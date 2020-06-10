@@ -27,4 +27,17 @@ Déplacement de positions pour laisser de la place
 * Modif inscriptions de P1 pour le connecteur femelle de cable plat
 * Déplacement C5 vers le bas
 * RN1 un peu vers la gauche, et déplacer le label qui va être sous l'écrou
-* Déplacement U2 vers la droite pour  
+* Déplacement U2 vers la droite 
+
+Back panel :
+
+Bouton reset : 
+width=height=13
+hole 12
+X=18
+y=78.2
+
+Connect power:
+H=7.7
+X=18
+Y=43.8

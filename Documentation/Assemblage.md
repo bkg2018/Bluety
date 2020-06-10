@@ -2,20 +2,21 @@
 ---
 Cette notice décrit le montage des cartes de Bluety.
 
-> Important: une soudure ou un branchement sera nécessaire sur votre ordinateur RC2014 pour les fonctions du bouton marche/arrêt de la façade.
+> Important: une soudure ou un branchement sera nécessaire sur votre ordinateur RC2014 pour les fonctions du bouton marche/arrêt de la façade. 
 
 Outils nécessaires :
 
-* Station de soudure
-* Soudure (diamètre 0.6mm ou 0.8mm recommandé)
-* Pince fine
-* Pince coupante coudée
-* Pompe à soudure
-* Tapis silicone (ou protection isolante du plan de travail)
-* Bracelet anti-statique
-* Nécessaire de nettoyage de pane de ffer à souder (brosse métallique et flux)
-* Clés ALEN 2 et 1.4mm (fixations connecteurs en façade arrière)
-* Alcool isopropanol (nettoyage cartes)
+* Station de soudure ![](pictures/001-station.jpg)
+* Soudure (diamètre 0.6mm ou 0.8mm recommandé) ![](pictures/002-solderwire.jpg)
+* Pince fine ![](pictures/003-pliers.jpg)
+* Pince fine coudée ![](pictures/004-pliers.jpg)
+* Pince coupante coudée ![](pictures/005-pliers.jpg)
+* Pompe à soudure ![](pictures/006-pump.jpg)
+* Tapis silicone (ou protection isolante du plan de travail) ![](pictures/TODO.png)
+* Bracelet anti-statique ![](pictures/TODO.png)
+* Nécessaire de nettoyage de pane de fer à souder (brosse métallique et flux) ![](pictures/008-tipscleaner.jpg) ![](pictures/009-tipscleaner.jpg)
+* Clés ALEN 2 et 1.4mm (fixations connecteurs en façade arrière) ![](pictures/.jpg)
+* Alcool isopropanol (nettoyage cartes) ![](pictures/TODO.png)
  
 ---
 
@@ -25,14 +26,14 @@ Cette carte se connecte sur n'importe quel connecteur de bus d'un ordinateur RC2
 
 Pièces :
 
-> * Circuit Bus Daughter
-> * Condensateur 10nF
-> * Header 40P angle droit
-> * Header 2x12P angle droit
+> * Circuit Bus Daughter ![](pictures/012-busdaughter.jpg)
+> * Condensateur 10nF ![](pictures/013-Capa100nF.jpg)
+> * Header 40P angle droit ![](pictures/014-header40P.jpg)
+> * Header 2x12P angle droit ![](pictures/015-header2x12P.jpg)
 
-* Soudez le condensateur C9 (100 nF). Coupez les pattes au dos.
-* Soudez le header 2x12P P3. Attention à souder le petit côté coudé.
-* Soudez le header 40P P2. Soudez le petit côté. Ne chauffez pas trop sinon le plastique ramollit trop et les pattes pivotent. Si cela arrive, réchauffez la soudure et remettez la patte en position à l'aide d'une pince.
+* Soudez le condensateur C9 (100 nF). Coupez les pattes au dos. ![](pictures/016.jpg)
+* Soudez le header 2x12P P3. Attention à souder le petit côté coudé. ![](pictures/017A.jpg) ![](pictures/017B.jpg) ![](pictures/017C.jpg)
+* Soudez le header 40P P2. Soudez le petit côté. Ne chauffez pas trop sinon le plastique ramollit trop et les pattes pivotent. Si cela arrive, réchauffez la soudure et remettez la patte en position à l'aide d'une pince.  ![](pictures/018.jpg)
 * Nettoyez à l'alcool isopropanol.
 
 ## Blink'n Switch
@@ -43,26 +44,24 @@ Le montage de cette carte nécessite son assemblage temporaire avec la façade p
 
 Pièces :
 
-> * Circuit Blink'n Switch
-> * Façade avant
-> * 5 Supports 12mm avec vis et écrou
-> * 4 supports CI 16P (il y en a 4 au total)
-> * 2 supports CI 14P
-> * 8 supports CI 20P
-> * 8 LED 3mm bleues
-> * 16 LED 3mm vertes
-> * 16 LED 3mm jaunes
-> * 4 interrupteurs ON/ON ou ON/OFF
-> * 16 interrupteurs ON-OFF-ON
-> * 2 interrupteurs dipswitch 8 positions
-> * 2 headers femelle 2P pattes de 11mm
-> * 4 headers femelle 8P pattes de 11mm
-> * 1 header mâle 2x12P
-> * 10 condensateurs céramique 100nF (104)
-> * 1 condensateur électro 100uF
-> * 3 réseaux résistance 10K (A103J)
-> * 5 réseaux résistance 470 (A471J)
-> * Circuits intégrés (3x 74HCT273N, 3x 74HCT688, 2x 74HCT245N, 2x 74HCT32)
+> * Circuit Blink'n Switch ![](pictures/020-blinknswitchh.jpg)
+> * Façade avant ![](pictures/021-frontpanel.jpg)
+> * 5 Supports 12mm avec vis et écrou ![](pictures/022-support12.jpg)
+> * 4 supports CI 16P ![](pictures/023-support16.jpg)
+> * 2 supports CI 14P ![](pictures/024-support14.jpg)
+> * 8 supports CI 20P ![](pictures/025-support20.jpg)
+> * 8 LED 3mm bleues, 16 LED 3mm vertes, 16 LED 3mm jaunes ![](pictures/026-LEDs.jpg)
+> * 4 interrupteurs ON/ON ou ON/OFF ![](pictures/027-ONON.jpg)
+> * 16 interrupteurs ON-OFF-ON ![](pictures/028-ONOFFFON.jpg)
+> * 2 interrupteurs dipswitch 8 positions ![](pictures/TODO.png)
+> * 2 headers femelle 2P pattes de 11mm ![](pictures/h2P.jpg)
+> * 4 headers femelle 8P pattes de 11mm ![](pictures/031-h8P.jpg)
+> * 1 header mâle 2x12P ![](pictures/032-h2x12P.jpg)
+> * 10 condensateurs céramique 100nF (104) ![](pictures/033-capa100nF.jpg)
+> * 1 condensateur électro 100uF ![](pictures/034-capa100uF.jpg)
+> * 3 réseaux résistance 10K (A103J) ![](pictures/TODO.png)
+> * 5 réseaux résistance 470 (A471J) ![](pictures/036-rn470.jpg)
+> * Circuits intégrés (3x 74HCT273N, 3x 74HCT688, 2x 74HCT245N, 2x 74HCT32) ![](pictures/TODO.png)
 
 Dans l'ordre, vous allez monter :
 
@@ -77,15 +76,16 @@ Dans l'ordre, vous allez monter :
 
 Placez le **dos** visible, (le trou du bouton marche arret en bas à gauche)
 
-* Soudez les 10 condensateurs 100nF C1 à C4 et C6 à C11
+* Soudez les 10 condensateurs 100nF C1 à C4 et C6 à C11 ![](pictures/040A.png) ![](pictures/040B.jpg)
 
-* Soudez les 8 supports 20P et les 2 supports 14P, encoches vers le *haut* ou la *gauche* selon le cas
+* Soudez les 8 supports 20P et les 2 supports 14P, encoches vers le *haut* ou la *gauche* selon le cas ![](pictures/041A.png) ![](pictures/041B.jpg)
 
-* Soudez les 3 réseaux de résistance **10K** RN1 RN4 RN7
+* Soudez les 3 réseaux de résistance **10K** RN1 RN4 RN7 ![](pictures/042A.jpg)  ![](pictures/042B.png)
     > * attention à *ne pas confondre avec les 470* : le composant est marqué A103J (103 signifie 10 x 10^3)
-    > * soudez d'abod une seule patte, vérifiez la position et le point de référence à gauche
+    > * soudez d'abod une seule patte, vérifiez la position et le point de référence à gauche ![](pictures/042C.jpg)
     > * attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit
     > * une fois la position vérifiée soudez les autres pattes
+
 
 * Soudez les 5 réseaux de résistance **470** RN2 RN3 RN5 RN6 RN8
     > * le composant est marqué A471J (471 signifie 47 x 10^1)
