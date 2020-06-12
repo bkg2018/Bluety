@@ -38,9 +38,9 @@ Pièces :
 
 ## Blink'n Switch
 
-Cette carte offre deux ports d'entrée/sortie complets, avec des LEDs témoins et des interrupteurs pour contrôler les entrées, ainsi que 8 LEDs en façade pour le port de contrôles 0x0D de l'ordinateur SC126 de Stephen S. Cousins. Ce port peut également être utilisé par un ordinateur RC2014 pour afficher 8 bits sur les LEDs de la façade avant avec un simple `OUT 0Dh`.
+Cette carte offre deux ports d'entrée/sortie complets, avec des LEDs témoins et des interrupteurs pour contrôler les entrées, ainsi que 8 LEDs en façade pour le port de contrôles 13 (0Dh) de l'ordinateur SC126 de Stephen S. Cousins. Ce port peut également être utilisé par un ordinateur RC2014 pour afficher 8 bits sur les LEDs de la façade avant avec un `OUT` sur le port 13.
 
-Le montage de cette carte nécessite son assemblage temporaire avec la façade pour que les composants apparaissant sur cette dernière soient correctement alignés. **Respectez l'ordre de montage et les consignes** pour avoir les meilleurs chances d'obtenir une belle façade.
+Le montage de cette carte nécessite plusieurs assemblages temporaires avec la façade avant pour que les composants apparaissant sur cette dernière soient correctement alignés. **Respectez l'ordre de montage et les consignes** pour avoir les meilleurs chances d'obtenir une belle façade.
 
 Pièces :
 
@@ -59,7 +59,7 @@ Pièces :
 > * 1 header mâle 2x12P ![](pictures/032-h2x12P.jpg)
 > * 10 condensateurs céramique 100nF (104) ![](pictures/033-capa100nF.jpg)
 > * 1 condensateur électro 100uF ![](pictures/034-capa100uF.jpg)
-> * 3 réseaux résistance 10K (A103J) ![](pictures/TODO.png)
+> * 3 réseaux résistance 10K (A103J) ![](pictures/035-rn10K.jpg)
 > * 5 réseaux résistance 470 (A471J) ![](pictures/036-rn470.jpg)
 > * Circuits intégrés (3x 74HCT273N, 3x 74HCT688, 2x 74HCT245N, 2x 74HCT32) ![](pictures/TODO.png)
 
@@ -80,63 +80,65 @@ Placez le **dos** visible, (le trou du bouton marche arret en bas à gauche)
 
 * Soudez les 8 supports 20P et les 2 supports 14P, encoches vers le *haut* ou la *gauche* selon le cas ![](pictures/041A.png) ![](pictures/041B.jpg)
 
-* Soudez les 3 réseaux de résistance **10K** RN1 RN4 RN7 ![](pictures/042A.jpg)  ![](pictures/042B.png)
+* Soudez les 3 réseaux de résistance **10K** RN1 RN4 RN7 ![](pictures/042A.jpg) ![](pictures/042B.png)
     > * attention à *ne pas confondre avec les 470* : le composant est marqué A103J (103 signifie 10 x 10^3)
     > * soudez d'abod une seule patte, vérifiez la position et le point de référence à gauche ![](pictures/042C.jpg)
     > * attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit
     > * une fois la position vérifiée soudez les autres pattes
 
 
-* Soudez les 5 réseaux de résistance **470** RN2 RN3 RN5 RN6 RN8
+* Soudez les 5 réseaux de résistance **470** RN2 RN3 RN5 RN6 RN8 ![](pictures/043A.jpg) ![](pictures/043B.png)
     > * le composant est marqué A471J (471 signifie 47 x 10^1)
-    > * Attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit
+    > * Attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit ![](pictures/043C.jpg)
 
 * Pour les composants le nécessitant, coupez l'excédent des pattes au fur et à mesure pour ne pas être gêné
  
 *Ne soudez pas* le header P1 et le condensateur C5 maintenant : ils gêneraient la suite de l'assemblage.
+
+Voici l'allure de la carte à ce stade.  ![](pictures/044.jpg)
 
 ### Avant : supports des dip-switch
 
 > ***Important :***
 >
 > Tous les éléments soudés sur l'avant apparaissent en façade à travers une ouverture, aussi une grande partie de
-> l'assemblage consiste à souder *une seule patte*, puis placer la façade pour vérifier et corriger l'alignement
-> avant de faire la soudure définitive des pattes restantes. Ainsi il est possible de rechauffer la soudure pour 
-> bouger l'élément en cas de problème d'alignement, ce qui sera pratiquement impossible une fois toutes les pattes 
-> soudées.
+> l'assemblage consiste à souder *une seule patte*, puis placer la façade pour vérifier et corriger l'alignement.
+> Ainsi il est possible de réchauffer la soudure pour bouger l'élément en cas de problème d'alignement. 
+> Une fois celui-ci correct on peut souder le reste des pattes.
 
-Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenant en bas à droite
+Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenant en bas à droite.  ![](pictures/045.jpg)
 
-* Soudez *une patte* de chacun des 2 supports CI 16P (SW10 et SW21), encoche vers la gauche. Ils serviront de base aux DIP-Switchs de sélection du numéro de port. 
+* Soudez *une patte* de chacun des 2 supports CI 16P (SW10 et SW21), encoche vers la gauche. Ils serviront de base aux DIP-Switchs de sélection du numéro de port. ![](pictures/TODO.png)
 
-* Vissez les 5 supports 12mm sur la carte : support sur le dessus, boulon au dos. Ils vont servir à plusieurs assemblages provisoires afin de bien aligner les composants de la façade, donc ne les démontez pas tout le long de cette étape. 
-L'espace de certains boulons est restreint une fois les composants en place, aussi il est préférable de maintenir le boulon et tourner le support plutôt que l'inverse. Si un composant nécessite à un moment de tourner un boulon, dévissez légèrement le support, tournez un peu le boulon et revissez le support.
+* Vissez les 5 supports 12mm sur la carte : support sur le dessus, boulon au dos. ![](pictures/046.jpg) Ils vont servir à plusieurs assemblages provisoires afin de bien aligner les composants de la façade, donc ne les démontez pas tout le long de cette étape. L'espace de certains boulons est restreint une fois les composants en place, aussi il est préférable de maintenir le boulon et tourner le support plutôt que l'inverse. ![](pictures/047.jpg) Si un composant nécessite à un moment de tourner un boulon, dévissez légèrement le support, tournez un peu le boulon et revissez le support.
 
-* Emboitez un second support 16P et un DIP-Switch sur chacun des deux supports.
-    > * Fixez la façade avant avec deux ou trois supports en passant les dipswitch à travers leurs ouvertures.
+* Emboitez un second support 16P et un DIP-Switch sur chacun des deux supports. ![](pictures/048.jpg)
+    > * Fixez la façade avant avec deux ou trois supports en passant les dipswitch à travers leurs ouvertures. ![](pictures/049.jpg)
     > * Si un switch n'est pas bien aligné, faites chauffer la soudure de la patte et réalignez l'ensemble 
     >   pour qu'il soit bien aligné avec l'ouverture de la façade.
 
 * Retournez l'ensemble et terminez la soudure des supports.
 
-    > Dévissez les vis de la façade, démontez la ainsi que les ensembles support+dip-switch emboités.
+* Dévissez les vis de la façade, démontez la ainsi que les ensembles support+dip-switch emboités pour qu'il ne reste que les deux supports soudés.
 
 ### Avant : Headers I/O et Power
 
-* Posez le circuit imprimé, face avant sur le dessus, sur des supports de préférence non métalliques afin qu'il soit au dessus du plan de travail et permette aux composants de glisser dans leurs emplacements. Veillez à assurer une hauteur d'environ 10 mm.
+* Posez le circuit imprimé, face avant sur le dessus, sur des supports de préférence non métalliques afin qu'il soit au dessus du plan de travail et permette aux composants de glisser dans leurs emplacements. Veillez à assurer une hauteur d'environ 10 mm. ![](pictures/050.jpg)
 
-* Positionnez les 4 connecteurs femelles 8P à longues pattes et les 2 connecteurs femelles 2P à longues pattes
+* Positionnez les 4 connecteurs femelles 8P à longues pattes et les 2 connecteurs femelles 2P à longues pattes ![](pictures/051.jpg)
 
-* Fixez la façade. Ne mettez pas la vis centrale, elle gênerait le positionnement des headers.
+* Fixez la façade. Ne mettez pas la vis centrale, elle gênerait le positionnement des headers. ![](pictures/052.jpg)
 
-* Posez la façade arrière sur la façade avant et perpendiculairement de manière à recouvrir les ouvertures des headers. Vous pouvez placer une feuille de papier entre les deux pour ne pas risquer d'abimer leur revêtement.
+* Posez la façade arrière sur la façade avant et perpendiculairement de manière à recouvrir les ouvertures des headers. Vous pouvez placer une feuille de papier entre les deux pour ne pas risquer d'abimer leur revêtement. ![](pictures/053.jpg)
 
-* Retournez délicatement l'ensemble et posez le à l'envers sur le plan de travail.
+* Retournez délicatement l'ensemble et posez le à l'envers sur le plan de travail. ![](pictures/054.jpg)
 
-* A l'aide d'une pince, placez les connecteurs dans les ouvertures de la façade. C'est un peu délicat, ne forcez pas pour ne pas tordre les pattes. Si cela arrive, démontez la façade, sortez le connecteur, redressez les pattes et recommencez l'opération.
+* A l'aide d'une pince, placez les connecteurs dans les ouvertures de la façade.  ![](pictures/055.jpg) C'est un peu délicat, ne forcez pas pour ne pas tordre les pattes. Si cela arrive, démontez la façade, sortez le connecteur, redressez les pattes et recommencez l'opération.
 
-* Lorsque tout est bien en place, soudez *une patte* de chacun des 6 connecteurs. 
-    > * Retournez l'ensemble pour vérifier l'alignement. 
+* Ls headers doivent être bien placés dans les encoches de la façade.  ![](pictures/056.jpg) ![](pictures/057.jpg)
+
+* Lorsque tout est bien en place, soudez *une patte* de chacun des 6 connecteurs.  ![](pictures/058.jpg)
+    > * Retournez l'ensemble pour vérifier l'alignement.  ![](pictures/059.jpg)
 
 * Lorsque tout est correctement placé, retournez et terminez la soudure des pattes restantes.
 
@@ -144,18 +146,18 @@ L'espace de certains boulons est restreint une fois les composants en place, aus
 
 * Dévissez la façade
 
-### IAvant : interrupteurs
+### Avant : interrupteurs
 
 Préparez les 16 interrupteurs à trois positions ON-OFF-ON et 4 interrupteurs à deux positions ON-OFF ou ON-ON.
 
 * Séparez les tas pour ne pas vous tromper. Le kit présente normalement deux couleurs différentes mais cela peut dépendre du stock.
  
 * Positionnez les 8 interrupteurs à **trois positions ON-OFF-ON** du port A, SW1 à SW8. Attention à placer l'encoche située sur 
-le pas de vis vers le bas *pour chaque interrupteur*. Ils doivent être tous orientés de la même façon car ils ne sont  généralement pas totalement symétriques.
+le pas de vis vers le bas *pour chaque interrupteur*. Ils doivent être tous orientés de la même façon car ils ne sont  généralement pas totalement symétriques. ![](pictures/060.jpg)
 
 * Positionnez les 8 interrupteurs à **trois positions ON-OFF-ON** SW17 à SW24. Même précaution pour l'encoche du pas de vis qui doit être en bas.
 
-* Positionnez les 4 interrupteurs à **deux positions ON-OFF ou ON-ON** SW9, SW11, SW20, SW22, encoche du pas de vis vers le bas.
+* Positionnez les 4 interrupteurs à **deux positions ON-OFF ou ON-ON** SW9, SW11, SW20, SW22, encoche du pas de vis vers le bas. ![](pictures/061.jpg)
     > * Placez tous les boutons en position basse.
     > * Vérifiez l'alignement
 
