@@ -83,19 +83,17 @@ sinon rien n'est inscrit ni modifié.
 
 Faut-il gérer le caractère ctrl-H ?
 
+- si char = LF
+	- CRLF
+	- exit
+
 - si posX >= LCDCOLS
 	- TESTWRAP
 	- si Z:
-		- est-ce LF ?
-			- si oui aller à :DOWRAP:
-	- (autre caractère, on ignore, à voir pour gestion Ctrl-H)	
-	- exit
+		- exit
+	- CRLF
 
-DOWRAP:
-
-- CRLF
-
-&    /SENDCHAR: (on n'arrive ici que si posx est ok)
+SENDCHAR: (on n'arrive ici que si posx est ok)
 
 - envoyer le caractère
 - le stocker dans la copie RAM
@@ -117,12 +115,7 @@ La position curseur ne change pas.
 	- remplir les 20 derniers avec des espaces
 	- recopie intégrale vers LCD (ligne par ligne)
 
-### CR
 
-Pour revenir en début de ligne.
-
-- posX = 0
-- SENDPOS
 
 ### CRLF
 
