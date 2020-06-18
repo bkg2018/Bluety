@@ -5,31 +5,6 @@
 ; LCDClear : clears screen 
 ; LCDScrollUp : scrolls screen one line up and clears bottom line
 ;---------------------------------------------------------------------------
-            .DATA
-; variables
-LCD_RAMCOPY:                    .DS 80  ; 80 bytes for screen ram copy
-LCDPOSX:    .DB 0               ; X from 0 to 19
-LCDPOSY:    .DB 0               ; Y from 0 to 3
-CURLINE:    .DB 0               ; line number during work
-; screen settings
-LCDCONTROL: .DB 0               ; control bits:
-LCBIT_I2C:  .EQU 0              ; 0 = I2C OFF
-LCBIT_PARALLEL:                 .EQU 1  ; 0 = PARALLEL OFF
-LCBIT_WRAP: .EQU 2              ; 0 = No wrap
-LCBIT_LCDONLY:                  .EQU 3  ; 1 = display ONLY on LCD
-LCBIT_CURSOR:                   .EQU 4  ; 1 = cursor on
-LCBIT_BLINK:                    .EQU 5  ; 1 = blinking cursor
-LCBIT_BLOCK:                    .EQU 6  ; 1 = block cursor, 0 = underscore
-LCBIT_NOLF: .EQU 7              ; 1 = do not interpret LF (0Ah)
-LCDCONTROL2:                    .DB 0  
-LC2BIT_NOBS:                    .EQU 0  ; 1 = do not interpret BS (08h) 
-LCDPORT:    .DB 0               ; 0x0C  on SC126 I2C
-I2CDEVICE:  .DB 0               ; 0x27 for 8574T controllers
-LCDCOLS:    .DB 0               ; 20 columns
-LCDROWS:    .DB 0               ; 4 lines
-LCD_INDEX:  .DB 0,0,0,0         ; each line offset
-
-            .CODE
 
             ; INIT for classical 4x20 Hitachi protocol
 LCDConsoleInit:                 
@@ -71,7 +46,7 @@ LCDConsoleInit:
             POP AF
             RET
 
-            .CODE
+;            .CODE
 
 ;---------------------------------------------------------------------------
 ; LCDSetCur : set the cursor position
@@ -80,19 +55,19 @@ LCDConsoleInit:
 LCDSetCur:  PUSH AF
             LD A,(LCDCOLS)
             CP B                ; LCDCOLS < X : C set
-            JR Z,@XNOTOK        ; x = LCDCOLS : not ok
-            JR NC,@XOK          ; X < LCDCOLS -> ok
-@XNOTOK:    DEC A               ; LCDCOLS - 1
+            JR Z,XNOTOK        ; x = LCDCOLS : not ok
+            JR NC,XOK          ; X < LCDCOLS -> ok
+XNOTOK:     DEC A               ; LCDCOLS - 1
             LD B,A              ; X clamped at LCDCOLS-1
-@XOK:       LD A,B              ; reload X
+XOK:        LD A,B              ; reload X
             LD (LCDPOSX),A
             LD A,(LCDROWS)
             CP C                ; LCDROWS < Y : C set
-            JR Z,@YNOTOK        ; y = LCDROWS -> not ok
-            JR NC,@YOK          ; y < LCDROWS -> ok
-@YNOTOK:    DEC A
+            JR Z,YNOTOK        ; y = LCDROWS -> not ok
+            JR NC,YOK          ; y < LCDROWS -> ok
+YNOTOK:    DEC A
             LD C,A              ; y clamped at LCDROWS-1
-@YOK:       LD A,C              ; reload Y
+YOK:       LD A,C              ; reload Y
             LD (LCDPOSY),A
             CALL LCDSetCurVar
             POP AF
@@ -130,21 +105,21 @@ LCDChar:    PUSH HL             ; save
             ; have to test line feed ?
             LD HL,LCDCONTROL
             BIT LCBIT_NOLF,(HL)
-            JR NZ,@NOTLF
+            JR NZ,NOTLF
             ; do not ignore LF
             CP 0Ah
-            JR NZ,@NOTLF
+            JR NZ,NOTLF
             ; LF : go to crlf routine
             POP HL
             JP CRLF
 
-@NOTLF:     ; have to test backspace ?
+NOTLF:     ; have to test backspace ?
             LD HL,LCDCONTROL2
             BIT LC2BIT_NOBS,(HL)
-            JR NZ,@NOTBS
+            JR NZ,NOTBS
             ; do not ignore BS
             CP 08h
-            JR NZ,@NOTBS
+            JR NZ,NOTBS
             ; back one char
             LD A,(LCDPOSX)
             OR A                ; zero?
@@ -156,24 +131,24 @@ LCDChar:    PUSH HL             ; save
             ; finish by setting cursor
             JP LCDSetCurVar 
 
-@NOTBS:     PUSH BC
+NOTBS:     PUSH BC
             LD C,A              ; save char in C
             LD A,(LCDCOLS)
             LD B,A
             LD A,(LCDPOSX)
             CP B                ; xpos >= nbcols ?
-            JR C,@SENDCHAR      ; no, ok to send character
+            JR C,SENDCHAR      ; no, ok to send character
             ; at the end of line, check if we wrap
             CALL TESTWRAP
-            JR NZ,@DOWRAP 
+            JR NZ,DOWRAP 
             ; no wrap : finished
             POP BC
             POP HL
             RET
 
-@DOWRAP:    CALL CRLF
+DOWRAP:    CALL CRLF
 
-@SENDCHAR:  LD A,C
+SENDCHAR:  LD A,C
             CALL fLCD_Data      ; send byte
             ; Compute RAM copy address
             LD HL,LCD_RAMCOPY   ; base address
@@ -182,12 +157,12 @@ LCDChar:    PUSH HL             ; save
             LD E,A
             LD D,0
             LD A,(LCDPOSY)      ; 0 to 3
-@ADDLINE:   OR A                ; A nul?
-            JR Z,@STORE
+ADDLINE:   OR A                ; A nul?
+            JR Z,STORE
             ADD HL,DE
             DEC A
-            JR @ADDLINE
-@STORE:     LD A,(LCDPOSX)
+            JR ADDLINE
+STORE:      LD A,(LCDPOSX)
             LD E,A
             ADD HL,DE           ; addresss ready
             LD (HL),C           ; store character
@@ -196,7 +171,7 @@ LCDChar:    PUSH HL             ; save
             INC A
             LD (LCDPOSX),A
 
-@END:       POP DE
+            POP DE
             POP BC
             POP HL                    
             RET
@@ -213,13 +188,13 @@ LCDString:
             PUSH  AF
             PUSH  BC
             PUSH    DE
-@Next:      LD   A,(HL)         ;Read next character 
+NextCh:       LD   A,(HL)         ;Read next character 
             OR      A
-            JR  Z,@End          ;ends with a 0
+            JR  Z,EndString          ;ends with a 0
             CALL    LCDChar     ;Write character to display
             INC  HL
-            JR  @Next
-@End:       INC  HL             ;jump over the ending 0
+            JR  NextCh
+EndString:       INC  HL             ;jump over the ending 0
             POP     DE
             POP  BC
             POP  AF
@@ -236,9 +211,9 @@ LCDClear:   PUSH AF
             XOR A               ; clear RAM screen copy
             LD B,80
             LD HL,LCD_RAMCOPY
-@ZERORAM:   LD (HL),A
+ZERORAM:   LD (HL),A
             INC HL
-            DJNZ @ZERORAM
+            DJNZ ZERORAM
             ; now clear LCD
             ; Display Clear
             LD   A, 0b00000001  ;Control reg:  0  0  0  0  0  0  0  1
@@ -253,7 +228,9 @@ LCDClear:   PUSH AF
 ;---------------------------------------------------------------------------
 ; LCDScrollUp : scrolls the LCD one line up and clears bottom line
 ;---------------------------------------------------------------------------
-LCDScrollUp:                    PUSH HL
+LCDScrollUp:
+#local    
+            PUSH HL
             PUSH DE
             PUSH BC
             PUSH AF
@@ -265,8 +242,8 @@ LCDScrollUp:                    PUSH HL
             LD A,(LCDROWS)      ; A = 4
             DEC A               ; A = 3
             LD B,A              ; B = 3
-@ADDWIDTH:  ADD HL,DE           ; HL = 20, 40, 60
-            DJNZ @ADDWIDTH
+ADDWIDTH:  ADD HL,DE           ; HL = 20, 40, 60
+            DJNZ ADDWIDTH
             PUSH HL             ; push 60
             LD DE,LCD_RAMCOPY   ; DE = source
             LD HL,LCD_RAMCOPY   ; HL = source
@@ -281,9 +258,9 @@ LCDScrollUp:                    PUSH HL
             LD A,' '            ; space character
             PUSH DE
             POP HL              ; HL = source+60
-@NEXTCHAR:  LD (HL),A           ; store a space
+NEXTCHAR:   LD (HL),A           ; store a space
             INC HL
-            DJNZ @NEXTCHAR
+            DJNZ NEXTCHAR
             ; ram copy scrolled and last line is full space
             CALL FULLCOPY       ; and send full content to LCD
             POP AF
@@ -291,13 +268,15 @@ LCDScrollUp:                    PUSH HL
             POP DE
             POP HL
             RET
-            
+#endlocal
 
 ;---------------------------------------------------------------------------
 ; Utility routines
 ;---------------------------------------------------------------------------
 ; Copy ram image to LCD memory
-FULLCOPY:   PUSH HL
+FULLCOPY:   
+#local
+            PUSH HL
             PUSH BC
             PUSH AF
             LD BC,0
@@ -308,14 +287,14 @@ FULLCOPY:   PUSH HL
             LD A,(LCDROWS)
             LD B,A              ; B = number of lines
 
-@NEXTLINE:  PUSH BC             ; start current line for 20 characters
+NEXTLINE:  PUSH BC             ; start current line for 20 characters
             LD A,(LCDCOLS)
             LD B,A              ; B = number of cols
 
-@NEXTCHAR:  LD A,(HL)           ; get current character
+NEXTCHAR:  LD A,(HL)           ; get current character
             CALL LCDChar        ; send it to LCD
             INC HL              ; advance source
-            DJNZ @NEXTCHAR      ; go next character on line
+            DJNZ NEXTCHAR      ; go next character on line
             ; set cursor to next line
             LD A,(CURLINE)
             INC A
@@ -323,13 +302,13 @@ FULLCOPY:   PUSH HL
             LD C,A
             CALL LCDSetCur      ; set to Y,0
             POP BC              ; get back current line number
-            DJNZ @NEXTLINE
+            DJNZ NEXTLINE
             ;we're done
             POP AF
             POP BC
             POP HL
             RET
-
+#endlocal
 
 ; Test wrap control bit, sets Z if no wrapping
 TESTWRAP:   PUSH HL
@@ -347,20 +326,20 @@ CRLF:       PUSH AF
             LD A,(LCDROWS)      ; 3
             DEC A               ; 2
             CP (HL)             ; 2 >= Y? => NC
-            JR NC,@INCRY        ; ok to increment Y
+            JR NC,INCRY        ; ok to increment Y
             ; lock Y at 3, and scroll up
             POP HL
             POP AF
             JP LCDScrollUp
-@INCRY:     INC (HL)
+INCRY:     INC (HL)
             POP HL
             POP AF
             RET                    
-
             
-#INCLUDE    Alphanumeric_LCD_I2C_fake.asm
-            
+            INCLUDE    "I2C.asm"
+            INCLUDE    "Alphanumeric_LCD_I2C.asm"
+            INCLUDE     "VARS.asm"
 
-
+           
 
 

@@ -5,6 +5,8 @@
 ;
 ; FAKE version, all functions do a return. This is for easier debugging
 ; of caller code from SCW which doesn't have a step-over command
+
+#CODE _CODE
 fLCD_Init:  RET
 
 
@@ -75,6 +77,5 @@ LCDDelay:   RET
 ; **  Variables
 ; **********************************************************************
 
-            .DATA
+#DATA _DATA
 LCD_BLIGHT: .DB  0  ; flag for backlighting
-

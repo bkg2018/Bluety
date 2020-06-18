@@ -63,9 +63,6 @@
 ; I2C_Read    Receive data frame
 ;**********************************************************************************************
 
-; Org for the code segment must be set by includer
-            .CODE
-
 ; I2C bus open device
 ;   On entry: A = Device address (bit zero is read flag)
 ;             SCL = unknown, SDA = unknown
@@ -101,14 +98,14 @@ I2C_Close:  JR   I2C_Stop       ;Output stop condition
 ;             HL IX IY preserved
 I2C_Write:  LD   D,A            ;Store byte to be written
             LD   B,8            ;8 data bits, bit 7 first
-@Wr_Loop:   RL   D              ;Test M.S.Bit
-            JR   C,@Bit_Hi      ;High, so skip
+Wr_Loop:   RL   D              ;Test M.S.Bit
+            JR   C,Bit_Hi      ;High, so skip
             CALL I2C_SDA_LO     ;SDA low   (SCL lo, SDA = data bit)
-            JR   @Bit_Clk
-@Bit_Hi:    CALL I2C_SDA_HI     ;SDA high  (SCL lo, SDA = data bit)
-@Bit_Clk:   CALL I2C_SCL_HI     ;SCL high  (SCL hi, SDA = data bit)
+            JR   Bit_Clk
+Bit_Hi:    CALL I2C_SDA_HI     ;SDA high  (SCL lo, SDA = data bit)
+Bit_Clk:   CALL I2C_SCL_HI     ;SCL high  (SCL hi, SDA = data bit)
             CALL I2C_SCL_LO     ;SCL low   (SCL lo, SDA = data bit)
-            DJNZ @Wr_Loop
+            DJNZ Wr_Loop
 ; Test for acknowledge from slave (receiver)
 ; On arriving here, SCL = lo, SDA = data bit
             CALL I2C_SDA_HI     ;SDA high  (SCL lo, SDA hi/ack)
@@ -117,12 +114,12 @@ I2C_Write:  LD   D,A            ;Store byte to be written
             LD   B,A
             CALL I2C_SCL_LO     ;SCL low   (SCL lo, SDA = hi)
             BIT  I2C_SDA_RD,B
-            JR   NZ,@NoAck      ;Skip if no acknowledge
+            JR   NZ,NoAck      ;Skip if no acknowledge
             XOR  A              ;Return success A=0 and Z flagged
             RET
 ; I2C STOP required as no acknowledge
 ; On arriving here, SCL = lo, SDA = hi
-@NoAck:     CALL I2C_SDA_LO     ;SDA low   (SCL lo, SDA = lo)
+NoAck:     CALL I2C_SDA_LO     ;SDA low   (SCL lo, SDA = lo)
             CALL I2C_SCL_HI     ;SCL high  (SCL hi, SDA = lo)
             CALL I2C_SDA_HI     ;SDA low   (SCL hi, SDA = hi)
             LD   A,2            ;Return error 2 - No Ack
@@ -130,6 +127,7 @@ I2C_Write:  LD   D,A            ;Store byte to be written
             RET
 
 
+;*** UNUSED *****
 ; I2C bus receive frame (data)
 ;   On entry: SCL low, SDA low
 ;   On exit:  If successful A = data byte and Z flagged
@@ -137,17 +135,18 @@ I2C_Write:  LD   D,A            ;Store byte to be written
 ;             If unsuccessul A = Error and NZ flagged
 ;               SCL = low, SDA = low ??? no failures supported
 ;             HL IX IY preserved
+IF USE_I2CREAD
 I2C_Read:   LD   B,8            ;8 data bits, 7 first
             CALL I2C_SDA_HI     ;SDA high  (SCL lo, SDA hi/input)
-@Rd_Loop:   CALL I2C_SCL_HI     ;SCL high  (SCL hi, SDA hi/input)
+Rd_Loop:   CALL I2C_SCL_HI     ;SCL high  (SCL hi, SDA hi/input)
             CALL I2C_RdPort     ;Read SDA input bit
             SCF                 ;Set carry flag
             BIT  I2C_SDA_RD,A   ;SDA input high?
-            JR   NZ,@Rotate     ;Yes, skip with carry flag set
+            JR   NZ,Rotate     ;Yes, skip with carry flag set
             CCF                 ;Clear carry flag
-@Rotate:    RL   D              ;Rotate result into D
+Rotate:    RL   D              ;Rotate result into D
             CALL I2C_SCL_LO     ;SCL low   (SCL lo, SDA hi/input)
-            DJNZ @Rd_Loop       ;Repeat for all 8 bits
+            DJNZ Rd_Loop       ;Repeat for all 8 bits
 ; Acknowledge input byte
 ; On arriving here, SCL = lo, SDA = hi/input
             CALL I2C_SDA_LO     ;SDA low   (SCL lo, SDA lo)
@@ -156,7 +155,7 @@ I2C_Read:   LD   B,8            ;8 data bits, 7 first
             LD   A,D            ;Get data byte received
             CP   A              ;Return success Z flagged
             RET
-
+ENDIF
 
 ; I2C bus start
 ;   On entry: SCL = unknown, SDA = unknown
@@ -231,5 +230,4 @@ I2C_RdPort: PUSH BC
 
 ; **********************************************************************
 ; Workspace / variable in RAM
-            .DATA
-I2C_RAMCPY: .DB  0
+

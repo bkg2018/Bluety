@@ -105,8 +105,7 @@ kLCD_Def:   .EQU 0b01000000     ;LCD command: Define character
 ; **  Program code
 ; **********************************************************************
 
-            .CODE               ;Code section
-
+#CODE _CODE
 
 ; **********************************************************************
 ; **  LCD support functions
@@ -167,11 +166,11 @@ fLCD_Init:
 SetA_Light: PUSH AF
             LD   A,(LCD_BLIGHT)
             OR   A
-            JR   Z, @Reset
+            JR   Z, ResetLight
             POP  AF
             SET  kLCDBitBL, A
             RET
-@Reset:     POP  AF
+ResetLight:     POP  AF
             RES  kLCDBitBL, A
             RET
 
@@ -183,25 +182,25 @@ fLCD_Inst:  PUSH BC
             PUSH AF
             LD   A,I2C_ADDR     ;I2C address to write to
             CALL I2C_Open       ;Open I2C device for write
-            JR   NZ,@End
+            JR   NZ,EndInst
             POP  AF
             PUSH AF
             PUSH AF
-            CALL @Wr4bits       ;Write bits 4 to 7 of instruction
+            CALL Wr4bitsI       ;Write bits 4 to 7 of instruction
             POP  AF
             RLA                 ;Rotate bits 0-3 into bits 4-7...
             RLA
             RLA
             RLA
-            CALL @Wr4bits       ;Write bits 0 to 3 of instruction
+            CALL Wr4bitsI       ;Write bits 0 to 3 of instruction
             LD   A, 2
             CALL LCDDelay       ;Delay 2 ms to complete 
             CALL I2C_Close
-@End:       POP  AF
+EndInst:       POP  AF
             POP  DE
             POP  BC
             RET
-@Wr4bits:   AND  0xF0           ;Mask so we only have D4 to D7
+Wr4bitsI:   AND  0xF0           ;Mask so we only have D4 to D7
             CALL SetA_Light     ; set or reset backlighting bit
             PUSH AF
             CALL I2C_Write      ;Output with E=Low and RS=Low
@@ -223,26 +222,26 @@ fLCD_Data:  PUSH BC
             PUSH AF
             LD   A,I2C_ADDR     ;I2C address to write to
             CALL I2C_Open       ;Open I2C device for write
-            JR   NZ,@End
+            JR   NZ,EndData
             POP  AF
             PUSH AF
             PUSH AF             ; push a second time
-            CALL @Wr4bits       ;Write bits 4 to 7 of data byte
+            CALL Wr4bitsD       ;Write bits 4 to 7 of data byte
             POP  AF
             RLA                 ;Rotate bits 0-3 into bits 4-7...
             RLA
             RLA
             RLA
-            CALL @Wr4bits       ;Write bits 0 to 3 of data byte
+            CALL Wr4bitsD       ;Write bits 0 to 3 of data byte
             LD   A, 150
-@Wait:      DEC  A              ;Wait a while to allow data 
-            JR   NZ, @Wait      ;  write to complete
+Wait:      DEC  A              ;Wait a while to allow data 
+            JR   NZ, Wait      ;  write to complete
             CALL I2C_Close
-@End:       POP  AF
+EndData:       POP  AF
             POP  DE
             POP  BC
             RET
-@Wr4bits:   AND  0xF0           ;Mask so we only have D4 to D7
+Wr4bitsD:   AND  0xF0           ;Mask so we only have D4 to D7
             CALL SetA_Light     ; set or reset backlighting bit
             SET  kLCDBitRS, A
             PUSH AF
@@ -283,6 +282,7 @@ fLCD_Str:   LD   A, (DE)        ;Get character from string
             INC  DE             ;Point to next character
             JR   fLCD_Str       ;Repeat
 
+#IF USE_LCDPRINT
 ; Output character string to LCD.
 ; The character string is taken at the adress following the CALL and ends with 0.
 ; The routine returns to the address after the string.
@@ -293,19 +293,19 @@ fLCD_Print:
             PUSH 	AF
             PUSH 	BC
             PUSH    DE
-@Next:      LD 		A,(HL)          ;Read next character 
+NextPrint:      LD 		A,(HL)          ;Read next character 
             OR      A
-            JR		Z,@End          ;ends with a 0
+            JR		Z,EndPrint          ;ends with a 0
             CALL    fLCD_Data       ;Write character to display
             INC 	HL
-            JR		@Next
-@End:       INC 	HL 				;jump over the ending 0
+            JR		NextPrint
+EndPrint:       INC 	HL 				;jump over the ending 0
             POP     DE
             POP 	BC
             POP 	AF
             EX 		(SP),HL 		;restore HL and new return address
             RET
-
+#ENDIF
 
 ; Define custom character
 ;   On entry: A = Character number (0 to 7)
@@ -322,14 +322,14 @@ fLCD_Def:   PUSH BC
             OR   kLCD_Def       ;Prepare define character instruction
             CALL fLCD_Inst      ;Write instruction to LCD
             LD   B, 0
-@Loop:      LD   A, (DE)        ;Get byte from bitmap
+LoopDef:      LD   A, (DE)        ;Get byte from bitmap
             PUSH DE
             CALL fLCD_Data      ;Write byte to display
             POP  DE
             INC  DE             ;Point to next byte
             INC  B              ;Count bytes
             BIT  3, B           ;Finish all 8 bytes?
-            JR   Z, @Loop       ;No, so repeat
+            JR   Z, LoopDef       ;No, so repeat
             POP  AF
             INC  A              ;Increment character number
             POP  BC
@@ -378,6 +378,6 @@ LCDDelay:   PUSH DE
 ; **  Variables
 ; **********************************************************************
 
-            .DATA
+#DATA _DATA
 LCD_BLIGHT: .DB  0  ; flag for backlighting
 

@@ -7,7 +7,7 @@
 ;
 
 ; Org for the code segment must be set by includer
-            .CODE
+#CODE _CODE
 
 ; I2C bus open device
 ;   On entry: A = Device address (bit zero is read flag)

@@ -1,0 +1,25 @@
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 21: symbol 'LCBIT_I2C' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 22: symbol 'LCBIT_CURSOR' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 107: symbol 'LCBIT_NOLF' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 118: symbol 'LC2BIT_NOBS' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 232: syntax error
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 271: syntax error
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 278: syntax error
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 294: symbol 'NEXTCHAR' already defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 311: syntax error
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 316: symbol 'LCBIT_WRAP' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 340: cannot read file 'Alphanumeric_LCD_I2C.asm'
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/VARS.asm' line 2: symbol '_DATA_End' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/VARS.asm' line 2: symbol '_DATA_Start' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/VARS.asm' line 2: expected constant expression
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/VARS.asm' line 8: syntax error
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/Source.asm' line 52: symbol 'fLCD_Init' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/Source.asm' line 58: symbol 'fLCD_Def' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 94: symbol 'fLCD_Pos' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 152: symbol 'fLCD_Data' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 154: symbol 'LCD_RAMCOPY' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 213: symbol 'LCD_RAMCOPY' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 220: symbol 'fLCD_Inst' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 248: symbol 'LCD_RAMCOPY' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 249: symbol 'LCD_RAMCOPY' not defined
+Error at file '/Users/bkg2018/Desktop/RETROCOMP/Bluety/LCDConsole/z88dk/LCDConsole.asm' line 286: symbol 'LCD_RAMCOPY' not defined
