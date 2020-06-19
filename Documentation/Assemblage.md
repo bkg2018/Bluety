@@ -31,12 +31,12 @@ Pièces :
 > * Header 40P angle droit ![](pictures/014-header40P.jpg)
 > * Header 2x12P angle droit ![](pictures/015-header2x12P.jpg)
 
-* Soudez le condensateur C9 (100 nF). Coupez les pattes au dos. ![](pictures/016.jpg)
+* Soudez le condensateur C9 (100 nF). Coupez les pattes au dos. ![](pictures/TODO.png)
 * Soudez le header 2x12P P3. Attention à souder le petit côté coudé. ![](pictures/017A.jpg) ![](pictures/017B.jpg) ![](pictures/017C.jpg)
 * Soudez le header 40P P2. Soudez le petit côté. Ne chauffez pas trop sinon le plastique ramollit trop et les pattes pivotent. Si cela arrive, réchauffez la soudure et remettez la patte en position à l'aide d'une pince.  ![](pictures/018.jpg)
 * Nettoyez à l'alcool isopropanol.
 
-## Blink'n Switch
+## carte "Blink'n Switch"
 
 Cette carte offre deux ports d'entrée/sortie complets, avec des LEDs témoins et des interrupteurs pour contrôler les entrées, ainsi que 8 LEDs en façade pour le port de contrôles 13 (0Dh) de l'ordinateur SC126 de Stephen S. Cousins. Ce port peut également être utilisé par un ordinateur RC2014 pour afficher 8 bits sur les LEDs de la façade avant avec un `OUT` sur le port 13.
 
@@ -306,7 +306,7 @@ Les micro interrupteurs sont livrés soudés avec un cable de longueur convenant
 
 ## Branchement BusDaughter => Blink'n Switch
 
-* Branchez les deux cables 12 fils sur la BusDaughter en prenant soin de respecter le repérage du fil A7 efffectué lors du branchement sur Blink'n Switch. Ne mettez pas les mêmes couleurs des deux cables côte à côte, pour pouvoir les différencier.
+* Branchez les deux cables 12 fils sur la BusDaughter en prenant soin de respecter le repérage du fil A7 efffectué lors du branchement sur Blink'n Switch. Ne mettez pas les mêmes couleurs des deux cables côte à côte, il serait difficile de les différencier.
 
 * Installez la carte BusDaughter dans l'emplacement bus de votre choix.
 	> Attention à l'emplacement de la broche 1 : le côté biseauté de la carte se présente sur l'avant de l'ordinateur
@@ -315,10 +315,10 @@ Les micro interrupteurs sont livrés soudés avec un cable de longueur convenant
 
 ## Façade avant
 
-Ls branchements sont facilités si vous avez connecté les cables de l'écran LCD et du bouton on/offf *avant* de visser la façade :
+Ls branchements sont facilités si vous avez connecté les cables de l'écran LCD et du bouton on/off *avant* de visser la façade :
 
-*  Si vous n'avez pas déjà branché le cable I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le cable, et revissez l'écran. Reportez-vous à la section *Façade avant* pour le branchement.
-*  Si vous n'avez pas fixé les cables sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans la section *Façade avant*, puis revissez la façade.
+*  Si vous n'avez pas déjà fixé le cable I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le cable puis revissez l'écran. Reportez-vous à la section *Façade avant* pour le branchement.
+*  Si vous n'avez pas fixé les cables sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans la section *Façade avant* puis revissez la façade.
 
 Ensuite vous pouvez brancher les cables.
 
@@ -328,6 +328,18 @@ Ensuite vous pouvez brancher les cables.
 *  Branchez le cable I2C sur l'ordinateur SC126, en prenant soin de l'ordre des broches. Le connecteur 6 fils du SC126 permet de placer le cable dans toutes les configurations possibles, donc il n'y a pas besoin de croiser des fils.  ![](pictures/TODO.png)
 
 ## Façade arrière
+
+La façade arrière regroupe les cables qui sortent du boitier.
+
+Le connecteur d'alimentation sert le bouton marche/arrêt de la façade et l'alimentation du SC126. Le bouton Reset est particulièrement utile pour les utilisateurs de la carte PiZero Terminal qui nécessite un reset après la mise en marche.
+
+Les interrupteurs de sélection permettent de choisir entre les deux ROM du SC126 et d'autoriser leur écriture pour une mise à jour.
+
+Le connecteur HDMI se branche par une rallonge directement sur la carte PiZero Terminal, permettant d'avoir une sortie écran couleur via le logiciel PiGfx.
+
+L'orifice à côté de la prise HDMI permet de passer une rallonge USB pour brancher un clavier USB sur un PiZero Terminal. Cette ouverture a été préférée à une prise USB en raison des difficultés à trouver un connecteur approprié. 
+
+En bas de la façade, une ouverture permet de passer les cables utiles pour les nombreux connecteurs du SC126, par exemple la prise série pour controler l'ordinateur via une machine de bureau ou portable.
 
 * Branchez la rallonge HDMI sur le connecteur, puis sur votre PiZeroTerminal
 * Branchez les deux interrupteurs 3 fils sur les connecteurs JP1 et JP2 du SC126 : attention à placer le bon cable sur le bon connecteur selon que vous avez placé RomWBW en U1 et SCM en U2 ou l'inverse
@@ -342,12 +354,14 @@ Pour l'interrupteur "SELECT" : le connecteur P9 du SC126 sélectionne la mémoir
 
 ## Bouton Power
 
-Avec le branchement proposé, le bouton de la façade avant contrôle l'alimentation du SC126 via le connecteur J2. Pour que ce dernier puisse alimenter le SC126 il faut placer l'interrupteur de la carte SC126 en position ON, afin de déporter la fonction ON/OFFF sur le bouton de l afaçade avant.
+Avec le branchement proposé, le bouton de la façade avant contrôle l'alimentation du SC126 via le connecteur J2. Pour que ce dernier puisse alimenter le SC126 il faut placer l'interrupteur de la carte SC126 en position ON, afin de déporter la fonction ON/OFFF sur le bouton de la façade avant.
 
 
 # Logiciel et utilisation
 
 Il n'y a rien de particulier à programmer pour les ports d'entrée sortie et celui de contrôle : les instructions OUT et IN enverront ou recevront les 8 bits de données.
+
+$$TODO: Pour l'écran LCD, une version spéciale de SCM a été développée. 
 
 ## Port de contrôle (13/0Dh)
 
