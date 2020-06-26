@@ -13,16 +13,17 @@ Outils nécessaires :
 * Pince coupante coudée ![](pictures/005-pliers.jpg)
 * Pompe à soudure ![](pictures/006-pump.jpg)
 * Tapis silicone (ou protection isolante du plan de travail) ![](pictures/TODO.png)
-* Bracelet anti-statique ![](pictures/TODO.png)
+* Bracelet anti-statique ![](pictures/007-bracelet.jpg)
 * Nécessaire de nettoyage de pane de fer à souder (brosse métallique et flux) ![](pictures/008-tipscleaner.jpg) ![](pictures/009-tipscleaner.jpg)
-* Clés ALEN 2 et 1.4mm (fixations connecteurs en façade arrière) ![](pictures/.jpg)
-* Alcool isopropanol (nettoyage cartes) ![](pictures/TODO.png)
+* Clés ALEN 2 et 1.4mm (fixations connecteurs en façade arrière) ![](pictures/TODO.png)
  
 ---
 
 ## Carte "Bus Daughter"
 
 Cette carte se connecte sur n'importe quel connecteur de bus d'un ordinateur RC2014 et véhicule les signaux utiles jusqu'à la carte Blink'n Switch d'entrée / sortie. Son assemblage ne présente pas de difficulté majeure mais vous devrez faire attention à l'orientation des connecteurs.
+
+Les images représentent une version précédente de cette carte, récemment la position du connecteur P3 a été placée plus au centre mais l'assemblage est identique.
 
 Pièces :
 
@@ -33,8 +34,7 @@ Pièces :
 
 * Soudez le condensateur C9 (100 nF). Coupez les pattes au dos. ![](pictures/TODO.png)
 * Soudez le header 2x12P P3. Attention à souder le petit côté coudé. ![](pictures/017A.jpg) ![](pictures/017B.jpg) ![](pictures/017C.jpg)
-* Soudez le header 40P P2. Soudez le petit côté. Ne chauffez pas trop sinon le plastique ramollit trop et les pattes pivotent. Si cela arrive, réchauffez la soudure et remettez la patte en position à l'aide d'une pince.  ![](pictures/018.jpg)
-* Nettoyez à l'alcool isopropanol.
+* Soudez le header 40P P2. Soudez le petit côté. Ne chauffez pas trop sinon le plastique ramollit  et les pattes peuvent pivoter. Si cela arrive, réchauffez la soudure et remettez la patte en position à l'aide d'une pince.  ![](pictures/018.jpg)
 
 ## carte "Blink'n Switch"
 
@@ -110,7 +110,7 @@ Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenan
 
 * Soudez *une patte* de chacun des 2 supports CI 16P (SW10 et SW21), encoche vers la gauche. Ils serviront de base aux DIP-Switchs de sélection du numéro de port. ![](pictures/TODO.png)
 
-* Vissez les 5 supports 12mm sur la carte : support sur le dessus, boulon au dos. ![](pictures/046.jpg) Ils vont servir à plusieurs assemblages provisoires afin de bien aligner les composants de la façade, donc ne les démontez pas tout le long de cette étape. L'espace de certains boulons est restreint une fois les composants en place, aussi il est préférable de maintenir le boulon et tourner le support plutôt que l'inverse. ![](pictures/047.jpg) Si un composant nécessite à un moment de tourner un boulon, dévissez légèrement le support, tournez un peu le boulon et revissez le support.
+* Vissez les 5 supports 12mm sur la carte : support sur le dessus, boulon au dos. ![](pictures/046.jpg) Ils vont servir à plusieurs assemblages prooires afin de bien aligner les composants de la façade, donc ne les démontez pas tout le long de cette étape. L'espace de certains boulons est restreint une fois les composants en place, aussi il est préférable de maintenir le boulon et tourner le support plutôt que l'inverse. ![](pictures/047.jpg) Si un composant nécessite à un moment de tourner un boulon, dévissez légèrement le support, tournez un peu le boulon et revissez le support.
 
 * Emboitez un second support 16P et un DIP-Switch sur chacun des deux supports. ![](pictures/048.jpg)
     > * Fixez la façade avant avec deux ou trois supports en passant les dipswitch à travers leurs ouvertures. ![](pictures/049.jpg)
@@ -142,7 +142,7 @@ Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenan
 
 * Lorsque tout est correctement placé, retournez et terminez la soudure des pattes restantes.
 
-* Coupez l'excédent de pattes. Attention aux projections éventuelles des petits bouts de métal : protégez vos yeux.
+* Coupez l'excédent de pattes. Attention aux projections éventuelles des petits bouts de métal car ces pattes sont très ridgides : protégez vos yeux.
 
 * Dévissez la façade
 
@@ -220,7 +220,7 @@ le pas de vis vers le bas *pour chaque interrupteur*. Ils doivent être tous ori
 
 > **N'utilisez aucun produit détergent ou alcoolique**. 
 > Les produits speciaux pour écran plat sont acceptables. 
-> Si vous souhaitez utiliser un produit, faites un essai sur un petit endroit au dos de la façade pour vérifier qu'il n'abime pas le vernis.
+> Si vous souhaitez utiliser un produit, faites un essai sur un petit endroit au dos de la façade ou sur la carte BusDaughter pour vérifier qu'il n'abime pas le vernis.
 
 * IMPORTANT : Mettez votre bracelet anti-statique
 
@@ -241,12 +241,18 @@ le pas de vis vers le bas *pour chaque interrupteur*. Ils doivent être tous ori
 
 Pour assembler l'écran LCD et le bouton d'alimentation vous devez une dernière fois dévisser la façade.
 
+Pièces :
+
+> * Ecran LCD 4x20 I2C ![](todo.png)
+> * Cable I2C
+> * 4 Supports 12mm avec vis et écrou ![](pictures/022-support12.jpg)
+
 ### Bouton d'alimentation
 
 * Dévissez la façade.
 
 * Branchez le cable 4 fils en M et le long cable rouge :
-	* les deux fils noirs du cable M sur les bornes - et NC
+	* le deux fils noirs du cable M sur les bornes - et NC
 	* les deux fils rouges du cable M sur les bornes + et C
 	* le fil rouge long sur la borne centrale NO
 
@@ -273,22 +279,23 @@ Cette façade arrière offre des interrupteurs pour contrôler les mémoires FLA
 
 Les micro interrupteurs sont livrés soudés avec un cable de longueur convenant à un SC126. Si vous utilisez un boitier plus grand ou un autre ordinateur, vous pouvez utiliser des cables Dupont male/femelle comme rallonge, les branchements restent similaires.
 
-* Vissez le micro interrupteur avec 2 fils à la position verticale "flash select" à l'aide des vis et d'une clé Allen 1.4mm (non fournie).
-    * ATTENTION si vous avez placé la RomWBW en U1 sur SC126, vous devez mettre les deux fils en bas, sinon vous devez les mettre en haut.$$TODO VERIFIER
-* Vissez les deux interrupteurs avec 3 fils aux positions "flash protect" horizontales
+Les branchements seront effectués ultérieurement.
+
+* Vissez le micro interrupteur avec 2 fils sur la position verticale "flash select" à l'aide des vis M2x8 et d'une clé Allen (non fournie).
+    > ATTENTION si vous avez placé la RomWBW en U1 sur SC126, vous devez mettre les deux fils en bas, par contre si vous avez placé la rom SCM en U1 vous devez mettre les deux fils en haut.
+* Vissez les deux interrupteurs avec 3 fils aux positions "flash protect" horizontales à l'aide de 4 vis M2x8
 * Vissez le connecteur d'alimentation, patte la plus longue en bas (c'est le '-')
-* Vissez le bouton reset
+* Vissez le bouton reset, la position des pattes n'a pas d'importance
+* Vissez le connecteur HDMI à l'aide des deux vis M3x8
 
-        > $$A FAIRE : branchements RESET, POWER
-        > $$A FAIRE : branchement USB
-
----
 
 # Installation et branchements
 
+Tous les composants sont fixés ou soudés, il reste maintenant à effectuer les branchements et l'installation de l'ordinateur dans le boitier.
+
 ## Installation SC126
 
-* Percez le fond du boitier à l'aide du gabarit SC126.  ![](pictures/TODO.png)  ![](pictures/TODO.png) Seuls 3 trous sont nécessaires car 1 des supports sera en face d'une patte du boitier et ne sera pas vissé, mais il assurera un rôle pour éviter une pliure du circuit imprimé lors des branchements. ![](pictures/TODO.png)
+* Percez le fond du boitier à l'aide du gabarit SC126.  ![](pictures/TODO.png)  ![](pictures/TODO.png) Seuls 3 trous sont nécessaires car 1 des supports est en face d'une patte du boitier et ne sera pas vissé, mais il assurera un rôle pour éviter une pliure du circuit imprimé lors des branchements. ![](pictures/TODO.png)
 * Pour le gabarit SC126 vous pouvez percer un trou supplémentaires pour le SC113Tiny, qui procure 3 connecteurs de bus supplémentaires. Lui aussi ne sera fixé que par une vis, mais pour la stabilité du tout on placera deux supports. ![](pictures/TODO.png)
 * Vous pouvez également faire une ouverture sur le côté gauche du boitier pour que le port d'extension du SC113Tiny soit accessible à l'extérieur.
 
