@@ -50,7 +50,7 @@ Vérifiez le contenu du kit, et contactez moi en cas d'erreur, l'envoi des pièc
 * Circuit Bus Daughter ![](pictures/012-busdaughter.jpg)
 * Circuit Blink'n Switch ![](pictures/020-blinknswitch.jpg)
 * Façade avant ![](pictures/021-frontpanel.jpg)
-* Façade arrière ![](pictures/090-backpanel.jpg)
+* Façade arrière ![](pictures/021B-backpanel.jpg)
 
 
 ## Composants
