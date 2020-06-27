@@ -17,8 +17,7 @@ Les circuits imprimés et si possible les composants ont également été choisi
 Mais Bluety conviendra à tout autre boitier de dimensions supérieures (pour les façades) et d'une profondeur suffisante pour 
 l'ordinateur choisi. 
 
-L'écran peut être fourni sans adaptateur I2C, c'est par exemple préférable pour le RC2014 Pro, et on le controlera alors 
-avec une carte d'entrée-sortie.
+L'écran peut être fourni sans adaptateur I2C, c'est par exemple préférable pour le RC2014 Pro, et on le controlera alors avec une carte d'entrée-sortie.
 
 Je vous souhaite un bon assemblage et beaucoup de plaisir avec Bluety.
 
@@ -34,8 +33,8 @@ qui propose 3 connecteurs de bus au lieu de 5 et convient au boitier. Il présen
 pour ajouter de nouveaux SC113 à l'exterieur du boitier.
 
 Notez que cette carte SC113-Tiny n'est pas supportée par Stephen S. Cousins, et je fournis uniquement le circuit 
-imprimé en option avec Bluety. Je conseille de commander un SC113 officiel auprès de Stephen et d'utiliser ses composants
-sur la carte SC113Tiny : il y aura deux condensateurs et deux connecteurs de bus inutilisés, le reste étant identique.
+imprimé en option avec Bluety. Je conseille de commander un SC113 officiel auprès de Stephen 
+et d'utiliser ses composants sur la carte SC113Tiny : il y aura deux condensateurs et deux connecteurs de bus inutilisés, le reste étant identique.
 
 ![Finished](pictures/SC113tiny.jpg)
 
