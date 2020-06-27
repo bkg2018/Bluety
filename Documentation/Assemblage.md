@@ -1,8 +1,117 @@
-# Assemblage
----
-Cette notice décrit le montage des cartes de Bluety.
+# Bluety
 
-> Important: une soudure ou un branchement sera nécessaire sur votre ordinateur RC2014 pour les fonctions du bouton marche/arrêt de la façade. 
+Bluety est un ensemble de circuits imprimés pour un boitier destiné à recevoir un ordinateur compatible RC2014, avec
+une conception particulièrement adaptée au SC126 de Stephen S. Cousins. Le RC2014 Pro de Spencer Owens convient également, 
+ainsi que de nombreux ordinateurs au format RC2014.
+
+L'ensemble se compose de cinq éléments :
+
+* une façade avant
+* une façade arrière
+* une carte d'entrée-sortie avec deux ports complets sélectionnables et un port de contrôle en sortie
+* une carte d'interfaçage avec le bus RC2014
+* un écran LCD 4x20 avec adaptateur I2C
+
+La conception a été basée sur un boitier bleu qui a donné son nom à Bluety. 
+Les circuits imprimés et si possible les composants ont également été choisis de la couleur bleue.
+Mais Bluety conviendra à tout autre boitier de dimensions supérieures (pour les façades) et d'une profondeur suffisante pour 
+l'ordinateur choisi. 
+
+L'écran peut être fourni sans adaptateur I2C, c'est par exemple préférable pour le RC2014 Pro, et on le controlera alors 
+avec une carte d'entrée-sortie.
+
+Je vous souhaite un bon assemblage et beaucoup de plaisir avec Bluety.
+
+![Finished](pictures_finished/finished.jpg)
+
+## Remarque : extension de bus
+
+L'ordinateur SC126 possède 2 connecteurs de bus ce qui est assez peu, mais il a un connecteur d'extension latéral,
+conçu pour recevoir par exemple le kit SC113 qui propose 5 connecteurs de bus ainsi qu'un nouveau connecteur d'extension.
+
+La carte du SC113 est cependant trop longue pour le boitier de Bluety, aussi j'en ai dérivé une version SC113-Tiny
+qui propose 3 connecteurs de bus au lieu de 5 et convient au boitier. Il présente lui aussi un connecteur d'extension 
+pour ajouter de nouveaux SC113 à l'exterieur du boitier.
+
+Notez que cette carte SC113-Tiny n'est pas supportée par Stephen S. Cousins, et je fournis uniquement le circuit 
+imprimé en option avec Bluety. Je conseille de commander un SC113 officiel auprès de Stephen et d'utiliser ses composants
+sur la carte SC113Tiny : il y aura deux condensateurs et deux connecteurs de bus inutilisés, le reste étant identique.
+
+![Finished](pictures/SC113tiny.jpg)
+
+
+
+# Contenu du kit
+
+Vérifiez le contenu du kit, et contactez moi en cas d'erreur, l'envoi des pièces manquantes sera à ma charge.
+
+## Cartes
+
+* Circuit Bus Daughter ![](pictures/012-busdaughter.jpg)
+* Circuit Blink'n Switch ![](pictures/020-blinknswitch.jpg)
+* Façade avant ![](pictures/021-frontpanel.jpg)
+* Façade arrière ![](pictures/090-backpanel.jpg)
+
+
+## Composants
+
+* 8 LED 3mm bleues, 16 LED 3mm vertes, 16 LED 3mm jaunes ![](pictures/026-LEDs.jpg)
+* 11 condensateurs céramique 100nF (104) ![](pictures/013-Capa100nF.jpg) 
+* 1 condensateur électro 100uF ![](pictures/034-capa100uF.jpg) 
+* 3 réseaux résistance 10K (A103J) ![](pictures/042A.jpg)
+* 5 réseaux résistance 470 (A471J) ![](pictures/043A.jpg)
+* 10 Circuits intégrés (3x 74HCT273N, 3x 74HCT688, 2x 74HCT245N, 2x 74HCT32) ![](pictures/037-ics.jpg)
+* 1 écran LCD
+
+NOTE: La couleur des composants peut varier
+
+## Connecteurs
+
+* Header 40P angle droit ![](pictures/014-header40P.jpg)
+* Header 2x12P angle droit ![](pictures/015-header2x12P.jpg)
+* 4 supports CI 16P ![](pictures/023-support16.jpg)
+* 2 supports CI 14P ![](pictures/024-support14.jpg)
+* 8 supports CI 20P ![](pictures/025-support20.jpg)
+* 2 headers femelle 2P pattes de 11mm ![](pictures/030-h2P.jpg)
+* 4 headers femelle 8P pattes de 11mm ![](pictures/031-h8P.jpg)
+* 1 header mâle 2x12P ![](pictures/032-h2x12P.jpg)
+* 1 connecteur d'alimentation
+* 1 connecteur HDMI F/F
+
+## Interrupteurs
+
+* 4 interrupteurs ON/ON ou ON/OFF ![](pictures/027-ONON.jpg) 
+* 16 interrupteurs ON-OFF-ON ![](pictures/028-ONOFFFON.jpg) 
+* 2 interrupteurs dipswitch 8 positions ![](pictures/029-dipswitch.jpg)
+* 1 micro interrupteur avec cable 2 fils
+* 2 micro interrupteur avec cable 3 fils
+
+# Boutons
+
+* 1 bouton Reset
+* 1 bouton d'alimentation avec LED
+
+
+# Visserie
+
+* 6 boulons M2x8
+* 2 boulons M3x8
+* 5 Supports 12mm avec vis et écrou ![](pictures/022A-support12.jpg)
+* 4 Supports 10mm avec vis et écrou ![](pictures/022B-support10.jpg)
+
+# Cables
+
+* 1 cable HDMI/microHDMI M/M
+* 1 cable bouton on/off avec 3 connecteurs
+* 1 cable alimentation principal rouge 
+* 1 cable alimentation principal noir
+* 1 cable reset 2 fils
+* 1 cable I2C 4 fils
+
+NOTE: La couleur des cables I2C et Reset peut varier
+
+
+# Assemblage
 
 Outils nécessaires :
 
@@ -12,65 +121,53 @@ Outils nécessaires :
 * Pince fine coudée ![](pictures/004-pliers.jpg)
 * Pince coupante coudée ![](pictures/005-pliers.jpg)
 * Pompe à soudure ![](pictures/006-pump.jpg)
-* Tapis silicone (ou protection isolante du plan de travail) ![](pictures/TODO.png)
+* Tapis silicone (ou protection isolante du plan de travail) ![](pictures/006A-silicon.jpg)
 * Bracelet anti-statique ![](pictures/007-bracelet.jpg)
 * Nécessaire de nettoyage de pane de fer à souder (brosse métallique et flux) ![](pictures/008-tipscleaner.jpg) ![](pictures/009-tipscleaner.jpg)
-* Clés ALEN 2 et 1.4mm (fixations connecteurs en façade arrière) ![](pictures/TODO.png)
+* Clés ALEN 2 et 1.4mm (fixations connecteurs en façade arrière) ![](pictures/010-allen.jpg)
+* Tournevis avec têtes cruxiforme, plat, allen ![](pictures/011-screwdriver.jpg)
+* Multimètre avec mesure de voltage et résistance, éventuellement test de continuité  ![](pictures/011A-multimeter.jpg)
  
----
+
+Respectez l'ordre d'assemblage pour obtenir une belle façade.
+
+L'ordre des branchements et des assemblages est destiné à vous faciliter le travail : ne sautez pas les étapes.
+
+Pour les soudures, il existe une méthode qui limite les risques en cas d'erreur :
+
+* souder une seule patte avec peu de soudure
+* vérifier que le composant a été mis au bon endroit et dans le bon sens
+* en cas d'erreur, retirer la soudure et replacer correctement le composant
+* quand tout est corrrect, souder toutes les autres pattes
+* compléter la soudure de la première patte
+
+Si vous placez trop de soudure ou soudez toutes les pattes, il vous sera difficile voire impossible de réparer 
+une erreur comme un interrupteur ou une LED à l'envers.
+
+Nous recommandons cette méthode pour tous les composants apparaissant en façade avant.
 
 ## Carte "Bus Daughter"
 
-Cette carte se connecte sur n'importe quel connecteur de bus d'un ordinateur RC2014 et véhicule les signaux utiles jusqu'à la carte Blink'n Switch d'entrée / sortie. Son assemblage ne présente pas de difficulté majeure mais vous devrez faire attention à l'orientation des connecteurs.
+Cette carte se connecte sur n'importe quel connecteur de bus d'un ordinateur RC2014 et véhicule les signaux utiles 
+jusqu'à la carte Blink'n Switch d'entrée / sortie. Son assemblage ne présente pas de difficulté majeure mais vous devrez 
+faire attention à l'orientation des connecteurs.
 
-Les images représentent une version précédente de cette carte, récemment la position du connecteur P3 a été placée plus au centre mais l'assemblage est identique.
 
-Pièces :
-
-> * Circuit Bus Daughter ![](pictures/012-busdaughter.jpg)
-> * Condensateur 10nF ![](pictures/013-Capa100nF.jpg)
-> * Header 40P angle droit ![](pictures/014-header40P.jpg)
-> * Header 2x12P angle droit ![](pictures/015-header2x12P.jpg)
-
-* Soudez le condensateur C9 (100 nF). Coupez les pattes au dos. ![](pictures/TODO.png)
+* Soudez le condensateur C9, marqué "104" (100 nF). L'orientation n'a pas d'importance. Coupez les pattes au dos. ![](pictures/TODO.png)
 * Soudez le header 2x12P P3. Attention à souder le petit côté coudé. ![](pictures/017A.jpg) ![](pictures/017B.jpg) ![](pictures/017C.jpg)
-* Soudez le header 40P P2. Soudez le petit côté. Ne chauffez pas trop sinon le plastique ramollit  et les pattes peuvent pivoter. Si cela arrive, réchauffez la soudure et remettez la patte en position à l'aide d'une pince.  ![](pictures/018.jpg)
+* Soudez le header 40P P2. Soudez le petit côté. Ne chauffez pas trop sinon le plastique ramollit  et les pattes 
+peuvent pivoter. Si cela arrive, réchauffez la soudure et remettez la patte en position à l'aide d'une pince.  ![](pictures/018.jpg)
 
 ## carte "Blink'n Switch"
 
-Cette carte offre deux ports d'entrée/sortie complets, avec des LEDs témoins et des interrupteurs pour contrôler les entrées, ainsi que 8 LEDs en façade pour le port de contrôles 13 (0Dh) de l'ordinateur SC126 de Stephen S. Cousins. Ce port peut également être utilisé par un ordinateur RC2014 pour afficher 8 bits sur les LEDs de la façade avant avec un `OUT` sur le port 13.
+Cette carte offre deux ports d'entrée/sortie complets, avec des LEDs témoins et des interrupteurs pour contrôler les entrées, 
+ainsi que 8 LEDs en façade pour le port de contrôles 13 (0Dh) de l'ordinateur SC126 de Stephen S. Cousins. Ce port peut 
+également être utilisé par un ordinateur RC2014 pour afficher 8 bits sur les LEDs de la façade avant avec un `OUT` sur le port 13.
 
-Le montage de cette carte nécessite plusieurs assemblages temporaires avec la façade avant pour que les composants apparaissant sur cette dernière soient correctement alignés. **Respectez l'ordre de montage et les consignes** pour avoir les meilleurs chances d'obtenir une belle façade.
+Le montage de cette carte nécessite plusieurs assemblages temporaires avec la façade avant pour que les composants apparaissant 
+sur cette dernière soient correctement alignés. **Respectez l'ordre de montage et les consignes** pour avoir les meilleurs 
+chances d'obtenir une belle façade.
 
-Pièces :
-
-> * Circuit Blink'n Switch ![](pictures/020-blinknswitchh.jpg)
-> * Façade avant ![](pictures/021-frontpanel.jpg)
-> * 5 Supports 12mm avec vis et écrou ![](pictures/022-support12.jpg)
-> * 4 supports CI 16P ![](pictures/023-support16.jpg)
-> * 2 supports CI 14P ![](pictures/024-support14.jpg)
-> * 8 supports CI 20P ![](pictures/025-support20.jpg)
-> * 8 LED 3mm bleues, 16 LED 3mm vertes, 16 LED 3mm jaunes ![](pictures/026-LEDs.jpg)
-> * 4 interrupteurs ON/ON ou ON/OFF ![](pictures/027-ONON.jpg)
-> * 16 interrupteurs ON-OFF-ON ![](pictures/028-ONOFFFON.jpg)
-> * 2 interrupteurs dipswitch 8 positions ![](pictures/TODO.png)
-> * 2 headers femelle 2P pattes de 11mm ![](pictures/h2P.jpg)
-> * 4 headers femelle 8P pattes de 11mm ![](pictures/031-h8P.jpg)
-> * 1 header mâle 2x12P ![](pictures/032-h2x12P.jpg)
-> * 10 condensateurs céramique 100nF (104) ![](pictures/033-capa100nF.jpg)
-> * 1 condensateur électro 100uF ![](pictures/034-capa100uF.jpg)
-> * 3 réseaux résistance 10K (A103J) ![](pictures/035-rn10K.jpg)
-> * 5 réseaux résistance 470 (A471J) ![](pictures/036-rn470.jpg)
-> * Circuits intégrés (3x 74HCT273N, 3x 74HCT688, 2x 74HCT245N, 2x 74HCT32) ![](pictures/TODO.png)
-
-Dans l'ordre, vous allez monter :
-
-1. Les supports de circuit intégrés et les réseaux de résistances au dos du circuit
-2. Les supports de dip-switch sur le devant
-3. Les connecteurs femelles d'entrée, sortie et puissance sur le devant
-4. Les interrupteurs sur le devant
-5. Les LEDs sur le devant
-6. Le reste des composants au dos
 
 ### Dos du circuit imprimé (partie 1)
 
@@ -81,14 +178,14 @@ Placez le **dos** visible, (le trou du bouton marche arret en bas à gauche)
 * Soudez les 8 supports 20P et les 2 supports 14P, encoches vers le *haut* ou la *gauche* selon le cas ![](pictures/041A.png) ![](pictures/041B.jpg)
 
 * Soudez les 3 réseaux de résistance **10K** RN1 RN4 RN7 ![](pictures/042A.jpg) ![](pictures/042B.png)
-    > * attention à *ne pas confondre avec les 470* : le composant est marqué A103J (103 signifie 10 x 10^3)
+    > * attention à *ne pas confondre avec les 470* : le composant est marqué A103J (103 signifie 10 x 10^3, soit 10 Kilo Ohms)
     > * soudez d'abod une seule patte, vérifiez la position et le point de référence à gauche ![](pictures/042C.jpg)
     > * attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit
     > * une fois la position vérifiée soudez les autres pattes
 
 
 * Soudez les 5 réseaux de résistance **470** RN2 RN3 RN5 RN6 RN8 ![](pictures/043A.jpg) ![](pictures/043B.png)
-    > * le composant est marqué A471J (471 signifie 47 x 10^1)
+    > * le composant est marqué A471J (471 signifie 47 x 10^1, soit 470 Ohms)
     > * Attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit ![](pictures/043C.jpg)
 
 * Pour les composants le nécessitant, coupez l'excédent des pattes au fur et à mesure pour ne pas être gêné
