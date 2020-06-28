@@ -8,8 +8,8 @@ L'ensemble se compose de cinq éléments :
 
 * une façade avant
 * une façade arrière
-* une carte d'entrée-sortie avec deux ports complets sélectionnables et un port de contrôle en sortie
-* une carte d'interfaçage avec le bus RC2014
+* *Blink'n Switch*, une carte d'entrée-sortie avec deux ports complets sélectionnables et un port de contrôle en sortie
+* *Bus Daughter*, une carte d'interfaçage avec le bus RC2014
 * un écran LCD 4x20 avec adaptateur I2C
 
 La conception a été basée sur un boitier bleu qui a donné son nom à Bluety. 
@@ -39,7 +39,6 @@ et d'utiliser ses composants sur la carte SC113Tiny : il y aura deux condensateu
 ![Finished](pictures/SC113tiny.jpg)
 
 
-
 # Contenu du kit
 
 Vérifiez le contenu du kit, et contactez moi en cas d'erreur, l'envoi des pièces manquantes sera à ma charge.
@@ -60,7 +59,7 @@ Vérifiez le contenu du kit, et contactez moi en cas d'erreur, l'envoi des pièc
 * 3 réseaux résistance 10K (A103J) ![](pictures/042A.jpg)
 * 5 réseaux résistance 470 (A471J) ![](pictures/043A.jpg)
 * 10 Circuits intégrés (3x 74HCT273N, 3x 74HCT688, 2x 74HCT245N, 2x 74HCT32) ![](pictures/037-ics.jpg)
-* 1 écran LCD
+* 1 écran LCD  ![](pictures/038-LCD.jpg)
 
 NOTE: La couleur des composants peut varier
 
@@ -74,38 +73,38 @@ NOTE: La couleur des composants peut varier
 * 2 headers femelle 2P pattes de 11mm ![](pictures/030-h2P.jpg)
 * 4 headers femelle 8P pattes de 11mm ![](pictures/031-h8P.jpg)
 * 1 header mâle 2x12P ![](pictures/032-h2x12P.jpg)
-* 1 connecteur d'alimentation
-* 1 connecteur HDMI F/F
-
+* 1 connecteur d'alimentation ![](pictures/039-power.jpg)
+* 1 connecteur HDMI F/F ![](pictures/040-hdmi.jpg)
+* 
 ## Interrupteurs
 
 * 4 interrupteurs ON/ON ou ON/OFF ![](pictures/027-ONON.jpg) 
 * 16 interrupteurs ON-OFF-ON ![](pictures/028-ONOFFFON.jpg) 
 * 2 interrupteurs dipswitch 8 positions ![](pictures/029-dipswitch.jpg)
-* 1 micro interrupteur avec cable 2 fils
-* 2 micro interrupteur avec cable 3 fils
+* 1 micro interrupteur avec cable 2 fils ![](pictures/040-switchselect.jpg)
+* 2 micro interrupteur avec cable 3 fils ![](pictures/040-switchprotect.jpg)
 
 # Boutons
 
-* 1 bouton Reset
-* 1 bouton d'alimentation avec LED
-
+* 1 bouton Reset  ![](pictures/040-resetbtn.jpg)
+* 1 bouton d'alimentation avec LED ![](pictures/040-pwrbtn.jpg)
 
 # Visserie
 
-* 6 boulons M2x8
-* 2 boulons M3x8
+* 6 boulons M2x8 ![](pictures/040-M2x8.jpg)
+* 2 boulons M3x8 ![](pictures/040-M3x8.jpg)
 * 5 Supports 12mm avec vis et écrou ![](pictures/022A-support12.jpg)
 * 4 Supports 10mm avec vis et écrou ![](pictures/022B-support10.jpg)
 
 # Cables
 
-* 1 cable HDMI/microHDMI M/M
-* 1 cable bouton on/off avec 3 connecteurs
-* 1 cable alimentation principal rouge 
-* 1 cable alimentation principal noir
-* 1 cable reset 2 fils
-* 1 cable I2C 4 fils
+* 1 cable HDMI/microHDMI M/M ![](pictures/TODO.png)
+* 1 cable bouton on/off avec 3 connecteurs ![](pictures/040-power.jpg)
+* 1 cable alimentation principal rouge  ![](pictures/040-mainvcc.jpg)
+* 1 cable alimentation principal noir ![](pictures/040-maingnd.jpg)
+* 1 cable reset 2 fils ![](pictures/040-reset.jpg)
+* 1 cable I2C 4 fils ![](pictures/040-I2C.jpg)
+* 2 cables Dupont 12 fils ![](pictures/040-dupont.jpg)
 
 NOTE: La couleur des cables I2C et Reset peut varier
 
@@ -132,32 +131,34 @@ Respectez l'ordre d'assemblage pour obtenir une belle façade.
 
 L'ordre des branchements et des assemblages est destiné à vous faciliter le travail : ne sautez pas les étapes.
 
-Pour les soudures, il existe une méthode qui limite les risques en cas d'erreur :
+Pour les soudures, il existe une méthode qui limite les risques :
 
 * souder une seule patte avec peu de soudure
 * vérifier que le composant a été mis au bon endroit et dans le bon sens
 * en cas d'erreur, retirer la soudure et replacer correctement le composant
-* quand tout est corrrect, souder toutes les autres pattes
+* quand tout est correct, souder toutes les autres pattes
 * compléter la soudure de la première patte
 
 Si vous placez trop de soudure ou soudez toutes les pattes, il vous sera difficile voire impossible de réparer 
 une erreur comme un interrupteur ou une LED à l'envers.
 
-Nous recommandons cette méthode pour tous les composants apparaissant en façade avant.
+Je recommande en particulier cette méthode pour tous les composants apparaissant en façade avant.
+
 
 ## Carte "Bus Daughter"
 
-Cette carte se connecte sur n'importe quel connecteur de bus d'un ordinateur RC2014 et véhicule les signaux utiles 
+Cette carte se connecte sur n'importe quel emplacement de bus d'un ordinateur RC2014 et véhicule les signaux utiles 
 jusqu'à la carte Blink'n Switch d'entrée / sortie. Son assemblage ne présente pas de difficulté majeure mais vous devrez 
 faire attention à l'orientation des connecteurs.
 
 
-* Soudez le condensateur C9, marqué "104" (100 nF). L'orientation n'a pas d'importance. Coupez les pattes au dos. ![](pictures/TODO.png)
-* Soudez le header 2x12P P3. Attention à souder le petit côté coudé. ![](pictures/017A.jpg) ![](pictures/017B.jpg) ![](pictures/017C.jpg)
+* Soudez le condensateur C9, marqué "104" (100 nF). L'orientation n'a pas d'importance. Coupez les pattes au dos. ![](pictures/016-capa.jpg)
+* Soudez le header 2x12P P3. Attention à souder le petit côté coudé. ![](pictures/017A.jpg) ![](pictures/017B.jpg)
 * Soudez le header 40P P2. Soudez le petit côté. Ne chauffez pas trop sinon le plastique ramollit  et les pattes 
 peuvent pivoter. Si cela arrive, réchauffez la soudure et remettez la patte en position à l'aide d'une pince.  ![](pictures/018.jpg)
 
-## carte "Blink'n Switch"
+
+## Carte "Blink'n Switch"
 
 Cette carte offre deux ports d'entrée/sortie complets, avec des LEDs témoins et des interrupteurs pour contrôler les entrées, 
 ainsi que 8 LEDs en façade pour le port de contrôles 13 (0Dh) de l'ordinateur SC126 de Stephen S. Cousins. Ce port peut 
@@ -177,21 +178,20 @@ Placez le **dos** visible, (le trou du bouton marche arret en bas à gauche)
 * Soudez les 8 supports 20P et les 2 supports 14P, encoches vers le *haut* ou la *gauche* selon le cas ![](pictures/041A.png) ![](pictures/041B.jpg)
 
 * Soudez les 3 réseaux de résistance **10K** RN1 RN4 RN7 ![](pictures/042A.jpg) ![](pictures/042B.png)
-    > * attention à *ne pas confondre avec les 470* : le composant est marqué A103J (103 signifie 10 x 10^3, soit 10 Kilo Ohms)
-    > * soudez d'abod une seule patte, vérifiez la position et le point de référence à gauche ![](pictures/042C.jpg)
-    > * attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit
+    > * attention à *ne pas confondre avec les 470* : le composant est marqué *103*,ce qui signifie 10 x 10^3, soit 10 Kilo Ohms
+    > * soudez d'abod une seule patte, vérifiez la position et le point de référence à gauche, correspondant au petit carré imprimé sur le circuit ![](pictures/042C.jpg)
     > * une fois la position vérifiée soudez les autres pattes
 
 
 * Soudez les 5 réseaux de résistance **470** RN2 RN3 RN5 RN6 RN8 ![](pictures/043A.jpg) ![](pictures/043B.png)
-    > * le composant est marqué A471J (471 signifie 47 x 10^1, soit 470 Ohms)
+    > * le composant est marqué 471, ce qui signifie 47 x 10^1, soit 470 Ohms
     > * Attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit ![](pictures/043C.jpg)
 
 * Pour les composants le nécessitant, coupez l'excédent des pattes au fur et à mesure pour ne pas être gêné
  
 *Ne soudez pas* le header P1 et le condensateur C5 maintenant : ils gêneraient la suite de l'assemblage.
 
-Voici l'allure de la carte à ce stade.  ![](pictures/044.jpg)
+Voici l'allure de la carte à ce stade. NOtez que les supports de circuit fournis sont de type "tulipe" de meilleure qualité que sur cette image. ![](pictures/044.jpg)
 
 ### Avant : supports des dip-switch
 
@@ -335,38 +335,25 @@ le pas de vis vers le bas *pour chaque interrupteur*. Ils doivent être tous ori
 
 ## Façade avant
 
-Pour assembler l'écran LCD et le bouton d'alimentation vous devez une dernière fois dévisser la façade.
-
-Pièces :
-
-> * Ecran LCD 4x20 I2C ![](todo.png)
-> * Cable I2C
-> * 4 Supports 12mm avec vis et écrou ![](pictures/022-support12.jpg)
-
-### Bouton d'alimentation
-
-* Dévissez la façade.
-
-* Branchez le cable 4 fils en M et le long cable rouge :
-	* le deux fils noirs du cable M sur les bornes - et NC
-	* les deux fils rouges du cable M sur les bornes + et C
-	* le fil rouge long sur la borne centrale NO
-
-* Si vous désirez utiliser le joint, placez le sur le pas de vis à l'intérieur du bouton pour qu'il aille s'appuyer sur l'extérieur de la façade, mais ce joint est facultatif
-* Passez les cables à travers le trou de la façade et de la carte Blink'n Switch
-* Vissez le bouton d'alimentation à l'aide de l'écrou. 
-
-
-        > $$A faire  : branchement power button
+Pour assembler l'écran LCD et le bouton d'alimentation vous devez une dernière fois dévisser la façade pour écarter Blink'n Switch.
 
 ### Ecran LCD 4x20
 
-* Fixez les 4 supports à l'écran, support sur l'avant et boulon au dos.  ![](pictures/070.jpg)
-
-* Fixez le câble 4 fils sur le connecteur I2C  ![](pictures/TODO.png)
+* Dévissez la façade.
+* Fixez les 4 supports 10mm à l'écran, support sur l'avant et boulon au dos.  ![](pictures/070.jpg)
+* Fixez le câble 4 fils sur le connecteur I2C  ![](pictures/70A-lcdcable.jpg)
 	> Note : il est plus difficile de brancher le câble après la fixation de l'écran sur la façade 
-
 * Vissez l'ensemble sur la façade à l'aide des vis.  ![](pictures/071.jpg)
+
+### Bouton d'alimentation
+
+* Vissez le bouton d'alimentation à l'aide de l'écrou. Si vous désirez utiliser le joint, placez le sur le pas de vis à l'intérieur du bouton pour qu'il aille s'appuyer sur l'extérieur de la façade, mais ce joint est facultatif  ![](pictures/TODO.png)
+* Repérez les bornes du bouton : **+** et **-** à l'extérieur alimentent la LED, **NO** est l'entrée 5V, **C** est le fil de sortie 5V et **NC** ne sera pas connecté. ![](pictures/072-pwrbtn.jpg)
+* Branchez le fil rouge long sur la borne centrale ![](pictures/072-mainvcc.jpg)
+* Branchez le cable 3 fils :
+	* les deux fils rouges sur les bornes **+** et **C** ![](pictures/072-vcc.jpg)
+	* le fil noir sur la borne **-** ![](pictures/072-gnd.jpg)
+
 
 
 ## Façade arrière (SC126+HDMI)
