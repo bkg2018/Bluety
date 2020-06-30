@@ -14,8 +14,7 @@ L'ensemble se compose de plusieurs éléments :
 
 La conception a été basée sur un boitier bleu qui a donné son nom à Bluety. 
 Les circuits imprimés et si possible les composants ont également été choisis de la couleur bleue.
-Mais Bluety conviendra à tout autre boitier de dimensions supérieures (pour les façades) et d'une profondeur suffisante pour 
-l'ordinateur choisi. 
+Mais Bluety conviendra à tout autre boitier de dimensions supérieures (pour les façades) et d'une profondeur suffisante pour l'ordinateur choisi.
 
 L'écran peut être fourni sans adaptateur I2C, c'est par exemple préférable pour le RC2014 Pro, et on le controlera alors avec une carte d'entrée-sortie.
 
@@ -23,18 +22,15 @@ Je vous souhaite un bon assemblage et beaucoup de plaisir avec Bluety.
 
 ![Bluety terminé](pictures_finished/finished.jpg)
 
-> Remarque : extension de bus
+> **Remarque : extension de bus**
 >
 > L'ordinateur SC126 possède 2 connecteurs de bus ce qui est assez peu, mais il a un connecteur d'extension latéral,
 conçu pour recevoir par exemple le kit SC113 qui propose 5 connecteurs de bus ainsi qu'un nouveau connecteur d'extension.
 >
 > La carte du SC113 est cependant trop longue pour le boitier de Bluety, aussi j'en ai dérivé une version SC113-Tiny
-qui propose 3 connecteurs de bus au lieu de 5 et convient au boitier. Il présente lui aussi un connecteur d'extension 
-pour ajouter de nouveaux SC113 à l'exterieur du boitier.
+qui propose 3 connecteurs de bus au lieu de 5 et convient au boitier. Il présente lui aussi un connecteur d'extension pour ajouter de nouveaux SC113 à l'exterieur du boitier.
 >
-> Notez que cette carte SC113-Tiny n'est pas supportée par Stephen S. Cousins, et je fournis uniquement le circuit 
-imprimé en option avec Bluety. Je conseille de commander un SC113 officiel auprès de Stephen 
-et d'utiliser ses composants sur la carte SC113Tiny : quelques composants du kit SC113 seront inutilisés mais le fonctionnement et l'assemblage restent identiques.
+> Notez que cette carte SC113-Tiny n'est pas supportée par Stephen S. Cousins, et je fournis uniquement le circuit imprimé en option avec Bluety. Je conseille de commander un SC113 officiel auprès de Stephen et d'utiliser ses composants sur la carte SC113Tiny : quelques composants du kit SC113 seront inutilisés mais le fonctionnement et l'assemblage restent identiques.
 >
 >![SC113 à côté de SC113 Tiny](pictures/SC113tiny.jpg)
 
@@ -53,12 +49,11 @@ Ne touchez pas les circuits intégrés et l'écran LCD sans être équipé d'un 
 * 1 Façade avant ![Façade avant](pictures/021-frontpanel.jpg)
 * 1 Façade arrière ![Façade arrière](pictures/021B-backpanel.jpg)
 
-
 ### Composants
 
 * 8 LED 3mm bleues, 16 LED 3mm vertes, 16 LED 3mm jaunes ![LEDs](pictures/026-LEDs.jpg)
-* 11 condensateurs céramique 100nF (104) ![100 nF (ou 0.1 uF)](pictures/013-Capa100nF.jpg) 
-* 1 condensateur électrolytique 100uF ![100 uF](pictures/034-capa100uF.jpg) 
+* 11 condensateurs céramique 100nF (104) ![100 nF (ou 0.1 uF)](pictures/013-Capa100nF.jpg)
+* 1 condensateur électrolytique 100uF ![100 uF](pictures/034-capa100uF.jpg)
 * 3 réseaux résistance 10K (marquées 103) ![10 Kohm](pictures/042A.jpg)
 * 5 réseaux résistance 470 (marquées 471) ![470 Ohm](pictures/043A.jpg)
 * 10 Circuits intégrés (3x 74HCT273N, 3x 74HCT688, 2x 74HCT245N, 2x 74HCT32) ![Circuits intégrés](pictures/037-ics.jpg)
@@ -81,8 +76,8 @@ NOTE: La couleur des condensateurs et résistances peut varier.
 
 ### Interrupteurs
 
-* 4 interrupteurs ON/ON ou ON/OFF ![ON/ON](pictures/027-ONON.jpg) 
-* 16 interrupteurs ON-OFF-ON ![ON/OFF/ON](pictures/028-ONOFFFON.jpg) 
+* 4 interrupteurs ON/ON ou ON/OFF ![ON/ON](pictures/027-ONON.jpg)
+* 16 interrupteurs ON-OFF-ON ![ON/OFF/ON](pictures/028-ONOFFFON.jpg)
 * 2 interrupteurs dipswitch 8 positions ![Dipswitch](pictures/029-dipswitch.jpg)
 * 1 micro interrupteur avec cable 2 fils ![Interrupteur 2 fils](pictures/040-switchselect.jpg)
 * 2 micro interrupteur avec cable 3 fils ![Interrupteurs 3 fils](pictures/040-switchprotect.jpg)
@@ -174,7 +169,7 @@ Placez le **dos** visible, (le trou du bouton marche arret en bas à gauche)
 
 * Soudez les 5 réseaux de résistance **470** RN2 RN3 RN5 RN6 RN8 ![Résistances](pictures/043B.png)
 
-    > * le composant est marqué 471, ce qui signifie 47 x 10^1, soit 470 Ohms  ![470](pictures/043A.jpg) 
+    > * le composant est marqué 471, ce qui signifie 47 x 10^1, soit 470 Ohms  ![470](pictures/043A.jpg)
     > * Attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit ![Repère](pictures/043C.jpg)
 
 * Pour les composants le nécessitant, coupez l'excédent des pattes au fur et à mesure pour ne pas être gêné
@@ -189,7 +184,7 @@ Voici l'allure de la carte à ce stade. Notez que les supports de circuit fourni
 > Tous les éléments soudés sur l'avant apparaissent en façade à travers une ouverture, aussi une grande partie de l'assemblage consiste à souder *une seule patte*, puis placer la façade pour vérifier et corriger l'alignement. Ainsi il est possible de réchauffer la soudure pour bouger l'élément en cas de problème d'alignement.
 > Une fois celui-ci correct on peut souder le reste des pattes.
 
-Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenant en bas à droite. ![](pictures/045.jpg)
+Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenant en bas à droite. ![Avant carte](pictures/045.jpg)
 
 * Soudez *une patte* de chacun des 2 supports CI 16P (SW10 et SW21), encoche vers la gauche. Ils serviront de base aux DIP-Switchs de sélection du numéro de port. ![](pictures/TODO.png)
 
@@ -284,9 +279,9 @@ le pas de vis vers le bas *pour chaque interrupteur*. Ils doivent être tous ori
 
 * Nettoyez soigneusement la façade avec un chiffon doux ou microfibre.
 
-  > **N'utilisez aucun produit détergent ou alcoolique**.
+  > **N'utilisez aucun produit détergent, solvant ou alcoolique**.
   > Les produits speciaux pour écran plat sont acceptables.
-  > Si vous souhaitez utiliser un produit, faites un essai sur un petit endroit au dos de la façade ou sur la carte BusDaughter pour vérifier qu'il n'abime pas le vernis.
+  > Si vous souhaitez utiliser un produit, faites un essai sur un petit endroit au dos de la façade ou sur la carte Bus Daughter pour vérifier qu'il n'abime pas le vernis.
 
 **IMPORTANT : Mettez votre bracelet anti-statique**
 
@@ -315,13 +310,13 @@ Pour assembler l'écran LCD et le bouton d'alimentation vous devez une dernière
 
 ### Bouton d'alimentation
 
-  * Vissez le bouton d'alimentation à l'aide de l'écrou. Si vous désirez utiliser le joint, placez le sur le pas de vis à l'intérieur du bouton pour qu'il aille s'appuyer sur l'extérieur de la façade, mais ce joint est facultatif  ![](pictures/TODO.png)
-  * Repérez les bornes du bouton : **+** et **-** à l'extérieur alimentent la LED, **NO** est l'entrée 5V, **C** est le fil de sortie 5V et **NC** ne sera pas connecté. ![](pictures/072-pwrbtn.jpg)
-  * Branchez le fil rouge long sur la borne centrale ![](pictures/072-mainvcc.jpg)
-  * Branchez le cable 3 fils :
+* Vissez le bouton d'alimentation à l'aide de l'écrou. Si vous désirez utiliser le joint, placez le sur le pas de vis à l'intérieur du bouton pour qu'il aille s'appuyer sur l'extérieur de la façade, mais ce joint est facultatif  ![](pictures/TODO.png)
+* Repérez les bornes du bouton : **+** et **-** à l'extérieur alimentent la LED, **NO** est l'entrée 5V, **C** est le fil de sortie 5V et **NC** ne sera pas connecté. ![Bornes bouton ON/OFF](pictures/072-pwrbtn.jpg)
+* Branchez le fil rouge long sur la borne centrale **C** ![Cable borne C](pictures/072-mainvcc.jpg)
+* Branchez le cable 3 fils :
 
-    * les deux fils rouges sur les bornes **+** et **C** ![Fils rouges](pictures/072-vcc.jpg)
-    * le fil noir sur la borne **-** ![Fil noir](pictures/072-gnd.jpg)
+  * les deux fils rouges sur les bornes **+** et **C** ![Fils rouges](pictures/072-vcc.jpg)
+  * le fil noir sur la borne **-** ![Fil noir](pictures/072-gnd.jpg)
 
 ## 6. Façade arrière (SC126+HDMI)
 
@@ -333,12 +328,15 @@ Les branchements seront effectués ultérieurement.
 
 * Vissez le micro interrupteur avec 2 fils sur la position verticale "flash select" à l'aide des vis M2x8 et d'une clé Allen (non fournie).
 
-    > ATTENTION si vous avez placé la RomWBW en U1 sur SC126, vous devez mettre les deux fils en bas, par contre si vous avez placé la rom SCM en U1 vous devez mettre les deux fils en haut.
+    > ATTENTION si vous avez placé la RomWBW en U1 sur SC126, vous devez mettre les deux fils en bas ![Switch select](pictures/073-selectU1U2.jpg).
+    > par contre si vous avez placé la rom SCM en U1 vous devez mettre les deux fils en haut.
 
-* Vissez les deux interrupteurs avec 3 fils aux positions "flash protect" horizontales à l'aide de 4 vis M2x8
+* Vissez les deux interrupteurs avec 3 fils aux positions "flash protect" horizontales à l'aide de 4 vis M2x8 ![]
 * Vissez le connecteur d'alimentation, patte la plus longue en bas (c'est le '-')
 * Vissez le bouton reset, la position des pattes n'a pas d'importance
 * Vissez le connecteur HDMI à l'aide des deux vis M3x8
+
+La façade arrière présente alors l'aspect suivant.![Façade Arrière](pictures/074-backpanel.jpg)
 
 ## 7. Installation et branchements
 
@@ -353,19 +351,23 @@ Tous les composants sont fixés ou soudés, il reste maintenant à effectuer les
          > $$A FAIRE : gabarits RC2014 Pro, SC126 et SC126+SC113T
          > $$A FAIRE : gabarit ouverture latérale
 
-* Branchez le cable I2C maintenant, l'accès sera moins aisé une fois la façade arrière mise en place. Prenez soin de bien respecter la correspondance des fils : repérez le fil GND sur l'écran LCD pour le brancher sur la broche 0V du connecteur I2C sur le SC126 et faites de même pour les trois autres cables, l'ordre reste le même donc vous ne devez pas avoir de fil croisé.  ![](pictures/090-I2C)![](pictures/090-LCD)
-* Branchez également un cable Dupont sur le port 1 si vous souhaitez l'utiliser plus tard, là aussi l'accès sera moins aisé une fois la façade arrière en place.  ![](pictures/TODO.png)
-* Vissez les supports sur le SC126 : 4 pour SC126, et 2 pour SC113Tiny si vous l'utilisez.  ![](pictures/080.jpg)
-* Fixez le SC126 à l'aide des supports boulons vis. Notez qu'avec le gabarit fourni, seuls 3 supports du SC126 et 1 support du SC113 Tiny seront vissés. Si vous souhaitez visser les 6 supports vous devrez avancer légèrement la carte en direction de l'avant mais l'interrupteur situé sur SC126 peut vous en empêcher. Les vis des supports iront sous le boitier, et les boulons sont normalement déjà vissés sur le dessus de la carte. ![](pictures/TODO.png)
+* Branchez le cable I2C, l'accès sera moins aisé une fois la façade arrière mise en place. Prenez soin de respecter la correspondance des fils : repérez le fil GND sur l'écran LCD pour le brancher sur la broche 0V du connecteur I2C sur le SC126 et faites de même pour les trois autres cables, l'ordre reste le même donc vous ne devez pas avoir de fil croisé.  ![Cable I2C](pictures/090-I2C.jpg)![Cable LCD](pictures/090-LCD.jpg)
+* Branchez également un cable Dupont (*non fourni*) sur le port 1 si vous souhaitez l'utiliser plus tard, là aussi l'accès sera moins aisé une fois la façade arrière en place.  ![Cable serial](pictures/090-Serial.jpg)
+* Vissez les supports sur le SC126 : 4 pour SC126, et 2 pour SC113Tiny si vous l'utilisez.  ![Supports](pictures/080.jpg)
+* Fixez le SC126 à l'aide des supports boulons vis. Notez qu'avec le gabarit fourni, seuls 3 supports du SC126 et 1 support du SC113 Tiny seront vissés. Si vous souhaitez visser les 6 supports vous devrez avancer légèrement la carte en direction de l'avant mais l'interrupteur situé sur SC126 peut vous en empêcher. Les vis des supports iront sous le boitier, et les boulons sont normalement déjà vissés sur le dessus de la carte.
+
+A cet instant vous allez fixer les deux façades définitivement afin de terpiner les derniers branchements.
+
 * Fixez la façade avant
-* Fixez la façade arrière.
+* Fixez la façade arrière. Si vous avez branché un cable série, passez le à travers l'ouverture du bas avant de visser la façade. ![Connexion](pictures/091-Serial.jpg)
 
 ### Branchement BusDaughter => Blink'n Switch
 
-* Branchez les deux cables 12 fils sur la BusDaughter en prenant soin de respecter le repérage du fil A7 efffectué lors du branchement sur Blink'n Switch. Ne mettez pas les mêmes couleurs des deux cables côte à côte, il serait difficile de les différencier.
+* Branchez les deux cables 12 fils sur la BusDaughter en prenant soin de respecter le repérage du fil A7 efffectué lors du branchement sur Blink'n Switch.
 * Installez la carte BusDaughter dans l'emplacement bus de votre choix.
 
-    > Attention à l'emplacement de la broche 1 : le côté biseauté de la carte se présente sur l'avant de l'ordinateur
+    > Attention à l'emplacement de la broche 1 : le côté biseauté de la carte se présente sur l'avant de l'ordinateur ![Connexion](pictures/090-busdaughter.jpg)
+    > Attention à enficher la carte sur le côté droit du connecteur de bus de 2x40 prises (vu de l'arrière vers l'avant), la première broche (vers l'avant) se place dans le trou marqué "1" sur le circuit imprimé ![](pictures/TODO.PNG)
 
 * Normalement, les deux cables doivent rester parallèles. Le plus à droite sur Blink'n Switch sera aussi le plus à droite sur BusDaughter. Si ce n'est pas le cas, vérifiez le branchement.
 
@@ -376,16 +378,7 @@ Ls branchements sont facilités si vous avez connecté les cables de l'écran LC
 * Si vous n'avez pas déjà fixé le cable I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le cable puis revissez l'écran. Reportez-vous à la section *Façade avant* pour le branchement.
 * Si vous n'avez pas fixé les cables sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans la section *Façade avant* puis revissez la façade.
 
-Ensuite vous pouvez brancher les cables.
-
-* Le cable rouge long du bouton d'alimentation va sur la broche courte du connecteur arrière. ![](pictures/TODO.png)
-* Le cable rouge double du bouton d'alimentation va sur la broche + du connecteur J2 sur SC126 ![](pictures/TODO.png)
-* Conservez le cable noir double du bouton d'alimentation accessible vers le connecteur J2, il sera branché plus tard.
-* Branchez le cable I2C sur l'ordinateur SC126, en prenant soin de l'ordre des broches. Le connecteur 6 fils du SC126 permet de placer le cable dans toutes les configurations possibles, donc il n'y a pas besoin de croiser des fils.  ![](pictures/TODO.png)
-
 ### Façade arrière
-
-La façade arrière regroupe les cables qui sortent du boitier.
 
 Le connecteur d'alimentation sert le bouton marche/arrêt de la façade et l'alimentation du SC126. Le bouton Reset est particulièrement utile pour les utilisateurs de la carte PiZero Terminal qui nécessite un reset après la mise en marche.
 
@@ -393,14 +386,13 @@ Les interrupteurs de sélection permettent de choisir entre les deux ROM du SC12
 
 Le connecteur HDMI se branche par une rallonge directement sur la carte PiZero Terminal, permettant d'avoir une sortie écran couleur via le logiciel PiGfx.
 
-L'orifice à côté de la prise HDMI permet de passer une rallonge USB pour brancher un clavier USB sur un PiZero Terminal. Cette ouverture a été préférée à une prise USB en raison des difficultés à trouver un connecteur approprié. 
+L'orifice à côté de la prise HDMI permet de passer une rallonge USB pour brancher un clavier USB sur un PiZero Terminal. Cette ouverture a été préférée à une prise USB en raison des difficultés à trouver un connecteur approprié.
 
-En bas de la façade, une ouverture permet de passer les cables utiles pour les nombreux connecteurs du SC126, par exemple la prise série pour controler l'ordinateur via une machine de bureau ou portable.
+En bas de la façade, une ouverture permet de passer les cables utiles pour les nombreux connecteurs du SC126, par exemple la prise série pour controler l'ordinateur via une machine de bureau ou portable (si vous avez suivi les indications, un cable est déjà installé et passe à travers cette ouverture).
 
-* Branchez la rallonge HDMI sur le connecteur, puis sur votre PiZeroTerminal
-* Branchez les deux interrupteurs 3 fils sur les connecteurs JP1 et JP2 du SC126 : attention à placer le bon cable sur le bon connecteur selon que vous avez placé RomWBW en U1 et SCM en U2 ou l'inverse
-* Branchez l'interrupteur 2 fils sur le connecteur P9, attention a 
-* Branchez le bouton reset sur le connecteur P8
+* Branchez le raccord HDMI sur le connecteur intérieur de la façade arrière, puis sur votre PiZeroTerminal ![](pictures/TODO.PNG)
+* Branchez les deux interrupteurs 3 fils sur les connecteurs JP1 et JP2 du SC126 : attention à placer le bon cable sur le bon connecteur selon que vous avez placé RomWBW en U1 et SCM en U2 ou l'inverse. Les fils ne doivent pas se croiser ou subir de torsion : le fil le plus à droite sur l'interrupteur est aussi à droite sur la carte SC126 et correspond à la position "PROTECT" ![U1U2](pictures/091-U1U2.jpg)
+* Branchez l'interrupteur 2 fils sur le connecteur P9 : si vous avez RomWBW en U1, les deux fils doivent se situer en bas. Branchez le cable du bouton reset avec les fiches jaunes sur le connecteur P8 et le bouton de la façade. Pour ces deux cablages, la position des fils n'a pas d'importance.![Select Reset](pictures/091-reset+select.jpg)
 * Branchez le connecteur d'alimentation sur le connecteur J2, attention le + est au milieu
 
     > $$A FAIRE : détails des cables et du cablage
@@ -411,20 +403,18 @@ Pour l'interrupteur "SELECT" : le connecteur P9 du SC126 sélectionne la mémoir
 
 Avec le branchement proposé, le bouton de la façade avant contrôle l'alimentation du SC126 via le connecteur J2. Pour que ce dernier puisse alimenter le SC126 il faut placer l'interrupteur de la carte SC126 en position ON, afin de déporter la fonction ON/OFFF sur le bouton de la façade avant.
 
-* Branchez le fil rouge de la broche **C** du bouton on/off sur le bornier J2 du SC126  ![Borne C](pictures/091-borneC.jpg)
-*
+* Branchez le fil rouge de la broche **C** du bouton on/off sur la borne 5V du bornier J2 du SC126  ![Borne 5V](pictures/091-borne5V.jpg)
+* Branchez le fil noir de la broche **-** et le cable noir séparé sur la borne GND du bornier J2 ![Borne GND](pictures/091-borneGND.jpg)
 
 ## 9. Logiciel et utilisation
 
-Il n'y a rien de particulier à programmer pour les ports d'entrée sortie et celui de contrôle : les instructions OUT et IN enverront ou recevront les 8 bits de données.
-
-$$TODO: Pour l'écran LCD, une version spéciale de SCM a été développée. 
+Les ports d'entrée-sortie sont contrôlés par des instructions IN et OUT du Z-80 ou du BASIC. L'écran LCD se contrôle via l'interface I2C à l'aide d'une librairie à intégrer dans vos programmes, ou à l'aide de versions de SCM et BASIC en cours de développement.
 
 ### Port de contrôle (13/0Dh)
 
-Le port de contrôle est cablé sur le numéro de port 13 (0Dh), ceci correspond aux deux logiciels de l'ordinateur SC126 : le moniteur SCM affiche l'état de ses tests à l'allumage sur ce port, et le boot de RomWBW affiché également son statut sur ce port.
+Le port de contrôle est cablé sur le numéro de port 13 (0Dh), ceci correspond aux deux logiciels de l'ordinateur SC126 : le moniteur SCM affiche l'état de ses tests à l'allumage sur ce port, et le boot de RomWBW affiché également l'avancement de son démarrage sur ce port.
 
-Tout programme peut allumer ou éteindre ces leds en envoyant une donnée 8-bits sur le port 13. La LED la plus à gauche représente le bit de poids fort.
+Tout programme peut allumer ou éteindre ces 8 leds en envoyant une donnée 8-bits sur le port 13. La LED la plus à gauche représente le bit de poids fort.
 
 > Remarque : le port 13 retient sa dernière donnée, donc pour éteindre les LEDs il faut explicitement écrire un 0.
 
@@ -432,25 +422,25 @@ Tout programme peut allumer ou éteindre ces leds en envoyant une donnée 8-bits
 
 Les 2 ports d'entrée et de sortie possèdent chacun 8 LEDs qui représentent les 8 bits de données, le bit de poids fort étant représenté par la LED la plus à gauche.
 
-Pour utiliser le port d'*entrée* A ou B :
+Pour utiliser le port A ou B *en sortie* :
 
-* choisir le numéro de port avec le DIPswitch, le bit de poids fort du numéro est représenté par l'interrupteur le plus à gauche.
-* placer les interrupteurs en position médiane et connecter vos fils sur le port d'entrée
+* choisissez le numéro de port avec le DIPswitch, le bit de poids fort du numéro est représenté par l'interrupteur le plus à gauche. Par exemple, pour utiliser le port 7, on place les trois interrupteurs les plus à droite en position haute et les cinq autres en position basse.![](pictures/TODO.PNG)
+* placez les interrupteurs en position médiane et connectez vos fils sur le port d'entrée
 * les interrupteurs peuvent être placés en position haute pour forcer un bit à 1, ou basse pour le forcer à 0
-* l'interrupteur supérieur à droite des LEDs les active ou non, elles affichent l'état de l'entrée qui leur correspond
-* utiliser les instructions IN pour lire l'état du port
+* l'interrupteur supérieur à droite des LEDs les active ou désactive. Elles affichent l'état de l'entrée qui leur correspond![](pictures/TODO.PNG)
+* utiliser les instructions IN pour lire l'état du port![](pictures/TODO.PNG)
 
-Pour utiliser le port de *sortie* A ou B :
+Pour utiliser le port A ou B *en entrée* :
 
-* choisir le numéro de port avec le DIPswitch
-* connecter vos fils sur le port de sortie
-* l'interrupteur inférieur à droite des LEDs les active ou non
+* choisissez le numéro de port avec le DIPswitch
+* connectez vos fils sur le port de sortie
+* l'interrupteur inférieur à droite des LEDs active ou désactive les LEDs
 * utiliser les instructions OUT pour écrire sur le port : 5V sont placés sur les sorties des bits placés à 1
 
 > Remarque : Chaque port de sortie retient sa dernière donnée, donc pour éteindre les LEDs il faut explicitement écrire un 0.
 
 ### Ecran LCD
 
-Pour accéder à l'écran LCD il faut passer par le bus I2C sur le port 0Ch du SC126. Un logiciel spécifique est disponible.
+Pour accéder à l'écran LCD il faut passer par le bus I2C sur le port 0Ch du SC126. Un logiciel spécifique est disponible. Une version de SCM est en cours de développement pour affichher sur l'écran LCD.
 
     > $$TODO : logiciel LCD/I2C
