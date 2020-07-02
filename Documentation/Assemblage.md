@@ -121,7 +121,7 @@ Outils nécessaires :
 * Tapis silicone (ou protection isolante du plan de travail) ![Tapis](pictures/006A-silicon.jpg)
 * Bracelet anti-statique ![Bracelet](pictures/007-bracelet.jpg)
 * Nécessaire de nettoyage de pane de fer à souder (brosse métallique et flux) ![Nettoyage](pictures/008-tipscleaner.jpg) ![Nettoyage](pictures/009-tipscleaner.jpg)
-* Clés ALEN 2 et 1.4mm (fixations connecteurs en façade arrière) ![Clés Allen](pictures/010-allen.jpg)
+* Clés ALLEN 2 et 1.4mm (Pour vis M2x8 et M3x8) ![Clés Allen](pictures/010-allen.jpg)
 * Tournevis avec têtes cruxiforme, plat, allen ![Tournevis](pictures/011-screwdriver.jpg)
 * Multimètre avec mesure de voltage et résistance, éventuellement test de continuité  ![Multimètre](pictures/011A-multimeter.jpg)
 
@@ -188,7 +188,7 @@ Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenan
 
 * Soudez *une patte* de chacun des 2 supports CI 16P (SW10 et SW21), encoche vers la gauche. Ils serviront de base aux DIP-Switchs de sélection du numéro de port. ![](pictures/TODO.png)
 
-* Vissez les 5 supports 12mm sur la carte : support sur le dessus, boulon au dos. ![](pictures/046.jpg) Ils vont servir à plusieurs assemblages prooires afin de bien aligner les composants de la façade, donc ne les démontez pas tout le long de cette étape. L'espace de certains boulons est restreint une fois les composants en place, aussi il est préférable de maintenir le boulon et tourner le support plutôt que l'inverse. ![](pictures/047.jpg) Si un composant nécessite à un moment de tourner un boulon, dévissez légèrement le support, tournez un peu le boulon et revissez le support.
+* Vissez les 5 supports 12mm sur la carte : support sur le dessus, boulon au dos. ![](pictures/046.jpg) Ils vont servir à plusieurs assemblages provisoires afin de bien aligner les composants de la façade, donc ne les démontez pas tout le long de cette étape. L'espace de certains boulons est restreint une fois les composants en place, aussi il est préférable de maintenir le boulon et tourner le support plutôt que l'inverse. ![](pictures/047.jpg) Si un composant nécessite à un moment de tourner un boulon, dévissez légèrement le support, tournez un peu le boulon et revissez le support.
 
 * Emboitez un second support 16P et un DIP-Switch sur chacun des deux supports. ![](pictures/048.jpg)
 
@@ -287,10 +287,10 @@ le pas de vis vers le bas *pour chaque interrupteur*. Ils doivent être tous ori
 
 Installez les circuits intégrés dans leurs emplacements :
 
-    * 3x 74HCT273N
-    * 3x 74HCT688
-    * 2x 74HCT245N
-    * 2x 74HCT32
+  * 3x 74HCT273N
+  * 3x 74HCT688
+  * 2x 74HCT245N
+  * 2x 74HCT32
 
 * Revissez la façade.
 * Emboitez les dip-switch sur leurs supports 16P puis emboitez les ensembles sur le circuit imprimé à travers l'ouverture en façade.
@@ -310,6 +310,7 @@ Pour assembler l'écran LCD et le bouton d'alimentation vous devez une dernière
 
 ### Bouton d'alimentation
 
+* Dévissez la façade.
 * Vissez le bouton d'alimentation à l'aide de l'écrou. Si vous désirez utiliser le joint, placez le sur le pas de vis à l'intérieur du bouton pour qu'il aille s'appuyer sur l'extérieur de la façade, mais ce joint est facultatif  ![](pictures/TODO.png)
 * Repérez les bornes du bouton : **+** et **-** à l'extérieur alimentent la LED, **NO** est l'entrée 5V, **C** est le fil de sortie 5V et **NC** ne sera pas connecté. ![Bornes bouton ON/OFF](pictures/072-pwrbtn.jpg)
 * Branchez le fil rouge long sur la borne centrale **C** ![Cable borne C](pictures/072-mainvcc.jpg)
