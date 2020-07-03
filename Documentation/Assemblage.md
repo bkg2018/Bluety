@@ -288,30 +288,31 @@ Préparez les 16 interrupteurs à trois positions ON-OFF-ON et 4 interrupteurs �
     > * 8 bleues pour le port de contrôle
     > * si vous préférez avoir des LED remplaçables, vous pouvez souder des supports femelles à deux broches à la place des LEDs, mais l'ajustement des LEDs à la bonne longueur sera sensiblement plus compliqué. Cette possibilité est laissée à votre appréciation et les supports ne sont pas fournis dans le kit.
 
-* Posez le circuit imprimé, face avant sur le dessus, sur des supports de préférence non métalliques afin qu'il soit au dessus du plan de travail et permette aux LEDs de glisser dans leurs emplacements. Veillez à assurer une hauteur d'environ 10 mm.
-* Placez les 16 LEDs vertes (ou jaunes) des ports d'entrée LED1 à LED8 et LED17 à LED24. La patte la plus courte est l'anode et se place en haut sur le signe (-) du circuit imprimé. <img src="pictures/065.jpg" alt="Polarité LED" style="zoom:50%;" />
-* Placez les 16 LEDs jaunes (ou vertes) des ports de sortie LED9 à LED16 et LED25 à LED32. La patte la plus courte est l'anode et se place en haut sur le signe (-) du circuit imprimé.
-* Placez les 8 LED bleues du port de contrôle LED33 à LED40. La patte la plus courte est l'anode et se place en haut sur le signe (-) du circuit imprimé.
-
-    > * Vérifiez une dernière fois que les pattes les plus courtes sont bien situées sur le haut, ainsi que l'applat de la LED.
-
-* Fixez de nouveau la façade à l'aide des 5 vis. Pensez à bien visser la vis unique à côté du trou du bouton marche/arrêt : elle assurera le bon alignement des LED situées sous le LCD.  ![](pictures/066.jpg)
-* Soulevez l'ensemble : les LEDs glissent dans leur logement et se plaquent sur le circuit imprimé.
-* Retournez délicatement l'ensemble pour que les LEDs glissent en sens inverse et se placent dans leur ouverture sur la façade. Une grande partie d'entre elles va s'y positionner directement, pour les autres agissez avec une pince sur les pattes pour les placer dans leur ouverture en façade. Posez l'ensemble retourné sur le plan de travail, en appui sur les interrupteurs.
-
-    > * Si une LED est mal positionnée, utilisez ses pattes et une pince pour la replacer correctement. Procédez délicatement pour ne pas tordre les pattes. <img src="pictures/067A.jpg" style="zoom:50%;" />
-    > * Vérifiez bien que toutes les LEDs sont  placées dans leur logement sur la façade en la regardant par en dessous. Elles doivent toutes dépasser de la même hauteur.  <img src="pictures/067B.jpg" style="zoom:50%;" />
-    > * Vérifiez une dernière fois que les pattes les plus courtes sont bien sur le symbole (-) du circuit.   <img src="pictures/067C.jpg" style="zoom:50%;" />En cas d'erreur, vous devez retourner la carte, dévisser et ôter la façade, remettre la LED dans le bon sens, revisser la façade et reprendre le bon positionnement des LEDs dans les logements.
-
-* Une fois tout bien positionné et vérifié, soudez les pattes des LEDs.
-* Coupez l'excédent des pattes
-* Dévissez la façade.
+    | Etape                                                        |                                                              |
+    | ------------------------------------------------------------ | -----------------------------------------------------------: |
+    | Posez le circuit imprimé, face avant sur le dessus, sur des supports de préférence non métalliques afin qu'il soit au dessus du plan de travail et permette aux LEDs de glisser dans leurs emplacements. Veillez à assurer une hauteur d'environ 10 mm. |                                                              |
+    | Placez les 16 LEDs vertes (ou jaunes) des ports d'entrée LED1 à LED8 et LED17 à LED24. La patte la plus courte est l'anode et se place en haut sur le signe (-) du circuit imprimé. | <img src="pictures/065.jpg" alt="Polarité LED" style="zoom:50%;" /> |
+    | Placez les 16 LEDs jaunes (ou vertes) des ports de sortie LED9 à LED16 et LED25 à LED32. La patte la plus courte est l'anode et se place en haut sur le signe (-) du circuit imprimé. |                                                              |
+    | Placez les 8 LED bleues du port de contrôle LED33 à LED40. La patte la plus courte est l'anode et se place en haut sur le signe (-) du circuit imprimé. |                                                              |
+    | Vérifiez une dernière fois que les pattes les plus courtes sont bien situées sur le haut, ainsi que l'applat de la LED. |                                                              |
+    | Fixez de nouveau la façade à l'aide des 5 vis. Pensez à bien visser la vis unique à côté du trou du bouton marche/arrêt : elle assurera le bon alignement des LED situées sous le LCD. |             <img src="pictures/066.jpg" style="zoom:50%;" /> |
+    | Soulevez l'ensemble : les LEDs glissent dans leur logement et se plaquent sur le circuit imprimé. |                                                              |
+    | Retournez délicatement l'ensemble pour que les LEDs glissent en sens inverse et se placent dans leur ouverture sur la façade. Une grande partie d'entre elles va s'y positionner directement, pour les autres agissez avec une pince sur les pattes pour les placer dans leur ouverture en façade. Posez l'ensemble retourné sur le plan de travail, en appui sur les interrupteurs. |                                                              |
+    | Si une LED est mal positionnée, utilisez ses pattes et une pince pour la replacer correctement. Procédez délicatement pour ne pas tordre les pattes. |            <img src="pictures/067A.jpg" style="zoom:50%;" /> |
+    | Vérifiez bien que toutes les LEDs sont  placées dans leur logement sur la façade en la regardant par en dessous. Elles doivent toutes dépasser de la même hauteur. |            <img src="pictures/067B.jpg" style="zoom:50%;" /> |
+    | Vérifiez une dernière fois que les pattes les plus courtes sont bien sur le symbole (-) du circuit. |            <img src="pictures/067C.jpg" style="zoom:50%;" /> |
+    | En cas d'erreur, vous devez retourner la carte, dévisser et ôter la façade, remettre la LED dans le bon sens, revisser la façade et reprendre le bon positionnement des LEDs dans les logements. |                                                              |
+    | Une fois tout bien positionné et vérifié, soudez les pattes des LEDs. |                                                              |
+    | Coupez l'excédent des pattes                                 |                                                              |
+    | Dévissez la façade.                                          |                                                              |
 
 ### 4.6 Dos du circuit imprimé (partie 2)
 
-* Retournez le circuit.
-* Soudez le condensateur C5, attention à la polarité la patte la plus courte est sur le (-). Coupez les pattes de l'autre côté.  <img src="pictures/068.jpg" style="zoom:50%;" />
-* Soudez le connecteur mâle 2x12P P1. <img src="pictures/069.jpg" style="zoom:50%;" />
+| Etape                                                        |                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------ |
+| Retournez le circuit.                                        |                                                  |
+| Soudez le condensateur C5, attention à la polarité la patte la plus courte est sur le (-). La bande noire avec le signe '-' doit être face au demi cercle hachuré sur le circuit imprimé. Coupez les pattes de l'autre côté. | <img src="pictures/068.jpg" style="zoom:50%;" /> |
+| Soudez le connecteur mâle 2x12P P1.                          | <img src="pictures/069.jpg" style="zoom:50%;" /> |
 
 ### 4.7 Finition
 
@@ -321,18 +322,14 @@ Préparez les 16 interrupteurs à trois positions ON-OFF-ON et 4 interrupteurs �
   > Les produits spéciaux pour écran plat sont acceptables.
   > Si vous souhaitez utiliser un produit, faites un essai sur un petit endroit au dos de la façade ou sur la carte Bus Daughter pour vérifier qu'il n'abime pas le vernis.
 
-**IMPORTANT : Mettez votre bracelet anti-statique**
+<img src="/Users/bkg2018/Desktop/RETROCOMP/Bluety/Documentation/Pictures/attention.png" alt="attention" style="zoom:25%;" />**IMPORTANT : Mettez votre bracelet anti-statique**
 
-Installez les circuits intégrés dans leurs emplacements :
-
-  * 3x 74HCT273N
-  * 3x 74HCT688
-  * 2x 74HCT245N
-  * 2x 74HCT32
-
-* Revissez la façade.
-* Emboitez les dip-switch sur leurs supports 16P puis emboitez les ensembles sur le circuit imprimé à travers l'ouverture en façade.
-* Branchez les 2 cables 12 fils sur le connecteur P1. Repérez le fil A7 par sa couleur ou avec un petit autocollant placé à l'extrémité libre. <img src="pictures/070-Cable connexion.jpg" style="zoom:50%;" />
+| Etape                                                        |                                                              |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Installez les circuits intégrés dans leurs emplacements :<br />3x 74HCT273N<br />3x 74HCT688<br />2x 74HCT245N<br />2x 74HCT32 |                                                              |
+| Revissez la façade.                                          |                                                              |
+| Emboitez les dip-switch sur leurs supports 16P puis emboitez les ensembles sur le circuit imprimé à travers l'ouverture en façade. |                                                              |
+| Branchez les 2 cables 12 fils sur le connecteur P1. Repérez le fil A7 par sa couleur ou avec un petit autocollant placé à l'extrémité libre. | <img src="pictures/070-Cable connexion.jpg" style="zoom:50%;" /> |
 
 ## 5. Façade avant
 
@@ -340,58 +337,55 @@ Pour assembler l'écran LCD et le bouton d'alimentation vous devez une dernière
 
 ### Ecran LCD 4x20
 
-* Dévissez la façade.
-
-  * | Fixez les 4 supports 10mm à l'écran, support sur l'avant et boulon au dos. | <img src="pictures/070.jpg" style="zoom:50%;" />          |
-    | ------------------------------------------------------------ | --------------------------------------------------------- |
-    | Fixez le câble 4 fils sur le connecteur I2C                  | <img src="pictures/70A-lcdcable.jpg" style="zoom:50%;" /> |
-    |                                                              |                                                           |
-    |                                                              |                                                           |
-    |                                                              |                                                           |
-    |                                                              |                                                           |
-    |                                                              |                                                           |
-    |                                                              |                                                           |
-    |                                                              |                                                           |
-    |                                                              |                                                           |
-
-    
-
-*   
-	
-	> Note : il est plus difficile de brancher le câble après la fixation de l'écran sur la façade 
-	
-* Vissez l'ensemble sur la façade à l'aide des vis.  <img src="pictures/071.jpg" style="zoom:50%;" />
+* |                                                              |                                                           |
+  | ------------------------------------------------------------ | --------------------------------------------------------: |
+  | Dévissez la façade.                                          |                                                           |
+  | Fixez les 4 supports 10mm à l'écran, support sur l'avant et boulon au dos. |          <img src="pictures/070.jpg" style="zoom:33%;" /> |
+  | Fixez le câble 4 fils sur le connecteur I2C.<br />Note : il est plus difficile de brancher le câble après la fixation de l'écran sur la façade. | <img src="pictures/70A-lcdcable.jpg" style="zoom:33%;" /> |
+  | Vissez l'ensemble sur la façade à l'aide des vis.            |          <img src="pictures/071.jpg" style="zoom:33%;" /> |
+  
 
 ### Bouton d'alimentation
 
-* Dévissez la façade.
-* Vissez le bouton d'alimentation à l'aide de l'écrou. Si vous désirez utiliser le joint, placez le sur le pas de vis à l'intérieur du bouton pour qu'il aille s'appuyer sur l'extérieur de la façade, mais ce joint est facultatif  <img src="pictures/TODO.png" style="zoom:50%;" />
-* Repérez les bornes du bouton : **+** et **-** à l'extérieur alimentent la LED, **NO** est l'entrée 5V, **C** est le fil de sortie 5V et **NC** ne sera pas connecté. <img src="pictures/072-pwrbtn.jpg" alt="Bornes bouton ON/OFF" style="zoom:50%;" />
-* Branchez le fil rouge long sur la borne centrale **C** <img src="pictures/072-mainvcc.jpg" alt="Cable borne C" style="zoom:50%;" />
-* Branchez le cable 3 fils :
+A ce stade la façade est séparée de Bink'n Switch.
 
-  * les deux fils rouges sur les bornes **+** et **C** <img src="pictures/072-vcc.jpg" alt="Fils rouges" style="zoom:50%;" />
-  * le fil noir sur la borne **-** <img src="pictures/072-gnd.jpg" alt="Fil noir" style="zoom:50%;" />
+| Etape                                                        |                                                              |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Si ce n'est pas fait, dévissez la façade.                    |                                                              |
+| Vissez le bouton d'alimentation à l'aide de l'écrou. Si vous désirez utiliser le joint, placez le sur le pas de vis à l'intérieur du bouton pour qu'il aille s'appuyer sur l'extérieur de la façade, mais ce joint est facultatif | <img src="pictures/TODO.png" style="zoom:50%;" />            |
+| Repérez les bornes du bouton : **+** et **-** à l'extérieur alimentent la LED, **NO** est l'entrée 5V, **C** est le fil de sortie 5V et **NC** ne sera pas connecté. | <img src="pictures/072-pwrbtn.jpg" alt="Bornes bouton ON/OFF" style="zoom:50%;" /> |
+| Branchez le fil rouge long sur la borne centrale **C**       | <img src="pictures/072-mainvcc.jpg" alt="Cable borne C" style="zoom:50%;" /> |
+| Branchez le cable 3 fils :                                   |                                                              |
+| - les deux fils rouges sur les bornes **+** et **C**         | <img src="pictures/072-vcc.jpg" alt="Fils rouges" style="zoom:50%;" /> |
+| - le fil noir sur la borne **-**                             | <img src="pictures/072-gnd.jpg" alt="Fil noir" style="zoom:50%;" /> |
+
+
+
+Les extrêmités des câbles qui n'ont pas été branchées à ce stade vont rester libres 
 
 ## 6. Façade arrière
 
-Cette façade arrière offre des interrupteurs pour contrôler les mémoires FLASH de l'ordinateur SC126, ainsi qu'un connecteur HDMI et une ouverture permettant de passer un cable USB pour une liaison directe vers un PiZero Terminal RC2014, et enfin un connecteur d'alimentation et un bouton reset. Une ouverture permet de passer les cables vers les connecteurs arrière d'un SC126.
+Cette façade arrière offre :
 
-Les micro interrupteurs sont livrés soudés avec un cable de longueur convenant à un SC126. Si vous utilisez un boitier plus grand ou un autre ordinateur, vous pouvez utiliser des cables Dupont male/femelle comme rallonge, les branchements restent similaires.
+* des micro-interrupteurs pour contrôler les mémoires FLASH de l'ordinateur SC126
+* un connecteur HDMI et une ouverture permettant de passer un cable USB pour une liaison directe vers un PiZero Terminal RC2014 et de relier la prise HDMI de celui-ci
+* un connecteur d'alimentation pour un transformateur 5V à prise jack
+* un bouton reset
+* une ouverture en bas de la façade pour passer les cables vers les connecteurs arrière du SC126
 
-Les branchements seront effectués ultérieurement.
+Les micro interrupteurs sont livrés soudés avec un cable de longueur convenant à un SC126. Si vous utilisez un boitier plus grand ou un autre ordinateur, vous pouvez utiliser des cables Dupont male/femelle comme rallonge, les branchements restent identiques. Notez que les autres ordinateurs RC2014 ne proposent pas forcément le choix entre deux ROMs.
 
-* Vissez le micro interrupteur avec 2 fils sur la position verticale "flash select" à l'aide des vis M2x8 et d'une clé Allen (non fournie).
+Cette étape de l'assemblage ne concerne que le placement des éléments, les branchements seront effectués ultérieurement.
 
-    > ATTENTION si vous avez placé la RomWBW en U1 sur SC126, vous devez mettre les deux fils en bas ![Switch select](pictures/073-selectU1U2.jpg).
-    > par contre si vous avez placé la rom SCM en U1 vous devez mettre les deux fils en haut.
+| Etape                                                        |                                                              |
+| ------------------------------------------------------------ | -----------------------------------------------------------: |
+| Vissez le connecteur HDMI à l'aide des deux vis M3x8.        |                                                              |
+| Vissez le micro interrupteur avec 2 fils sur la position verticale "flash select" à l'aide des vis M2x8 et d'une clé Allen (non fournie). <br />ATTENTION : si vous avez placé la RomWBW en U1 sur SC126, vous devez mettre les deux fils en bas. Si par contre vous avez placé la rom SCM en U1 vous devez mettre les deux fils en haut. | <img src="pictures/073-selectU1U2.jpg" alt="Switch select" style="zoom:50%;" /> |
+| Vissez les deux interrupteurs avec 3 fils aux positions "flash protect" horizontales à l'aide de 4 vis M2x8. |                                                              |
+| Vissez le connecteur d'alimentation, patte la plus longue en bas (c'est le '-') |                  ![Alimentation](pictures/091-powercnct.jpg) |
+| Vissez le bouton reset, la position des pattes n'a pas d'importance. Branchez le cable Reset avec les exxtrêmités jaunes. |                             ![Reset](pictures/091-reset.jpg) |
 
-* Vissez les deux interrupteurs avec 3 fils aux positions "flash protect" horizontales à l'aide de 4 vis M2x8 ![]
-* Vissez le connecteur d'alimentation, patte la plus longue en bas (c'est le '-')
-* Vissez le bouton reset, la position des pattes n'a pas d'importance
-* Vissez le connecteur HDMI à l'aide des deux vis M3x8
-
-La façade arrière présente alors l'aspect suivant.![Façade Arrière](pictures/074-backpanel.jpg)
+La façade arrière présente alors l'aspect suivant.<img src="pictures/074-backpanel.jpg" alt="Façade Arrière" style="zoom:67%;" />
 
 ## 7. Installation et branchements
 
@@ -399,16 +393,25 @@ Tous les composants sont fixés ou soudés, il reste maintenant à effectuer les
 
 ### Installation SC126
 
-* Percez le fond du boitier à l'aide du gabarit SC126.  ![](pictures/TODO.png)  ![](pictures/TODO.png) Seuls 3 trous sont nécessaires car 1 des supports est en face d'une patte du boitier et ne sera pas vissé, mais il assurera un rôle pour éviter une pliure du circuit imprimé lors des branchements. ![](pictures/TODO.png)
+* Dévissez les pieds du fond du boitier et mettez à l'abri les pieds et leurs vis pour plus tard.
+
+* Placez le gabarit de perçage (drilling template) au fond du  boitier et scotchez le pour le maintenir en place. Vous pouvez jouer légèrement sur la position mais n'avancez pas trop le gabarit vers la façade avant, l'interrupteur avant du SC126 risque de buter contre Blink'n Switch ou la façade. Ne le reculez pas trop non plus car ce sera alors le connecteur HDMI qui risquera de buter contre des composants d'une carte située sur le RC2014. Si vous avez assemblé votre SC126 sans l'interrupteur
+
+* Percez le fond du boitier à l'emplacement des marques sur le gabarit avec une mèche de 3mm. Pour percer ces trous, la technique est de donner un coup de pointeau au centre du trou, puis d'utiliser une perceuse à colonne pour faire un trou bien vertical et bien centré. On peut faire un avant-trou avec une mèche de 1mm si on le souhaite mais le fond du boitier n'étant pas très épais une mèche de 3mm ne rencontre pas de difficulté particulière. Vous pouvez huiler légèrement pour éviter que le papier du gabarit brûle.![](pictures/TODO.png)  ![](pictures/TODO.png) Seuls 3 trous sont nécessaires car 1 des supports est en face d'une patte du boitier et ne sera pas vissé, mais il assurera un rôle pour éviter une pliure du circuit imprimé lors des branchements. ![](pictures/TODO.png)
+
 * Pour le gabarit SC126 vous pouvez percer un trou supplémentaires pour le SC113Tiny, qui procure 3 connecteurs de bus supplémentaires. Lui aussi ne sera fixé que par une vis, mais pour la stabilité du tout on placera deux supports. ![](pictures/TODO.png)
+
 * Vous pouvez également faire une ouverture sur le côté gauche du boitier pour que le port d'extension du SC113Tiny soit accessible à l'extérieur.
 
          > $$A FAIRE : gabarits RC2014 Pro, SC126 et SC126+SC113T
          > $$A FAIRE : gabarit ouverture latérale
 
 * Branchez le cable I2C, l'accès sera moins aisé une fois la façade arrière mise en place. Prenez soin de respecter la correspondance des fils : repérez le fil GND sur l'écran LCD pour le brancher sur la broche 0V du connecteur I2C sur le SC126 et faites de même pour les trois autres cables, l'ordre reste le même donc vous ne devez pas avoir de fil croisé.  ![Cable I2C](pictures/090-I2C.jpg)![Cable LCD](pictures/090-LCD.jpg)
+
 * Branchez également un cable Dupont (*non fourni*) sur le port 1 si vous souhaitez l'utiliser plus tard, là aussi l'accès sera moins aisé une fois la façade arrière en place.  ![Cable serial](pictures/090-Serial.jpg)
+
 * Vissez les supports sur le SC126 : 4 pour SC126, et 2 pour SC113Tiny si vous l'utilisez.  ![Supports](pictures/080.jpg)
+
 * Fixez le SC126 à l'aide des supports boulons vis. Notez qu'avec le gabarit fourni, seuls 3 supports du SC126 et 1 support du SC113 Tiny seront vissés. Si vous souhaitez visser les 6 supports vous devrez avancer légèrement la carte en direction de l'avant mais l'interrupteur situé sur SC126 peut vous en empêcher. Les vis des supports iront sous le boitier, et les boulons sont normalement déjà vissés sur le dessus de la carte.
 
 A cet instant vous allez fixer les deux façades définitivement afin de terpiner les derniers branchements.
