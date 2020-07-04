@@ -1,0 +1,2015 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>Assemblage</title><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857143; overflow-x: hidden; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; tab-size: 4; background-position: inherit inherit; background-repeat: inherit inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; word-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 40px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+@media screen and (max-width: 500px) { 
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font-family: inherit; font-size: inherit; font-style: inherit; font-variant-caps: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px !important; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right-width: 0px; background-color: inherit; }
+.CodeMirror-linenumber { }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; position: relative !important; background-position: inherit inherit; background-repeat: inherit inherit; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; background-position: 0px 0px; background-repeat: initial initial; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print { 
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { padding-left: 32px; padding-right: 32px; padding-bottom: 0px; break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background-color: rgb(204, 204, 204); display: block; overflow-x: hidden; background-position: initial initial; background-repeat: initial initial; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) { 
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background-color: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; background-position: initial initial; background-repeat: initial initial; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
+code { text-align: left; }
+a.md-print-anchor { white-space: pre !important; border: none !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; text-shadow: initial !important; background-position: 0px 0px !important; background-repeat: initial initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.html-for-mac .inline-math-svg .MathJax_SVG { vertical-align: 0.2px; }
+.md-math-block .MathJax_SVG_Display { text-align: center; margin: 0px; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; overflow-y: hidden; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: var(--monospace); }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none; }
+.MathJax_SVG_Display svg { vertical-align: middle !important; margin-bottom: 0px !important; margin-top: 0px !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom-width: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+svg[id^="mermaidChart"] { line-height: 1em; }
+mark { background-color: rgb(255, 255, 0); color: rgb(0, 0, 0); background-position: initial initial; background-repeat: initial initial; }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+mark .md-meta { color: rgb(0, 0, 0); opacity: 0.3 !important; }
+
+
+:root {
+  /* dark color for background*/
+  /* default color */
+  --bg-color1: rgb(40, 44, 52);
+  /* for most panel, context, header, etc */
+  --bg-color2: rgb(33, 37, 43);
+  /* for toc and table edit panel */
+  --bg-color3: rgba(16, 17, 20, 0.5);
+  /* for tips */
+  --bg-color4: black;
+  /* for blockquote, codeblock, input, etc */
+  --bg-color5: rgb(29, 31, 35);
+  /* light color for text and icon*/
+  /* default color */
+  --text-color1: rgb(170, 178, 180);
+  /* for text on panel */
+  --text-color2: rgb(220, 220, 220);
+  /* for checkbox and radio */
+  --text-color3: hsl(192, 6%, 40%);
+  /* for tips */
+  --text-color4: white;
+  /* for focus mode */
+  --text-color5: rgba(170, 178, 180, 0.5);
+  /* link color */
+  --link-color: rgb(197, 202, 210);
+  /* table color */
+  --table-border-color: rgb(100, 104, 116);
+  --table-thead-color: rgb(31, 35, 40);
+  --table-bg-color: rgb(40, 45, 52);
+  --table-bg-darker-color: rgb(35, 40, 46);
+  /* hover color */
+  /* default hover background color */
+  --hover-bg-color1: rgb(62, 66, 73);
+  /* for input item */
+  --hover-bg-color2: hsl(220, 9%, 14%);
+  /* for button on toc and table edit panel */
+  --hover-bg-color3: rgba(62, 66, 73, 0.8);
+  /* default hover text color */
+  --hover-text-color: white;
+  /* active color */
+  --active-color: var(--hover-bg-color1);
+  /* input color */
+  --input-color: rgb(29, 31, 35);
+  /* menu divider color */
+  --menu-divider-color: rgb(95, 97, 101);
+  /* scrollbar color */
+  --scrollbar-thumb-color: var(--menu-divider-color);
+  --scrollbar-track-color: rgba(95, 97, 101, 0.3);
+  /* theme select color */
+  --theme-select-color: rgba(255, 255, 255, 0.5);
+  --button-color: rgb(62, 66, 73);
+  --select-color: rgb(33, 37, 43);
+  /* focus color */
+  --focus-color: rgba(100, 100, 100, 0.8);
+  --focus-ring-color: var(--focus-color);
+  /* codeblock color */
+  --code-red-color: rgb(221, 110, 115);
+  --code-yellow-color: rgb(218, 192, 123);
+  --code-cyan-color: rgb(86, 182, 194);
+  --code-blue-color: rgb(94, 174, 237);
+  --code-purple-color: rgb(195, 115, 215);
+  --code-orange-color: rgb(221, 153, 103);
+  --code-grey-color: rgb(127, 132, 142);
+  --code-green-color: rgb(152, 195, 123);
+  --code-select-bg-color: rgb(64, 72, 89);
+  --code-cursor-color: rgb(82, 139, 255);
+  /* implicit selecttion text bg color */
+  --select-text-bg-color: rgb(150, 156, 170);
+  /* implicit button color */
+  --primary-color: var(--button-color);
+  --primary-btn-border-color: transparent;
+  --primary-btn-text-color: var(--text-color2);
+  /* implicit sidebar color */
+  --side-bar-bg-color: var(--bg-color2);
+  --control-text-color: var(--text-color2);
+  /* implicit text color */
+  --text-color: var(--text-color1);
+  /* implicit background color for setting menu */
+  --bg-color: var(--bg-color1);
+  /* implicit hover color */
+  --item-hover-bg-color: var(--hover-bg-color1);
+  --item-hover-text-color: var(--hover-text-color);
+  /* implicit active color */
+  --active-file-bg-color: var(--hover-bg-color);
+  /* implicit mathjax edit panel background color */
+  --rawblock-edit-panel-bd: var(--bg-color5);
+  /* implicit focus mode color */
+  --blur-text-color: var(--text-color5);
+  /* implicit search result select color */
+  --search-select-bg-color: var(--select-text-bg-color);
+  --search-select-bg-color: rgb(56, 71, 95);
+
+  --control-text-hover-color: var(--hover-text-color);
+  /* implicit active file color in sidebar file menu treeview */
+  --active-file-text-color: var(--hover-text-color);
+  --active-file-border-color: var(--hover-text-color);
+
+  --node-border: var(--menu-divider-color);
+  --node-fill: var(--bg-color2);
+}
+
+/* font */
+/* basic style */
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: "Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  color: var(--text-color1);
+  background: var(--bg-color1);
+  line-height: 1.6;
+}
+
+/* text selection background color */
+.in-text-selection {
+  background-color: rgb(64, 72, 89);
+}
+
+/* link */
+#write a:not([role="menuitem"]) {
+  color: var(--link-color) !important;
+}
+
+#write a:not([role="menuitem"]):hover {
+  color: var(--hover-text-color) !important;
+}
+
+/* h1-h6 */
+#write h1,
+#write h2,
+#write h3,
+#write h4,
+#write h5,
+#write h6 {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+  line-height: 1em;
+}
+
+#write h1 {
+  font-size: 2.5em;
+  padding-bottom: 0.5em;
+  border-bottom: 5px double var(--text-color1);
+}
+
+#write h1:before {
+  content: "\00A7  ";
+}
+
+#write h2 {
+  font-size: 2em;
+  padding-bottom: 0.5em;
+  border-bottom: 3px double var(--text-color1);
+}
+
+#write h2:before {
+  content: "\00A7  ";
+}
+
+#write h3 {
+  font-size: 1.75em;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid var(--text-color1);
+}
+
+#write h4 {
+  font-size: 1.55em;
+}
+
+#write h5 {
+  font-size: 1.35em;
+}
+
+#write h6 {
+  font-size: 1.2em;
+}
+
+/* horizontal divider */
+hr {
+  height: 2px;
+  background-color: var(--text-color1);
+  border: 0px;
+}
+
+/* list */
+ul,
+ol {
+  padding-left: 30px;
+}
+
+/* blockquote */
+blockquote {
+  border-left: 4px solid var(--text-color1);
+  padding: 4px 15px;
+  color: var(--text-color1);
+  background-color: var(--bg-color5);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+blockquote blockquote {
+  padding-right: 0em;
+}
+
+/* table */
+.md-table-fig,
+.md-table-fig:active {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.md-table thead tr {
+  background-color: var(--table-thead-color);
+}
+
+.md-table tr th {
+  font-weight: bold;
+  border-left: 1px solid var(--table-border-color);
+  border-right: 1px solid var(--table-border-color);
+  text-align: left;
+  margin: 0;
+  padding: 6px 13px;
+}
+
+.md-table tbody tr {
+  border-top: 1px solid var(--table-border-color);
+  margin: 0;
+  padding: 0;
+}
+
+.md-table tbody tr:nth-child(2n) {
+  background-color: var(--table-bg-darker-color);
+}
+
+.md-table tbody tr:nth-child(2n + 1) {
+  background-color: var(--table-bg-color);
+}
+
+.md-table tr td {
+  border-left: 1px solid var(--table-border-color);
+  border-right: 1px solid var(--table-border-color);
+  text-align: left;
+  margin: 0;
+  padding: 6px 13px;
+}
+
+.md-table tr th:first-child,
+.md-table tr td:first-child {
+  border-left-width: 0px;
+}
+
+.md-table tr th:last-child,
+.md-table tr td:last-child {
+  border-right-width: 0px;
+}
+
+/* table edit panel */
+.ty-table-edit {
+  background-color: var(--bg-color3);
+  border: 0px;
+  border-radius: 6px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 6px;
+  padding-right: 6px;
+  margin-top: -29px !important;
+}
+
+/* button on table edit panel */
+.ty-table-edit button {
+  background-color: transparent;
+  color: var(--text-color2);
+  border: 0px;
+  margin-left: 0px !important;
+}
+
+/* button hover on table edit panel */
+.ty-table-edit button:hover {
+  background-color: var(--hover-bg-color3);
+  color: var(--hover-text-color);
+}
+
+/* adjusting table panel */
+.popover {
+  background-color: var(--bg-color2);
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* arrow of adjusting table panel */
+.popover.bottom > .arrow:after {
+  border-bottom-color: var(--bg-color2);
+}
+
+/* divider in adjust table panel */
+.md-grid-board-wrap .popover-title {
+  border-top-color: var(--menu-divider-color);
+}
+
+/* grid size */
+.md-grid-board a {
+  width: 15px;
+  height: 15px;
+}
+
+/* existing thread grid */
+.md-grid-board tr[row="1"] .md-grid-ext {
+  background-color: rgb(60, 60, 60);
+}
+
+/* not existing thread grid */
+.md-grid-board tr[row="1"] {
+  background-color: rgb(220, 220, 220);
+}
+
+/* existing grid */
+.md-grid-board .md-grid-ext {
+  background-color: rgb(120, 120, 120);
+}
+
+/* selected thread grid */
+.md-grid-board tr[row="1"] a.md-active,
+.md-grid-board tr[row="1"] a:hover {
+  background-color: rgb(60, 60, 60);
+}
+
+/* selected grid */
+.md-grid-board a.md-active,
+.md-grid-board a:hover {
+  border-color: var(--menu-divider-color);
+  background-color: rgb(120, 120, 120);
+}
+
+/* task */
+.md-task-list-item > input {
+  margin-left: -1.3em;
+}
+
+/* footnote */
+sup.md-footnote {
+  color: var(--text-color1);
+  background-color: var(--bg-color2);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* mathjax */
+/* .mathjax-block>.code-tooltip {
+    bottom: .375rem;
+}
+.md-mathjax-midline {
+    background: #fafafa;
+} */
+.md-inline-math script {
+  color: var(--text-color1);
+}
+
+.md-rawblock > .md-rawblock-container {
+  transition: 0.5s;
+}
+
+.md-rawblock > .md-rawblock-tooltip {
+  transition: 0.5s;
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.md-rawblock:hover > .md-rawblock-tooltip {
+  transition: 0.5s;
+  visibility: visible;
+  opacity: 1;
+  animation: none;
+}
+
+/* meta information of image */
+.md-image > .md-meta {
+  border: 0px;
+  padding: 2px 0px 0px 4px;
+  font-size: 0.9em;
+  color: var(--text-color1);
+}
+
+/* input */
+input {
+  background-color: var(--input-color) !important;
+  border: 0px !important;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* input hover */
+/* input:hover {
+    background-color: var(--hover-bg-color2) !important;
+} */
+/* checkbox */
+input[type="checkbox"]:before {
+  content: "";
+  display: inline-block;
+  width: 1.1rem;
+  height: 1.1rem;
+  vertical-align: middle;
+  text-align: center;
+  border: 0px;
+  border-radius: 3px;
+  background-color: var(--input-color);
+  margin-top: -0.5rem;
+  margin-left: -0.1rem;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* checkbox hover */
+input[type="checkbox"]:not([disabled]):not(:checked):hover:before {
+  content: "\2713";
+  font-size: 0.9rem;
+  line-height: 1.2rem;
+  color: var(--text-color3);
+}
+
+/* checkbox checked*/
+input[type="checkbox"]:checked:before {
+  content: "\2713";
+  font-size: 0.9rem;
+  line-height: 1.2rem;
+  color: var(--text-color2);
+}
+
+/* checkbox checked hover*/
+input[type="checkbox"]:checked:hover:before {
+  content: "\2713";
+  font-size: 0.9rem;
+  line-height: 1.2rem;
+  color: var(--hover-text-color);
+}
+
+/* radio */
+input[type="radio"]:before {
+  content: "";
+  display: inline-block;
+  width: 1.1rem;
+  height: 1.1rem;
+  vertical-align: middle;
+  text-align: center;
+  border: 0px;
+  border-radius: 0.55rem;
+  background-color: var(--input-color);
+  margin-top: -0.4rem;
+  margin-left: -0.1rem;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* radio hover */
+input[type="radio"]:not([disabled]):not(:checked):hover:before {
+  content: "\25CF";
+  font-size: 1rem;
+  line-height: 1rem;
+  color: var(--text-color3);
+}
+
+/* radio checked */
+input[type="radio"]:checked:before {
+  content: "\25CF";
+  font-size: 1rem;
+  line-height: 1rem;
+  color: var(--text-color2);
+}
+
+/* radio checked hover*/
+input[type="radio"]:checked:before {
+  content: "\25CF";
+  font-size: 1rem;
+  line-height: 1rem;
+  color: var(--hover-text-color);
+}
+
+/* default focus style */
+:focus {
+  outline-color: var(--focus-color);
+}
+
+/* exit source view button */
+.typora-sourceview-on #toggle-sourceview-btn {
+  background-color: var(--bg-color2);
+}
+
+.typora-sourceview-on #toggle-sourceview-btn:hover {
+  background-color: var(--hover-bg-color1);
+}
+
+/* shadow for image item*/
+.md-image img {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* toc */
+.md-toc {
+  background-color: var(--bg-color3);
+  border-radius: 6px;
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
+  border: 0px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* toc content */
+.md-toc-content {
+  padding-top: 5px;
+  padding-bottom: 8px;
+  margin-top: 15px;
+  margin-bottom: 0px;
+}
+
+/* remove outline when toc is selected */
+.md-toc:focus .md-toc-content {
+  border: 0px;
+  margin: 0px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* toc item */
+.md-toc-item {
+  margin: 2px;
+}
+
+/* toc edit panel */
+#write div.md-toc-tooltip {
+  border: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: var(--bg-color3);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  opacity: 0;
+  visibility: hidden;
+  display: block !important;
+  transition: 0.3s;
+}
+
+#write .md-toc:focus div.md-toc-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+#write .md-toc:focus {
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+/* toc delete button */
+.md-delete-toc {
+  background-color: transparent;
+}
+
+/* html block */
+.md-htmlblock:hover .md-htmlblock-container {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  border-top-right-radius: 0px;
+}
+
+/* search panel */
+#md-searchpanel {
+  background-color: var(--bg-color2);
+  color: var(--text-color2);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* ignore case button and find whole word button */
+.searchpanel-search-option-btn {
+  border: 0px;
+}
+
+/* button on search panel */
+#md-searchpanel .btn:hover {
+  color: var(--hover-text-color);
+  background-color: var(--hover-bg-color1) !important;
+}
+
+/* remove shadow around input in search panel*/
+#md-searchpanel input {
+  box-shadow: none;
+}
+
+/* search option button hover */
+.searchpanel-search-option-btn:not(.active):hover {
+  color: var(--hover-text-color);
+  background-color: var(--hover-bg-color1);
+}
+
+/* close button in search panel */
+#md-searchpanel .input-group-addon.close-btn {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* replaceall button */
+.ty-replace-panel-row #search-panel-replaceall-btn {
+  padding-left: 8px;
+  padding-right: 6px !important;
+}
+
+/* replace button */
+.ty-replace-panel-row #search-panel-replace-btn {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* sidebar */
+.sidebar-menu {
+  color: var(--text-color2);
+}
+
+/* sidebar shadow */
+.typora-node #typora-sidebar {
+  box-shadow: 3px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* divider between file item and search */
+.ty-sidebar-search-panel {
+  border-color: var(--menu-divider-color);
+}
+
+/* file item in sidebar */
+#file-library .file-list-item {
+  border-bottom: 0px;
+  opacity: 1;
+  border-left: 4px solid;
+  border-color: var(--bg-color2);
+}
+
+/* file item hover */
+#file-library .file-list-item:hover {
+  background-color: var(--hover-bg-color1);
+  color: var(--hover-text-color);
+  border-color: var(--hover-bg-color1);
+}
+
+/* file item active */
+#file-library .file-list-item.active {
+  background-color: var(--hover-bg-color1);
+  color: var(--hover-text-color);
+  border-color: var(--hover-text-color);
+}
+
+/* suffix of file item*/
+.file-list-item-file-ext-part {
+  opacity: 0.8;
+}
+
+/* sidebar file menu */
+#sidebar-files-menu {
+  border: 0px;
+  box-shadow: -2px -2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* sidebar file menu item */
+.dropdown-menu > li > a {
+  color: var(--text-color2);
+}
+
+.dropdown-menu > li > a:hover {
+  color: var(--hover-text-color);
+}
+
+/* sidebar file menu close button */
+#close-sidebar-menu-btn:hover {
+  color: var(--hover-text-color);
+}
+
+/* sidebar file nemu divider */
+#sidebar-files-menu > .show + .menuitem-group-label.show {
+  border-color: var(--menu-divider-color);
+}
+
+/* sidebar footer */
+.sidebar-footer {
+  border: 0px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  transition: 0.3s;
+  display: flex !important;
+}
+
+.pin-outline
+  #typora-sidebar:hover
+  .sidebar-footer:not(.show-sidebar-footer-context) {
+  animation: none;
+}
+
+/* remove outline when file item in treeview is selected*/
+.file-library-node:not(.file-node-root):focus > .file-node-content {
+  outline: none;
+}
+
+/* sort button on sidebar file menu */
+.ty-side-sort-btn.active,
+.ty-side-sort-btn:hover {
+  color: var(--hover-text-color);
+}
+
+/* setting */
+/* header in setting */
+.window-header {
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* sidebar in setting */
+.sidebar {
+  background-color: var(--bg-color2) !important;
+  box-shadow: 3px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.list-group-content {
+  margin-left: 10px !important;
+}
+
+/* sidebar button in setting menu */
+.nav-group-item {
+  color: var(--text-color2) !important;
+  border-top-left-radius: 6px !important;
+  border-bottom-left-radius: 6px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+/* sidebar button hover in setting menu */
+.nav-group-item:hover,
+.nav-group-item:active,
+.nav-group-item.active {
+  background-color: var(--hover-bg-color1) !important;
+  color: var(--hover-text-color) !important;
+}
+
+/* remove up and down button from number type input*/
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+}
+
+/* the indent example in setting.editor */
+div.pane
+  > div:nth-child(4)
+  > div:nth-child(2)
+  .label-input-group
+  td:last-child
+  div {
+  border: 0px !important;
+  border-radius: 6px;
+  background-color: var(--bg-color5);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  margin: 10px !important;
+}
+
+/* button in setting menu */
+.ty-preferences button.btn-default {
+  border: 0px;
+  background-color: var(--bg-color5);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+/* button hover in setting menu */
+.ty-preferences .btn-default:not([disabled]):hover {
+  background-color: var(--hover-bg-color1) !important;
+}
+
+/* return button in setting menu */
+.window-header button:hover {
+  color: var(--text-color2) !important;
+}
+
+/* search input in setting menu */
+.search-input {
+  border-top-left-radius: 6px !important;
+  border-bottom-left-radius: 6px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+  margin-left: 10px !important;
+}
+
+.search-input:focus {
+  border: none !important;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* select item (mostly in setting menu) */
+select {
+  border: 0px;
+  border-radius: 6px;
+  background-color: var(--input-color) !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* enabled select item hover */
+select:not([disabled]):hover {
+  color: var(--text-color2);
+  opacity: 1;
+}
+
+/* disabled select item hover */
+select[disabled]:hover {
+  opacity: 0.5;
+}
+
+/* mega menu */
+.megamenu-content,
+.megamenu-opened header {
+  background: var(--bg-color1);
+}
+
+.megamenu-content {
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.megamenu-opened .megamenu-content {
+  visibility: visible;
+  opacity: 1;
+  animation: none;
+}
+
+/* mega menu sidebar*/
+.megamenu-menu {
+  background-color: var(--bg-color2);
+  box-shadow: 3px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* return button in mega menu */
+#megamenu-menu-sidebar .menu-style-btn {
+  border: 0px;
+}
+
+/* remove divider in mega menu */
+.megamenu-menu-header {
+  border-color: var(--menu-divider-color);
+}
+
+/* return button color in mega menu */
+.megamenu-menu-header #megamenu-menu-header-title {
+  color: var(--text-color2);
+}
+
+/* return button hover in mega menu */
+.megamenu-menu-header:hover {
+  background-color: var(--hover-bg-color1);
+}
+
+/* return button hover in mega menu */
+.megamenu-menu-header:hover #megamenu-menu-header-title {
+  color: var(--hover-text-color);
+}
+
+/* long button in mega menu */
+.long-btn {
+  border: 0px;
+  background-color: var(--bg-color5);
+  color: var(--text-color1);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+/* recent file in mega menu */
+#recent-file-panel {
+  padding: 10px;
+}
+
+#recent-document-table {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+#recent-file-panel-action-btn {
+  background: var(--bg-color5);
+  border: 0px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+#recent-file-panel thead tr {
+  background-color: var(--table-thead-color);
+}
+
+#recent-file-panel tbody tr:nth-child(2n) {
+  background-color: var(--table-bg-darker-color);
+}
+
+#recent-file-panel tbody tr:nth-child(2n + 1) {
+  background-color: var(--table-bg-color);
+}
+
+#recent-file-panel-action-btn:hover {
+  background-color: var(--hover-bg-color1);
+  color: var(--text-color2);
+}
+
+/* theme preview */
+.theme-preview-div {
+  box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* theme preview hover */
+.theme-preview-div:hover {
+  border-color: var(--theme-select-color);
+}
+
+/* context menu and spell check panel */
+.dropdown-menu:not(.megamenu-menu-list) {
+  background-color: var(--bg-color2);
+  color: var(--text-color2);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* divider in context menu and spell check panel */
+.dropdown-menu .divider {
+  border-color: var(--menu-divider-color);
+}
+
+/* remove divider outline */
+.dropdown-menu {
+  border: 0px;
+}
+
+/* footer */
+footer.ty-footer {
+  border-top: 0px !important;
+  background-color: var(--bg-color2) !important;
+  /*     color: var(--text-color2); */
+  box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* footer item */
+.footer-item,
+#outline-btn,
+#footer-word-count {
+  color: var(--text-color2);
+  opacity: 1;
+}
+
+/* footer item hover */
+.footer-item:hover,
+#outline-btn:hover {
+  background-color: var(--hover-bg-color1);
+  color: var(--hover-text-color);
+}
+
+/* button on some panel */
+.btn {
+  border: 0px;
+  outline-width: 0px !important;
+}
+
+.btn:hover {
+  background-color: var(--hover-bg-color1);
+  color: var(--hover-text-color);
+}
+
+/* traffic button hover */
+#top-titlebar .toolbar-icon.btn:hover {
+  color: var(--text-color2);
+  background-color: var(--hover-bg-color1);
+}
+
+/* traffic button hover */
+#top-titlebar #w-close:hover {
+  background-color: #e81123 !important;
+}
+
+/* adjust maxmize restore button height */
+.typora-maxmized #w-restore {
+  height: 24px;
+}
+
+/* left upper button hover */
+.ty-menu-btn-area:hover .ty-menu-btn-area-sub {
+  color: var(--text-color2) !important;
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  padding-right: 10px;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+/* scrollbar track */
+::-webkit-scrollbar-track:hover {
+  background-color: var(--scrollbar-track-color) !important;
+  border-radius: 4px;
+}
+
+/* scrollbar thumb */
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--scrollbar-thumb-color) !important;
+  border-radius: 4px;
+}
+
+/* tip when hover on a button */
+#ty-tooltip {
+  background-color: var(--bg-color4);
+  color: var(--text-color4);
+}
+
+/* item container hover in context menu */
+.menu-item-container:hover {
+  background-color: var(--bg-color2);
+}
+
+/* item in context menu */
+.menu-item-container .menu-style-btn {
+  border-color: var(--menu-divider-color);
+}
+
+/* mathjax edit panel*/
+.md-rawblock-before {
+  border-top-left-radius: 6px;
+}
+
+.md-rawblock-after {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+/* mathjax focus */
+.MathJax_SVG:focus {
+  outline: none;
+  background-color: transparent;
+}
+
+/* notification panel */
+#md-notification {
+  background-color: var(--bg-color2) !important;
+  color: var(--text-color2);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+#ty-surpress-mode-warning-close-btn {
+  float: unset !important;
+  margin: 0px !important;
+}
+
+.unibody-window #md-notification p {
+  bottom: -4px !important;
+}
+
+/* inline codeblock */
+code {
+  font-size: 0.9em;
+  background-color: var(--bg-color5);
+  border-radius: 6px;
+  padding: 4px 4px 4px 4px;
+  margin: 0px 6px 0px 6px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* codeblock */
+.md-fences,
+.md-fences:active {
+  background-color: var(--bg-color5);
+  border-radius: 6px;
+  padding: 8px 4px 8px 4px !important;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.md-fences .code-tooltip {
+  display: block !important;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s;
+  background-color: var(--bg-color3);
+}
+
+.md-fences.md-focus .code-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.CodeMirror-lines {
+  padding-left: 4px;
+}
+
+/* selected text and cursor */
+.CodeMirror-selected,
+.CodeMirror-selectedtext {
+  background: var(--code-select-bg-color) !important;
+}
+
+.CodeMirror div.CodeMirror-cursor {
+  border-left: 2px solid var(--code-cursor-color);
+  z-index: 3;
+}
+
+.CodeMirror.cm-s-typora-default div.CodeMirror-cursor {
+  border-left: 3px solid var(--code-cursor-color);
+}
+
+/* highlight */
+.cm-s-inner .cm-property {
+  color: var(--code-blue-color) !important;
+}
+
+.cm-s-inner .cm-operator {
+  color: var(--code-cyan-color) !important;
+}
+
+.cm-s-inner .cm-keyword {
+  color: var(--code-purple-color) !important;
+}
+
+.cm-s-inner .cm-tag {
+  color: var(--code-red-color) !important;
+}
+
+.cm-s-inner .cm-attribute {
+  color: var(--code-orange-color) !important;
+}
+
+.cm-s-inner .cm-string {
+  color: var(--code-green-color) !important;
+}
+
+.cm-s-inner .cm-comment,
+.cm-s-inner.cm-comment {
+  /*     color: var(--code-orange-color) !important; */
+  color: var(--code-grey-color) !important;
+  font-style: italic;
+}
+
+.cm-s-inner .cm-header,
+.cm-s-inner .cm-def,
+.cm-s-inner.cm-header,
+.cm-s-inner.cm-def {
+  /*     color: var(--code-red-color) !important; */
+  color: var(--code-blue-color) !important;
+}
+
+.cm-s-inner .cm-meta,
+.cm-s-inner .cm-qualifier {
+  color: var(--code-red-color) !important;
+}
+
+.cm-s-inner .cm-builtin {
+  /*     color: var(--code-blue-color) !important; */
+  color: var(--code-cyan-color) !important;
+}
+
+.cm-s-inner .cm-bracket {
+  color: var(--text-color1) !important;
+}
+
+.cm-s-inner .cm-number {
+  color: var(--code-orange-color) !important;
+}
+
+.cm-s-inner .cm-variable {
+  color: var(--text-color1) !important;
+}
+
+.cm-s-inner .cm-variable-2 {
+  /*     color: var(--code-blue-color) !important; */
+  color: var(--code-yellow-color) !important;
+}
+
+.cm-s-typora-default .cm-header,
+.cm-s-typora-default .cm-property {
+  color: var(--code-red-color) !important;
+}
+
+.cm-s-typora-default .cm-string {
+  /*     color: var(--code-blue-color); */
+  color: var(--code-purple-color);
+}
+
+.cm-s-typora-default .cm-atom {
+  color: var(--code-grey-color);
+  font-style: italic;
+}
+
+.cm-s-typora-default .cm-number {
+  color: var(--code-orange-color);
+  font-style: normal !important;
+}
+
+.cm-s-typora-default .cm-link {
+  color: var(--code-blue-color);
+}
+
+.cm-s-typora-default .CodeMirror-activeline-background {
+  background: var(--hover-bg-color1);
+}
+
+.cm-s-typora-default .cm-comment,
+.cm-s-typora-default .cm-code {
+  color: var(--code-purple-color);
+}
+
+.cm-s-typora-default .cm-tag {
+  /*     color: var(--code-red-color); */
+  color: var(--code-blue-color);
+}
+
+.cm-s-typora-default .cm-strong,
+.cm-s-typora-default .cm-em,
+.cm-s-typora-default .cm-del {
+  /*     color: var(--code-green-color); */
+  color: var(--code-orange-color);
+}
+
+.cm-s-typora-default .cm-block-start.cm-variable-2 {
+  /*     color: var(--code-orange-color); */
+  color: var(--code-red-color);
+}
+
+.cm-formatting-task .cm-formatting-task {
+  color: var(--code-red-color);
+}
+
+/* math formula tag */
+.cm-s-inner .cm-atom,
+.cm-s-inner.cm-atom {
+  color: var(--code-blue-color);
+}
+
+/* inline codeblock in source mode */
+.cm-s-typora-default .cm-comment {
+  color: var(--code-green-color);
+}
+
+/* horizontal divider when language is markdown */
+.cm-s-inner .cm-hr {
+  color: var(--text-color1);
+}
+
+/* variable type when language is c/cpp */
+.cm-s-inner .cm-variable-3 {
+  color: var(--code-purple-color);
+}
+
+/* unknown highlight keyword */
+.cm-s-inner .cm-quote,
+.cm-s-inner.cm-quote {
+  color: #57ac57;
+}
+
+.cm-s-inner .cm-link {
+  color: var(--code-blue-color);
+}
+
+.cm-s-inner .cm-negative {
+  color: #d95050;
+}
+
+.cm-s-inner .cm-positive {
+  color: #50e650;
+}
+
+.cm-s-inner .cm-string-2 {
+  color: #f50;
+}
+
+.CodeMirror-gutters {
+  border-right: none;
+}
+
+/* focus mode */
+.on-focus-mode .md-end-block:not(.md-focus) .md-toc-item {
+  opacity: 0.5;
+}
+
+.on-focus-mode #write h1:not(.md-focus):before {
+  opacity: 0.5;
+}
+
+.on-focus-mode #write h2:not(.md-focus):before {
+  opacity: 0.5;
+}
+
+.on-focus-mode #write h1:not(.md-focus) {
+  border-color: var(--text-color5);
+}
+
+.on-focus-mode #write h2:not(.md-focus) {
+  border-color: var(--text-color5);
+}
+
+.on-focus-mode #write h3:not(.md-focus) {
+  border-color: var(--text-color5);
+}
+
+/* YAML block */
+pre.md-meta-block,
+pre.md-meta-block:active {
+  background-color: var(--bg-color5);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* switch between different mode */
+#typora-source {
+  display: block !important;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.typora-sourceview-on #typora-source {
+  visibility: visible;
+  opacity: 1;
+}
+
+#typora-source .CodeMirror-lines {
+  max-width: 1200px;
+  padding-left: 70px;
+  padding-right: 70px;
+}
+
+#write {
+  display: block !important;
+  visibility: visible;
+  opacity: 1;
+  transition: 0.3s;
+  max-width: 1200px;
+  padding-left: 70px;
+  padding-right: 70px;
+}
+
+.typora-sourceview-on #write {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* #md-searchpanel {
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.3s !important;
+}
+
+.on-search-panel-open #md-searchpanel {
+    visibility: visible;
+    opacity: 1;
+} */
+
+.uni-preference-panel {
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.show-preference-panel .uni-preference-panel {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* quick open menu */
+.typora-quick-open-item:hover {
+  background-color: var(--hover-bg-color1);
+  color: var(--hover-text-color);
+}
+
+/* insert table panel */
+.modal-content {
+  border: 0px;
+  border-radius: 6px;
+}
+
+.modal-content .btn-primary {
+  background-color: var(--hover-bg-color1);
+  color: var(--text-color1);
+  outline-width: 0px;
+}
+
+.modal-content .btn-primary:hover {
+  color: var(--hover-text-color);
+}
+
+.modal-content .form-control,
+.modal-content .form-control:focus {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modal-backdrop {
+  background-color: black;
+  opacity: 0.3 !important;
+}
+
+/* zoom  */
+#zoom-hint #zoom-hint-reset {
+  color: var(--text-color1);
+}
+
+#zoom-hint .zoom-hint-button:hover {
+  color: var(--hover-text-color) !important;
+}
+
+/* word count */
+#footer-word-count-info {
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.ty-show-word-count #footer-word-count-info {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* spell check */
+#spell-check-panel {
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.ty-show-spell-check #spell-check-panel {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* search result */
+.md-search-select {
+  border: 2px solid rgb(69, 125, 255);
+  box-sizing: content-box;
+  color: var(--text-color1) !important;
+}
+
+.md-search-hit {
+  background-color: var(--search-select-bg-color);
+}
+
+/* search panel message */
+#searchpanel-msg {
+  background-color: var(--bg-color2);
+  color: var(--text-color2);
+}
+
+.searchpanel-msg-btn:hover {
+  background-color: var(--hover-bg-color1);
+  color: var(--hover-text-color);
+}
+
+/* language selection for codeblock */
+.auto-suggest-container {
+  border: 0px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  background-color: var(--bg-color2);
+}
+
+/* sidebar outline item hover and active */
+.outline-item:hover {
+  color: var(--hover-text-color);
+}
+
+.outline-label:hover {
+  text-decoration: none;
+}
+
+.pin-outline .outline-active {
+  color: var(--hover-text-color);
+}
+
+/* sidebar title hover */
+.info-panel-tab:hover {
+  color: var(--hover-text-color) !important;
+}
+
+/* active file in sidebar file menu treeview */
+.file-tree-node.active > .file-node-background {
+  background-color: var(--hover-bg-color1);
+}
+
+/* hover file in sidebar file menu treeview */
+.file-node-content:hover {
+  cursor: pointer;
+}
+
+/* saved button in megamenu */
+#m-saved:hover {
+  background-color: var(--bg-color2);
+  color: var(--text-color2);
+  cursor: default;
+}
+
+/* mermaid sequence*/
+text.actor {
+  fill: var(--text-color1);
+}
+
+.labelText {
+  fill: var(--text-color1);
+}
+
+.loopText {
+  fill: var(--text-color1);
+}
+
+/* mermaid flowchart */
+.node rect,
+.node circle,
+.node ellipse,
+.node polygon {
+  fill: var(--bg-color2);
+  stroke: var(--text-color1);
+  stroke: var(--menu-divider-color);
+}
+
+.edgePath .path {
+  stroke: var(--menu-divider-color);
+}
+
+.label {
+  color: var(--text-color1);
+}
+
+/* mermaid gantt */
+.titleText {
+  fill: var(--text-color1);
+}
+
+.section0,
+.section2 {
+  fill: var(--table-thread-color);
+}
+
+.section1,
+.section3 {
+  fill: var(--table-bg-color);
+}
+
+.task0,
+.task1,
+.task2,
+.task3 {
+  fill: rgb(80, 84, 90);
+  stroke: rgb(80, 84, 90);
+}
+
+.taskText0,
+.taskText1,
+.taskText2,
+.taskText3 {
+  fill: var(--text-color2) !important;
+}
+
+.active0,
+.active1,
+.active2,
+.active3 {
+  fill: rgb(100, 104, 110);
+  stroke: rgb(100, 104, 110);
+}
+
+.activeText0,
+.activeText1,
+.activeText2,
+.activeText3 {
+  fill: var(--text-color2) !important;
+}
+
+.done0,
+.done1,
+.done2,
+.done3 {
+  fill: rgb(48, 51, 58);
+  stroke: rgb(48, 51, 58);
+}
+
+.crit0,
+.crit1,
+.crit2,
+.crit3 {
+  fill: rgb(150, 150, 150);
+  stroke: var(--text-color1);
+}
+
+.activeCrit0,
+.activeCrit1,
+.activeCrit2,
+.activeCrit3 {
+  fill: rgb(100, 104, 110);
+  stroke: var(--text-color1);
+}
+
+.doneCrit0,
+.doneCrit1,
+.doneCrit2,
+.doneCrit3 {
+  fill: rgb(48, 51, 58);
+  stroke: var(--text-color1);
+}
+
+.taskTextOutside0,
+.taskTextOutside2,
+.taskTextOutside1,
+.taskTextOutside3 {
+  fill: var(--text-color1) !important;
+}
+
+.grid text {
+  fill: white;
+}
+
+.today {
+  stroke: var(--text-color1);
+}
+
+/* flow diagram */
+.md-fences[lang="flow"] .md-diagram-panel-preview rect {
+  fill: var(--bg-color2);
+  stroke: var(--menu-divider-color);
+  stroke-width: 1.2;
+}
+
+.md-fences[lang="flow"] .md-diagram-panel-preview path {
+  stroke: var(--menu-divider-color);
+  stroke-width: 1.2;
+}
+
+.md-fences[lang="flow"] #cond {
+  fill: var(--bg-color2);
+}
+
+/* sequence diagram */
+.md-fences[lang="sequence"] .md-diagram-panel-preview rect:not([fill="none"]) {
+  fill: var(--bg-color2);
+  stroke: var(--menu-divider-color);
+  stroke-width: 1.2;
+}
+
+.md-fences[lang="sequence"] .md-diagram-panel-preview path {
+  fill: var(--menu-divider-color);
+  stroke: var(--menu-divider-color);
+  stroke-width: 1.2;
+}
+
+.md-fences[lang="sequence"] text,
+.md-fences[lang="flow"] text {
+  font-family: "Consolas" !important;
+}
+
+/* remove box shadow when not edit graph */
+.md-fences[lang="sequence"]:not(.md-focus),
+.md-fences[lang="mermaid"]:not(.md-focus),
+.md-fences[lang="flow"]:not(.md-focus) {
+  box-shadow: none;
+}
+
+/* remove border when edit graph */
+.md-diagram-panel {
+  border: none !important;
+}
+
+
+/* No link underlines in TOC */
+.md-toc-inner {
+    text-decoration: none;
+}
+
+.md-toc-content {
+    counter-reset: h1toc
+}
+
+.md-toc-h1 {
+    margin-left: 0;
+    counter-reset: h2toc
+}
+
+.md-toc-h2 {
+    margin-left: 2rem;
+    counter-reset: h3toc
+}
+
+.md-toc-h3 {
+    margin-left: 3rem;
+    counter-reset: h4toc
+}
+
+.md-toc-h4 {
+    margin-left: 4rem;
+    counter-reset: h5toc
+}
+
+.md-toc-h5 {
+    margin-left: 5rem;
+    counter-reset: h6toc
+}
+
+.md-toc-h6 {
+    margin-left: 6rem;
+}
+
+.md-toc-h1:before {
+    color: black;
+    counter-increment: h1toc;
+}
+
+.md-toc-h1 .md-toc-inner {
+    margin-left: 0;
+}
+
+.md-toc-h2:before {
+    color: black;
+    counter-increment: h2toc;
+    content: counter(h2toc) ". "
+}
+
+.md-toc-h2 .md-toc-inner {
+    margin-left: 0;
+}
+
+.md-toc-h3:before {
+    color: black;
+    counter-increment: h3toc;
+    content: counter(h2toc) ". " counter(h3toc) ". "
+}
+
+.md-toc-h3 .md-toc-inner {
+    margin-left: 0;
+}
+
+.md-toc-h4:before {
+    color: black;
+    counter-increment: h4toc;
+    content: counter(h2toc) ". " counter(h3toc) ". " counter(h4toc) ". "
+}
+
+.md-toc-h4 .md-toc-inner {
+    margin-left: 0;
+}
+
+.md-toc-h5:before {
+    color: black;
+    counter-increment: h5toc;
+    content: counter(h2toc) ". " counter(h3toc) ". " counter(h4toc) ". " counter(h5toc) ". "
+}
+
+.md-toc-h5 .md-toc-inner {
+    margin-left: 0;
+}
+
+.md-toc-h6:before {
+    color: black;
+    counter-increment: h6toc;
+    content: counter(h2toc) ". " counter(h3toc) ". " counter(h4toc) ". " counter(h5toc) ". " counter(h6toc) ". "
+}
+
+.md-toc-h6 .md-toc-inner {
+    margin-left: 0;
+}
+
+
+/** initialize css counter */
+#write {
+    counter-reset: h1
+}
+
+h1 {
+    counter-reset: h2
+}
+
+h2 {
+    counter-reset: h3
+}
+
+h3 {
+    counter-reset: h4
+}
+
+h4 {
+    counter-reset: h5
+}
+
+h5 {
+    counter-reset: h6
+}
+
+/** put counter result into headings */
+/*#write h1:before {
+    counter-increment: h1;
+    content: counter(h1) ". "
+}*/
+
+#write h2:before {
+    counter-increment: h2;
+    content: counter(h2) ". "
+}
+
+#write h3:before,
+h3.md-focus.md-heading:before /** override the default style for focused headings */ {
+    counter-increment: h3;
+    content: counter(h2) "." counter(h3) ". "
+}
+
+#write h4:before,
+h4.md-focus.md-heading:before {
+    counter-increment: h4;
+    content: counter(h2) "." counter(h3) "." counter(h4) ". "
+}
+
+#write h5:before,
+h5.md-focus.md-heading:before {
+    counter-increment: h5;
+    content: counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) ". "
+}
+
+#write h6:before,
+h6.md-focus.md-heading:before {
+    counter-increment: h6;
+    content: counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) "." counter(h6) ". "
+}
+
+/** override the default style for focused headings */
+#write>h3.md-focus:before,
+#write>h4.md-focus:before,
+#write>h5.md-focus:before,
+#write>h6.md-focus:before,
+h3.md-focus:before,
+h4.md-focus:before,
+h5.md-focus:before,
+h6.md-focus:before {
+    color: inherit;
+    border: inherit;
+    border-radius: inherit;
+    position: inherit;
+    left:initial;
+    float: none;
+    top:initial;
+    font-size: inherit;
+    padding-left: inherit;
+    padding-right: inherit;
+    vertical-align: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+}
+
+</style>
+</head>
+<body class='typora-export' >
+<div  id='write'  class = 'is-mac'><h1><a name="bluety" class="md-header-anchor"></a><span>Bluety</span></h1><div class='md-toc' mdtype='toc'><p class="md-toc-content" role="list"><span role="listitem" class="md-toc-item md-toc-h1" data-ref="n0"><a class="md-toc-inner" style="cursor: pointer;" href="#bluety">Bluety</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n32"><a class="md-toc-inner" style="cursor: pointer;" href="#contenu-du-kit">Contenu du kit</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n40"><a class="md-toc-inner" style="cursor: pointer;" href="#cartes-et-circuits-imprimés">Cartes et circuits imprimés</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n64"><a class="md-toc-inner" style="cursor: pointer;" href="#composants">Composants</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n98"><a class="md-toc-inner" style="cursor: pointer;" href="#connecteurs-et-supports">Connecteurs et supports</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n144"><a class="md-toc-inner" style="cursor: pointer;" href="#interrupteurs">Interrupteurs</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n171"><a class="md-toc-inner" style="cursor: pointer;" href="#boutons">Boutons</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n185"><a class="md-toc-inner" style="cursor: pointer;" href="#visserie">Visserie</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n212"><a class="md-toc-inner" style="cursor: pointer;" href="#câbles">Câbles</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n247"><a class="md-toc-inner" style="cursor: pointer;" href="#préparatifs">Préparatifs</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n249"><a class="md-toc-inner" style="cursor: pointer;" href="#boitier">Boitier</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n264"><a class="md-toc-inner" style="cursor: pointer;" href="#inventaire-des-outils">Inventaire des outils</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n307"><a class="md-toc-inner" style="cursor: pointer;" href="#conseils">Conseils </a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n324"><a class="md-toc-inner" style="cursor: pointer;" href="#options">Options</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n327"><a class="md-toc-inner" style="cursor: pointer;" href="#carte-bus-daughter">Carte Bus Daughter</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n347"><a class="md-toc-inner" style="cursor: pointer;" href="#carte-blinkn-switch">Carte Blink'n Switch</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n350"><a class="md-toc-inner" style="cursor: pointer;" href="#dos-du-circuit-imprimé-partie-1">Dos du circuit imprimé (partie 1)</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n396"><a class="md-toc-inner" style="cursor: pointer;" href="#avant--supports-des-dip-switch">Avant : supports des dip-switch</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n440"><a class="md-toc-inner" style="cursor: pointer;" href="#avant--connecteurs-es-et-alimentation">Avant : Connecteurs E/S et Alimentation</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n494"><a class="md-toc-inner" style="cursor: pointer;" href="#avant--interrupteurs">Avant : interrupteurs</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n552"><a class="md-toc-inner" style="cursor: pointer;" href="#avant--leds">Avant : LEDs</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n633"><a class="md-toc-inner" style="cursor: pointer;" href="#dos-du-circuit-imprimé-partie-2">Dos du circuit imprimé (partie 2)</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n651"><a class="md-toc-inner" style="cursor: pointer;" href="#finition">Finition</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n679"><a class="md-toc-inner" style="cursor: pointer;" href="#façade-avant">Façade avant</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n681"><a class="md-toc-inner" style="cursor: pointer;" href="#ecran-lcd-4x20">Ecran LCD 4x20</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n705"><a class="md-toc-inner" style="cursor: pointer;" href="#bouton-dalimentation">Bouton d'alimentation</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n741"><a class="md-toc-inner" style="cursor: pointer;" href="#façade-arrière">Façade arrière</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n782"><a class="md-toc-inner" style="cursor: pointer;" href="#installation-et-branchements">Installation et branchements</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n784"><a class="md-toc-inner" style="cursor: pointer;" href="#installation-sc126">Installation SC126</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n834"><a class="md-toc-inner" style="cursor: pointer;" href="#branchement-busdaughter--blinkn-switch">Branchement BusDaughter  Blink'n Switch</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n856"><a class="md-toc-inner" style="cursor: pointer;" href="#façade-avant-n856">Façade avant</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n863"><a class="md-toc-inner" style="cursor: pointer;" href="#façade-arrière-n863">Façade arrière</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n887"><a class="md-toc-inner" style="cursor: pointer;" href="#bouton-power">Bouton Power</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n911"><a class="md-toc-inner" style="cursor: pointer;" href="#utilisation">Utilisation</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n913"><a class="md-toc-inner" style="cursor: pointer;" href="#port-de-contrôle-130dh">Port de contrôle (13/0Dh)</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n918"><a class="md-toc-inner" style="cursor: pointer;" href="#ports-dentrée-sortie">Ports d'entrée sortie</a></span><span role="listitem" class="md-toc-item md-toc-h4" data-ref="n920"><a class="md-toc-inner" style="cursor: pointer;" href="#utiliser-le-port-a-ou-b-en-entrée">Utiliser le port A ou B <em>en entrée</em></a></span><span role="listitem" class="md-toc-item md-toc-h4" data-ref="n946"><a class="md-toc-inner" style="cursor: pointer;" href="#utiliser-le-port-a-ou-b-en-sortie">Utiliser le port A ou B <em>en sortie</em></a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n970"><a class="md-toc-inner" style="cursor: pointer;" href="#ecran-lcd">Ecran LCD</a></span></p></div><p><span>Bluety est un ensemble de circuits imprimés pour un boitier destiné à recevoir un ordinateur compatible RC2014. </span></p><p><span>L&#39;ensemble se compose de plusieurs éléments :</span></p><ul><li><span>Une façade avant avec des ouvertures pour un écran LCD et de nombreux connecteurs, LEDs et interrupteurs.</span></li><li><span>Une façade arrière avec des connecteurs, interrupteurs et ouvertures pour faciliter les branchements.</span></li><li><em><span>Blink&#39;n Switch</span></em><span>, une carte d&#39;entrée-sortie avec deux ports d&#39;entrée/sortie complets et un port de contrôle en sortie.</span></li><li><em><span>Bus Daughter</span></em><span>, une carte compatible RC2014 pour connecter </span><em><span>Blink&#39;n Switch</span></em><span> au bus RC2014.</span></li><li><span>Un écran LCD 4x20 avec adaptateur I2C.</span></li></ul><p><span>La conception de Bluety est basée sur un boitier bleu que l&#39;on peut se procurer sur un site marchand chinois. La couleur de ce boitier a donné son nom à Bluety, ainsi que la taille des façades. Les circuits imprimés et si possible les composants ont également été choisis de la couleur bleue. Mais Bluety conviendra à tout autre boitier de dimensions supérieures (pour les façades) et d&#39;une profondeur suffisante pour l&#39;ordinateur choisi, cependant l&#39;utilisateur devra pratiquer une ouverture sur les façades de son boitier pour pouvoir y fixer les façades de Bluety.</span></p><p><span>Bluety est également conçu pour accueillir le kit SC126 de Stephen S. Cousins et la carte </span><em><span>PiZero Terminal</span></em><span> qui possède une sortie HDMI. Il s&#39;agit d&#39;un ordinateur équipé d&#39;un processeur Z-180 à 18 MHz (compatible Z-80), de deux ROM Flash de 512 Ko permettant le choix entre les logiciels de contrôle </span><em><span>Small Computer Monitor</span></em><span> et </span><em><span>RomWBW</span></em><span>, d&#39;une RAM Flash de 512 Ko, ainsi que de nombreux contrôleurs de périphériques intrégrés tels que deux ports série, un port SD et un port I2C. </span></p><p><span>Bluety est également utilisable avec le RC2014 de Spencer Owens et de nombreux ordinateurs respectant le bus RC2014, bien que l&#39;écran LCD ne soit pas directement utilisable en raison de l&#39;absence de bus I2C. Le logiciel de contrôle en cours de développement est actuellement destiné à l&#39;interface I2C. </span></p><p><span>Je vous souhaite un bon assemblage et beaucoup de plaisir avec Bluety.</span></p><p><img src="pictures_finished/finished.jpg" alt="Bluety terminé"  /></p><blockquote><p><strong><span>Extension de bus</span></strong></p><p><span>L&#39;ordinateur SC126 possède 2 connecteurs de bus seulement mais il a également un connecteur d&#39;extension latéral, conçu pour recevoir par exemple le kit SC113 qui propose 5 connecteurs de bus (ainsi qu&#39;un nouveau connecteur d&#39;extension).</span></p><p><span>La carte SC113 est trop longue pour le boitier de Bluety, aussi j&#39;en ai dérivé une version SC113-Tiny qui propose 3 connecteurs de bus au lieu de 5 et convient aux dimensions du boitier. Il présente lui aussi un connecteur d&#39;extension pour ajouter un SC113 à l&#39;extérieur du boitier.</span></p><p><span>Notez que cette carte SC113-Tiny n&#39;est pas supportée par Stephen S. Cousins, et je fournis uniquement le circuit imprimé en option avec Bluety. Je vous conseille de commander un SC113 officiel auprès de Stephen (</span><a href='https://www.tindie.com/products/tindiescx/sc113-modular-backplane-kit-for-rc2014/' target='_blank' class='url'>https://www.tindie.com/products/tindiescx/sc113-modular-backplane-kit-for-rc2014/</a><span>) et d&#39;utiliser ses composants sur la carte SC113Tiny. Quelques composants du kit SC113 seront inutilisés mais le fonctionnement et l&#39;assemblage sont identiques.</span></p><p><img src="pictures/SC113tiny.jpg" alt="SC113 à côté de SC113 Tiny" style="zoom: 50%;" /></p></blockquote><blockquote><p><strong><span>Interrupteur marche/arrêt SC126</span></strong></p><p><span>Bluety possède son propre bouton marche/arrêt. Si vous n&#39;avez pas encore assemblé votre SC126, vous pouvez remplacer l&#39;interrupteur par un connecteur à trois broches et placer un jumper sur les deux broches éloignées du bord de la carte afin de remplacer l&#39;interrupteur en position ON.</span></p><p><img src="pictures/97-contact.jpg" alt="Remplacement on/off" style="zoom:50%;" /></p></blockquote><h2><a name="contenu-du-kit" class="md-header-anchor"></a><span>Contenu du kit</span></h2><p><span>Vérifiez le contenu du kit, et contactez moi en cas d&#39;erreur. Vous pouvez aussi intervenir dans le groupe de discussion </span><a href='https://groups.google.com/forum/#!forum/rc2014-z80' target='_blank' class='url'>https://groups.google.com/forum/#!forum/rc2014-z80</a><span>.</span></p><p><span>Avant toute chose, une précaution importante.</span></p><table>
+<tbody><tr>
+<td><img src="pictures/attention.png" style="zoom:125%;"></td><td><b>Ne touchez pas les circuits intégrés et l'écran LCD sans être équipé d'un bracelet antistatique relié à une masse</b>. De préférence, laissez les à l'abri dans leur étui anti-statique jusqu'au moment de la fixation de la façade avant sur le boitier pour éliminer le risque de les endommager avec de l'électricité statique. Dans tous les cas, ne les placez pas sur le circuit avant d'avoir procédé aux vérifications électriques.</td>
+</tr>
+</tbody></table><table>
+<tbody><tr>
+<td><img src="pictures/thisway.png" alt="Vérification" style="zoom:75%;"></td>
+<td> Dans le processus d'assemblage, les étapes où vous devrez procéder à une vérification ou à un assemblage particulier seront indiquées par ce panneau. <b>N'ignorez pas ces étapes</b>, elles garantissent le bon résultat de l'assemblage.</td>
+</tr></tbody></table><p>&nbsp;</p><h3><a name="cartes-et-circuits-imprimés" class="md-header-anchor"></a><span>Cartes et circuits imprimés</span></h3><p><span>Veillez à protéger les deux façades de toute rayure, brulure, ou projection de flux lors des soudures. Ce sont les faces visibles donc conservez les à l&#39;écart lorsqu&#39;elles ne sont pas nécessaires. Les façades ne nécessitent aucune soudure.</span></p><p><span>Les façades peuvent être légèrement incurvées mais ceci disparaitra après fixation sur le boitier</span></p><figure><table><thead><tr><th><span>Nombre</span></th><th><span>Carte</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Bus Daughter</span></td><td style='text-align:right;' ><img src="pictures/012-busdaughter.jpg" alt="Bus Daughter" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Blink&#39;n Switch</span></td><td style='text-align:right;' ><img src="pictures/020-blinknswitch.jpg" alt="Blink'n Switch" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Façade avant</span></td><td style='text-align:right;' ><img src="pictures/021-frontpanel.jpg" alt="Façade avant" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Façade arrière</span></td><td style='text-align:right;' ><img src="pictures/021B-backpanel.jpg" alt="Façade arrière" style="zoom: 33%;" /></td></tr></tbody></table></figure><h3><a name="composants" class="md-header-anchor"></a><span>Composants</span></h3><figure><table><thead><tr><th><span>Nombre</span></th><th><span>Composants</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>40</span></td><td><span>8 LED 3mm bleues</span><br><span>16 LED 3mm vertes</span><br><span>16 LED 3mm jaunes</span></td><td style='text-align:right;' ><img src="pictures/026-LEDs.jpg" alt="LEDs" style="zoom: 33%;" /></td></tr><tr><td><span>11</span></td><td><span>Condensateurs céramique 100nF (marqués 104)</span></td><td style='text-align:right;' ><img src="pictures/013-Capa100nF.jpg" alt="100 nF (ou 0.1 uF)" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Condensateur électrolytique 100uF</span></td><td style='text-align:right;' ><img src="pictures/034-capa100uF.jpg" alt="100 uF" style="zoom: 33%;" /></td></tr><tr><td><span>3</span></td><td><span>Réseaux résistance 10 KOhms (marqués 103)</span></td><td style='text-align:right;' ><img src="pictures/042A.jpg" alt="10 Kohm" style="zoom: 33%;" /></td></tr><tr><td><span>5</span></td><td><span>Réseaux résistance 470 Ohms (marqués 471)</span></td><td style='text-align:right;' ><img src="pictures/043A.jpg" alt="470 Ohm" style="zoom: 33%;" /></td></tr><tr><td><span>10</span></td><td><span>Circuits intégrés :</span><br><span>- 3x 74HCT273N</span><br><span>- 2x 74HCT245N</span><br><span>- 3x 74HCT688</span><br><span>- 2x 74HCT32</span></td><td style='text-align:right;' ><img src="pictures/037-ics.jpg" alt="Circuits intégrés" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Ecran LCD 4x20 rétroéclairé</span></td><td style='text-align:right;' ><img src="pictures/038-LCD.jpg" alt="Ecran LCD" style="zoom: 33%;" /></td></tr></tbody></table></figure><h3><a name="connecteurs-et-supports" class="md-header-anchor"></a><span>Connecteurs et supports</span></h3><figure><table><thead><tr><th><span>Nombre</span></th><th><span>Connecteurs et supports de circuits intégrés</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Connecteur 40P angle droit</span></td><td style='text-align:right;' ><img src="pictures/014-header40P.jpg" alt="Connecteur 40P" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Connecteur 2x12P mâle angle droit</span></td><td style='text-align:right;' ><img src="pictures/015-header2x12P.jpg" alt="Connecteur 2x12P" style="zoom: 33%;" /></td></tr><tr><td><span>4</span></td><td><span>Supports CI 16P</span></td><td style='text-align:right;' ><img src="pictures/023-support16.jpg" alt="Supports CI 16 positions" style="zoom: 33%;" /></td></tr><tr><td><span>2</span></td><td><span>Supports CI 14P</span></td><td style='text-align:right;' ><img src="pictures/024-support14.jpg" alt="Supports CI 14 positions" style="zoom: 33%;" /></td></tr><tr><td><span>8</span></td><td><span>Supports CI 20P</span></td><td style='text-align:right;' ><img src="pictures/025-support20.jpg" alt="Supports CI 20 positions" style="zoom: 33%;" /></td></tr><tr><td><span>2</span></td><td><span>Connecteurs femelle 2P pattes de 11mm</span></td><td style='text-align:right;' ><img src="pictures/030-h2P.jpg" alt="Connecteurs 2P" style="zoom: 33%;" /></td></tr><tr><td><span>4</span></td><td><span>Connecteurs femelle 8P pattes de 11mm</span></td><td style='text-align:right;' ><img src="pictures/031-h8P.jpg" alt="Connecteurs 8P" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Connecteur mâle 2x12P droit</span></td><td style='text-align:right;' ><img src="pictures/032-h2x12P.jpg" alt="Connecteur 2x12P" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Connecteur d&#39;alimentation</span></td><td style='text-align:right;' ><img src="pictures/039-power.jpg" alt="Connecteur alimentation" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Connecteur HDMI</span></td><td style='text-align:right;' ><img src="pictures/040-hdmi.jpg" alt="Connecteur HDMI" style="zoom: 33%;" /></td></tr></tbody></table></figure><h3><a name="interrupteurs" class="md-header-anchor"></a><span>Interrupteurs</span></h3><figure><table><thead><tr><th><span>Nombres</span></th><th><span>Interrupteurs</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>4</span></td><td><span>Interrupteurs ON/ON ou ON/OFF</span></td><td style='text-align:right;' ><img src="pictures/027-ONON.jpg" alt="ON/ON" style="zoom: 33%;" /></td></tr><tr><td><span>16</span></td><td><span>Interrupteurs ON-OFF-ON</span></td><td style='text-align:right;' ><img src="pictures/028-ONOFFFON.jpg" alt="ON/OFF/ON" style="zoom: 33%;" /></td></tr><tr><td><span>2</span></td><td><span>Interrupteurs dipswitch 8 positions</span></td><td style='text-align:right;' ><img src="pictures/029-dipswitch.jpg" alt="Dipswitch" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Micro interrupteur avec câble 2 fils</span></td><td style='text-align:right;' ><img src="pictures/040-switchselect.jpg" alt="Interrupteur 2 fils" style="zoom: 33%;" /></td></tr><tr><td><span>2</span></td><td><span>Micro interrupteur avec câble 3 fils</span></td><td style='text-align:right;' ><img src="pictures/040-switchprotect.jpg" alt="Interrupteurs 3 fils" style="zoom: 33%;" /></td></tr></tbody></table></figure><p><span>NOTE : La couleur des interrupteurs peut varier.</span></p><h3><a name="boutons" class="md-header-anchor"></a><span>Boutons</span></h3><figure><table><thead><tr><th><span>Nombre</span></th><th><span>Boutons</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Bouton Reset</span></td><td style='text-align:right;' ><img src="pictures/040-resetbtn.jpg" alt="Reset" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Bouton marche/arrêt avec LED</span></td><td style='text-align:right;' ><img src="pictures/040-pwrbtn.jpg" alt="Bouton ON/OFF" style="zoom: 33%;" /></td></tr></tbody></table></figure><h3><a name="visserie" class="md-header-anchor"></a><span>Visserie</span></h3><figure><table><thead><tr><th><span>Nombre</span></th><th><span>Visserie et Supports</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>6</span></td><td><span>Boulons M2x8 (interrupteurs façade arrière)</span></td><td style='text-align:right;' ><img src="pictures/040-M2x8.jpg" alt="M2x8" style="zoom: 33%;" /></td></tr><tr><td><span>2</span></td><td><span>Boulons M3x8 (connecteur HDMI)</span></td><td style='text-align:right;' ><img src="pictures/040-M3x8.jpg" alt="M3x8" style="zoom: 33%;" /></td></tr><tr><td><span>5</span></td><td><span>Supports 12mm avec vis et écrou (façade avant)</span></td><td style='text-align:right;' ><img src="pictures/022A-support12.jpg" alt="Supports 12mm" style="zoom: 33%;" /></td></tr><tr><td><span>4</span></td><td><span>Supports 10mm avec vis et écrou (écran LCD)</span></td><td style='text-align:right;' ><img src="pictures/022B-support10.jpg" alt="Supports 10mm" style="zoom: 33%;" /></td></tr><tr><td><span>6</span></td><td><span>Supports 15mm avec vis et écrou (fond de boitier)</span></td><td style='text-align:right;' ><img src="pictures/022C-support15.jpg" style="zoom:33%;" /></td></tr></tbody></table></figure><p><span>NOTE : la couleur et la matière des supports 15mm peut varier.</span></p><h3><a name="câbles" class="md-header-anchor"></a><span>Câbles</span></h3><p><span>Bluety est livré avec des câbles sur mesure dont la longueur convient pour le boitier de référence d&#39;une profondeur de 190 mm. Si vous utilisez un boitier plus profond vous devrez utiliser des rallonges de type Dupont, ou sertir vous mêmes des câbles à la bonne longueur.</span></p><figure><table><thead><tr><th><span>Nombre</span></th><th><span>Câbles</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Câble HDMI/microHDMI</span></td><td style='text-align:right;' ><img src="pictures/040-hdmicable.jpg" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Câble bouton marche/arrêt avec 3 connecteurs</span></td><td style='text-align:right;' ><img src="pictures/040-power.jpg" alt="Cable bouton ON/OFF" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Câble alimentation principale rouge</span></td><td style='text-align:right;' ><img src="pictures/040-mainvcc.jpg" alt="Cable alimentation" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Câble alimentation principale noir</span></td><td style='text-align:right;' ><img src="pictures/040-maingnd.jpg" alt="Cable alimentation" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Câble reset 2 fils</span><br><br><span>Note : la couleur de ce câble peut varier.</span></td><td style='text-align:right;' ><img src="pictures/040-reset.jpg" alt="Cable reset" style="zoom: 33%;" /></td></tr><tr><td><span>1</span></td><td><span>Câble I2C 4 fils</span><br><br><span>Note : la couleur de ce câble peut varier.</span></td><td style='text-align:right;' ><img src="pictures/040-I2C.jpg" alt="Cable I2C" style="zoom: 33%;" /></td></tr><tr><td><span>2</span></td><td><span>Câbles Dupont 12 fils</span></td><td style='text-align:right;' ><img src="pictures/040-dupont.jpg" alt="Cables connexion" style="zoom: 33%;" /></td></tr></tbody></table></figure><h2><a name="préparatifs" class="md-header-anchor"></a><span>Préparatifs</span></h2><p><span>Préparez votre équipement. </span></p><h3><a name="boitier" class="md-header-anchor"></a><span>Boitier</span></h3><p><span>Bluety est conçu pour un boitier bleu que l&#39;on peut trouver sur la plupart des sites marchands : AliExpress, Banggood, Amazon, eBay. Dans le champ de rechherche de votre site préféré, entrez &quot;</span><strong><span>Blue Metal Electronic Enclosures</span></strong><span>&quot;et choisissez le boitier de dimensions </span><strong><span>250 x 190 x 110</span></strong><span> (mm) dans les résultats. </span><em><span>Attention</span></em><span> il existe d&#39;autres boitiers d&#39;aspect similaire mais de dimensions inférieures qui ne conviendront pas à Bluety, donc vérifiez bien les dimensions.</span></p><figure><table><thead><tr><th><img src="pictures/00-AE.png" alt="AliExpress" style="zoom:33%;" /></th><th><img src="pictures/00-BG.png" alt="BangGood" style="zoom:33%;" /></th></tr></thead><tbody><tr><td><img src="pictures/00-AZ.png" alt="Amazon" style="zoom:33%;" /></td><td><img src="pictures/00-EB.png" alt="eBay" style="zoom:33%;" /></td></tr></tbody></table></figure><p><span>Le coût est d&#39;environ 20 à 40 euros / dollars livraison comprise. Les coûts de livraison en provenance de chine sont très bas par rapport à ceux au départ de France, aussi je ne propose pas le boitier dans le kit car son poids augmenterait considérablement le coût de livraison de Bluety.</span></p><p><span>Il y a une autre raison pour laquelle je ne propose pas le boitier : vous devez vous attendre à ce que les coins des cadres plastifiés blancs puissent être abimés durant le transport : j&#39;ai eu ce problème sur  3 exemplaires que j&#39;ai commandés. </span></p><p><img src="pictures/00-damagedcorner.jpg" style="zoom:33%;" /></p><p><span>C&#39;est aussi parce que je ne peux pas garantir le bon état des angles que je ne propose pas le boitier avec le kit Bluety. Toutefois avec un peu de travail au cutter et du papier de verre très fin, on peut arrondir les angles. Par ailleurs les deux cadres sont  identiques et symétriques, donc on peut les démonter pour placer le meilleur en façade avant, ou retourner un cadre si les coins du bas sont en meilleur état que ceux du haut. Au final ces défauts sont peu visibles.</span></p><p><span>Si vous possédez une imprimante 3D de taille sufffisante vous pouvez reproduire ces cadres, mais je ne propose pas de modèle. N&#39;hésitez pas à me contacter si vous pouvez fabriquer ces cadres ou leur modèle 3D.</span></p><p><span>Si vous souhaitez utiliser un autre boitier, vous devez vous assurer que ses dimensions seront d&#39;au moins 250 mm de largeur par 110 mm de hauteur, avec une profondeur d&#39;au moins 190 mm. Ces dimensions  conviennent au SC126 et à toutes les versions du RC2014 y compris la version Pro avec 8 connecteurs de bus.</span></p><h3><a name="inventaire-des-outils" class="md-header-anchor"></a><span>Inventaire des outils</span></h3><p><span>Ce tableau liste les outils dont vous aurez besoin pour assembler le kit.</span></p><figure><table><thead><tr><th><span>Outil</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>Station de soudure, de préférence avec température réglable</span></td><td style='text-align:right;' ><img src="pictures/001-station.jpg" alt="Station de soudure" style="zoom: 33%;" /></td></tr><tr><td><span>Fil à soudure (diamètre 0.6mm ou 0.8mm recommandé)</span></td><td style='text-align:right;' ><img src="pictures/002-solderwire.jpg" alt="Fil soudure" style="zoom: 33%;" /></td></tr><tr><td><span>Pince fine</span></td><td style='text-align:right;' ><img src="pictures/003-pliers.jpg" alt="Pince" style="zoom: 33%;" /></td></tr><tr><td><span>Pince fine coudée</span></td><td style='text-align:right;' ><img src="pictures/004-pliers.jpg" alt="Pince" style="zoom: 33%;" /></td></tr><tr><td><span>Pince coupante coudée</span></td><td style='text-align:right;' ><img src="pictures/005-pliers.jpg" alt="Pince coupante" style="zoom: 33%;" /></td></tr><tr><td><span>Pompe à soudure</span></td><td style='text-align:right;' ><img src="pictures/006-pump.jpg" alt="Pompe" style="zoom: 33%;" /></td></tr><tr><td><span>Tapis silicone (ou protection isolante du plan de travail). Ce tapis protège votre plan de travail des brulures mais aussi des rayures, et isole le circuit. Nettoyez régulièrement la surface afin d&#39;éviter que les résidus de métal ou de soudure ne rayent les circuits imprimés et les façades. Débarrassez les bouts de métal et de soudure, passez le tapis sous l&#39;eau du robinet et séchez le. Faites cette opération régulièrement pendant l&#39;assemblage, ne laissez pas les débris s&#39;accumuler sur le tapis.</span></td><td style='text-align:right;' ><img src="pictures\006A-silicon.jpg" referrerpolicy="no-referrer" alt="Tapis"></td></tr><tr><td><span>Bracelet anti-statique. Reliez la pince à une masse. Ne reliez pas la pince directement à une prise de terre, vous seriez au contact avec la terre de tout votre réseau électrique et risqueriez de vous charger d&#39;électricité au lieu de l&#39;inverse. Si vous n&#39;avez pas de boitier spécial vous pouvez relier la pince à la sortie négative d&#39;un transformateur 5V ou au boitier métallique d&#39;un ordinateur.</span></td><td style='text-align:right;' ><img src="pictures/007-bracelet.jpg" alt="Bracelet" style="zoom: 33%;" /></td></tr><tr><td><span>Nécessaire de nettoyage de pane de fer à souder (brosse métallique et flux)</span></td><td style='text-align:right;' ><img src="pictures/008-tipscleaner.jpg" alt="Nettoyage" style="zoom: 25%;" /><img src="pictures/009-tipscleaner.jpg" alt="Nettoyage" style="zoom:25%;" /></td></tr><tr><td><span>Clés ALLEN 2 et 1.4mm (Pour vis M2x8 et M3x8)</span></td><td style='text-align:right;' ><img src="pictures/010-allen.jpg" alt="Clés Allen" style="zoom: 33%;" /></td></tr><tr><td><span>Tournevis avec têtes cruxiforme, plat, allen</span></td><td style='text-align:right;' ><img src="pictures/011-screwdriver.jpg" alt="Tournevis" style="zoom: 33%;" /></td></tr><tr><td><span>Multimètre avec mesure de voltage et résistance, éventuellement test de continuité</span></td><td style='text-align:right;' ><img src="pictures/011A-multimeter.jpg" alt="Multimètre" style="zoom: 33%;" /></td></tr></tbody></table></figure><p>&nbsp;</p><h3><a name="conseils" class="md-header-anchor"></a><span>Conseils </span></h3><p><span>Respectez les consignes d&#39;assemblage pour obtenir une belle façade avec les composants bien alignés.</span></p><p><span>L&#39;ordre des branchements et des assemblages est destiné à vous faciliter le travail : ne sautez pas les étapes.</span></p><p><span>Pour les soudures, voici une méthode qui limite les dégâts en cas d&#39;erreur :</span></p><ul><li><span>souder une seule patte avec peu de soudure</span></li><li><span>vérifier que le composant a été mis au bon endroit et dans le bon sens</span></li><li><span>en cas d&#39;erreur, retirer la soudure et replacer correctement le composant</span></li><li><span>quand tout est correct, souder toutes les autres pattes</span></li><li><span>compléter la soudure de la première patte</span></li></ul><p><span>Si vous placez trop de soudure ou soudez toutes les pattes, il sera difficile voire impossible de réparer une erreur comme un interrupteur ou une LED à l&#39;envers. Avoir une seule patte légèrement soudée permet de vérifier l&#39;alignement mais aussi la polarité lorsque celle-ci est importante.</span></p><p><span>Je recommande en particulier cette méthode pour tous les composants apparaissant en façade avant.</span></p><h3><a name="options" class="md-header-anchor"></a><span>Options</span></h3><p><span>L&#39;équipement idéal de Bluety est le kit SC126 de Stephen S. Cousins. Des versions spécifiques de RomWBW et SCM seront bientôt disponibles pour que l&#39;écran LCD soit accessible en programamtion, mais aussi en écoh de la console standard.</span></p><p><span>Le boitier ciblé par Bluety est disponible chez BangGood</span></p><h2><a name="carte-bus-daughter" class="md-header-anchor"></a><span>Carte Bus Daughter</span></h2><p><span>Cette carte se connecte sur n&#39;importe quel emplacement de bus d&#39;un ordinateur RC2014 et véhicule les signaux utiles jusqu&#39;à la carte Blink&#39;n Switch d&#39;entrée / sortie. Son assemblage ne présente pas de difficulté majeure mais vous devrez faire attention à l&#39;orientation des connecteurs.</span></p><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th>&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Soudez le condensateur C9, marqué &quot;104&quot; (100 nF). L&#39;orientation n&#39;a pas d&#39;importance. Coupez les pattes au dos</span></td><td><img src="pictures/016-capa.jpg" alt="Condensateur soudé" style="zoom: 33%;" /></td></tr><tr><td><span>2</span></td><td><span>Soudez le connecteur 2x12P P3. Attention à souder le petit côté coudé</span></td><td><img src="pictures/017A.jpg" alt="Soudure du connecteur" style="zoom: 33%;" /><img src="pictures/017B.jpg" alt="Vus de côté" style="zoom:33%;" /></td></tr><tr><td><span>3</span></td><td><span>Soudez le connecteur 40P P2. Soudez le petit côté. Ne chauffez pas trop sinon le plastique ramollit  et les pattes peuvent pivoter. Si cela arrive, réchauffez la soudure et remettez la patte en position à l&#39;aide d&#39;une pince</span></td><td><img src="pictures/018.jpg" alt="Connecteur soudé" style="zoom:50%;" /></td></tr></tbody></table></figure><h2><a name="carte-blinkn-switch" class="md-header-anchor"></a><span>Carte Blink&#39;n Switch</span></h2><p><span>Cette carte offre deux ports d&#39;entrée/sortie complets, avec des LEDs témoins et des interrupteurs pour contrôler les entrées, ainsi que 8 LEDs en façade pour le port de contrôles 13 (0Dh) de l&#39;ordinateur SC126 de Stephen S. Cousins. Ce port peut également être utilisé par un ordinateur RC2014 pour afficher 8 bits sur les LEDs de la façade avant avec un </span><code>OUT</code><span> sur le port 13.</span></p><p><span>Le montage de cette carte nécessite plusieurs assemblages temporaires avec la façade avant pour que les composants apparaissant sur cette dernière soient correctement alignés. </span><strong><span>Respectez l&#39;ordre de montage et les consignes</span></strong><span> pour avoir les meilleurs chances d&#39;obtenir une belle façade.</span></p><h3><a name="dos-du-circuit-imprimé-partie-1" class="md-header-anchor"></a><span>Dos du circuit imprimé (partie 1)</span></h3><p><span>Placez le </span><strong><span>dos</span></strong><span> visible, (le trou du bouton marche arrêt en bas à gauche)</span></p><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Soudez les 10 condensateurs 100nF C1 à C4 et C6 à C11.</span></td><td style='text-align:right;' ><img src="pictures/040A.png" alt="Condensateurs" style="zoom: 33%;" /><br><img src="pictures/040B.jpg" alt="Condensateurs" style="zoom:50%;" /></td></tr><tr><td><span>2</span></td><td><span>Soudez les 8 supports 20P et les 2 supports 14P, encoches vers le </span><em><span>haut</span></em><span> ou la </span><em><span>gauche</span></em><span> selon le cas.</span></td><td style='text-align:right;' ><img src="pictures/041A.png" alt="Supports" style="zoom: 33%;" /><br><img src="pictures/041B.jpg" alt="Supports" style="zoom: 50%;" /></td></tr><tr><td><span>3</span></td><td><span>Soudez les 3 réseaux de résistance </span><strong><span>10K</span></strong><span> RN1 RN4 RN7.</span></td><td style='text-align:right;' ><img src="pictures/042B.png" alt="Résistances" style="zoom: 33%;" /></td></tr><tr><td><span>4</span></td><td><span>Attention à </span><em><span>ne pas confondre avec les 470</span></em><span> : le composant est marqué </span><em><span>103</span></em><span>,ce qui signifie 10 x 10^3, soit 10 Kilo Ohms .</span></td><td style='text-align:right;' ><img src="pictures/042A.jpg" alt="10K" style="zoom: 33%;" /></td></tr><tr><td><span>5</span></td><td><span>Soudez d&#39;abord une seule patte, vérifiez la position et le point de référence à gauche, correspondant au petit carré imprimé sur le circuit. </span><br><br><span>Une fois la position vérifiée soudez les autres pattes.</span></td><td style='text-align:right;' ><img src="pictures/042C.jpg" alt="Repères" style="zoom: 33%;" /></td></tr><tr><td><span>6</span></td><td><span>Soudez les 5 réseaux de résistance </span><strong><span>470</span></strong><span> RN2 RN3 RN5 RN6 RN8.</span></td><td style='text-align:right;' ><img src="pictures/043B.png" alt="Résistances" style="zoom: 33%;" /></td></tr><tr><td><span>7</span></td><td><span>Le composant est marqué 471, ce qui signifie 47 x 10^1, soit 470 Ohms.</span></td><td style='text-align:right;' ><img src="pictures/043A.jpg" alt="470" style="zoom: 33%;" /></td></tr><tr><td><span>8</span></td><td><span>Attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit</span></td><td style='text-align:right;' ><img src="pictures/043C.jpg" alt="Repère" style="zoom: 33%;" /></td></tr></tbody></table></figure><ul><li><p><span>Pour les composants le nécessitant, coupez l&#39;excédent des pattes au fur et à mesure pour ne pas être gêné</span></p><blockquote><p><img src="pictures/attention.png" style="zoom: 25%;" /><em><span>Ne soudez pas</span></em><span> le connecteur P1 et le condensateur C5 maintenant : ils gêneraient la suite de l&#39;assemblage.</span></p></blockquote></li></ul><p><span>Voici l&#39;allure de la carte à ce stade. Notez que les supports de circuit fournis sont de type &quot;tulipe&quot; de meilleure qualité que sur cette image. </span></p><p><img src="pictures/044.jpg" alt="Vue carte soudée" style="zoom:50%;" /></p><h3><a name="avant--supports-des-dip-switch" class="md-header-anchor"></a><span>Avant : supports des dip-switch</span></h3><blockquote><p><strong><em><span>Important :</span></em></strong></p><p><span>Tous les éléments soudés sur l&#39;avant apparaissent en façade à travers une ouverture, aussi une grande partie de l&#39;assemblage consiste à souder </span><em><span>une seule patte</span></em><span>, puis placer la façade pour vérifier et corriger l&#39;alignement. Ainsi il est possible de réchauffer la soudure pour bouger l&#39;élément en cas de problème d&#39;alignement. Une fois celui-ci correct on peut souder le reste des pattes.</span></p></blockquote><p><span>Tournez la carte pour voir l&#39;</span><strong><span>avant</span></strong><span>, le trou du bouton power étant maintenant en bas à droite. </span></p><p><img src="pictures/045.jpg" alt="Avant carte" style="zoom:50%;" /></p><p>&nbsp;</p><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Soudez </span><em><span>une patte</span></em><span> de chacun des 2 supports CI 16P (SW10 et SW21), encoche vers la gauche. Ils serviront de base aux DIP-Switchs de sélection du numéro de port.</span></td><td style='text-align:right;' ><img src="pictures/TODO.png" style="zoom:33%;" /></td></tr><tr><td><span>2</span></td><td><span>Vissez les 5 supports 12mm sur la carte : support sur le dessus, boulon au dos.</span></td><td style='text-align:right;' ><img src="pictures/046.jpg" style="zoom: 50%;" /></td></tr><tr><td><span>3</span></td><td><span>Ils vont servir à plusieurs assemblages provisoires afin de bien aligner les composants de la façade, donc ne les démontez pas tout le long de cette étape. L&#39;espace de certains boulons est restreint une fois les composants en place, aussi il est préférable de maintenir le boulon et tourner le support plutôt que l&#39;inverse.</span></td><td style='text-align:right;' ><img src="pictures/047.jpg" style="zoom:50%;" /></td></tr><tr><td><span>4</span></td><td><span>Si un composant nécessite à un moment de tourner un boulon, dévissez légèrement le support, tournez un peu le boulon et revissez le support.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>5</span></td><td><span>Emboitez un second support 16P et un DIP-Switch sur chacun des deux supports.</span></td><td style='text-align:right;' ><img src="pictures/048.jpg" style="zoom:50%;" /></td></tr><tr><td><span>6</span></td><td><span>Fixez la façade avant avec deux ou trois supports en passant les dipswitch à travers leurs ouvertures. Si un switch n&#39;est pas bien aligné, faites chauffer la soudure de la patte et réalignez l&#39;ensemble pour qu&#39;il soit bien aligné avec l&#39;ouverture de la façade.</span></td><td style='text-align:right;' ><img src="pictures/049.jpg" style="zoom:50%;" /></td></tr><tr><td><span>7</span></td><td><span>Retournez l&#39;ensemble et terminez la soudure des supports.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>8</span></td><td><span>Dévissez les vis de la façade, démontez la ainsi que les ensembles support+dip-switch emboités pour qu&#39;il ne reste que les deux supports soudés.</span></td><td style='text-align:right;' >&nbsp;</td></tr></tbody></table></figure><h3><a name="avant--connecteurs-es-et-alimentation" class="md-header-anchor"></a><span>Avant : Connecteurs E/S et Alimentation</span></h3><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th>&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Posez le circuit imprimé, face avant sur le dessus, sur des supports de préférence non métalliques afin qu&#39;il soit au dessus du plan de travail et permette aux composants de glisser dans leurs emplacements. Veillez à assurer une hauteur d&#39;environ 10 mm.</span></td><td><img src="pictures/050.jpg" style="zoom:50%;" /></td></tr><tr><td><span>2</span></td><td><span>Positionnez les 4 connecteurs femelles 8P à longues pattes et les 2 connecteurs femelles 2P à longues pattes</span></td><td><img src="pictures/051.jpg" style="zoom:75%;" /></td></tr><tr><td><span>3</span></td><td><span>Fixez la façade. Ne mettez pas la vis centrale, elle gênerait le positionnement des connecteurs.</span></td><td><img src="pictures/052.jpg" style="zoom:50%;" /></td></tr><tr><td><span>4</span></td><td><span>Posez la façade arrière sur la façade avant et perpendiculairement de manière à recouvrir les ouvertures des connecteurs. Vous pouvez placer une feuille de papier entre les deux pour ne pas risquer d&#39;abimer leur revêtement.</span></td><td><img src="pictures/053.jpg" style="zoom:50%;" /></td></tr><tr><td><span>5</span></td><td><span>Retournez délicatement l&#39;ensemble et posez le à l&#39;envers sur le plan de travail.</span></td><td><img src="pictures/054.jpg" style="zoom:50%;" /></td></tr><tr><td><span>6</span></td><td><span>A l&#39;aide d&#39;une pince, placez les connecteurs dans les ouvertures de la façade. </span><br><br><span>C&#39;est un peu délicat, ne forcez pas pour ne pas tordre les pattes. Si cela arrive, démontez la façade, sortez le connecteur, redressez les pattes et recommencez l&#39;opération.</span></td><td><img src="pictures/055.jpg" style="zoom:50%;" /></td></tr><tr><td><span>7</span></td><td><span>Les connecteurs doivent être bien placés dans les encoches de la façade.</span></td><td><img src="pictures/056.jpg" style="zoom:50%;" /><img src="pictures/057.jpg" style="zoom:50%;" /></td></tr><tr><td><span>8</span></td><td><span>Lorsque tout est bien en place, soudez </span><em><span>une patte</span></em><span> de chacun des 6 connecteurs.</span></td><td><img src="pictures/058.jpg" style="zoom:50%;" /></td></tr><tr><td><span>9</span></td><td><span>Retournez l&#39;ensemble pour vérifier l&#39;alignement.</span></td><td><img src="pictures/059.jpg" style="zoom:50%;" /></td></tr><tr><td><span>10</span></td><td><span>Lorsque tout est correctement placé, retournez et terminez la soudure des pattes restantes.</span></td><td>&nbsp;</td></tr><tr><td><span>11</span></td><td><span>Coupez l&#39;excédent de pattes. Attention aux projections éventuelles des petits bouts de métal car ces pattes sont très ridgides : protégez vos yeux.</span></td><td>&nbsp;</td></tr><tr><td><span>12</span></td><td><span>Dévissez la façade.</span></td><td>&nbsp;</td></tr></tbody></table></figure><h3><a name="avant--interrupteurs" class="md-header-anchor"></a><span>Avant : interrupteurs</span></h3><p><span>Préparez les 16 interrupteurs à trois positions ON-OFF-ON et 4 interrupteurs à deux positions ON-OFF ou ON-ON.</span></p><ul><li><span>Séparez les tas pour ne pas vous tromper. Le kit présente normalement deux couleurs différentes mais cela peut dépendre du stock.</span></li></ul><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th>&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Positionnez les 8 interrupteurs à </span><strong><span>trois positions ON-OFF-ON</span></strong><span> du port A, SW1 à SW8. Attention à placer l&#39;encoche située sur </span><br><span>le pas de vis vers le bas </span><em><span>pour chaque interrupteur</span></em><span>. Ils doivent être tous orientés de la même façon car ils ne sont  généralement pas totalement symétriques.</span></td><td><img src="pictures/060.jpg" style="zoom:50%;" /></td></tr><tr><td><span>2</span></td><td><span>Positionnez les 8 interrupteurs à </span><strong><span>trois positions ON-OFF-ON</span></strong><span> SW17 à SW24. Même précaution pour l&#39;encoche du pas de vis qui doit être en bas.</span></td><td>&nbsp;</td></tr><tr><td><span>3</span></td><td><span>Positionnez les 4 interrupteurs à </span><strong><span>deux positions ON-OFF ou ON-ON</span></strong><span> SW9, SW11, SW20, SW22, encoche du pas de vis vers le bas.</span></td><td><img src="pictures/061.jpg" style="zoom:50%;" /></td></tr><tr><td><span>4</span></td><td><span>Placez tous les boutons en position basse ou centrale (pour ceux à trois positions)</span></td><td>&nbsp;</td></tr><tr><td><span>5</span></td><td><span>Glissez et fixez la façade à l&#39;aide des vis.</span></td><td>&nbsp;</td></tr><tr><td><span>6</span></td><td><span>Assurez vous que tout est bien aligné et qu&#39;aucun bouton ne s&#39;est délogé, sinon replacez le et refaites la fixation de la façade. Vérifiez que les interrupteurs situés les plus à droite sont bien à deux positions et non trois.</span></td><td>&nbsp;</td></tr><tr><td><span>7</span></td><td><span>Retournez la carte, et soudez </span><em><span>un seul point</span></em><span> de chacun des 20 interrupteurs avec une petite quantité de soudure.</span></td><td>&nbsp;</td></tr><tr><td><span>8</span></td><td><span>Soulevez légèrement l&#39;extrémité de la carte côté LCD afin que les interrupteurs soient bien plaqués contre le circuit, et que les pattes à souder dépassent bien du circuit</span></td><td><img src="pictures/062.jpg" style="zoom:50%;" /></td></tr><tr><td><span>9</span></td><td><span>Vérifiez l&#39;alignement en retournant l&#39;ensemble. Alignez les leviers à l&#39;aide d&#39;une règle ou d&#39;un bord de la façade avant. Au besoin, chauffez le point de l&#39;interrupteur mal aligné pour le replacer correctement.</span></td><td><img src="pictures/063A.jpg" style="zoom:50%;" /><img src="pictures/063B.jpg" style="zoom:50%;" /></td></tr><tr><td><span>10</span></td><td><span>Quant tout est bien aligné, soudez les autres pattes, remettez de la soudure sur la première selon besoin. Faites ceci pour les 20 interrupteurs. N&#39;hésitez pas à charger en soudure, pour que l&#39;ensemble assure une bonne solidité en plus du contact électrique.</span></td><td><img src="pictures/064.jpg" style="zoom:50%;" /></td></tr><tr><td><span>11</span></td><td><span>Remettez les interrupteurs en position basse</span></td><td>&nbsp;</td></tr><tr><td><span>12</span></td><td><span>Dévissez et enlevez la façade.</span></td><td>&nbsp;</td></tr></tbody></table></figure><h3><a name="avant--leds" class="md-header-anchor"></a><span>Avant : LEDs</span></h3><ul><li><p><span>Préparez les LEDs :</span></p><blockquote><ul><li><span>16 vertes pour les ports d&#39;entrée</span></li><li><span>16 jaunes pour les ports de sortie</span></li><li><span>vous pouvez inverser les couleurs vertes et jaunes selon votre goût</span></li><li><span>8 bleues pour le port de contrôle</span></li><li><span>si vous préférez avoir des LED remplaçables, vous pouvez souder des supports femelles à deux broches à la place des LEDs, mais l&#39;ajustement des LEDs à la bonne longueur sera sensiblement plus compliqué. Cette possibilité est laissée à votre appréciation et les supports ne sont pas fournis dans le kit.</span></li></ul></blockquote><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th style='text-align:right;' ><span>Illustration</span></th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Posez le circuit imprimé, face avant sur le dessus, sur des supports de préférence non métalliques afin qu&#39;il soit au dessus du plan de travail et permette aux LEDs de glisser dans leurs emplacements. Veillez à assurer une hauteur d&#39;environ 10 mm.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>2</span></td><td><span>Placez les 16 LEDs vertes (ou jaunes) des ports d&#39;entrée LED1 à LED8 et LED17 à LED24. La patte la plus courte est l&#39;anode et se place en haut sur le signe (-) du circuit imprimé.</span></td><td style='text-align:right;' ><img src="pictures/065.jpg" alt="Polarité LED" style="zoom:50%;" /></td></tr><tr><td><span>3</span></td><td><span>Placez les 16 LEDs jaunes (ou vertes) des ports de sortie LED9 à LED16 et LED25 à LED32. La patte la plus courte est l&#39;anode et se place en haut sur le signe (-) du circuit imprimé.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>4</span></td><td><span>Placez les 8 LED bleues du port de contrôle LED33 à LED40. La patte la plus courte est l&#39;anode et se place en haut sur le signe (-) du circuit imprimé.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>5</span></td><td><span>Vérifiez une dernière fois que les pattes les plus courtes sont bien situées sur le haut, ainsi que l&#39;applat de la LED.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>6</span></td><td><span>Fixez de nouveau la façade à l&#39;aide des 5 vis. Pensez à bien visser la vis unique à côté du trou du bouton marche/arrêt : elle assurera le bon alignement des LED situées sous le LCD.</span></td><td style='text-align:right;' ><img src="pictures/066.jpg" style="zoom:50%;" /></td></tr><tr><td><span>7</span></td><td><span>Soulevez l&#39;ensemble : les LEDs glissent dans leur logement et se plaquent sur le circuit imprimé.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>8</span></td><td><span>Retournez délicatement l&#39;ensemble pour que les LEDs glissent en sens inverse et se placent dans leur ouverture sur la façade. Une grande partie d&#39;entre elles va s&#39;y positionner directement, pour les autres agissez avec une pince sur les pattes pour les placer dans leur ouverture en façade. Posez l&#39;ensemble retourné sur le plan de travail, en appui sur les interrupteurs.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>9</span></td><td><span>Si une LED est mal positionnée, utilisez ses pattes et une pince pour la replacer correctement. Procédez délicatement pour ne pas tordre les pattes.</span></td><td style='text-align:right;' ><img src="pictures/067A.jpg" style="zoom:50%;" /></td></tr><tr><td><span>10</span></td><td><span>Vérifiez bien que toutes les LEDs sont  placées dans leur logement sur la façade en la regardant par en dessous. Elles doivent toutes dépasser de la même hauteur.</span></td><td style='text-align:right;' ><img src="pictures/067B.jpg" style="zoom:50%;" /></td></tr><tr><td><span>11</span></td><td><span>Vérifiez une dernière fois que les pattes les plus courtes sont bien sur le symbole (-) du circuit.</span></td><td style='text-align:right;' ><img src="pictures/067C.jpg" style="zoom:50%;" /></td></tr><tr><td><span>12</span></td><td><span>En cas d&#39;erreur, vous devez retourner la carte, dévisser et ôter la façade, remettre la LED dans le bon sens, revisser la façade et reprendre le bon positionnement des LEDs dans les logements.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>13</span></td><td><span>Une fois tout bien positionné et vérifié, soudez les pattes des LEDs.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>14</span></td><td><span>Coupez l&#39;excédent des pattes</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>15</span></td><td><span>Dévissez la façade.</span></td><td style='text-align:right;' >&nbsp;</td></tr></tbody></table></figure></li></ul><h3><a name="dos-du-circuit-imprimé-partie-2" class="md-header-anchor"></a><span>Dos du circuit imprimé (partie 2)</span></h3><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th>&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Retournez le circuit.</span></td><td>&nbsp;</td></tr><tr><td><span>2</span></td><td><span>Soudez le condensateur C5, attention à la polarité la patte la plus courte est sur le (-). La bande noire avec le signe &#39;-&#39; doit être face au demi cercle hachuré sur le circuit imprimé. Coupez les pattes de l&#39;autre côté.</span></td><td><img src="pictures/068.jpg" style="zoom:50%;" /></td></tr><tr><td><span>3</span></td><td><span>Soudez le connecteur mâle 2x12P P1.</span></td><td><img src="pictures/069.jpg" style="zoom:50%;" /></td></tr></tbody></table></figure><h3><a name="finition" class="md-header-anchor"></a><span>Finition</span></h3><ul><li><p><span>Nettoyez soigneusement la façade avec un chiffon doux ou microfibre.</span></p><blockquote><p><strong><span>N&#39;utilisez aucun produit détergent, solvant ou alcoolique</span></strong><span>.</span>
+<span>Les produits spéciaux pour écran plat sont acceptables.</span>
+<span>Si vous souhaitez utiliser un produit, faites un essai sur un petit endroit au dos de la façade ou sur la carte Bus Daughter pour vérifier qu&#39;il n&#39;abime pas le vernis.</span></p></blockquote></li></ul><p><img src="Pictures/attention.png" alt="attention" style="zoom:25%;" /><strong><span>IMPORTANT : Mettez votre bracelet anti-statique</span></strong></p><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th>&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Installez les circuits intégrés dans leurs emplacements :</span><br><span>3x 74HCT273N</span><br><span>3x 74HCT688</span><br><span>2x 74HCT245N</span><br><span>2x 74HCT32</span></td><td>&nbsp;</td></tr><tr><td><span>2</span></td><td><span>Revissez la façade.</span></td><td>&nbsp;</td></tr><tr><td><span>3</span></td><td><span>Emboitez les dip-switch sur leurs supports 16P puis emboitez les ensembles sur le circuit imprimé à travers l&#39;ouverture en façade.</span></td><td>&nbsp;</td></tr><tr><td><span>4</span></td><td><span>Branchez les 2 cables 12 fils sur le connecteur P1. Repérez le fil A7 par sa couleur ou avec un petit autocollant placé à l&#39;extrémité libre.</span></td><td><img src="pictures/070-Cable connexion.jpg" style="zoom:50%;" /></td></tr></tbody></table></figure><h2><a name="façade-avant" class="md-header-anchor"></a><span>Façade avant</span></h2><p><span>Pour assembler l&#39;écran LCD et le bouton d&#39;alimentation vous devez une dernière fois dévisser la façade pour écarter Blink&#39;n Switch.</span></p><h3><a name="ecran-lcd-4x20" class="md-header-anchor"></a><span>Ecran LCD 4x20</span></h3><ul><li><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Dévissez la façade.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>2</span></td><td><span>Fixez les 4 supports 10mm à l&#39;écran, support sur l&#39;avant et boulon au dos.</span></td><td style='text-align:right;' ><img src="pictures/070.jpg" style="zoom:33%;" /></td></tr><tr><td><span>3</span></td><td><span>Fixez le câble 4 fils sur le connecteur I2C.</span><br><span>Note : il est plus difficile de brancher le câble après la fixation de l&#39;écran sur la façade.</span></td><td style='text-align:right;' ><img src="pictures/70A-lcdcable.jpg" style="zoom:33%;" /></td></tr><tr><td><span>4</span></td><td><span>Vissez l&#39;ensemble sur la façade à l&#39;aide des vis.</span></td><td style='text-align:right;' ><img src="pictures/071.jpg" style="zoom:33%;" /></td></tr></tbody></table></figure></li></ul><h3><a name="bouton-dalimentation" class="md-header-anchor"></a><span>Bouton d&#39;alimentation</span></h3><p><span>A ce stade la façade est séparée de Bink&#39;n Switch.</span></p><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th>&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Si ce n&#39;est pas fait, dévissez la façade.</span></td><td>&nbsp;</td></tr><tr><td><span>2</span></td><td><span>Vissez le bouton d&#39;alimentation à l&#39;aide de l&#39;écrou. Si vous désirez utiliser le joint, placez le sur le pas de vis à l&#39;intérieur du bouton pour qu&#39;il aille s&#39;appuyer sur l&#39;extérieur de la façade, mais ce joint est facultatif</span></td><td><img src="pictures/TODO.png" style="zoom:50%;" /></td></tr><tr><td><span>3</span></td><td><span>Repérez les bornes du bouton : </span><strong><span>+</span></strong><span> et </span><strong><span>-</span></strong><span> à l&#39;extérieur alimentent la LED, </span><strong><span>NO</span></strong><span> est l&#39;entrée 5V, </span><strong><span>C</span></strong><span> est le fil de sortie 5V et </span><strong><span>NC</span></strong><span> ne sera pas connecté.</span></td><td><img src="pictures/072-pwrbtn.jpg" alt="Bornes bouton ON/OFF" style="zoom:50%;" /></td></tr><tr><td><span>4</span></td><td><span>Branchez le fil rouge long sur la borne centrale </span><strong><span>C</span></strong></td><td><img src="pictures/072-mainvcc.jpg" alt="Cable borne C" style="zoom:50%;" /></td></tr><tr><td><span>5</span></td><td><span>Branchez le câble 3 fils :</span></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><span>les deux fils rouges sur les bornes </span><strong><span>+</span></strong><span> et </span><strong><span>C</span></strong></td><td><img src="pictures/072-vcc.jpg" alt="Fils rouges" style="zoom:50%;" /></td></tr><tr><td>&nbsp;</td><td><span>le fil noir sur la borne </span><strong><span>-</span></strong></td><td><img src="pictures/072-gnd.jpg" alt="Fil noir" style="zoom:50%;" /></td></tr></tbody></table></figure><p><span>Les extrémités des câbles qui n&#39;ont pas encore été branchées vont rester libres pour l&#39;instant.</span></p><h2><a name="façade-arrière" class="md-header-anchor"></a><span>Façade arrière</span></h2><p><span>Cette façade arrière offre :</span></p><ul><li><span>des micro-interrupteurs pour contrôler les mémoires FLASH de l&#39;ordinateur SC126</span></li><li><span>un connecteur HDMI et une ouverture permettant de passer un cable USB pour une liaison directe vers un PiZero Terminal RC2014 et de relier la prise HDMI de celui-ci</span></li><li><span>un connecteur d&#39;alimentation pour un transformateur 5V à prise jack</span></li><li><span>un bouton reset</span></li><li><span>une ouverture en bas de la façade pour passer les cables vers les connecteurs arrière du SC126</span></li></ul><p><span>Les micro interrupteurs sont livrés soudés avec un cable de longueur convenant à un SC126. Si vous utilisez un boitier plus grand ou un autre ordinateur, vous pouvez utiliser des cables Dupont male/femelle comme rallonge, les branchements restent identiques. Notez que les autres ordinateurs RC2014 ne proposent pas forcément le choix entre deux ROMs.</span></p><p><span>Cette étape de l&#39;assemblage ne concerne que le placement des éléments, les branchements seront effectués ultérieurement.</span></p><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Vissez le connecteur HDMI à l&#39;aide des deux vis M3x8.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>2</span></td><td><span>Vissez le micro interrupteur avec 2 fils sur la position verticale &quot;flash select&quot; à l&#39;aide des vis M2x8 et d&#39;une clé Allen (non fournie). </span><br><span>ATTENTION : si vous avez placé la RomWBW en U1 sur SC126, vous devez mettre les deux fils en bas. Si par contre vous avez placé la rom SCM en U1 vous devez mettre les deux fils en haut.</span></td><td style='text-align:right;' ><img src="pictures/073-selectU1U2.jpg" alt="Switch select" style="zoom:50%;" /></td></tr><tr><td><span>3</span></td><td><span>Vissez les deux interrupteurs avec 3 fils aux positions &quot;flash protect&quot; horizontales à l&#39;aide de 4 vis M2x8.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>4</span></td><td><span>Vissez le connecteur d&#39;alimentation, patte la plus longue en bas (c&#39;est le &#39;-&#39;)</span></td><td style='text-align:right;' ><img src="pictures/091-powercnct.jpg" referrerpolicy="no-referrer" alt="Alimentation"></td></tr><tr><td><span>5</span></td><td><span>Vissez le bouton reset, la position des pattes n&#39;a pas d&#39;importance. Branchez le cable Reset avec les exxtrêmités jaunes.</span></td><td style='text-align:right;' ><img src="pictures/091-reset.jpg" referrerpolicy="no-referrer" alt="Reset"></td></tr></tbody></table></figure><p><span>La façade arrière présente alors l&#39;aspect suivant.</span><img src="pictures/074-backpanel.jpg" alt="Façade Arrière" style="zoom:67%;" /></p><h2><a name="installation-et-branchements" class="md-header-anchor"></a><span>Installation et branchements</span></h2><p><span>Tous les composants sont fixés ou soudés, il reste maintenant à effectuer les branchements et l&#39;installation de l&#39;ordinateur dans le boitier.</span></p><h3><a name="installation-sc126" class="md-header-anchor"></a><span>Installation SC126</span></h3><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Dévissez les pieds du fond du boitier et mettez à l&#39;abri les pieds et leurs vis pour plus tard.</span></td><td style='text-align:right;' ><img src="pictures/TODO.png" style="zoom:25%;" /></td></tr><tr><td><span>2</span></td><td><span>Placez le gabarit de perçage (drilling template) au fond du  boitier et scotchez le pour le maintenir en place. Vous pouvez jouer légèrement sur la position mais n&#39;avancez pas trop le gabarit vers la façade avant, l&#39;interrupteur avant du SC126 risque de buter contre Blink&#39;n Switch ou la façade. Ne le reculez pas trop non plus car ce sera alors le connecteur HDMI qui risquera de buter contre des composants d&#39;une carte située sur le RC2014. Si vous avez assemblé votre SC126 sans l&#39;interrupteur</span></td><td style='text-align:right;' ><img src="pictures/TODO.png" style="zoom:25%;" /></td></tr><tr><td><span>3</span></td><td><span>Percez le fond du boitier à l&#39;emplacement des marques sur le gabarit avec une mèche de 3mm. Pour percer ces trous, la technique est de donner un coup de pointeau au centre du trou, puis d&#39;utiliser une perceuse à colonne pour faire un trou bien vertical et bien centré. On peut faire un avant-trou avec une mèche de 1mm si on le souhaite mais le fond du boitier n&#39;étant pas très épais une mèche de 3mm ne rencontrera pas de difficulté particulière. Vous pouvez huiler légèrement pour éviter que le papier du gabarit brûle.</span></td><td style='text-align:right;' ><img src="pictures/TODO.png" style="zoom:25%;" /></td></tr><tr><td><span>4</span></td><td><span>Seuls 3 trous sont nécessaires pour le SC126 car un des supports est en face d&#39;un pied du boitier et ne sera pas vissé, mais il assurera un rôle pour la stabilité du circuit imprimé.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>5</span></td><td><span>FACULTATIF : Vous pouvez percer un trou supplémentaire pour le SC113Tiny qui procure 3 connecteurs de bus supplémentaires. Lui aussi ne sera fixé que par une vis, mais pour la stabilité du tout la carte utilise deux supports.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>6</span></td><td><span>FACULTATIF : Vous pouvez faire une ouverture sur le côté droit du boitier (vu de l&#39;arrière) pour que le port d&#39;extension du SC113Tiny soit accessible à l&#39;extérieur.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>7</span></td><td><span>Branchez le câble I2C, l&#39;accès sera moins aisé une fois la façade arrière mise en place. Prenez soin de respecter la correspondance des fils : repérez le fil GND sur l&#39;écran LCD pour le brancher sur la broche 0V du connecteur I2C sur le SC126 et faites de même pour les trois autres câbles, l&#39;ordre reste le même donc vous ne devez pas avoir de fil croisé.</span></td><td style='text-align:right;' ><img src="pictures/090-I2C.jpg" alt="Cable I2C" style="zoom: 50%;" /><span> </span><img src="pictures/090-LCD.jpg" alt="Cable LCD" style="zoom:50%;" /></td></tr><tr><td><span>8</span></td><td><span>FACULTATIF : Branchez un câble Dupont (</span><em><span>non fourni</span></em><span>) sur le port série 1 si vous souhaitez l&#39;utiliser plus tard, là aussi l&#39;accès sera moins aisé une fois la façade arrière en place.</span></td><td style='text-align:right;' ><img src="pictures/090-Serial.jpg" alt="Cable serial" style="zoom:50%;" /></td></tr><tr><td><span>9</span></td><td><span>Vissez les supports sur le SC126 : </span><strong><span>4</span></strong><span> pour SC126, et </span><strong><span>2</span></strong><span> pour SC113Tiny si vous l&#39;utilisez.</span></td><td style='text-align:right;' ><img src="pictures/080.jpg" alt="Supports" style="zoom:50%;" /></td></tr><tr><td><span>10</span></td><td><span>Fixez le SC126 à l&#39;aide des supports boulons vis. Notez qu&#39;avec le gabarit fourni, seuls 3 supports du SC126 et 1 support du SC113 Tiny seront vissés. Si vous souhaitez visser les 6 supports vous devrez avancer légèrement la carte en direction de l&#39;avant mais l&#39;interrupteur situé sur SC126 peut vous en empêcher. Les vis des supports iront sous le boitier, et les boulons sont normalement déjà vissés sur le dessus de la carte.</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>11</span></td><td><span>A cet instant vous allez fixer les deux façades définitivement afin de terminer les derniers branchements.</span><br><span>* Fixez la façade avant</span><br><span>* Fixez la façade arrière. Si vous avez branché un câble série, passez le à travers l&#39;ouverture du bas avant de visser la façade.</span></td><td style='text-align:right;' ><img src="pictures/091-Serial.jpg" alt="Connexion" style="zoom:50%;" /></td></tr></tbody></table></figure><h3><a name="branchement-busdaughter--blinkn-switch" class="md-header-anchor"></a><span>Branchement BusDaughter  Blink&#39;n Switch</span></h3><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Branchez les deux cables 12 fils sur la BusDaughter en prenant soin de respecter le repérage du fil A7 effectué lors du branchement sur Blink&#39;n Switch.</span></td><td style='text-align:right;' ><img src="pictures/TODO.PNG" style="zoom:50%;" /></td></tr><tr><td><span>2</span></td><td><span>Installez la carte BusDaughter dans l&#39;emplacement bus de votre choix</span></td><td style='text-align:right;' >&nbsp;</td></tr><tr><td><span>3</span></td><td><span>Attention à l&#39;orientation de la carte : le coin biseauté de la carte se présente sur l&#39;avant de l&#39;ordinateur</span></td><td style='text-align:right;' ><img src="pictures/090-busdaughter.jpg" alt="Connexion" style="zoom:50%;" /></td></tr><tr><td><span>4</span></td><td><span>Attention à enficher la carte sur le côté droit du connecteur de bus de 2x40 prises (vu de l&#39;arrière vers l&#39;avant), la première broche (vers l&#39;avant) se place dans le trou marqué &quot;1&quot; sur le circuit imprimé.</span><br><span>Normalement, les deux câbles doivent rester parallèles. Le plus à droite sur Blink&#39;n Switch sera aussi le plus à droite sur BusDaughter. Si ce n&#39;est pas le cas, vérifiez le branchement.</span></td><td style='text-align:right;' ><img src="pictures/TODO.PNG" style="zoom:50%;" /></td></tr></tbody></table></figure><h3><a name="façade-avant-n856" class="md-header-anchor"></a><span>Façade avant</span></h3><p><span>Ls branchements sont facilités si vous avez connecté les câbles de l&#39;écran LCD et du bouton marche/arrêt </span><em><span>avant</span></em><span> de visser la façade :</span></p><ul><li><span>Si vous n&#39;avez pas déjà fixé le câble I2C sur l&#39;écran LCD, dévissez l&#39;écran de la façade, branchez le câble puis revissez l&#39;écran. Reportez-vous à la section </span><em><span>Façade avant</span></em><span> pour le branchement.</span></li><li><span>Si vous n&#39;avez pas fixé les câbles sur le bouton d&#39;alimentation, dévissez la façade, effectuez les branchements comme indiqué dans la section </span><em><span>Façade avant</span></em><span> puis revissez la façade.</span></li></ul><h3><a name="façade-arrière-n863" class="md-header-anchor"></a><span>Façade arrière</span></h3><p><span>Le connecteur d&#39;alimentation sert le bouton marche/arrêt de la façade et l&#39;alimentation du SC126. Le bouton Reset est particulièrement utile pour les utilisateurs de la carte PiZero Terminal qui nécessite un reset après la mise en marche.</span></p><p><span>Les interrupteurs de sélection permettent de choisir entre les deux ROM du SC126 et d&#39;autoriser leur écriture pour une mise à jour.</span></p><p><span>Le connecteur HDMI se branche par une rallonge directement sur la carte PiZero Terminal, permettant d&#39;avoir une sortie écran couleur via le logiciel PiGfx.</span></p><p><span>L&#39;orifice à côté de la prise HDMI permet de passer une rallonge USB pour brancher un clavier USB sur un PiZero Terminal. Cette ouverture a été préférée à une prise USB en raison des difficultés à trouver un connecteur approprié.</span></p><p><span>En bas de la façade, une ouverture permet de passer les câbles utiles pour les nombreux connecteurs du SC126, par exemple la prise série pour contrôler l&#39;ordinateur via une machine de bureau ou portable (si vous avez suivi les indications, un câble est déjà installé et passe à travers cette ouverture).</span></p><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Branchez le raccord HDMI sur le connecteur intérieur de la façade arrière, puis sur votre PiZeroTerminal</span></td><td style='text-align:right;' ><img src="pictures/TODO.PNG" style="zoom:50%;" /></td></tr><tr><td><span>2</span></td><td><span>Branchez les deux interrupteurs 3 fils sur les connecteurs JP1 et JP2 du SC126 : attention à placer le bon cable sur le bon connecteur selon que vous avez placé RomWBW en U1 et SCM en U2 ou l&#39;inverse. Les fils ne doivent pas se croiser ou subir de torsion : le fil le plus à droite sur l&#39;interrupteur est aussi à droite sur la carte SC126 et correspond à la position &quot;PROTECT&quot;</span></td><td style='text-align:right;' ><img src="pictures/091-U1U2.jpg" alt="U1U2" style="zoom:50%;" /></td></tr><tr><td><span>3</span></td><td><span>Branchez l&#39;interrupteur 2 fils sur le connecteur P9 : si vous avez RomWBW en U1, les deux fils doivent se situer en bas. Branchez le cable du bouton reset avec les fiches jaunes sur le connecteur P8 et le bouton de la façade. Pour ces deux cablages, la position des fils n&#39;a pas d&#39;importance.</span></td><td style='text-align:right;' ><img src="pictures/091-reset+select.jpg" alt="Select Reset" style="zoom:50%;" /></td></tr></tbody></table></figure><p><span>Pour l&#39;interrupteur &quot;SELECT&quot; : le connecteur P9 du SC126 sélectionne la mémoire 1 ou 2 selon qu&#39;il est fermé (interrupteur de la façade arrière face aux deux fils) ou ouvert (interrupteur sur la position où seul le fil central est connecté). Veillez à placer l&#39;interrupteur de façon à ce que les fils sélectionnent bien la ROM qui se trouve à l&#39;emplacement concerné. Le modèle d&#39;installation fourni dans cette documentation convient pour RomWBW situé en U1. Si vous avez inversé les ROMs par rapport à ce modèle vous devrez inverser  l&#39;interrupteur de sélection verticalement et les câbles à trois fils en fonction des indications de la façade arrière.</span></p><h3><a name="bouton-power" class="md-header-anchor"></a><span>Bouton Power</span></h3><p><span>Le bouton de la façade avant contrôle l&#39;alimentation du SC126 via le connecteur J2. Pour que ce dernier puisse alimenter le SC126 il faut placer l&#39;interrupteur de la carte SC126 en position ON, afin de déporter la fonction ON/OFF sur le bouton de la façade avant. </span></p><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>FACULTATIF : si vous avez remplacé l&#39;interrupteur du SC126 par un connecteur à trois broches, placez un jumper sur les deux broches les plus éloignées du bord de la carte.</span></td><td style='text-align:right;' ><img src="pictures/97-contact.jpg" style="zoom:50%;" /></td></tr><tr><td><span>2</span></td><td><span>Branchez le fil rouge de la broche </span><strong><span>C</span></strong><span> du bouton on/off sur la borne 5V du bornier J2 du SC126</span></td><td style='text-align:right;' ><img src="pictures/091-borne5V.jpg" alt="Borne 5V" style="zoom:50%;" /></td></tr><tr><td><span>3</span></td><td><span>Branchez le fil noir de la broche </span><strong><span>-</span></strong><span> et le câble noir séparé sur la borne GND du bornier J2</span></td><td style='text-align:right;' ><img src="pictures/091-borneGND.jpg" alt="Borne GND" style="zoom:50%;" /></td></tr><tr><td><span>4</span></td><td><span>Branchez le fil </span><strong><span>rouge</span></strong><span> provenant du bouton marche/arrêt sur la cosse </span><strong><span>la plus courte</span></strong><span> du connecteur d&#39;alimentation</span><br><br><span>Branchez le fil </span><strong><span>noir</span></strong><span> provenant du bornier J2 sur la cosse </span><strong><span>la plus longue</span></strong><span> du connecteur d&#39;alimentation</span></td><td style='text-align:right;' ><img src="pictures/95_powerconnect.jpg" alt="Connecteur" style="zoom:50%;" /><img src="pictures/96_powerconnect.jpg" alt="Branchement" style="zoom:50%;" /></td></tr></tbody></table></figure><p>&nbsp;</p><h2><a name="utilisation" class="md-header-anchor"></a><span>Utilisation</span></h2><p><span>Les ports d&#39;entrée-sortie sont contrôlés par des instructions IN et OUT du Z-80 ou du BASIC. L&#39;écran LCD se contrôle via l&#39;interface I2C à l&#39;aide d&#39;une librairie à intégrer dans vos programmes, ou à l&#39;aide de versions de SCM et BASIC en cours de développement.</span></p><h3><a name="port-de-contrôle-130dh" class="md-header-anchor"></a><span>Port de contrôle (13/0Dh)</span></h3><p><span>Le port de contrôle est câblé sur le numéro de port 13 (0Dh), ceci correspond aux deux logiciels de l&#39;ordinateur SC126 : le moniteur SCM affiche l&#39;état de ses tests à l&#39;allumage sur ce port, et le boot de RomWBW affiché également l&#39;avancement de son démarrage sur ce port.</span></p><p><span>Tout programme peut allumer ou éteindre ces 8 LEDs en envoyant une donnée 8-bits sur le port 13. La LED la plus à gauche représente le bit de poids fort.</span></p><blockquote><p><span>Remarque : le port 13 retient sa dernière donnée, donc pour éteindre les LEDs il faut explicitement écrire un 0.</span></p></blockquote><h3><a name="ports-dentrée-sortie" class="md-header-anchor"></a><span>Ports d&#39;entrée sortie</span></h3><p><span>Les 2 ports d&#39;entrée et de sortie possèdent chacun 8 LEDs qui représentent les 8 bits de données, le bit de poids fort étant représenté par la LED la plus à gauche.</span></p><h4><a name="utiliser-le-port-a-ou-b-en-entrée" class="md-header-anchor"></a><span>Utiliser le port A ou B </span><em><span>en entrée</span></em></h4><figure><table><thead><tr><th><span>Etape</span></th><th style='text-align:left;' ><span>Description</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td style='text-align:left;' ><span>Choisissez le numéro de port avec le DIPswitch, le bit de poids fort du numéro est représenté par l&#39;interrupteur le plus à gauche. Par exemple, pour utiliser le port 7, on place les trois interrupteurs les plus à droite en position haute et les cinq autres en position basse.</span></td><td style='text-align:right;' ><img src="pictures/97-portselect.jpg" style="zoom:50%;" /></td></tr><tr><td><span>2</span></td><td style='text-align:left;' ><span>Placez les interrupteurs en position médiane et connectez vos fils sur le port d&#39;entrée</span></td><td style='text-align:right;' ><img src="pictures/TODO.PNG" style="zoom:50%;" /></td></tr><tr><td><span>3</span></td><td style='text-align:left;' ><span>Les interrupteurs peuvent être placés en position haute pour forcer un bit à 1, ou basse pour le forcer à 0</span></td><td style='text-align:right;' ><img src="pictures/TODO.PNG" style="zoom:50%;" /></td></tr><tr><td><span>4</span></td><td style='text-align:left;' ><span>L&#39;interrupteur supérieur à droite des LEDs les active ou désactive. Elles affichent l&#39;état de l&#39;entrée qui leur correspond</span></td><td style='text-align:right;' ><img src="pictures/TODO.PNG" style="zoom:50%;" /></td></tr><tr><td><span>5</span></td><td style='text-align:left;' ><span>utiliser les instructions IN pour lire l&#39;état du port</span></td><td style='text-align:right;' >&nbsp;</td></tr></tbody></table></figure><h4><a name="utiliser-le-port-a-ou-b-en-sortie" class="md-header-anchor"></a><span>Utiliser le port A ou B </span><em><span>en sortie</span></em></h4><figure><table><thead><tr><th><span>Etape</span></th><th><span>Description</span></th><th style='text-align:right;' >&nbsp;</th></tr></thead><tbody><tr><td><span>1</span></td><td><span>Choisissez le numéro de port avec le DIPswitch</span></td><td style='text-align:right;' ><img src="pictures/TODO.PNG" style="zoom:50%;" /></td></tr><tr><td><span>2</span></td><td><span>Connectez vos fils sur le port de sortie</span></td><td style='text-align:right;' ><img src="pictures/TODO.PNG" style="zoom:50%;" /></td></tr><tr><td><span>3</span></td><td><span>L&#39;interrupteur inférieur à droite des LEDs active ou désactive les LEDs</span></td><td style='text-align:right;' ><img src="pictures/TODO.PNG" style="zoom:50%;" /></td></tr><tr><td><span>4</span></td><td><span>Utiliser les instructions OUT pour écrire sur le port : 5V sont placés sur les sorties des bits placés à 1</span></td><td style='text-align:right;' ><img src="pictures/TODO.PNG" style="zoom:50%;" /></td></tr></tbody></table></figure><blockquote><p><span>Remarque : Chaque port de sortie retient sa dernière donnée, donc pour éteindre les LEDs il faut explicitement écrire un 0.</span></p></blockquote><h3><a name="ecran-lcd" class="md-header-anchor"></a><span>Ecran LCD</span></h3><p><span>L&#39;écran LCD est contrôlé par le bus I2C sur le port 0Ch du SC126. Un logiciel spécifique est en cours de finition ainsi qu&#39;une version de SCM et du BASIC en cours de développement capables d&#39;afficher du texte sur l&#39;écran LCD.</span></p></div>
+</body>
+</html>
