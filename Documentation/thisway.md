@@ -1,0 +1,1 @@
+<img src="pictures/thisway.png" alt="Vérification" style="zoom:75%;" />
