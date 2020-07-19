@@ -14,13 +14,14 @@ L'ensemble se compose des éléments suivants :
 * Une façade arrière avec un connecteur d'alimentation, une sortie HDMI, des interrupteurs de contrôle des ROMs du SC126, des ouvertures pour faciliter les branchements et un bouton Reset.
 * *Blink'n Switch*, une carte d'entrée-sortie avec deux ports d'entrée/sortie sélectionnables et un port de  sortie fixe utilisé par le SC126 pour afficher le status lors du démarrage. Cette carte équivaut à deux carte I/O mais ses contrôleurs en façades en rendent l'utilisation beaucoup plus simple et elle présente des possibilités supplémentaires.
 * *Bus Daughter*, une carte compatible RC2014 pour connecter *Blink'n Switch* au bus RC2014.
-* Un écran LCD 4x20 avec adaptateur I2C pour le SC126.
+* Un écran LCD 4x20 rétro éclairé, *avec ou sans adaptateur I2C*.
+* Tous les câbles nécessaires pour les branchements.
 
-La conception du kit et son deisgn sont basés sur un boitier bleu que l'on peut se procurer sur la plupart des sites marchands proposant de l'électronique (voir [Boitier](#boitier)). La couleur de ce boitier a donné son nom et son design à Bluety et a dicté la taille des façades. Les circuits imprimés et si possible les composants ont été choisis de couleur bleue. Mais Bluety conviendra à tout autre boitier de dimensions supérieures (pour les façades) et d'une profondeur suffisante pour l'ordinateur choisi. L'utilisateur devra pratiquer une ouverture sur les façades de son boitier pour pouvoir y fixer les façades de Bluety.
+La conception du kit et son design sont basés sur un boitier bleu que l'on peut se procurer sur la plupart des sites marchands proposant de l'électronique (voir [Boitier](#boitier)). La couleur de ce boitier a donné son nom et son design à Bluety et a dicté la taille des façades. Les circuits imprimés et si possible les composants ont été choisis de couleur bleue. Mais Bluety conviendra à tout autre boitier de dimensions supérieures (pour les façades) et d'une profondeur suffisante pour l'ordinateur choisi. L'utilisateur devra pratiquer une ouverture sur les façades de son boitier pour pouvoir y fixer les façades de Bluety.
 
-Bluety est particulièrement conçu pour accueillir le kit [SC126](https://www.tindie.com/products/tindiescx/sc126-z180-sbc-motherboard-kit/) de Stephen S. Cousins et la carte *[PiZero Terminal](https://www.tindie.com/products/semachthemonkey/raspberry-pi-zero-serial-terminal-for-rc2014/?pt=ac_prod_search)* qui possède une sortie HDMI ou la carte [BusRaider](https://www.tindie.com/products/robdobson/play-retro-games-rc2014-graphics-kit/) de Rob Robson. Le SC126 est un ordinateur équipé d'un processeur Z-180 à 18 MHz (compatible Z-80), de deux ROM Flash de 512 Ko permettant le choix entre les logiciels de contrôle [*Small Computer Monitor*](https://smallcomputercentral.wordpress.com/small-computer-monitor/) et [RomWBW](https://github.com/wwarthen/RomWBW), d'une RAM Flash de 512 Ko, ainsi que de nombreux contrôleurs de périphériques intégrés tels que deux ports série, un port SD et un port I2C. 
+Bluety est particulièrement conçu pour accueillir le kit [SC126](https://www.tindie.com/products/tindiescx/sc126-z180-sbc-motherboard-kit/) de Stephen S. Cousins et la carte *[PiZero Terminal](https://www.tindie.com/products/semachthemonkey/raspberry-pi-zero-serial-terminal-for-rc2014/?pt=ac_prod_search)* qui possède une sortie HDMI ou la carte [BusRaider](https://www.tindie.com/products/robdobson/play-retro-games-rc2014-graphics-kit/) de Rob Robson. Le SC126 est un ordinateur équipé d'un processeur Z-180 à 18 MHz (compatible Z-80), de deux ROM Flash de 512 Ko permettant le choix entre les logiciels de contrôle [*Small Computer Monitor*](https://smallcomputercentral.wordpress.com/small-computer-monitor/) et [RomWBW](https://github.com/wwarthen/RomWBW), d'une RAM Flash de 512 Ko, ainsi que de nombreux contrôleurs de périphériques intégrés tels que deux ports série, un port SD et un port I2C. Ce dernier permet d'accéder à l'écran LCD.
 
-Bluety est également utilisable avec le [RC2014](https://www.tindie.com/stores/Semachthemonkey/) de Spencer Owens dans toutes ses versions jusqu'à la version [RC2014 Pro](https://www.tindie.com/products/Semachthemonkey/backplane-pro-for-rc2014-z80-homebrew-computer/) équipée du [Backplane Pro](https://www.tindie.com/products/Semachthemonkey/backplane-pro-for-rc2014-z80-homebrew-computer/) avec 12 connecteurs de bus, ainsi que de nombreux ordinateurs respectant le bus RC2014, bien que l'écran LCD ne soit pas toujours utilisable tel quel en l'absence de bus I2C. Le logiciel de contrôle en cours de développement est actuellement destiné à l'interface I2C, une version non-I2C sera développée ultérieurement.
+Bluety est également utilisable avec le [RC2014](https://www.tindie.com/stores/Semachthemonkey/) de Spencer Owens dans toutes ses versions jusqu'à la version [RC2014 Pro](https://www.tindie.com/products/Semachthemonkey/backplane-pro-for-rc2014-z80-homebrew-computer/) équipée du [Backplane Pro](https://www.tindie.com/products/Semachthemonkey/backplane-pro-for-rc2014-z80-homebrew-computer/) avec 12 connecteurs de bus, ainsi que de nombreux ordinateurs respectant le bus RC2014, bien que l'écran LCD ne soit pas encore utilisable en l'absence de bus I2C. Le logiciel de contrôle en cours de développement est destiné à l'interface I2C, une version non-I2C sera développée par la suite.
 
 Je vous souhaite un bon assemblage et beaucoup de plaisir avec Bluety.
 
@@ -28,19 +29,19 @@ Je vous souhaite un bon assemblage et beaucoup de plaisir avec Bluety.
 
 > **Extension de bus**
 >
-> L'ordinateur SC126 ne possède que 2 connecteurs de bus mais il a un connecteur d'extension latéral, conçu pour recevoir par exemple le kit [SC113](https://www.tindie.com/products/tindiescx/sc113-modular-backplane-kit-for-rc2014/?pt=ac_prod_search) qui propose 5 connecteurs de bus et lui aussi un connecteur d'extension.
+> L'ordinateur SC126 possède 2 connecteurs de bus et un connecteur d'extension latéral, conçu pour recevoir par exemple le kit [SC113](https://www.tindie.com/products/tindiescx/sc113-modular-backplane-kit-for-rc2014/?pt=ac_prod_search) qui propose 6 connecteurs de bus et un nouveau connecteur d'extension.
 > 
 >La carte SC113 est cependant trop longue pour le boitier de Bluety, aussi Bluety peut être équipé d'une version raccourcie, SC113-Tiny, qui propose 3 connecteurs de bus au lieu de 5 et convient aux dimensions du boitier. Il présente lui aussi un connecteur d'extension pour ajouter un SC113 à l'extérieur du boitier.
 > 
 >Le circuit imprimé SC113 Tiny est disponible en option avec le kit Bluety, sans ses composants.
 
-> Notez que *cette carte SC113-Tiny n'est pas supportée par Stephen S. Cousins*, et je fournis *uniquement le circuit imprimé* en option avec Bluety. Je vous conseille de commander un [SC113](https://www.tindie.com/products/tindiescx/sc113-modular-backplane-kit-for-rc2014/) et d'utiliser ses composants sur la carte SC113 Tiny. Quelques composants du kit SC113 sont inutilises mais en dehors de cela le fonctionnement et l'assemblage sont identiques.
+> Notez que *cette carte SC113-Tiny n'a pas été conçue par Stephen S. Cousins* et n'est donc pas supportée par lui mais par moi-même en cas de problème. Je fournis *uniquement le circuit imprimé* en option avec Bluety : je vous conseille de commander un [SC113](https://www.tindie.com/products/tindiescx/sc113-modular-backplane-kit-for-rc2014/) et d'utiliser ses composants sur la carte SC113 Tiny. Quelques composants du kit SC113 sont inutilises mais en dehors de cela le fonctionnement et l'assemblage sont identiques.
 >
 > <img src="pictures/SC113tiny.jpg" alt="SC113 à côté de SC113 Tiny" style="zoom: 50%;" />
 
 > **Interrupteur marche/arrêt SC126**
 >
-> Bluety possède son propre bouton marche/arrêt. Si vous n'avez pas encore assemblé votre SC126, vous pouvez remplacer l'interrupteur par un connecteur à trois broches et placer un jumper sur les deux broches éloignées du bord de la carte afin de remplacer l'interrupteur en position ON. Si votre SC126 est déjà assemblé, il vous suffira de placer l'interrupteur en position ON.
+> Bluety possède son propre bouton marche/arrêt. Si vous n'avez pas encore assemblé votre SC126, vous pouvez remplacer l'interrupteur par un connecteur à trois broches et placer un jumper sur les deux broches éloignées du bord de la carte afin de remplacer l'interrupteur en position ON comme indiqué sur l'image ci-dessous. Si en revanche votre SC126 est déjà assemblé, il vous suffira de placer l'interrupteur en position ON.
 >
 > <img src="pictures/97-contact.jpg" alt="Remplacement on/off" style="zoom:50%;" />
 >
@@ -189,13 +190,13 @@ Ce tableau liste les outils dont vous aurez besoin pour assembler le kit.
 | Pince fine coudée                                            | <img src="pictures/004-pliers.jpg" alt="Pince" style="zoom: 33%;" /> |
 | Pince coupante coudée                                        | <img src="pictures/005-pliers.jpg" alt="Pince coupante" style="zoom: 33%;" /> |
 | Pompe à soudure                                              | <img src="pictures/006-pump.jpg" alt="Pompe" style="zoom: 33%;" /> |
-| Tapis silicone (ou protection isolante du plan de travail). Ce tapis protège votre plan de travail des brulures mais aussi des rayures, et isole le circuit. Nettoyez régulièrement la surface afin d'éviter que les résidus de métal ou de soudure rayent les circuits imprimés ou les façades. Débarrassez les bouts de métal et de soudure, passez le tapis sous l'eau du robinet et séchez le. Faites cette opération régulièrement pendant l'assemblage, ne laissez pas les débris s'accumuler sur le tapis. |                          ![Tapis](pictures\006A-silicon.jpg) |
+| Tapis silicone (ou protection isolante du plan de travail). Ce tapis protège votre plan de travail des brulures mais aussi des rayures, et isole les circuits les uns des autres lorsque les circuits imprimés sont posés dessus. Nettoyez régulièrement la surface afin d'éviter que les résidus de métal ou de soudure rayent les façades ou les circuits imprimés, avec le risque d'abimer des pistes. Débarrassez les bouts de métal et de soudure, passez le tapis sous l'eau du robinet et séchez le. Faites cette opération régulièrement pendant l'assemblage, ne laissez pas les débris s'accumuler sur le tapis. |                          ![Tapis](pictures\006A-silicon.jpg) |
 | Bracelet anti-statique. Reliez la pince à une masse. Ne reliez pas la pince directement à une prise de terre, vous seriez au contact avec la terre de tout votre réseau électrique et risqueriez de vous charger d'électricité au lieu de l'inverse. Si vous n'avez pas de boitier spécial vous pouvez relier la pince à la sortie négative d'un transformateur 5V ou au boitier métallique d'un ordinateur. | <img src="pictures/007-bracelet.jpg" alt="Bracelet" style="zoom: 33%;" /> |
-| Nécessaire de nettoyage de pane de fer à souder (brosse métallique et flux) | <img src="pictures/008-tipscleaner.jpg" alt="Nettoyage" style="zoom: 25%;" /><img src="pictures/009-tipscleaner.jpg" alt="Nettoyage" style="zoom:25%;" /> |
-| Clés ALLEN 2 et 1.4mm (Pour vis M2x8 et M3x8)                | <img src="pictures/010-allen.jpg" alt="Clés Allen" style="zoom: 33%;" /> |
-| Tournevis avec têtes cruxiforme, plat, allen                 | <img src="pictures/011-screwdriver.jpg" alt="Tournevis" style="zoom: 33%;" /> |
-| Multimètre avec mesure de voltage et résistance, éventuellement test de continuité | <img src="pictures/011A-multimeter.jpg" alt="Multimètre" style="zoom: 33%;" /> |
-| Perceuse à colonne pour le fond du boitier                   |                               ![Perceuse](pictures/TODO.PNG) |
+| Accessoires de nettoyage de pane de fer à souder (brosse métallique et flux) | <img src="pictures/008-tipscleaner.jpg" alt="Nettoyage" style="zoom: 25%;" /><img src="pictures/009-tipscleaner.jpg" alt="Nettoyage" style="zoom:25%;" /> |
+| Clés ALLEN pour vis M2x8 et M3x8                             | <img src="pictures/010-allen.jpg" alt="Clés Allen" style="zoom: 33%;" /> |
+| Tournevis avec têtes cruxiformes, plates, Allen si vous n'avez pas de clés Allen. | <img src="pictures/011-screwdriver.jpg" alt="Tournevis" style="zoom: 33%;" /> |
+| Multimètre avec mesure de voltage et résistance, éventuellement test de continuité (diodes) | <img src="pictures/011A-multimeter.jpg" alt="Multimètre" style="zoom: 33%;" /> |
+| Perceuse à colonne pour le fond du boitier (par exemple Dremel) avec une mêche de 3mm |                               ![Perceuse](pictures/TODO.PNG) |
 
 
 
@@ -234,9 +235,9 @@ Cette carte offre deux ports d'entrée/sortie avec des LEDs témoins et des inte
 
 <TABLE><TR><TD><img src="pictures/thisway.png" width="150px" /></TD><TD>Le montage de cette carte nécessite plusieurs assemblages temporaires avec la façade avant pour que les composants apparaissant sur cette dernière soient correctement alignés. <B>Respectez l'ordre de montage et les consignes</B> pour avoir les meilleurs chances d'obtenir une belle façade.</TD></TR></TABLE>
 
-### Arrière (partie 1) : Supports et composants
+### Arrière (partie 1) : supports et composants
 
-Placez le **dos** visible, (le trou du bouton marche arrêt en bas à gauche)
+Placez le **dos** visible, (l'orifice' du bouton marche arrêt en bas à gauche)
 
 | Etape  | Description                                                       |                                                              |
 | --- | --------------------------------------------------------- | -----------------------------------------------------------: |
@@ -286,7 +287,7 @@ Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenan
 | 7 | Une fois que tout est bien aligné, retournez l'ensemble et terminez la soudure des supports. |                                                   |
 | 8 | Dévissez les vis de la façade, démontez la ainsi que les ensembles support+dip-switch emboités pour qu'il ne reste que les deux supports soudés. |                                                   |
 
-### Avant : Connecteurs E/S et Alimentation
+### Avant : connecteurs E/S et Alimentation
 
 | Etape | Description                                                        |                                                              |
 | ---- | -------------------------------------------------------- | ------------------------------------------------------------ |
@@ -466,7 +467,7 @@ Le kit propose deux gabarits de perçage : un pour le SC126 avec ou sans l'exten
 | <img src="pictures/thisway.png" alt="Vérification" width="50px" /> | ● Pour le **SC126 seul**, découpez le gabarit SC126 : le bord droit de la découpe correspond au bord gauche du SC113 Tiny et le bord inférieur est 10 mm en dessous du rectangle du SC126. | <img src="pictures/082-SC126-template.png" style="zoom:33%;" /> |
 | <img src="pictures/thisway.png" alt="Vérification" width="50px" /> | ● Pour le **SC126 avec le SC113 Tiny**, découpez le gabarit SC126 : le bord droit de la découpe est 6 mm à droite du bord droit du SC113 Tiny et le bord inférieur est  10 mm en dessous du rectangle du SC126. | <img src="pictures/082-SC126-SC113-template.png" style="zoom:33%;" /> |
 | <img src="pictures/thisway.png" alt="Vérification" width="50px" /> | ● Pour le RC2014 Pro et/ou le **backplane Pro**, découpez le gabarit RC2014. Le bord droit de la découpe est 9 mm à droite du bord droit du Backplane Pro et le bord inférieur est 10 mm en dessous du rectangle du Backplane Pro. | <img src="pictures/082-SRC2014-Pro-template.png" style="zoom:33%;" /> |
-| <img src="pictures/attention.png" alt="Vérification" style="zoom:75%;" /> | Vous pouvez modifier légèrement la position du gabarit mais :<br />● N'avancez pas trop le gabarit vers la façade avant, l'interrupteur du SC126 risque de buter contre Blink'n Switch ou la façade. Si vous avez assemblé le SC126 sans l'interrupteur vous avez davantage de marge.<br />● Ne le reculez pas trop non plus car le connecteur HDMI risque de buter contre des composants d'une carte située sur le bus RC2014. <br />● Ne l'éloignez pas trop du bord droit si vous voulez pratiquer une ouverture pour l'extension de bus du SC113 Tiny. Pour le RC2014, si vous le rapprochez trop à gauche vous risquez de buter contre le bouton marche/arrêt. |  |
+| <img src="pictures/attention.png" alt="Vérification" style="zoom:100%;" /> | Vous pouvez modifier légèrement la position du gabarit mais :<br />● N'avancez pas trop le gabarit vers la façade avant, l'interrupteur du SC126 risque de buter contre Blink'n Switch ou la façade. Si vous avez assemblé le SC126 sans l'interrupteur vous avez davantage de marge.<br />● Ne le reculez pas trop non plus car le connecteur HDMI risque de buter contre des composants d'une carte située sur le bus RC2014. <br />● Ne l'éloignez pas trop du bord droit si vous voulez pratiquer une ouverture pour l'extension de bus du SC113 Tiny. Pour le RC2014, si vous le rapprochez trop à gauche vous risquez de buter contre le bouton marche/arrêt. |  |
 | 4    | Percez le fond métalique du boitier à l'emplacement des marques sur le gabarit avec une mèche métal de **3&nbsp;mm**. Pour percer ces trous, la technique est de donner un coup de pointeau au centre du trou indiqué sur le gabarit, puis d'utiliser une perceuse à colonne (par exemple une Dremel) pour faire un trou vertical bien centré. On peut faire un avant-trou avec une mèche de 1 mm si on le souhaite mais le fond du boitier n'étant pas très épais une mèche de 3 mm ne rencontrera pas de difficulté majeure. Vous pouvez huiler légèrement pour éviter que le papier du gabarit brûle.<br />● Pour **SC126 seul**, vous devrez percer **5 trous** : les 4 trous pour fixer SC126, et 1 trou pour déplacer un pied du fond de  boitier. <br />● Pour le **SC126 + SC113 Tiny**, vous devrez percer **8 trous** : les 4 trous du SC126, 2 pour le SC113 Tiny, et 2 pour déplacer des pieds du fond de  boitier.<br />● Pour le **RC2014**, vous devrez percer **6 trous** pour le Backplane Pro, il n'y a pas besoin de déplacer de pieds pour cette configuration. | <img src="pictures/083-drilling.jpg" style="zoom:33%;" /> |
 | 5 | FACULTATIF : Vous pouvez faire une ouverture sur le côté droit du boitier (vu de l'arrière) pour que le port d'extension du SC113 Tiny soit accessible à l'extérieur. Dans ce cas, calez le gabarit contre le bord droit pour que le connecteur d'extension soit au plus près de ce bord. C'est le réglage par défaut donc vous n'avez pas besoin de modifier le gabarit. Vous pouvez décaler de 2 mm à droite si vous souhaitez que l'extension de bus soit au ras |  |
 | 6 | Branchez le câble I2C sur le SC126, l'accès sera moins aisé une fois la façade arrière mise en place. Prenez soin de respecter la correspondance des fils : repérez le fil GND sur l'écran LCD pour le brancher sur la broche 0V du connecteur I2C sur le SC126 et faites de même pour les trois autres câbles, l'ordre est identique donc vous ne devez pas avoir de fil croisé. | <img src="pictures/090-I2C.jpg" alt="Cable I2C" style="zoom: 50%;" /> <img src="pictures/090-LCD.jpg" alt="Cable LCD" style="zoom:50%;" /> |
@@ -488,42 +489,62 @@ Le kit propose deux gabarits de perçage : un pour le SC126 avec ou sans l'exten
 
 Les branchements sont facilités si vous avez connecté les câbles de l'écran LCD et du bouton marche/arrêt *avant* de visser la façade :
 
-* Si vous n'avez pas déjà fixé le câble I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le câble puis revissez l'écran. Reportez-vous à la section *Façade avant* pour le branchement.
-* Si vous n'avez pas fixé les câbles sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans la section *Façade avant* puis revissez la façade.
+* Si vous n'avez pas déjà fixé le câble I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le câble puis revissez l'écran. Reportez-vous à la section [Façade avant](#façade-avant) pour le branchement.
+* Si vous n'avez pas fixé les câbles sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans la section [Façade avant](#façade-avant) puis revissez la façade.
 
 ### Façade arrière
 
-Le connecteur d'alimentation sert le bouton marche/arrêt de la façade et l'alimentation du SC126. Le bouton Reset est particulièrement utile pour les utilisateurs de la carte PiZero Terminal qui nécessite un reset après la mise en marche.
+En bas de la façade, une ouverture permet de passer les câbles utiles pour les nombreux connecteurs du SC126, par exemple la prise série pour contrôler l'ordinateur via une machine de bureau ou portable (si vous avez suivi les indications, un câble est déjà installé et passe à travers cette ouverture).
 
-Les interrupteurs de sélection permettent de choisir entre les deux ROM du SC126 et d'autoriser leur écriture pour une mise à jour.
+#### HDMI
 
-Le connecteur HDMI se branche par une rallonge directement sur la carte *PiZero Terminal* ou *BusRaider*, permettant d'avoir une sortie écran couleur via le logiciel interne (PiGfx ou BusRaider).
+Le connecteur HDMI se branche par la rallonge fournie dans le kit directement sur une carte *PiZero Terminal* ou *BusRaider*, permettant d'avoir une sortie écran couleur via le logiciel interne (PiGfx ou BusRaider).
 
 L'orifice à côté de la prise HDMI permet de passer une rallonge USB pour brancher un clavier USB sur un PiZero Terminal. Cette ouverture a été préférée à une prise USB en raison des difficultés à trouver un connecteur approprié.
 
-En bas de la façade, une ouverture permet de passer les câbles utiles pour les nombreux connecteurs du SC126, par exemple la prise série pour contrôler l'ordinateur via une machine de bureau ou portable (si vous avez suivi les indications, un câble est déjà installé et passe à travers cette ouverture).
+| Etape | Description                                                  |      |                                                              |
+| ----- | ------------------------------------------------------------ | ---- | -----------------------------------------------------------: |
+| 1     | Branchez le raccord HDMI sur le connecteur intérieur de la façade arrière, puis sur votre PiZeroTerminal ou BusRaider. |      |            <img src="pictures/TODO.PNG" style="zoom:50%;" /> |
+
+#### Interrupteurs ROMs SC126
+
+Les interrupteurs de sélection permettent de choisir entre les deux ROM du SC126 et d'autoriser leur écriture pour une mise à jour. 
+
+<TABLE><TR><TD><img src="pictures/thisway.png" alt="thisway" width="50px" /></TD><TD>Ces interrupteurs n'ont pas de fonction pour une configuration RC2014 Pro.</TD></TR></TABLE>
+
+| Etape | Description                                                  |      |                                                              |
+| ----- | ------------------------------------------------------------ | ---- | -----------------------------------------------------------: |
+| 1     | Branchez les **deux interrupteurs** **3 fils** sur les connecteurs **JP1** et **JP2** du SC126 : attention à placer le bon câble sur le bon connecteur selon que vous avez placé RomWBW en U1 et SCM en U2 ou l'inverse. L'interrupteur situé en haut va sur le connecteur de la ROM SCM, et celui du bas sur celle de RomWBW. Les fils ne doivent pas se croiser ou subir de torsion : vu de l'arrière, le fil le plus à droite sur l'interrupteur est aussi à droite sur la carte SC126 et correspond à la position "PROTECT" à la fois sur la carte et sur l'inscription de la façade arrière. |      | <img src="pictures/091-U1U2.jpg" alt="U1U2" style="zoom:75%;" /><br /><img src="pictures/091-U1U2 protect.jpg" alt="Protect" style="zoom:75%;" /> |
+| 2     | Branchez **l'interrupteur** **2 fils** sur le connecteur **P9** : si vous avez RomWBW en U1, les deux fils doivent se situer en bas. Si en revanche vous avez placé SCM en U1, les deux fils doivent se trouver en haut. |      | <img src="pictures/091-reset+select.jpg" alt="Select Reset" style="zoom:100%;" /><img src="pictures/95_romselect.jpg" alt="RomWBW" style="zoom:75%;" /> |
+
+#### RESET
+
+Le bouton Reset est particulièrement utile pour les utilisateurs de la carte PiZero Terminal qui nécessite en général un reset après la mise en marche, mais aussi lorsqu'une erreur de programme bloque l'ordinateur.
+
+| Etape | Description                                                  |      |                                                              |
+| ----- | ------------------------------------------------------------ | ---- | -----------------------------------------------------------: |
+| 1    | Branchez le cable du bouton reset avec les **fiches jaunes** sur le connecteur **P8** et le bouton de la façade. Pour ce câble la position des fils n'a pas d'importance. |      |                                       ![](pictures/TODO.png) |
+
+### Bouton marche/arrêt 
+
+#### SC126
+
+Le bouton de la façade avant est relié au connecteur d'alimentation de la façade arrière et contrôle l'alimentation du SC126 via le connecteur **J2**. Pour que ce dernier puisse alimenter le SC126 il faut placer l'interrupteur de la carte SC126 en position ON, afin de déporter la fonction ON/OFF sur le bouton de la façade avant. 
 
 | Etape | Description                                                  |                                                              |
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------------: |
-| 1     | Branchez le raccord HDMI sur le connecteur intérieur de la façade arrière, puis sur votre PiZeroTerminal |            <img src="pictures/TODO.PNG" style="zoom:50%;" /> |
-| 2     | Branchez les deux interrupteurs 3 fils sur les connecteurs JP1 et JP2 du SC126 : attention à placer le bon cable sur le bon connecteur selon que vous avez placé RomWBW en U1 et SCM en U2 ou l'inverse. Les fils ne doivent pas se croiser ou subir de torsion : vu de l'arrière, le fil le plus à droite sur l'interrupteur est aussi à droite sur la carte SC126 et correspond à la position "PROTECT" à la fois sur la carte et sur l'inscription de la façade arrière. | <img src="pictures/091-U1U2.jpg" alt="U1U2" style="zoom:75%;" /><br /><img src="pictures/091-U1U2 protect.jpg" alt="Protect" style="zoom:75%;" /> |
-| 3     | Branchez l'interrupteur 2 fils sur le connecteur P9 : si vous avez RomWBW en U1, les deux fils doivent se situer en bas. Si en revanche vous avez placé SCMen U1, les deux fils doivent se trouver en haut. | <img src="pictures/091-reset+select.jpg" alt="Select Reset" style="zoom:100%;" /><img src="pictures/95_romselect.jpg" alt="RomWBW" style="zoom:75%;" /> |
-| 4     | Branchez le cable du bouton reset avec les fiches jaunes sur le connecteur P8 et le bouton de la façade. Pour ce câble la position des fils n'a pas d'importance. |                                       ![](pictures/TODO.png) |
-
-Pour l'interrupteur "SELECT" : le connecteur P9 du SC126 sélectionne la mémoire 1 ou 2 selon qu'il est fermé (interrupteur de la façade arrière face aux deux fils) ou ouvert (interrupteur sur la position où seul le fil central est connecté). Veillez à placer l'interrupteur de façon à ce que les fils sélectionnent bien la ROM qui se trouve à l'emplacement concerné. Le modèle d'installation fourni dans cette documentation convient pour RomWBW situé en U1. Si vous avez inversé les ROMs par rapport à ce modèle vous devrez inverser  l'interrupteur de sélection verticalement et les câbles à trois fils en fonction des indications de la façade arrière.
-
-### Bouton Power
-
-Le bouton de la façade avant contrôle l'alimentation du SC126 via le connecteur J2. Pour que ce dernier puisse alimenter le SC126 il faut placer l'interrupteur de la carte SC126 en position ON, afin de déporter la fonction ON/OFF sur le bouton de la façade avant. 
-
-| Etape | Description                                                  |                                                              |
-| ----- | ------------------------------------------------------------ | -----------------------------------------------------------: |
-| 1     | FACULTATIF : si vous avez remplacé l'interrupteur du SC126 par un connecteur à trois broches, placez un jumper sur les deux broches les plus éloignées du bord de la carte. |      <img src="pictures/97-contact.jpg" style="zoom:50%;" /> |
+| 1     | FACULTATIF : si vous avez remplacé l'interrupteur du SC126 par un connecteur à trois broches, placez un jumper sur les deux broches les plus éloignées du bord de la carte. Sinon, mettez simplement l'interrupteur rouge en position ON (vers la droite lorsque l'on regarde la carte SC126 de l'arrière). |      <img src="pictures/97-contact.jpg" style="zoom:50%;" /> |
 | 2     | Branchez le fil rouge de la broche **C** du bouton on/off sur la borne 5V du bornier J2 du SC126 | <img src="pictures/091-borne5V.jpg" alt="Borne 5V" style="zoom:50%;" /> |
 | 3     | Branchez le fil noir de la broche **-** et le câble noir séparé sur la borne GND du bornier J2 | <img src="pictures/091-borneGND.jpg" alt="Borne GND" style="zoom:50%;" /> |
-| 4     | Branchez le fil **rouge** provenant du bouton marche/arrêt sur la cosse **la plus courte** du connecteur d'alimentation<br /><br />Branchez le fil **noir** provenant du bornier J2 sur la cosse **la plus longue** du connecteur d'alimentation | <img src="pictures/95_powerconnect.jpg" alt="Connecteur" style="zoom:50%;" /><img src="pictures/96_powerconnect.jpg" alt="Branchement" style="zoom:50%;" /> |
+| 4     | Branchez le fil **rouge** provenant du bouton marche/arrêt sur la cosse **la plus courte** du connecteur d'alimentation arrière<br /><br />Branchez le fil **noir** provenant du bornier J2 sur la cosse **la plus longue** du connecteur d'alimentation arrière. | <img src="pictures/95_powerconnect.jpg" alt="Connecteur" style="zoom:50%;" /><img src="pictures/96_powerconnect.jpg" alt="Branchement" style="zoom:50%;" /> |
 
+#### RC2014 Pro
 
+$$TODO
+
+Le branchement dépend des options choisies lors de l'assemblage du kit RC2014 Pro.
+
+$$TODO
 
 ## Utilisation
 
@@ -531,27 +552,31 @@ Les ports d'entrée-sortie sont contrôlés par des instructions IN et OUT du Z-
 
 ### Port de contrôle (13/0Dh)
 
-Le port de contrôle est câblé sur le numéro de port 13 (0Dh), ceci correspond aux deux logiciels de l'ordinateur SC126 :
+Le port de contrôle est câblé sur le numéro de port 13 (0D en hexadécimal) : ceci correspond aux deux logiciels de contrôle disponibles pour l'ordinateur SCZ180 dans sa version SC126.
 
-* le moniteur Small Computer Monitor de Stephhen S. Cousins affiche l'état de ses tests à l'allumage sur ce port, et le boot de RomWBW affiché également l'avancement de son démarrage sur ce port.
+* Le moniteur Small Computer Monitor affiche l'état de ses tests à l'allumage sur ce port.
+* Le boot de RomWBW affiche l'avancement de son démarrage sur ce port.
+* Tout programme peut allumer ou éteindre ces 8 LEDs en envoyant une donnée 8-bits sur le port 13. La LED la plus à gauche représente le bit de poids fort.
 
-Tout programme peut allumer ou éteindre ces 8 LEDs en envoyant une donnée 8-bits sur le port 13. La LED la plus à gauche représente le bit de poids fort.
+<TABLE><TR><TD><img src="pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>Remarque : le port 13 retient la dernière donnée écrite, donc il faut explicitement écrire un 0 pour éteindre les LEDs, notamment avec RomWBW qui laisse les 8 LEDs allumées à la fin de son démarrage.</TD></TR></TABLE>
 
-<TABLE><TR><TD><img src="pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>Remarque : le port 13 retient sa dernière donnée, donc pour éteindre les LEDs il faut explicitement écrire un 0.</TD></TR></TABLE>
+### Ports d'entrée sortie A et B
 
-### Ports d'entrée sortie
+Les 2 ports possèdent chacun 8 LEDs pour le port en entrée et 8 LEDs pour le port en sortie. Dans les deux cas, le bit de poids fort (bit 7) est représenté par la LED la plus à gauche.
 
-Les 2 ports d'entrée et de sortie possèdent chacun 8 LEDs qui représentent les 8 bits de données, le bit de poids fort étant représenté par la LED la plus à gauche.
+Le numéro de chacun des deux ports est sélectionnable par les huit interrupteurs d'un dipswitch qui représentent les valeurs de 0 à 255. Là aussi, le bit de poids fort (bit 7) est situé à gauche.
 
 #### Utiliser le port A ou B *en entrée*
+
+Chacun des ports en entrée dispose d'un connecteur 8 fils, de 8 LEDs et de 8 interrupteurs. 
 
 | Etape | Description                                                  |                                                        |
 | ----- | :----------------------------------------------------------- | -----------------------------------------------------: |
 | 1     | Choisissez le numéro de port avec le DIPswitch, le bit de poids fort du numéro est représenté par l'interrupteur le plus à gauche. Par exemple, pour utiliser le port 7, on place les trois interrupteurs les plus à droite en position haute et les cinq autres en position basse. | <img src="pictures/97-portselect.jpg" width="400px" /> |
-| 2     | Placez les interrupteurs en position médiane et connectez vos fils sur le port d'entrée |     <img src="pictures/096-input.jpg" width="300px" /> |
-| 3     | Les interrupteurs peuvent être placés en position haute pour forcer un bit à 1, ou basse pour le forcer à 0. |          <img src="pictures/TODO.PNG" width="300px" /> |
-| 4     | L'interrupteur supérieur à droite des LEDs les active ou désactive. Chaque LED affiche l'état de l'entrée qui lui correspond. |          <img src="pictures/TODO.PNG" width="300px" /> |
-| 5     | Pour lire l'état du port , utilisez :<br />● l'instruction `IN` du Z-80<br />● l'instruction `IN0` du Z-180<br />● la fonction `INP()` du BASIC<br />● la commande `IN` de SCM<br />La donnée reçue aura les bits à 1 sur les entrées qui seront à +5V, et les LEDs de ces bits seront allumées. Les bits des entrées reliées à GND ou recevant moins de 5V seront à 0 et la LED sera éteinte. |                                                        |
+| 2     | Placez les interrupteurs en position médiane et connectez vos fils sur le port d'entrée. |     <img src="pictures/096-input.jpg" width="300px" /> |
+| 3     | Les interrupteurs peuvent être placés en position haute pour forcer un bit à 1 ou en position basse pour le forcer à 0. |          <img src="pictures/TODO.PNG" width="300px" /> |
+| 4     | L'interrupteur supérieur à droite des LEDs les active ou désactive. Chaque LED affiche l'état de l'entrée qui lui correspond. En position basse, l'interrupteur éteint les LEDs quel que soit l'état du port, ce qui évite que le port d'entrée ou de sortie dépense du courant pour l'allumage des LEDs. |          <img src="pictures/TODO.PNG" width="300px" /> |
+| 5     | Pour lire l'état du port , utilisez :<br />● l'instruction `IN` du Z-80<br />● l'instruction `IN0` du Z-180<br />● la fonction `INP()` du BASIC<br />● la commande `IN` de SCM<br />La donnée reçue aura les bits à 1 sur les entrées qui seront à +5V, et les LEDs de ces bits seront allumées (si l'interrupteur on/off est sur *on*). Les bits des entrées reliées à GND ou recevant moins de 5V seront à 0 et la LED sera éteinte. |                                                        |
 |       |                                                              |                                                        |
 
 #### Utiliser le port A ou B *en sortie*
@@ -559,12 +584,12 @@ Les 2 ports d'entrée et de sortie possèdent chacun 8 LEDs qui représentent le
 | Etape | Description                                                  |                                                        |
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------: |
 | 1     | Choisissez le numéro de port avec le DIPswitch, le bit de poids fort du numéro est représenté par l'interrupteur le plus à gauche. Par exemple, pour utiliser le port 7, on place les trois interrupteurs les plus à droite en position haute et les cinq autres en position basse. | <img src="pictures/97-portselect.jpg" width="400px" /> |
-| 2     | Connectez vos fils sur le port de sortie                     |            <img src="pictures/TODO.PNG" width="300" /> |
-| 3     | L'interrupteur inférieur à droite des LEDs active ou désactive les LEDs |            <img src="pictures/TODO.PNG" width="300" /> |
-| 4     | Pour écrire une donnée 8 bits sur le port, utilisez :<br />● l'instruction `OUT` du Z-80<br />● l'instruction `OUT0` du Z-180<br />● la commande `OUT` du BASIC<br />● la commande `OUT`de SCM<br />5V sont placés sur les sorties des bits placés à 1 et les LEDs des bits à 1 sont allumées. |            <img src="pictures/TODO.PNG" width="300" /> |
+| 2     | Connectez vos fils sur le port de sortie si besoin.          |            <img src="pictures/TODO.PNG" width="300" /> |
+| 3     | L'interrupteur inférieur à droite des LEDs active ou désactive les LEDs. Lorsqu'elles sont désactivées, le connecteur de sortie reçoit tout le courant disponible, sinon les LEDs allumées prennent une part de la charge. |            <img src="pictures/TODO.PNG" width="300" /> |
+| 4     | Pour écrire une donnée 8 bits sur le port, utilisez :<br />● l'instruction `OUT` du Z-80<br />● l'instruction `OUT0` du Z-180<br />● la commande `OUT` du BASIC<br />● la commande `OUT`de SCM<br />5V sont placés sur les sorties des bits placés à 1 et les LEDs des bits à 1 sont allumées. Les autres bits restent à 0 et la LED éteinte. |            <img src="pictures/TODO.PNG" width="300" /> |
 | 5     | Vous pouvez utiliser le connecteur +5V/GND pour alimenter des dispositifs extérieurs comme des circuits avec des relais ou des capteurs, indépendamment de l'état du port ou des interrupteurs en façade. |                                                        |
 
-<TABLE><TR><TD><img src="pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>Remarque : Chaque port de sortie retient sa dernière donnée, donc pour éteindre les LEDs il faut explicitement écrire un 0.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>Remarque : Chaque port de sortie retient sa dernière donnée, donc pour éteindre les LEDs il faut explicitement écrire un 0.</TD></TR><TR><TD><img src="pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>Vous pouvez utiliser le dipswitch pour espionner n'importe quel numéro de port, par exemple les ports internes du Z-180 sur le SC126 ou les ports contrôlés par une ROM avec BusRaider.</TD></TR></TABLE>
 
 ### Ecran LCD : Interface I2C (SC126)
 
@@ -576,11 +601,11 @@ Si vous souhaitez conserver le port I2C pour un autre périphérique, vous pouve
 
 ### Ecran LCD : Interface parallèle (SC126,RC2014 Pro)
 
-Il n'existe pas de bus I2C dans le kit RC2014 Pro, aussi vous devrez passer par une autre interface : en l'occurence, la [méthode décrite par Stephen S. Cousins](https://smallcomputercentral.wordpress.com/example-alphanumeric-lcd/) qui utilise soit un port de sortie 8-bits, soit un Z-80 PIO, le tout vers 8 broches de l'écran LCD.
+Il n'existe pas de bus I2C dans le kit RC2014 Pro, aussi vous devrez passer par une interface parallèle, comme décrit dans [l'exemple de Stephen S. Cousins](https://smallcomputercentral.wordpress.com/example-alphanumeric-lcd/) qui utilise soit un port de sortie 8-bits, soit un Z-80 PIO, le tout vers 8 broches de l'écran LCD.
 
 Avec le SC126, vous pouvez aussi utiliser cette solution si vous destinez le bus I2C à un autre usage.
 
-<TABLE><TR><TD><img src="pictures/attention.png" width="100px" /></TD><TD>Lors de la commande du kit Bluety, vous devrez spécifier que vous souhaitez un écran LCD <EM>sans module I2C</EM>, ou bien il vous faudra le déssouder ce qui est assez diffficile.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="pictures/attention.png" width="100px" /></TD><TD>Lors de la commande du kit Bluety, vous devrez spécifier que vous souhaitez un écran LCD <EM>sans module I2C</EM>, ou bien il vous faudra le déssouder ce qui est très difficile.</TD></TR></TABLE>
 
 Sur le plan matériel, vous devez installer une carte pour contrôler un port de sortie. Il existe trois kits qui permettent cela :
 
@@ -601,11 +626,22 @@ Actuellement, l'interface LCD logicielle est développée pour le bus I2C sur un
 
 Lorsque ces logiciels seront achevés, une version utilisant un port de sortie en sera dérivée.
 
-Une version CP/M du BASIC-80 est également à l'étude.
+Une version CP/M du BASIC-80 est à l'étude.
 
+Fonctions :
 
-
-
+- sortie en mode console avec gestion backspace et linefeed et scroll automatique
+- scroll
+- effacement
+- positionnement curseur
+- retour chariot auto ou ignoré
+- affichage texte 
+- programmation 16 caractères user
+- codes de contrôle ou caractères user pour les codes 0 à 15
+- curseur boc ou underline
+- curseur visible ou non
+- curseur clignotant ou fixe
+- écho device normal ou non (SCM, BASIC)
 
 
 
