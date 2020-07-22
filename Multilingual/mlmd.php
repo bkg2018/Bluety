@@ -6,6 +6,24 @@
  * and generate files for each file found.
 */
 
+//MARK: Utility functions
+
+
+
+
+/** Check if a filename has an MLMD valid extension.
+ *  @return string the file extensiuon, or false is not valid mlmd file name. */
+function isMLMDfile($filename) {
+    $extension = ".base.md";
+    $pos = mb_stripos($filename, $extension, 0, 'UTF-8');
+    if ($pos===false) {
+        $extension = ".mlmd";
+        $pos = mb_stripos($filename, $extension, 0, 'UTF-8');
+        if ($pos===false) return false;
+    }
+    return $extension;
+}
+
 /** Recursively explore a directory and its subdirectories and return an array of '.base.md' and '.mlmd' file pathes. */
 function exploreDirectory($dirName) {
     $dir = opendir($dirName);
@@ -17,18 +35,16 @@ function exploreDirectory($dirName) {
             $thisFile = $dirName . '/' . $file;
             if (is_dir($thisFile)) {
                 $filenames = array_merge($filenames, exploreDirectory($thisFile));
-            } else {
-                $pos = mb_stripos($thisFile, ".base.md", 0, 'UTF-8');
-                if ($pos===false) $pos = mb_stripos($thisFile, ".mlmd", 0, 'UTF-8');
-                if ($pos!==false) {
-                    $filenames[] = $thisFile;
-                }
+            } else if (isMLMDfile($thisFile)) {
+                $filenames[] = $thisFile;
             }
         }
         closedir($dir);
     }
     return $filenames;
 }
+
+//MARK: Generator class
 
 /** Generator class. */
 class MultilingualMarkdownGenerator {
@@ -43,7 +59,7 @@ class MultilingualMarkdownGenerator {
         '.languages'    => 'languages',
         '.toc'          => 'toc'
     ];
-    // Input filename and file
+    // Current input filename and file
     private $inFilename = null;             // 'example.base.md'
     private $inFile = null;                 // input file handle
     private $lineBuf = "";                  // current line content
@@ -51,21 +67,60 @@ class MultilingualMarkdownGenerator {
     private $lineBufLength = 0;             // current line size in characters (utf-8)
     private $prevChar = '';                 // used to detect line and heading start
     private $curChar = '';                  // current char
-    // Output filenames and files
+    private $curLine = 1;                   // current line number in current input file
+
+    // Current output filenames and files
     private $outFilenameTemplate = null;    // 'example'
     private $outFilenames = [];             // '<language>' => 'example.md' / 'example.<language>.md'
     private $outFiles = [];                 // '<language>' => file handle
     private $lastWritten = [];              // last  character written to file
     private $curOutputs = [];               // current utput buffers for files
-    private $languages = [];                // added languages
-    private $mainLanguage =false;
+
     // Directives status
-    private $curLanguage = 'ignore';        // last language directive (all / <code> / ignore)
+    private $languages = [];                // added languages
+    private $mainLanguage =false;           // optional main language (<code> deleted from MD output filename)
+    private $curLanguage = 'ignore';        // current language directive effect (all / <code> / ignore / default)
     private $directiveStack = [];           // previous language directive (all / <code>)
+    private $languagesSet = false;          // ignore until '.languages' directive has been processed
+    private $L1headingSet = false;          // ignore until level 1 heading has been processed
+    // All files headings for toc
+    private $headings = [];                 // all headers objects for each relative filename
+    private $relFilenames = [];             // relative filenames for each filename
 
-    // debug help
-    private $curLine = 1;
 
+    /** Parser Tool : read characters from current file until a given character is found. 
+     *  @param string $marker the ending character
+     *  @return string the characters read until the marker. The marker itself is not returned
+     *                 but is available as $this->curChar. returns empty string if already on marker.
+     */
+    private function getCharUntil($marker) {
+        $content = '';
+        $this->getChar($this->inFile);/// get first title character
+        while (($this->curChar !== false) && ($this->curChar !== $marker) && ($this->curChar !== "\n")) {
+            $content .= $this->curChar ?? '';
+            $this->getChar($this->inFile); // next char
+            if ($this->curChar=="\n") {
+                $this->curLine += 1;
+            }
+        } ;
+        return $content;
+    }
+
+    //** debugging echo */
+    private function debugEcho() {
+        if (getenv("debug")=="1") {
+            if (($this->curChar !== false) && ($this->prevChar=="\n")) {
+                echo "[{$this->curLine}]:";
+            }
+            echo $this->curChar;
+        }
+    }
+
+    /** Error tool */
+    private function error($msg) {
+        //echo "ERROR: $msg\n";
+        error_log("{$this->inFilename}({$this->curLine}): MLMD error: $msg");
+    }
     /** directives */
 
     /** .all(( */
@@ -111,21 +166,18 @@ class MultilingualMarkdownGenerator {
         $stopNow = false;
         do {
             $this->getChar($this->inFile);
-            if (getenv("debug")=="1") {
-                echo $this->curChar;
-            }
             if ($this->curChar!==false) {
                 switch ($this->curChar) {
                     // CR?
                     case "\r":
-                        // do not store
+                        // do not store (normalize to unix EOL)
                         break;
                     // line feed?
                     case "\n":
-                        // stop this directive 
+                        // stop current directive 
                         $stopNow = true;
                         // but finish with current word (fall-through)
-                    // end of keyword?
+                        // end of keyword?
                     case ' ':
                     case ',':
                         // if we have a word, set it as additionnal language
@@ -145,85 +197,235 @@ class MultilingualMarkdownGenerator {
         // finish languages registering, open files, and set initial status
         $this->endLanguages();
     }
-    /** .toc */
+    /** .toc 
+     *   
+     *  Generate a TOC in current output files using the directive parameters and the headings array.
+     * 
+     *  Headings all have an anchor prior to the title, with a heading number:
+     *  <a name="h12"></a>
+     *  ### Heading text
+     * 
+     *  The TOC must link to these anchors using the following model:
+     *  [1.2 Heading text](<file>#h12)
+     * 
+     *  Numbering is optional and chossn by the directive parameters.
+     *  .TOC [level=m-n] [title=m,"<title text>"] [number=m:<symbol><sep>[,...]]
+     * 
+     *  level=m-n                   : use headings from level m to n. m defaults to 1, n defaults to 9
+     * 
+     *  title=m,"<title text>"      : text for the TOC title with heading level m, language directives can be used
+     * 
+     *  number=m:<symbol><sep>,...  : prefix TOC titles with numbering or labelling. Syntax for m:<symbol><sep>
+     *                                  - `m` is the heading level
+     *                                  - <symbol> is a number (e.g: `1`) or a letter (e.g: `a`) for this level, 
+     *                                    case (`a` or `A`) is preserved and numbering starts with the given value
+     *                                  - `sep` is the symbol to use after this level numbering, e.g `.` or `-`
+     * 
+     * Example to number level 1 with uppercase letters, followed by a dash '-', level 2 with a number starting at 1 and followed by a dot,
+     * and level 3 as level 2, and with a title heading level of 2 (prefixed with '##'):
+     * 
+     * .TOC level=1-3 title=2,.fr((Table des matières.)).en((Table Of Contents)) number=1:A-,2:1.,3:1
+     * 
+    */
     private function toc($dummy) {
-        /*
-        $curWord = '';
-        $stopNow = false;
-        $startLevel = false;
-        $endLevel = false;
-        while (!feof($this->inFile) && !$stopNow) {
-            $c = fgetc($this->inFile);
-            switch ($c) {
-                // end of line?
-                case "\n":
-                case "\r":
-                    // stop this directive 
-                    $stopNow = true;
-                    // but finish with current word (fall-through)
-                // end of keyword?
-                case '-':
-                    // if we have a word, set it as additionnal language
-                    if (!empty($curWord)) {
-                        $this->addLanguage($curWord);
-                        $curWord = '';
+        // default parameters
+        $title = "Table Of Contents";               // <text>    in title=m,"<text>"
+        $titleLevel = 2;                            // m         in title=m,"<text>"
+        $startLevel = 2;                            // m         in level=m[-n]
+        $endLevel = 4;                              // n         in level=[m]-n
+        $levelsNumbering = [2=>'1',3=>'1',4=>'1'];  // m=>symbol in number=m:<symbol><sep>,...
+        $levelsSeparator = [2=>'.',3=>'.',4=>''];   // m=>sep    in number=m:<symbol><sep>,...
+        // skip initial space
+        $this->curWord = trim($this->getChar($this->inFile)); 
+        do {
+            $this->getChar($this->inFile);
+
+            // add to current word and check keywords
+            $this->curWord .= $this->curChar;
+            switch (strtolower($this->curWord)) {
+                case 'title=': // title=m,"<text>"
+                    // get level
+                    $titleLevel = $this->getCharUntil(',');
+                    // parse and set toc title
+                    $title = $this->getCharUntil('"');// skip to " or \n
+                    if ($this->curChar != '"') {
+                        $this->error("no '\"' around title text, got this: [$title]");
+                    } else {
+                        $title = $this->getCharUntil('"');
                     }
-                    break;
-                // store current keyword
+                    $this->curWord = '';
+                break;
+                case 'level=':
+                    // get definition until next space
+                    $def = $this->getCharUntil(' ');
+                    $dashpos=mb_stripos($def, '-', 0, 'UTF-8');
+                    if ($dashpos === false) {
+                        // only one level
+                        $startLevel = $endLevel = (int)$def;
+                    } else {
+                        $startLevel = (int)mb_substr($def,0,$dashpos,'UTF-8');
+                        $endLevel   = (int)mb_substr($def,$dashpos+1,null,'UTF-8');
+                        if (empty($startLevel)) $startLevel = 1;
+                        if (empty($endLevel)) $endLevel = 9;
+                    }
+                    $this->curWord = '';
+                break;
+                case 'number=':
+                    // get definition until next space
+                    $defs = explode(',',$this->getCharUntil(' '));
+                    $levelsNumbering = [];
+                    $levelsSeparator = [];
+                    foreach($defs as $def) {
+                        $parts = explode(':',$def);
+                        $level = $parts[0];
+                        if (count($parts) > 1) {
+                            $levelsNumbering[$level]=mb_substr($parts[1],0,1,'UTF-8');
+                            $levelsSeparator[$level]=mb_substr($parts[1],1,1,'UTF-8');
+                        } else {
+                            $levelsNumbering[$level]='';
+                            $levelsSeparator[$level]='';
+                        }
+                    }
+                    $this->curWord = '';
+                break;
+                case ' ':/// separator
+                    $this->curWord = '';
                 default:
-                    $curWord .= $c;
-                    break;
+                break;
             }
+        } while ($this->curChar !== false && $this->curChar != "\n");
+
+        // generate TOC title with forced 'toc' anchor
+        $this->storeHeading($titleLevel, $title, 'toc');
+        // generate toc lines for each file, only if start level is 1
+        if ($startLevel == 1) {
+            $numbering = 1;
+            foreach($this->headings as $basename => $headings) {
+                // truncate basename extension
+                $basename = basename($basename, isMLMDfile($basename));
+                // prepare prefix for Level 1 headings (file titles)
+                $prefixL1 = '';
+                if (isset($levelsNumbering[1])) {
+                    $prefixL1 .= chr(ord($levelsNumbering[1]) + $numbering - 1);
+                }
+                // find level 1 heading, starting at line 0
+                $index = $this->findHeadingIndex($headings);
+                $text = '{file}';
+                $anchor = $text;
+                if ($index !== false) {
+                    $text = "{$headings[$index]->text}";
+                    $anchor .= "#h{$headings[$index]->number}"; /// ex: {file}#h1
+                }
+                //$line = "<A href=\"{$anchor}\">{$prefix}{$text}</A>";
+                $prefix = '';
+                if (!empty($prefixL1)) {
+                    $prefix = $prefixL1 . ') '; /// ex: 1) or A)
+                }
+                //$line = "{$prefix}[{$text}]({$anchor})";
+                // line break prefix for non-numeric prefixes
+                if ($numbering > 1 && !is_numeric($levelsNumbering[1])) {
+                    $prefix = "<br />\n{$prefix}";
+                }                
+                $this->storeContent($prefix . '[');
+                $this->storeContent($text, $basename);
+                $this->storeContent("]({$anchor})", $basename);
+//                $this->outputToFiles($line, true, $basename);// flush this line and replace file name
+                //TODO: next levels
+                $numbering += 1;
+            }
+            /// end toc
+            $this->storeContent("\n\n",null,true);
+
+        } else {
+
         }
-        $this->curLanguage = 'ignore';
-        */
+
+    }
+
+    /** Store the line for a TOC level and index in headings array.
+     *  @param int $curLevel [IN/OUT] the current heading level to look for
+     *  @param int $curIndex [IN/OUT] the current index in the headings array
+     *  @param array $headings the array of all headings, in the file order
+     *  @param int $maxLevel the maximum heading level to store
+     *  @param string $basename the base name for the file containing the headings
+     *  @return -
+    */
+    private function storeTOCline(&$curLevel, &$curIndex, &$headings, $maxlevel, $basename) {
+        // exlore thhe rest of the array
+        while ($curIndex <= count[$headings]) {
+            $object = $headings[$curIndex];
+        }
+        
+
+    }
+
+    /** Find the first heading in the array for a level after a given line number.
+     *  @param array $headings array for all headings in a file
+     *  @param int $level the heading level to look for
+     *  @param int $line the line number where to start search
+     *  @return false if no heading found, else return the index of heading object
+     */
+    private function findHeadingIndex(&$headings, $level = 1, $line = 0) {
+        foreach( $headings as $index => $object) {
+            if ($object->line < $line) continue;
+            if ($object->level == $level) return $index;
+        }
+        return false;
+    }
+
+    /** Generate a TOC line */
+    private function generateToc($headings, $start, $end) {
+        // generate a link to the file?
     }
 
     /** Write to an output file, protect against doubled line feeds */
-    private function writeToFile($code) {
-        // file = $this->outFiles[$code]
-        // content = $this->curOutputs[$code]
-        if (array_key_exists($code,$this->lastWritten)) {
-            while (substr($this->curOutputs[$code],0,1)=="\n" && $this->lastWritten[$code]=="\n\n") {
-                $this->curOutputs[$code] = substr($this->curOutputs[$code], 1);
+    private function writeToFile($language) {
+        // file = $this->outFiles[$language]
+        // content = $this->curOutputs[$language]
+        if (array_key_exists($language,$this->lastWritten)) {
+            while (substr($this->curOutputs[$language],0,1)=="\n" && $this->lastWritten[$language]=="\n\n") {
+                $this->curOutputs[$language] = substr($this->curOutputs[$language], 1);
             }
         }
         // normalize to unix eol
-        $this->curOutputs[$code] = str_replace("\r\n", "\n", $this->curOutputs[$code]);
+        $this->curOutputs[$language] = str_replace("\r\n", "\n", $this->curOutputs[$language]);
         //reduce triple EOL to double, and trim ending spaces & tabs
-        $this->curOutputs[$code] = str_replace(["\n\n\n"," \n","\t\n"], ["\n\n", "\n","\n"], $this->curOutputs[$code]);
-        $this->curOutputs[$code] = trim($this->curOutputs[$code], " \t\0\x0B");
+        $this->curOutputs[$language] = str_replace(["\n\n\n"," \n","\t\n"], ["\n\n", "\n","\n"], $this->curOutputs[$language]);
+        $this->curOutputs[$language] = trim($this->curOutputs[$language], " \t\0\x0B");
         
         // send to file and clear the buffer
-        if (!empty($this->curOutputs[$code])) {
-            fwrite($this->outFiles[$code], $this->curOutputs[$code]);
+        if (!empty($this->curOutputs[$language])) {
+            fwrite($this->outFiles[$language], $this->curOutputs[$language]);
             // retain previous last 2 character written
-            $this->lastWritten[$code] = mb_substr(($this->lastWritten[$code] ?? "") . $this->curOutputs[$code],-2,2);
-            $this->curOutputs[$code] = "";
+            $this->lastWritten[$language] = mb_substr(($this->lastWritten[$language] ?? "") . $this->curOutputs[$language],-2,2);
+            $this->curOutputs[$language] = "";
         } 
     }
 
     /** Output a content to current output files. 
      *  Lines are buffered before being sent, and beginning : ending spaces are trimed.
+     *  if '{file}' is found in the content, it is replaced by the language suffix
      *  @param string $content the content to send to outputs buffers, and to files if an end of line is found
      *  @param bool $flush true to force sending to files (used at end of file)
+     *  @param string $filename the base filename to use for {file} replacement
     */
-    private function outputToFiles($content, $flush=false) {
+    private function outputToFiles($content, $flush=false, $basename=null) {
 
         switch ($this->curLanguage) {
             case 'all': // output to all files
-                foreach ($this->outFiles as $code => $outFile) {
-                    // concatenate to buffer, use default if empty content
+                foreach ($this->outFiles as $language => $outFile) {
+                    // replace filename in content?
+                    $finalContent = str_replace('{file}', $basename . ($language == $this->mainLanguage ? '.md' : ".$language.md"), $content);
                     //TODO: improve this, because it doesn't work if default is not declared first
-                    if (!array_key_exists($code, $this->curOutputs)) $this->curOutputs[$code] = '';
-                    if (empty($this->curOutputs[$code]) && !empty($this->curOutputs['default'])) {
-                        $this->curOutputs[$code] = $this->curOutputs['default'] . $content;
+                    if (!array_key_exists($language, $this->curOutputs)) $this->curOutputs[$language] = '';
+                    if (empty($this->curOutputs[$language]) && !empty($this->curOutputs['default'])) {
+                        $this->curOutputs[$language] = $this->curOutputs['default'] . $finalContent;
                     } else {
-                        $this->curOutputs[$code] .= $content;
+                        $this->curOutputs[$language] .= $finalContent;
                     }
                     // send to file if EOL or EOF
-                    if ($flush || substr($this->curOutputs[$code],-1,1)=="\n") {
-                        $this->writeToFile($code);
+                    if ($flush || substr($this->curOutputs[$language],-1,1)=="\n") {
+                        $this->writeToFile($language);
                     }
                 }
                 $this->curOutputs['default'] = '';
@@ -236,10 +438,12 @@ class MultilingualMarkdownGenerator {
             default:
                 // output to current language
                 if (!array_key_exists($this->curLanguage, $this->curOutputs)) $this->curOutputs[$this->curLanguage] = '';
+                // replace filename in content?
+                $finalContent = str_replace('{file}', $basename . ($this->curLanguage == $this->mainLanguage ? '.md' : ".{$this->curLanguage}.md"), $content);
                 if (empty($this->curOutputs[$this->curLanguage]) && !empty($this->curOutputs['default'])) {
-                    $this->curOutputs[$this->curLanguage] = $this->curOutputs['default'] . $content;
+                    $this->curOutputs[$this->curLanguage] = $this->curOutputs['default'] . $finalContent;
                 } else {
-                    $this->curOutputs[$this->curLanguage] .= $content;
+                    $this->curOutputs[$this->curLanguage] .= $finalContent;
                 }
                 if ($flush || substr($this->curOutputs[$this->curLanguage],-1,1)=="\n") {
                     $this->writeToFile($this->curLanguage);
@@ -273,31 +477,74 @@ class MultilingualMarkdownGenerator {
         }
     }
 
-    /** store current heading  */
-    private function storeHeading($content) {
-        // find level
+    /** Compuyte heading level frfom the starting '#'s */
+    private function getHeadingLevel($content) {
         $heading = trim($content);
         $level = 0;
         $length = mb_strlen($heading,'UTF-8');
         while ($heading[$level]=='#' && $level <= $length) {
             $level += 1;
         }
-        $prefix = trim(mb_substr($heading, 0, $level, 'UTF-8'));
-        $heading = trim(mb_substr($heading, $level, NULL, 'UTF-8'));
-        // write prefix to all output files
-        foreach($this->outFiles as $outFile) {
-            fwrite($outFile, $prefix . ' ');
+        return $level;
+    }
+
+    /** Store content as a header. Interpret any directive in the content and write the result to corresponding files.
+     *  Allowed directives: .all .ignore .default .<code>
+     *  Also writes an anchor for the TOC links if there is a recorded heading and no anchor has been forced
+     *  This is also called for TOC title
+     *  @param int $level the heading level (number of '#')
+     *  @param string $content the text line for the heading, starting after the '#' and ending right before the '\n'.
+     *  @param string $anchor [optional] anchor to use, null to use the default anchor
+     *  @return boolean false if any writing error occurs, true if header stored correctly in files
+     */
+    private function storeHeading($level, $content, $anchor=null) {
+        // compute anchor name if needed
+        if ($anchor == null) {
+            $headings = $this->headings[$this->relFilenames[$this->inFilename]] ?? false;
+            $headerObject = $headings[$this->curLine] ?? null;
+            if ($headerObject) {
+                $anchor = "h{$headerObject->number}";
+            }
+        } 
+        // write prefix and anchor to all output files
+        $prefix = str_repeat('#', $level);
+        $heading = trim($content);
+        foreach($this->languages as $language => $bool) {
+            if (fwrite($this->outFiles[$language], $prefix . ' ')===false) {
+                $this->error("unable to write to {$this->outFilenames[$language]}");
+                return false;
+            }
+            if (fwrite($this->outFiles[$language], "<a name=\"{$anchor}\"></a>")===false) {
+                $this->error("unable to write to {$this->outFilenames[$language]}");
+                return false;
+            }
         }
-        // write parts
+        // now write heading content
+        $this->storeContent($heading);
+        // Finish heading with 2xEOL
+        $this->storeContent("\n\n",null,true);
+        if ($level == 1) $this->L1headingSet = true;
+    }
+
+    /** Store content. Interpret any directive in the content and write the result to corresponding files.
+     *  Allowed directives: .all .ignore .default .<code>
+     *  'all' is assumed at entry.
+     *  @param string $content the text to store, ending right before the '\n'.
+     *  @param string $basename the base filename to use for {file} replacement in content
+     *  @param bool $keepCR false to delete \n endings, true to keep them
+     *  @param bool $endCR true to put a \n at theh end
+     *  @return boolean false if any writing error occurs, true if header stored correctly in files
+     */
+    private function storeContent($content, $basename = null, $keepCR = false, $endCR = false) {
         $pos = 0;
         $inDirective = false;
         $curword = '';
-        $length = mb_strlen($heading,'UTF-8');
+        $length = mb_strlen($content,'UTF-8');
         $curOutput = 'all';
         $outputStack = [];
         $outputs = [];
         while ($pos < $length) {
-            $c = mb_substr($heading,$pos,1);
+            $c = mb_substr($content,$pos,1);
             if ($c=='.') {
                 // previous content to be stored?
                 if (!empty($curword)) {
@@ -312,11 +559,11 @@ class MultilingualMarkdownGenerator {
                     $newOutput = mb_substr($tryWord,1,-2); // 'all', 'default', 'ignore', '<code>', ''
                     $inDirective = false;
                     $curword = '';
-                    if (empty($newOutput)) { // means directive is .))
+                    if ($tryWord=='.))') {
                         $curOutput = array_pop($outputStack);
                     } else {
                         array_push($outputStack, $curOutput);
-                        $curOutput = $newOutput;
+                        $curOutput = empty($newOutput) ? 'default' : $newOutput;
                     }
                 } else {
                     $curword .= $c;
@@ -327,26 +574,31 @@ class MultilingualMarkdownGenerator {
             }
             $pos += 1;
         }
-        // retain only non-empty outputs
+        if (!empty($curword)) {
+            $this->outputToArray($curword, $outputs, $curOutput);
+            $curword = '';
+        }
+// retain only non-empty outputs
         $final = [];
         foreach($outputs as $output => $content) {
-            if (!empty(trim($content))) {
-                $final[$output] = trim($content);
-                if (substr($final[$output],-1,1) == "\n") {
+            if (!empty(trim($content, " \t\0\x0B"))) {
+                $final[$output] = trim($content, " \t\0\x0B");
+                if (!$keepCR && substr($final[$output],-1,1) == "\n") {
                     $final[$output] = substr($final[$output],0,-1);
                 }
             }
         }
-        /*if (getenv("debug")=="1") {
-            print_r($final);
-        }*/
-        // output headings with an ending \n
+        // output headings with an ending \n, replace {file} by basename
         foreach ($this->languages as $language => $bool) {
-            $text = array_key_exists($language, $final) ? $final[$language] : $final['default'];
-            fwrite($this->outFiles[$language], $text . "\n");
+            $text = array_key_exists($language, $final) ? $final[$language] : ($final['default'] ?? '');
+            $text = str_replace('{file}', $basename . ($language == $this->mainLanguage ? '.md' : ".{$language}.md"), $text);
+            $text .= $endCR ? "\n" : '';
+            if (fwrite($this->outFiles[$language], $text)===false) return false;
+            $this->lastWritten[$language] = mb_substr(($this->lastWritten[$language] ?? "") . $text,-2,2);
         }
+        return true;
     }
-
+    
     /** Add a language to the languages set */
     private function addLanguage($code) {
         // main=<code> ?
@@ -378,57 +630,86 @@ class MultilingualMarkdownGenerator {
         $this->prevChar = "\n";
         $this->curLine += 1; 
         $this->curLanguage = 'all';
+        $this->languagesSet = true;
         array_push($this->directiveStack,$this->curLanguage);
    }
 
+   /** Set root directory for relative filenames */
+   public function setRootDir($rootDir) {
+       $this->rootDir = $rootDir;
+   }
 
-    /** Find all headings and sub headings */
-    private function getHeadings($filename) {
-        $inFile = fopen($filename,'rb');
-        $headings = [];
-        $curHeading = '';
-        $curLevel = 0;
-        while (!feof($inFile)) {
-            $line = trim($fgets($inFile));
-            if ($line[0]!='#') continue;
-            // count level
-            $level = 0;
-            $length = min(9,mb_strlen($line,'UTF-8'));
-            while ($line[$level]=='#' && $level <= $length) {
-                $level += 1;
+    /** Find all headings and sub headings in a set of files.
+     *  The files which are not under the given root directory will be ignored.
+     *  @param array $filenames the pathes of the files to explore for headings
+      */
+    public function exploreHeadings($filenames) {
+
+        $this->headings = [];
+        $number = 1;
+        foreach($filenames as $filename) {
+            // get relative filename, ignore if not the right root
+            $rootLen = mb_strlen($this->rootDir,'UTF-8');
+            $baseDir = mb_substr($filename, 0, $rootLen, 'UTF-8');
+            if ($baseDir != $this->rootDir) {
+                $this->error("wrong root dir for file [$filename], should be [$this->rootDir]");
+                continue;
             }
-            $line = trim(mb_substr($line, $level, NULL,'UTF-8'));
-        }
+            $this->relFilenames[$filename] = mb_substr($filename, $rootLen+1, NULL, 'UTF-8');
+            $inFile = fopen($filename,'rb');
+            if ($inFile===false) {
+                $this->error("could not open [$filename]");
+                continue;
+            }
+            $this->headings[$this->relFilenames[$filename]] = [];
+            $index = 0;
+            do {
+                $text = trim(fgets($inFile));
+                $curLine += 1;
+                if (($text[0]??'') != '#') continue;
+                // prepare an object
+                $object = new stdClass();
+                // sequential number for all headers of all files
+                $object->number = $number;
+                $number += 1;
+                // count number of '#' = heading level
+                $object->level = 0;
+                $length = min(9,mb_strlen($text,'UTF-8'));
+                while ($text[$object->level]=='#' && $object->level <= $length) {
+                    $object->level += 1;
+                }
+                // line number in this file
+                $object->line = $curLine;
+                // trimmed text without # prefix
+                $object->text = trim(mb_substr($text, $object->level, NULL,'UTF-8'));
+                // store the object in array for this file
+                $this->headings[$this->relFilenames[$filename]][$index] = $object;
+                $index += 1;
+            } while (!feof($inFile));
+            $this->closeInput();
+        } // next file
     }
 
     /** Store a character depending on mode. */
     private function storeCharacter($c) {
-        $this->curword .= $c;
-    }
-
-
-    /** Close all output files. */
-    private function endAll() {
-        foreach ($this->outFiles as $outFile) {
-            fclose($outFile);
-        }
+        $this->curWord .= $c;
     }
 
     // Buffer for current word starting with a dot
-    private $curword = '';
+    private $curWord = '';
     // Flag to know if we're in a word starting with a dot
     private $inDirective = false;
 
     /** Start a new possible directive with a dot. */
     private function startDirectiveWith($c) {
         $this->inDirective = true;
-        $this->curword = $c;
+        $this->curWord = $c;
     }
 
     /** reset parsing status to neutral */
     private function resetParsing() {
         $this->inDirective = false;
-        $this->curword = '';
+        $this->curWord = '';
     }
 
     /** Read a character from input file, buffered in line.
@@ -451,6 +732,7 @@ class MultilingualMarkdownGenerator {
         }
         $this->prevChar = $this->curChar;
         $this->curChar = mb_substr($this->lineBuf, $this->lineBufPos, 1, 'UTF-8');
+        $this->debugEcho();
         return $this->curChar;
     }
 
@@ -459,12 +741,10 @@ class MultilingualMarkdownGenerator {
         $headingContent = $this->curChar; // '#'
         do {
             $c = $this->getChar($file);
-            if (getenv("debug")=="1") {
-                echo $this->curChar;
-            }
             /// end of line or end of file?
             if ($c===false || $c=="\n") {
-                $this->storeHeading($headingContent);
+                $level = $this->getHeadingLevel($headingContent);
+                $this->storeHeading($level, trim(mb_substr($headingContent, $level,null,'UTF-8')));
                 $this->curLine += 1;
                 break;
             }
@@ -474,27 +754,50 @@ class MultilingualMarkdownGenerator {
         return true;
     }
 
-    /** Open the input streaming file and prepare the output filename template. */
-    public function setInputFile($filename) {
-        // no null file
+    /** Close input file. */
+    private function closeInput() {
         if ($this->inFile != null) {
             fclose($this->inFile);
+            $this->inFile = null;
+        }
+        return false;
+    }
+
+    /** Close output files. */
+    private function closeOutput() {
+        foreach($this->outFiles as &$outFile) {
+            if ($outFile != null) {
+                fclose($outFile);
+            }
+        }
+        unset($this->outFiles);
+        $this->outFiles = [];
+    }
+
+    /** Open the input streaming file and prepare the output filename template. */
+    public function setInputFile($filename) {
+        // close any previous file
+        if ($this->inFile != null) {
+            $this->closeInput();
         }
         // open or exit
         $this->inFile = fopen($filename, "rb");
         if ($this->inFile===false) {
-            return false;
+            return $this->closeInput();
         }
         // prepare output file template
-        $pos = mb_stripos($filename, '.base.', 0,'UTF-8');
-        if ($pos===false) {
-            $pos = mb_stripos($filename, '.mlmd', 0,'UTF-8');
-            if ($pos===false) return false;
+        $extension = isMLMDfile($filename);
+        if ($extension===false) {
+            return $this->closeInput();
         }
+ 
         // retain base name as template and reset line number
-        $this->outFilenameTemplate = mb_substr($filename, 0, $pos,'UTF-8');
+        $this->outFilenameTemplate = mb_substr($filename, 0, -mb_strlen($extension,'UTF-8'),'UTF-8');
         $this->inFilename = $filename;
         $this->curLine = 1;
+        $this->curLanguage = 'ignore';
+
+        $this->closeOutput();
         return true;
     }
     
@@ -509,19 +812,14 @@ class MultilingualMarkdownGenerator {
 
         $c = '';
         if (getenv("debug")=="1") {
-            echo "[1]:";//: first line number
+            echo "\n[1]:";//: first line number
         }
-
+        // ignore until .languages is done and first '#' heading has been processed
+        $this->languagesSet = false;
+        $this->L1headingSet = false;
         do {
             $this->getChar($this->inFile);
-            //$$ DEBUG $$
-            if (getenv("debug")=="1") {
-                if (($this->curChar !== false) && ($this->prevChar=="\n")) {
-                    echo "[{$this->curLine}]:";
-                }
-                echo $this->curChar;
-            }
-            //$$ DEBUG $$
+            
             switch ($this->curChar) { 
             case false:
                 break;
@@ -529,18 +827,18 @@ class MultilingualMarkdownGenerator {
                 // if already in directive detection, flush
                 if ($this->prevChar=="\n" || $this->inDirective) {
                     // flush previous content and stop directive detection
-                    $this->outputToFiles($this->curword);
+                    $this->outputToFiles($this->curWord);
                     $this->resetParsing();
                 }
                 // start directive detection?
-                if (empty($this->curword) || !$this->inDirective) {
+                if (empty($this->curWord) || !$this->inDirective) {
                     $this->startDirectiveWith($this->curChar);
                     break;
                 }
                 // currently in a directive?
                 if ($this->inDirective) {
                     // possible end of directive, try to interpret current word
-                    $tryWord = mb_strtolower($this->curword,'UTF-8');
+                    $tryWord = mb_strtolower($this->curWord,'UTF-8');
                     if (array_key_exists($tryWord, $this->directives)) {
                         // start effect and restart character capture
                         $functionName = $this->directives[$tryWord];
@@ -558,6 +856,7 @@ class MultilingualMarkdownGenerator {
                 }
                 break;
             case '#':
+                if (!$this->languagesSet) break;
                 // start or continue a heading
                 if ($this->prevChar=="\n") {
                     $this->parseHeading($this->inFile);
@@ -567,15 +866,17 @@ class MultilingualMarkdownGenerator {
                 }
                 break;
             case "\n":
-                $this->outputToFiles($this->curword . $this->curChar);
                 $this->curLine += 1;
                 $this->resetParsing();
+                if (!$this->languagesSet) break;
+                if (!$this->L1headingSet) break;
+                $this->outputToFiles($this->curWord . $this->curChar);
                 break;
             default:
                 // not '.', '\n' or '#'
                 if ($this->inDirective) {
                     // try to identify a directive with current store and this character
-                    $tryWord = mb_strtolower($this->curword . $this->curChar,'UTF-8');
+                    $tryWord = mb_strtolower($this->curWord . $this->curChar,'UTF-8');
                     if (array_key_exists($tryWord, $this->directives)) {
                         // apply directive effect and reset current store
                         $functionName = $this->directives[$tryWord];
@@ -585,11 +886,7 @@ class MultilingualMarkdownGenerator {
                     // not a directive, add to current word store
                     $this->storeCharacter($this->curChar);
                 } else {
-                    // out of any directive and heading: output using current settings
-                    if ($this->curChar=="\n") {
-                        // DEBUG: count the line
-                        $this->curLine += 1;
-                    }
+                    if (!$this->languagesSet) break;
                     $this->outputToFiles($this->curChar);
                 }
                 break;
@@ -597,19 +894,21 @@ class MultilingualMarkdownGenerator {
         } while ($this->curChar !== false);
         // flush anything left in all output buffers
         $this->curLanguage = 'all';
-        $this->outputToFiles($this->curword, true);
+        $this->outputToFiles($this->curWord, true);
         // MD047: force single \n file ending if needed
-        foreach($this->languages as $code => $bool) {
-            if (substr($this->lastWritten[$code],-1,1) != "\n") {
-                fwrite($this->outFiles[$code], "\n");
+        foreach($this->languages as $language => $bool) {
+            if (substr($this->lastWritten[$language],-1,1) != "\n") {
+                fwrite($this->outFiles[$language], "\n");
             }
-            fclose($this->outFiles[$code]);
-            $this->outFiles[$code] = null;
+            fclose($this->outFiles[$language]);
+            $this->outFiles[$language] = null;
         }
     }
 }
 
-// CLI launch arguments parsing
+//MARK: CLI launch
+
+// Arguments parsing
 $inFilenames = [];
 $arg = 1;
 while ($arg < $argc) {
@@ -626,13 +925,21 @@ while ($arg < $argc) {
     $arg += 1;
 }
 
+// Create the generator instance
+$parser = new MultilingualMarkdownGenerator();
+
 // no file: explore
 if (count($inFilenames)==0) {
     $inFilenames = exploreDirectory(getcwd());
-}
 
-$parser = new MultilingualMarkdownGenerator();
+}
+// Build the headings list for TOC
+$parser->setRootDir(getcwd());
+$parser->exploreHeadings($inFilenames);
+
+// Parse input files and generate all output files
 foreach($inFilenames as $filename) {
     $parser->Parse($filename);
 }
+
 ?>

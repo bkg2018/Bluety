@@ -4,4 +4,7 @@
 .fr((français.)).en((english.))
 .fr((autre ligne..)).((default text.))
 
+
+[1.2 Heading text](example.fr.md#h5)
+
 Next line all.

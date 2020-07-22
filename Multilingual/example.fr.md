@@ -1,27 +1,33 @@
-# Titre du fichier
+# <a name="h2"></a>Titre du fichier
 
-Entête du fichier.
+Entête du fichier
 
-## Premier titre
+## <a name="toc"></a>Table des matières
 
-Ceci est le début de la première partie. 
+A) [mixeddefault.fr.md](mixeddefault.fr.md)<br />
+B) [Titre du fichier](endspace.fr.md#h1)<br />
+C) [Titre du fichier](example.fr.md#h2)
 
-### Sous-titre 1.1
+## <a name="h3"></a>Premier titre
 
-Texte de la partie 1.1.
+Ceci est le début de la première partie.
 
-### Sous-titre 1.2
+### <a name="h4"></a>Sous-titre 1.1
 
-Texte de la partie 1.2.
+Texte de la partie 1.1
 
-## Deuxième titre
+### <a name="h5"></a>Sous-titre 1.2
 
-Ceci est le début de la deuxième partie. 
+Texte de la partie 1.2
 
-## Sous-titre 2.1
+## <a name="h6"></a>Deuxième titre
 
-Texte de la partie 2.1.
+Ceci est le début de la deuxième partie.
 
-## Sous-titre 2.2
+### <a name="h7"></a>Sous-titre 2.1
+
+Texte de la partie 2.1
+
+### <a name="h8"></a>Sous-titre 2.2
 
 Texte de la partie 2.2.

@@ -2,9 +2,14 @@ All the text before languages directive will be ignored.
 You may put comments here.
 
 .LANGUAGES fr,en main=en
+
+
 # .fr((Titre du fichier.)) .default((File Title.))
 
+
 Entête du fichier.
+
+.TOC level=1-3 title=2,".fr((Table des matières.)).en((Table Of Contents.))" number=1:A-,2:1.,3:1
 
 ## .default((First Title.)) .fr((Premier titre.))
 
@@ -23,10 +28,10 @@ Texte de la partie 1.2.
 .fr((Ceci est le début de la deuxième partie..)) 
 .en((This is the second part starting..))
 
-## .default((SubTitle 2.1.)) .fr((Sous-titre 2.1.))
+### .default((SubTitle 2.1.)) .fr((Sous-titre 2.1.))
 
 Texte de la partie 2.1.
 
-## .default((SubTitle 2.2.)) .fr((Sous-titre 2.2.))
+### .default((SubTitle 2.2.)) .fr((Sous-titre 2.2.))
 
 Texte de la partie 2.2.
