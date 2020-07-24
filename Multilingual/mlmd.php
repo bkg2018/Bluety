@@ -299,63 +299,153 @@ class MultilingualMarkdownGenerator {
         $this->storeHeading($titleLevel, $title, 'toc');
         // generate toc lines for each file, only if start level is 1
         if ($startLevel == 1) {
-            $numbering = 1;
+            $numbering = [$startLevel => 0];
             foreach($this->headings as $basename => $headings) {
-                // truncate basename extension
-                $basename = basename($basename, isMLMDfile($basename));
-                // prepare prefix for Level 1 headings (file titles)
-                $prefixL1 = '';
-                if (isset($levelsNumbering[1])) {
-                    $prefixL1 .= chr(ord($levelsNumbering[1]) + $numbering - 1);
+                // store first level 1 heading for the file
+                $index = $this->findHeadingIndex($headings, $startLevel, 0);
+                if ($index === false) continue; // should not happen!
+                $line = $headings[$index]->line;// remember level 1 line
+                $this->storeTOClines($startLevel, $startLevel, $numbering, $index, $headings, $levelsNumbering, $levelsSeparator, $basename);
+                // and store the other levels if any
+                $index = $this->findHeadingIndex($headings, $startLevel + 1, $line+1);
+                if (($endLevel > 1) && ($index !== false)) {
+                    $numbering[$startLevel + 1] = 0;
+                    $result = $this->storeTOClines($startLevel + 1, $endLevel, $numbering, $index, $headings, $levelsNumbering, $levelsSeparator, $basename);
                 }
-                // find level 1 heading, starting at line 0
-                $index = $this->findHeadingIndex($headings);
-                $text = '{file}';
-                $anchor = $text;
-                if ($index !== false) {
-                    $text = "{$headings[$index]->text}";
-                    $anchor .= "#h{$headings[$index]->number}"; /// ex: {file}#h1
-                }
-                //$line = "<A href=\"{$anchor}\">{$prefix}{$text}</A>";
-                $prefix = '';
-                if (!empty($prefixL1)) {
-                    $prefix = $prefixL1 . ') '; /// ex: 1) or A)
-                }
-                //$line = "{$prefix}[{$text}]({$anchor})";
-                // line break prefix for non-numeric prefixes
-                if ($numbering > 1 && !is_numeric($levelsNumbering[1])) {
-                    $prefix = "<br />\n{$prefix}";
-                }                
-                $this->storeContent($prefix . '[');
-                $this->storeContent($text, $basename);
-                $this->storeContent("]({$anchor})", $basename);
-//                $this->outputToFiles($line, true, $basename);// flush this line and replace file name
-                //TODO: next levels
-                $numbering += 1;
             }
             /// end toc
             $this->storeContent("\n\n",null,true);
 
         } else {
-
+            $numbering = [ $startLevel => 0];
+            $headings = $this->headings[$this->inFilename];
+            $index = $this->findHeadingIndex($headings, $startLevel, 0);
+            if ($index !== false) {
+                $this->storeTOClines($startLevel, $endLevel, $numbering, $index, $headings, $levelsNumbering, $levelsSeparator, $basename);
+            } else {
+                $this->error("starting level not found for TOC in file {$this->inFilename}");
+            }
         }
 
     }
 
-    /** Store the line for a TOC level and index in headings array.
-     *  @param int $curLevel [IN/OUT] the current heading level to look for
+    /** Store toc lines.
+     * 
+     *  The lines to print are defined with the following prameters:
+     * 
+     *  - startLevel -> 2, 3, 4: first heading level, exit when level below this
+     *  - endLevel: last heading level, ignore headings with levels above this
+     *  - numbering -> A, a, 1: gives the current numbering for each level
+     *  - index -> 0, 1, 2... : gives the index of first heading to look
+     * 
+     *  And the following arrays and data are also given for linking and numbering headings:
+     * 
+     *  - headings: array of objects, which each object describing a heading from current file 
+     *  - levels numbering and separators: array of symbols to define the prefix of headings in the toc
+     *  - basename: base filename where to link, replaces '{file}' in content
+     * 
+     *  The heading objects have the following fields:
+     *  - number: a number unique to all headings of all files, used as destination for link
+     *  - line: the line number in the file
+     *  - level: the heading level (number of '#'s)
+     *  - text: the heading text (can include MLMD directives, doesn't include '#' prefix nor numbering)
+     *
+     *  @param int $startLevel the starting heading level to look for
+     *  @param int $endLevel the maximum heading level to store
+     *  @param array $curNumbering [IN/OUT] the current numbers for for each level
      *  @param int $curIndex [IN/OUT] the current index in the headings array
      *  @param array $headings the array of all headings, in the file order
-     *  @param int $maxLevel the maximum heading level to store
+     *  @param array $levelsNumbering numbering schemes for each level exx:: [2=>'1',3=>'1',4=>'1'];
+     *  @param array $levelsSeparator separators for each level numbering scheme exx: [2=>'.',3=>'.',4=>''];
      *  @param string $basename the base name for the file containing the headings
      *  @return -
     */
-    private function storeTOCline(&$curLevel, &$curIndex, &$headings, $maxlevel, $basename) {
-        // exlore thhe rest of the array
-        while ($curIndex <= count[$headings]) {
+    private function storeTOClines($startLevel, $endLevel, &$curNumbering, &$curIndex, &$headings, $levelsNumbering, $levelsSeparator, $basename) {
+        // truncate basename extension
+        $basename = basename($basename, isMLMDfile($basename));
+        $prevLevel = $startLevel;/// keep track for numbering
+        $curLevel = $startLevel;
+        // explore all headings starting at curIndex
+        while ($curIndex < count($headings)) {
             $object = $headings[$curIndex];
-        }
-        
+            // exit if level too low
+            if ($object->level < $startLevel) {
+                return true; // finished
+            }
+            // ignore if level too high
+            if ($object->level > $endLevel) {
+                $curIndex += 1;
+                continue;// loop on next object
+            }
+            // go up to previous heading level?
+            if ($object->level < $curLevel) {
+                $prevLevel = $curLevel;
+                $curLevel = $object->level;
+                $curNumbering[$curLevel] += 1;
+                continue; // loop on same object with new context
+            }
+            // go down one level?
+            $nextLevel = $curLevel + 1;
+            if ($object->level == $nextLevel) {
+                $curLevel = $nextLevel;
+                $curNumbering[$curLevel] = 0;
+                $this->storeTOClines($curLevel, $endLevel, $curNumbering, $curIndex, $headings, $levelsNumbering, $levelsSeparator, $basename);
+                // back to this level: loop on curIndex object, restore curLevel
+                $curLevel = $prevLevel;
+                continue;
+            }
+            // same level as current level? advance number if same as previous heading, else init
+            if ($object->level == $curLevel) {
+                if ($object->level == $prevLevel) {
+                    $curNumbering[$curLevel] += 1;
+                } else {
+                    $curNumbering[$curLevel] = 1;
+                }
+                // output: prepare alpha/numeric prefix
+                $prefix = str_repeat('    ',$curLevel-1);
+                foreach($levelsNumbering as $level => $numbering) {
+                    if ($level <= $curLevel) {
+                        $prefix .= chr(ord($numbering) + $curNumbering[$level] - 1);
+                        if ($level==$curLevel) {
+                            $prefix .= ')'; //: end prefix
+                            break;
+                        } else {
+                            $prefix .= $levelsSeparator[$level] ?? '';
+                        }
+                    }
+                }
+                // output: prepare html anchor
+                $anchor = '{file}';
+                if ($curIndex !== false) {
+                    $text = "{$object->text}";
+                    $anchor .= "#h{$object->number}"; /// ex: {file}#h1
+                }
+                // output: HTML line break prefix for non-numeric prefixes
+                if ($curNumbering[$curLevel] >= 1 && !is_numeric($levelsNumbering[1])) {
+                    $prefix = "<br />\n{$prefix}";
+                }      
+                // send parts to files, interpret directives and '{file}' meta      
+                $this->storeContent($prefix . ' [');
+                $this->storeContent($text, $basename);
+                $this->storeContent("]({$anchor})", $basename);
+                // go next heading 
+                $curIndex += 1;
+                $prevLevel = $curLevel;
+            } else {
+                // level skipping 
+                if ($object->level > $nextLevel) {
+                    $this->error("inconsistent heading level (skip from {$curLevel} to {$object->level}) in file {$basename} line {$object->line}");
+                    $prevLevel = $curLevel;
+                    $curLevel = $nextLevel;
+                    $curNumbering[$curLevel] = $levelsNumbering[$curLevel];
+                    // loop same object new context
+                } else {
+                    //WTF
+                    $this->error("unknown error in headings level file {$basename} line {$object->line}");
+                }
+            }
+        } // while curIndex ok
+        return true;
 
     }
 
@@ -501,7 +591,8 @@ class MultilingualMarkdownGenerator {
         // compute anchor name if needed
         if ($anchor == null) {
             $headings = $this->headings[$this->relFilenames[$this->inFilename]] ?? false;
-            $headerObject = $headings[$this->curLine] ?? null;
+            $index = $this->findHeadingIndex($headings, $level, $this->curLine);
+            $headerObject = $headings[$index] ?? null;
             if ($headerObject) {
                 $anchor = "h{$headerObject->number}";
             }
@@ -641,6 +732,7 @@ class MultilingualMarkdownGenerator {
 
     /** Find all headings and sub headings in a set of files.
      *  The files which are not under the given root directory will be ignored.
+     *  Files with no headings will receive a heading using their filename
      *  @param array $filenames the pathes of the files to explore for headings
       */
     public function exploreHeadings($filenames) {
@@ -655,38 +747,51 @@ class MultilingualMarkdownGenerator {
                 $this->error("wrong root dir for file [$filename], should be [$this->rootDir]");
                 continue;
             }
-            $this->relFilenames[$filename] = mb_substr($filename, $rootLen+1, NULL, 'UTF-8');
+            $relFilename = mb_substr($filename, $rootLen+1, NULL, 'UTF-8');
+            $this->relFilenames[$filename] = $relFilename;
             $inFile = fopen($filename,'rb');
             if ($inFile===false) {
                 $this->error("could not open [$filename]");
                 continue;
             }
-            $this->headings[$this->relFilenames[$filename]] = [];
+            $this->headings[$relFilename] = [];
             $index = 0;
+            $curLine = 1;
             do {
                 $text = trim(fgets($inFile));
-                $curLine += 1;
-                if (($text[0]??'') != '#') continue;
-                // prepare an object
-                $object = new stdClass();
-                // sequential number for all headers of all files
-                $object->number = $number;
-                $number += 1;
-                // count number of '#' = heading level
-                $object->level = 0;
-                $length = min(9,mb_strlen($text,'UTF-8'));
-                while ($text[$object->level]=='#' && $object->level <= $length) {
-                    $object->level += 1;
+                if (($text[0]??'') == '#') {
+                    // prepare an object
+                    $object = new stdClass();
+                    // sequential number for all headers of all files
+                    $object->number = $number;
+                    $number += 1;
+                    // count number of '#' = heading level
+                    $object->level = 0;
+                    $length = min(9,mb_strlen($text,'UTF-8'));
+                    while ($text[$object->level]=='#' && $object->level <= $length) {
+                        $object->level += 1;
+                    }
+                    // line number in this file
+                    $object->line = $curLine;
+                    // trimmed text without # prefix
+                    $object->text = trim(mb_substr($text, $object->level, NULL,'UTF-8'));
+                    // store the object in array for this file
+                    $this->headings[$this->relFilenames[$filename]][$index] = $object;
+                    $index += 1;
                 }
-                // line number in this file
-                $object->line = $curLine;
-                // trimmed text without # prefix
-                $object->text = trim(mb_substr($text, $object->level, NULL,'UTF-8'));
-                // store the object in array for this file
-                $this->headings[$this->relFilenames[$filename]][$index] = $object;
-                $index += 1;
+                $curLine += 1;
             } while (!feof($inFile));
             $this->closeInput();
+            // force a level 1 object if no headings
+            if (count($this->headings[$relFilename])==0) {
+                $object = new stdClass();
+                $object->number = $number;
+                $number += 1;
+                $object->level = 1;
+                $object->line = 1;
+                $object->text = $relFilename;
+                $this->headings[$relFilename][] = $object;
+            }
         } // next file
     }
 
@@ -867,10 +972,10 @@ class MultilingualMarkdownGenerator {
                 break;
             case "\n":
                 $this->curLine += 1;
+                if ($this->languagesSet && $this->L1headingSet) {
+                    $this->outputToFiles($this->curWord . $this->curChar);
+                }
                 $this->resetParsing();
-                if (!$this->languagesSet) break;
-                if (!$this->L1headingSet) break;
-                $this->outputToFiles($this->curWord . $this->curChar);
                 break;
             default:
                 // not '.', '\n' or '#'
