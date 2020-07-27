@@ -6,10 +6,11 @@ You may put comments here.
 
 # .fr((Titre du fichier.)) .default((File Title.))
 
+[Jump to another place](endspace.{language}.md#this-is-endspace-file-target)
 
 Entête du fichier.
 
-.TOC level=1-3 title=2,".fr((Table des matières.)).en((Table Of Contents.))" number=1:A-,2:1.,3:1
+.TOC level=1-3 title=2,".fr((Table des matières.)).en((Table Of Contents.))"
 
 ## .default((First Title.)) .fr((Premier titre.))
 

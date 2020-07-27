@@ -6,7 +6,7 @@ Optionally, it adds a Table Of Content in each generated markdown file.
 
 ## Prerequisites
 
-Make sure you have PHP 7.3 cli version accessible in PATH:
+Make sure PHP 7.3 cli version is accessible in PATH:
 
 ```code
 php -v
@@ -20,7 +20,7 @@ Earlier versions of PHP 7 may work but have not been tested.
 
 ## Storing MLMD script
 
-Put the PHP script in a directory you have easy access to, e.g.:
+Put the PHP script in a directory with easy access, e.g.:
 
 * `~/phpscripts` on macOS/Linux
 * `%HOMEDRIVE%%HOMEPATH%\phpscripts` on Windows
@@ -31,13 +31,13 @@ Parameters that can be passed to the script are discribed in [How To Use MLMD](#
 
 ### Using an alias to run MLMD
 
-This is optional and allows you to type `mlmd` as if it were a command of your Operating System. If you don't use aliases, you'll have to type `php <your_path_to_mlmd>/mlmd.php` instead.
+This is optional and allows to type `mlmd` as if it were a command of the Operating System. Without aliases, the script must be launched by typing `php <your_path_to_mlmd>/mlmd.php`.
 
-Adapt the commands below to the directory where you stored the script.
+Adapt the commands below to the directory where the script is stored.
 
 #### Linux / macOS / OS X
 
-* Put the following alias command in your shell startup (most likely `~/.bashrc`, `~/.zshrc` etc):
+* Put the following alias command in the shell startup (most likely `~/.bashrc`, `~/.zshrc` etc):
 
   ```code
   alias mlmd=php ~/phpscripts/mlmd.php
@@ -55,11 +55,11 @@ Adapt the commands below to the directory where you stored the script.
 * Create a shortcut to this CMD file (right-click then create shortcut).
 * Open the `shell:startup` directory (hit Windows key + R and type `shell:startup`).
 * Move the shortcut from its directory to this startup directory.
-* Restart Windows and login to your user account.
+* Restart Windows and login to the user account.
 
 ### Template files names
 
-The files names for your Markdown templates must end with `.base.md` of `.mlmd`. Files with other extensions will be ignored.
+The files names for the Markdown templates must end with `.base.md` of `.mlmd`. Files with other extensions will be ignored.
 
 When no specific files parameters are given to the script, MLMD will explore the directory tree where it starts and generate files for all the templates it finds. The generated files will be put in the same directory as their template.
 
@@ -67,7 +67,19 @@ See [Templates and Directives](#templates-and-directives) for directives syntax 
 
 ## How to Use MLMD
 
-Edit your templates and name them with `.base.md` or `.mlmd` extension.
+Syntax for `mlmd.php` is:
+
+```code
+php <path-to-mlmd>mlmd.php [inputfiles] [-main=<filepath.mlmd>] [-out=html|md]
+```
+
+### Templates filenames
+
+The template files must be named them with `.base.md` or `.mlmd` extension.
+
+### Input filenames paramaters
+
+To process specific files, use the `-i` parameter followed by the file path. To process more than one files, it is best to have them in a same tree and to start MLMD at the root directory where the main Markdown file lies so that file pathes in links can be relative to this root dir.
 
 * Process a given file: use `-i <filepath>`:
 
@@ -90,10 +102,54 @@ Edit your templates and name them with `.base.md` or `.mlmd` extension.
 
   This last syntax will process any file found in the directory tree which ends by `.base.md` or `.mlmd`, including those found in sub directories. Other files will be ignored.
 
-## Templates and Directives
+  ### Main file
 
-Your file templates must be named with a `.base.md` or `.mlmd` extension. They are normal text files so macOS or Windows text encoding is accepted but MLMD is UTF-8 compliant so macOS and Windows encoding could have side effect, as any character above code 127 will be invalid UTF-8.
+  If a file is named `README.mlmd` in the directory where the script is started, it will be considered the main file of all the directory tree and links will use pathes relative to this directory. Notice the name casing: `README` is uppercase, while the `.mlmd` extension is lowercase. On Windows, case is not significant but the script still searches an uppercase `README`.
 
+  If there is no `README.md` file in the starting directory, the `-main` parameter can be used to tell the script which template is the main file:
+
+```code
+php ~/phpscripts/mlmd.php -main ./main.mlmd
+```
+
+### Output mode html/md
+
+The `-out` parameter let you choose between HTML and Markdown links style for the Table Of Contents.
+
+To distinguish the two methods, please read the following explanations.
+
+Markdown allows three ways for creating links to a heading in a file:
+
+* using standard HTML `<A>` anchors and links
+* using Markdown automatic heading targets
+* using Markdown `{:` targets in headings
+
+The HTML `<A name="target">` anchors and `<A href="file#target">` can be used in MLMD templates, just like they would in standard HTML or Markdown, and the Markdown links also works as they would in a normal Markdown: the MLMD script won't change the anchors and links written using these forms.
+
+However, MLMD can generate a Table Of Contents using the directive `.toc` and will put links to hehadings in this table. This is where the `-out` parameter allows you to chhoose which method will be used for these links:
+
+* `-out=html` will generate `<A name="target">` HTML anchors right before each headings in each processed file and `<A href="file#target">` HTML links in the table Of Contents.
+* `-out=md` will generate `{: #target}` Markdown anchors in each headings in each processed file and `[](file#target)` Markdown links in the Table Of Contents.
+
+The choice of method is context dependent. The HTML method will generate standard HTML and is appropriate for published site content. The Markdown method won't use HTML tags and is appropriate for software or Github documentation.
+
+Notice that the MD method will generate unique anchors and links even if some headings are identical in a file: using standard Markdown, this is not possible because in one file, all headings texts are supposed to be unique.
+
+## Templates, Variables and Directives
+
+The file templates must be named with a `.base.md` or `.mlmd` extension. They are normal text files so macOS or Windows text encoding is accepted but MLMD is UTF-8 compliant so macOS and Windows encoding could have side effect, as any character between codes 128 and 255 would be invalid UTF-8.
+
+### Variables in headings
+
+MLMD recognizes a few *variables* in the headings. These variables will take a language specific value at generation time and be replaced by relevant text in the generated file.
+
+The `{file}` variable will be replaced by the name of the generated file itself. It allows to link somewhere in the generated file whichever language is concerned.
+
+The `{language}` variable will be replaced by the language code in each generated file.
+
+The `{main}` variable will be replaced by the generated main file path.
+
+### Directives
 Actions for generating the language specific files are set by *directives* in the base templates. 
 
 Directives are commands beginning with a dot `.` followed by a keyword and parameters or, for most of them, by an opening marker `((` or an ending marker `))`.
