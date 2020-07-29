@@ -3,5 +3,27 @@
 		{
 			"path": "."
 		}
-	]
+	],
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Listen for XDebug",
+				"type": "php",
+				"request": "launch",
+				"port": 9000
+			},
+			{
+				"name": "Launch currently open script",
+				"stopOnEntry": true,
+				"type": "php",
+				"request": "launch",
+				"program": "${file}",
+				"args": ["-main=example.base.md", "-out=html", "-numbering=1:A-,2:1.,3:1"],	
+				"cwd": "${fileDirname}",
+				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1"},
+				"port": 9000
+			}
+		]
+	}
 }
