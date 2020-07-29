@@ -1,8 +1,10 @@
 All the text before languages directive will be ignored.
 You may put comments here.
 
-.LANGUAGES fr,en main=en
+.languages fr,en main=en
+.numbering 1:A-,2:1.,3:1
 
+Flag: http://www.geognos.com/api/en/countries/flag/{language}.png
 
 # .fr((Titre du fichier.)) .default((File Title.))
 
@@ -10,7 +12,7 @@ You may put comments here.
 
 Entête du fichier.
 
-.TOC level=1-3 title=2,".fr((Table des matières.)).en((Table Of Contents.))"
+.TOC level=1-4 title=2,".fr((Table des matières.)).en((Table Of Contents.))"
 
 ## .default((First Title.)) .fr((Premier titre.))
 
@@ -19,6 +21,10 @@ Entête du fichier.
 ### .default((Subtitle 1.1.)) .fr((Sous-titre 1.1.))
 
 Texte de la partie 1.1.
+
+#### .((sub sub title for a minor part in 1.1.))
+
+#### .((another sub sub title for a minor part in 1.1.))
 
 ### .default((Subtitle 1.2.)) .fr((Sous-titre 1.2.))
 
@@ -35,4 +41,11 @@ Texte de la partie 2.1.
 
 ### .default((SubTitle 2.2.)) .fr((Sous-titre 2.2.))
 
+
+#### .((sub sub title for a minor part in 2.2.))
+
+#### .((another sub sub title for a minor part in 2.2.))
+
 Texte de la partie 2.2.
+
+## .((Title for part 3.))
