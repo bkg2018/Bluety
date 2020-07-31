@@ -1,6 +1,16 @@
 .LANGUAGES fr,en main=en
 # .fr((Titre du fichier.)) .default((File Title.))
 
+* [Link]({file}#this-is-a-target)
+
+`.fr((` pas une directive.
+
+'.fr((' pas une directive.
+
+".fr((" pas une directive.
+
+.)) doit laisser le statut 'all' empilé.
+
 .fr((français.)).en((english.))
 .fr((autre ligne..)).((default text.))
 
