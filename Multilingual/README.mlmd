@@ -1,15 +1,22 @@
-# Multilingual Markdown Generator MLMD
+This MLMD template is MLMD documentation source.
 
-MLMD is a PHP script which generate one or more Markdown files for a set of declared languages from one or more multilingual markdown templates, using directives in the templates to distinguish each language parts.
+These lines preceeding the `.languages` directive are ignored by MLMD.
 
-MLMD can add a Table Of Content in the generated Markdown files and number headings in all files and in tables of Content.
+.languages fr,en main=en
+# .((Multilingual Markdown Generator.)).fr((Générateur de Markdown Multilingue.)) MLMD
 
-The user has full control over the generated languages, the table of content generation and the headings numbering.
+.((MLMD is a PHP script which generate one or more Markdown files for a set of declared languages from one or more multilingual markdown templates, using directives in the templates to distinguish each language parts..)).fr((MLMD est un script PHP qui génère des fichiers Markdown dans plusieurs langues à partir de modèles multilingues, grâce à des directives placées dans les modèles pour distinguer les parties de chaque langue..))
+
+.((MLMD can add a Table Of Content in the generated Markdown files and number headings in all files and in tables of Content..)).fr((MLMD peut ajouter une table des matières et numéroter les titres dans les fichiers et les tables des matières..))
+
+.((The user has full control over the generated languages, the table of content generation and the headings numbering..)).fr((L'utilisateur peut contrôler les langues, la génération des tables des matières et la numérotation des titres..))
+
+.toc title=.((Table Of Contents.)).fr((Sommaire.)) numbering=1:A-,2:1.,3:1 level=1-3 out=md
 
 ## Installation
 
-MLMD consists of a main script `mlmd.php` and a few dependencies files (`heading.class.php` and `generator.class.php`).
-The script and its dependancies files can be put anywhere at user choice.
+.((MLMD consists of a main script `mlmd.php` and a few dependencies files. (`heading.class.php` and `generator.class.php`.)
+The script and its dependancies files can be put anywhere at user choice..)).fr((MLMD est constitué d'un script principal `mlmd.php`et de dépendances  (`heading.class.php` et `generator.class.php`). Le script et ces dépendances peuvent être placés dans ni'importe quel répertoire accessible à l'utilisateur..))
 
 ### PHP version
 
