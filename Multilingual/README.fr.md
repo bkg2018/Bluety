@@ -1,65 +1,188 @@
-This MLMD template is MLMD documentation source.
+# <a name="h17"></a>Générateur de Markdown Multilingue MLMD
 
-These lines preceeding the `.languages` directive are ignored by MLMD.
 
-.languages fr,en main=en
-# .((Multilingual Markdown Generator.)).fr((Générateur de Markdown Multilingue.)) MLMD
+default text on line 1
+french text on line 2
 
-.((MLMD is a PHP script which generate one or more Markdown files for a set of declared languages from one or more multilingual markdown templates, using directives in the templates to distinguish each language parts..)).fr((MLMD est un script PHP qui génère des fichiers Markdown dans plusieurs langues à partir de modèles multilingues, grâce à des directives placées dans les modèles pour distinguer les parties de chaque langue..))
 
-.((MLMD can add a Table Of Content in the generated Markdown files and number headings in all files and in tables of Content..)).fr((MLMD peut ajouter une table des matières et numéroter les titres dans les fichiers et les tables des matières..))
 
-.((The user has full control over the generated languages, the table of content generation and the headings numbering..)).fr((L'utilisateur peut contrôler les langues, la génération des tables des matières et la numérotation des titres..))
+MLMD is a PHP script which generate one or more Markdown files for a set of declared languages from one or more multilingual markdown templates, using directives in the templates to distinguish each language parts.MLMD est un script PHP qui génère des fichiers Markdown dans plusieurs langues à partir de modèles multilingues, grâce à des directives placées dans les modèles pour distinguer les parties de chaque langue.
 
-.toc title=.((Table Of Contents.)).fr((Sommaire.)) numbering=1:A-,2:1.,3:1 level=1-3 out=md
+MLMD can add a Table Of Content in the generated Markdown files and number headings in all files and in tables of Content.MLMD peut ajouter une table des matières et numéroter les titres dans les fichiers et les tables des matières.
 
-## Installation
+The user has full control over the generated languages, the table of content generation and the headings numbering.L'utilisateur peut contrôler les langues, la génération des tables des matières et la numérotation des titres.
 
-.((MLMD consists of a main script `mlmd.php` and a few dependencies files. (`heading.class.php` and `generator.class.php`.)
-The script and its dependancies files can be put anywhere at user choice..)).fr((MLMD est constitué d'un script principal `mlmd.php`et de dépendances  (`heading.class.php` et `generator.class.php`). Le script et ces dépendances peuvent être placés dans ni'importe quel répertoire accessible à l'utilisateur..))
+## <a name="toc"></a>Sommaire
 
-### PHP version
+-  [Titre du fichier](endspace.fr.md#h1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) [This is 'endspace' file target](endspace.fr.md#h3)
+<br />
+-  [Titre du fichier](example.fr.md#h4)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) [Premier titre](example.fr.md#h5)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.1) [Sous-titre 1.1](example.fr.md#h6)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2) [Sous-titre 1.2](example.fr.md#h9)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;2) [Deuxième titre](example.fr.md#h10)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1) [Sous-titre 2.1](example.fr.md#h11)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2) [Sous-titre 2.2](example.fr.md#h12)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;3) [Title for part 3](example.fr.md#h15)
+<br />
+-  [mixeddefault.mlmd](mixeddefault.fr.md#h16)
+<br />
+-  [Générateur de Markdown Multilingue MLMD](README.fr.md#h17)
+<br />
+-  [heading text for English again text for all languages](README.fr.md#h47)
+<br />
+-  [Titre principal](README.fr.md#h51)
+<br />
+-  [Title for all languages](README.fr.md#h55)
+<br />
+-  [Titre en Français](README.fr.md#h60)
+<br />
+-  [Titre en Français](README.fr.md#h61)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) [Installation](README.fr.md#h18)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.1) [Version PHP](README.fr.md#h19)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2) [Emplacement de)) MLMD](README.fr.md#h20)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.3) [Utilisation d'un alias pour lancer MLMD](README.fr.md#h21)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;2) [Utilisation de MLMD](README.fr.md#h24)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1) [Templates file pathes and names](README.fr.md#h25)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2) [Input files (-i)](README.fr.md#h26)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.3) [Main file (-main)](README.fr.md#h27)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.4) [Output mode html/md (-out)](README.fr.md#h28)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.5) [Headings numbering (-numbering)](README.fr.md#h29)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;3) [Writing templates files](README.fr.md#h32)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.1) [End of lines](README.fr.md#h33)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.2) [Quoted text](README.fr.md#h34)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.3) [Variables](README.fr.md#h35)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.4) [Default text](README.fr.md#h36)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.5) [Directives](README.fr.md#h37)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.6) [Immediate vs enclosed effect](README.fr.md#h38)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.7) [Default directives and effects](README.fr.md#h39)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;4) [Declaring languages: `](README.fr.md#h40)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1) [Syntax](README.fr.md#h41)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2) [Notices](README.fr.md#h42)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.3) [Example](README.fr.md#h43)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;5) [Generating for all languages: `` directive](README.fr.md#h44)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.1) [.ALL Syntax](README.fr.md#h45)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.2) [.ALL Examples](README.fr.md#h46)
+<br />
+-  [heading text for English again text for all languages](README.fr.md#h47)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) [Default text: `](README.fr.md#h48)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.1) [.DEFAULT Syntax](README.fr.md#h49)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2) [.DEFAULT Examples](README.fr.md#h50)
+<br />
+-  [Titre principal](README.fr.md#h51)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) [Ignoring text: `.IGNORE` directive](README.fr.md#h52)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.1) [.IGNORE Syntax](README.fr.md#h53)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2) [.IGNORE Example](README.fr.md#h54)
+<br />
+-  [Title for all languages](README.fr.md#h55)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) [Generating for languages: `.<code>((`  directives](README.fr.md#h56)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.1) [.<code> Syntax](README.fr.md#h57)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2) [.<code> Examples](README.fr.md#h58)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.3) [Heading for Engish generated file](README.fr.md#h59)
+<br />
+-  [Titre en Français](README.fr.md#h60)
+<br />
+-  [Titre en Français](README.fr.md#h61)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) [Generating Table Of Content: `](README.fr.md#h62)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.1) [Syntax](README.fr.md#h63)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2) [Example](README.fr.md#h67)
 
-MLMD has been tested with PHP 7.3 cli version.
 
-To make sure PHP is accessible from a command line:
+out=
+## <a name="h18"></a>Installation
+
+
+MLMD consists of a main script `mlmd.php` and a few dependencies files. (`heading.class.php` and `generator.class.php`.) The script and its dependancies files can be put anywhere at user choice.MLMD est constitué d'un script principal `mlmd.php`et de dépendances  (`heading.class.php` et `generator.class.php`). Le script et ses dépendances peuvent être placés dans n'importe quel répertoire accessible à l'utilisateur.
+
+### <a name="h19"></a>Version PHP
+
+
+MLMD has been tested with PHP 7.3 cli version.MLMD a été testé avec PHP 7.3 CLI.
+
+To make sure PHP is accessible from a command line:Pour vérifier que PHP est accessible depuis une ligne de commande, tapez :
 
 ```code
 php -v
 ```
 
-should display:
+.((should display:.)).fr((Cela doit afficher des lignes de texte similaires à ce qui suit :.))
 
 ```code
-PHP 7.3.20 (cli) (built: Jul  9 2020 23:50:54) ( NTS )
-Copyright (c) 1997-2018 The PHP Group
-Zend Engine v3.3.20, Copyright (c) 1998-2018 Zend Technologies
-    with Zend OPcache v7.3.20, Copyright (c) 1999-2018, by Zend Technologies
+PHP 7.3.20 (cli) (built: Jul  9 22 23:5:54) ( NTS )
+Copyright (c) 1997-218 The PHP Group
+Zend Engine v3.3.2, Copyright (c) 1998-218 Zend Technologies
+with Zend OPcache v7.3.2, Copyright (c) 1999-218, by Zend Technologies
 ```
 
-The directory where the PHP installation and its setting files lie can be displayed with `php --ini`.
+.((The directory where the PHP installation and its setting files lie can be displayed with `php --ini`..)).fr((Le répertoire d'installation de PHP et de ses fichiers de configuration peut être affiché avec la commande `php --ini`..))
 
-Earlier versions of PHP 7 may work but have not been tested. The Multibyte extension (mb) is needed but
- should not imply a specific setting as it should be embedded in standard PHP 7.3 distributions.
+.((Earlier versions of PHP 7 may work but have not been tested. The Multibyte extension (mb) is needed but should not imply a specific setting as it should be embedded in standard PHP 7.3 distributions..)).fr((Les versions précédentes de PHP 7 peuvent fonctionner mais n'ont pas été testées. L'extension MultiByte (mb) est utilisée mais ne nécessite pas de réglage particulier car elle est intégrée par défaut dans les distributions standards de PHP 7..))
 
-### Storing MLMD
+### .((Storing.)).fr((Emplacement de)) MLMD
 
-The PHP script and its dependencies must be put in a directory with easy user access, e.g.:
+.((The PHP script and its dependencies must be put in a directory with easy user access, e.g.:.)).fr((Le script et ses dépendances doivent se situer dans un répertoire accessible à l'utilisatezur, par exemple :.))
 
-* `~/phpscripts` on macOS/Linux
-* `%HOMEDRIVE%%HOMEPATH%\phpscripts` on Windows
+* `~/phpscripts` .((on.)).fr((sur.)) macOS/Linux
+* `%HOMEDRIVE%%HOMEPATH%\phpscripts` .((on.)).fr((sur.)) on Windows
 
-Parameters that can be passed to the script are described in [How To Use MLMD](#how-to-use-mlmd)
+.((Parameters that can be passed to the script are described in [How To Use MLMD](#how-to-use-mlmd).)).fr((Les paramètres du script sont décrits dans la partie [Utilisation de MLMD](#utilisation-de-mlmd).))
 
-### Using an alias to launch MLMD
+### .((Using an alias to launch MLMD.)).fr((Utilisation d'un alias pour lancer MLMD.))
 
-This is optional and allows to type `mlmd` as if it were a command of the Operating System or command shell. Without aliases, the script must be launched by typing `php <your_path_to_mlmd>/mlmd.php`.
+.((This is optional and allows to type `mlmd` as if it were a command of the Operating System or command shell. Without aliases, the script must be launched by typing `php <your_path_to_mlmd>/mlmd.php`..)).fr((Ce qui suit est facultatif mais permet d'utiliser le script MLMD comme s'il était une commande du système d'exploitation. Sans les alias, le script doit être exécuté en tapant `php <chemin>/mlmd.php` avec el chemin où ont été stockés le script et ses dépendances..))
 
-The commands detailed in the following examples must be adapted to the directory where the script has been stored.
+.((The commands detailed in the following examples must be adapted to the directory where the script has been stored..)).fr((Les commandes indiquées ci-après doivent être adaptées pour le répertoire où se situe el script..))
 
 #### Linux / macOS / OS X
 
-* The following alias command must be put in the shell startup script (most likely `~/.bashrc`, `~/.zshrc` etc):
+* .((The following alias command must be put in the shell startup script (most likely `~/.bashrc`, `~/.zshrc` etc):.)).fr((La commande suivante peut être placée dans le script de démarrage du shell (en général `~/.bashrc`, `~/.zshrc` etc) :.))
 
   ```code
   alias mlmd=php ~/phpscripts/mlmd.php
@@ -67,23 +190,23 @@ The commands detailed in the following examples must be adapted to the directory
 
 #### Windows 10
 
-* A text file must be created (e.g. using NOTEPAD.EXE) containing this command line:
+* Un fichier texte doit être créé - par exemple avec le Bloc Note - contenant la ligne suivante :
 
-  ```code
+```code
   doskey mlmd=php %HOMEDRIVE%%HOMEPATH%\phpscripts\mlmd.php $*
   ```
 
-* The file can be saved as `MLMD.CMD`or `mlmd.cmd` (letters case is ignored by Windows.) on the Desktop or any user accessible directory.
-* A shortcut to this CMD file must be created (right-click then create shortcut).
-* The `shell:startup` directory must be opened (by hitting the Windows and R keys together and typing `shell:startup`).
-* The shortcut must be moved from its directory to this startup directory.
-* Windows must be restarted.
-  
-From then on, the `mlmd` alias will be available in any command line box as a normal command.
+* .((The file can be saved as `MLMD.CMD`or `mlmd.cmd` (letters case is ignored by Windows.) on the Desktop or any user accessible directory..)).fr((Le fichier est enregistré sous le nom `MLMD.CMD` ou `mlmd.cmd` (Windows ne différencie pas minuscules et majuscules dans les noms de fichiers.) sur le bureau ou dans n'importe quel répertoire accessible à l'utilisateur..))
+* .((A shortcut to this CMD file must be created (right-click then create shortcut)..)).fr((Un raccourci vers ce fichier est créé par un clic de droite suivi de la commande *Créer un raccourci*..))
+* .((The `shell:startup` directory must be opened (by hitting the Windows and R keys together and typing `shell:startup`)..)).fr((Le répertoire `shell:startup` est ouvert en tapant les touches Windows et R puis en tapant `shell:startup`..))
+* .((The shortcut must be moved from its directory to this startup directory..)).fr((Le raccourci créé à l'étape précédente est déplacé vers le répertoire startup..))
+* .((Windows must be restarted..)).fr((Windows doit être redémarré..))
 
-This method may work with earlier versions of Windows but they have not been tested.
+.((From then on, the `mlmd` alias will be available in any command line box as a normal command..)).fr((A partir de ce moment, l'alias `mlmd` sera disponible dans les boîtes de commandes.))
 
-## How to Use MLMD
+.((This method may work with earlier versions of Windows but they have not been tested..)).fr((Cette méthode peut fonctionner avec des versions antérieures de Windows mais elles n'ont pas été testées..))
+
+## .((How to Use MLMD.)).fr((Utilisation de MLMD.))
 
 The syntax for `mlmd.php` and all available arguments is:
 
@@ -207,15 +330,59 @@ The user has total control of which languages he/she wants to put in the templat
 
 The following describes the MLMD directives and the variables which can be put in the templates to specialize parts of them for declared languages.
 
+### End of lines
+
+MLMD templates are interpreted on a line basis: it means that text for a language must be typed on a single line with the other languages specific text parts and no intermediary end of lines.
+
+Normal Markdown conventions are generally assuming that text lines should not be larger than about 80 characters. MLMD templates do not force this limit and in fact, all text for a given paragraph should rather be typed on a single line, partcularly if the default text feature is used. This is because MLMD will interpret the default and language text parts when it finds an end of line, so using end of line to cut the text in shorter lines and make it easier to read can in fact make MLMD go wrong.
+
+Although MLMD will generate Markdown files with lines much longer than 8 characters, Markdown viewers and Web Browsers are generally not constrained by this limit and will display the text correctly. Similarly, the modern text editors to type the MLMD templates will make the text fit into the displayed width even if there is no end of line.
+
+To make things clearer here is an example where each line is ended by the ENTER key:
+
+```code
+.((default text.))
+.fr((french text.))
+.en((english text.))
+```
+
+When MLMD finds the first line, it interprets the default text and put it in all the generated files because no other language specific text is on the line. The second line will put text only in the FR file, and the third line only in the EN file but both are preceeded by the default text, which was probably not the expected result.
+
+The correct way to write this is as below:
+
+```code
+.((default text.)).fr((french text.)).en((english text.))
+```
+
+Now, the default text will go in all the unspecified languages files, the french text will go in the FR file and the english text will go in the EN file.
+
+### Quoted text
+
+MLMD skips parts of text when it is surrounded by some quote characters and by code fences, and doesn't interpret directives and variables in the surrounded text:
+
+* <code>```</code>: code fences surround code text in which directives and variables will not be interpreted
+* `"`: double quotes around text neutralize directives and variables, e.g. `".(("` will not close the current directive
+* <code>`</code>: back-ticks around text also neutralize directives and variables, e.g. <code>`.((`</code> will not close the current directive
+
+Notice: simple quotes `'` have *no neutralizing effect*, so directives and variables in text surrounded by `'` *will* be interpreted. MLMD has been designed this way because the simple quote character is used alone in a lot of languages and not to surround text.
+
 ### Variables
 
-MLMD recognizes a few *variables*. These variables can be put eanywhere in headings or text and will take a language specific value when MLMD is run and replaces them by relevant text in the generated files.
+MLMD recognizes a few *variables*. These variables can be put anywhere in headings or text in the templates and will take a language specific value in the generated files when MLMD is run.
 
-* The `{file}` variable will be replaced by the name of the generated file itself. It allows to link somewhere in the generated file whichever language is concerned.
-* The `{language}` variable will be replaced by the language code in each generated file. This can be used to link to Web available content or APIs.
-* The `{main}` variable will be replaced by the generated main file path, which allows to link to a global table of content for example.
+* The `README.fr.md` variable will be replaced by the name of the generated file itself. It allows to link somewhere in the generated file whichever language is concerned.
+* The `fr` variable will be replaced by the language code in each generated file. This can be used to link to Web available content or APIs.
+* The `example.fr.md` variable will be replaced by the generated main file path, which allows to link to a global table of content for example.
 
-Each variable takes a value a generation time, except for `{main}` which is only converted to a value if a `-main` argument has been passed to MLMD. If no `-main` file is defined, the text will stay as `{main}` in the generated files.
+Each variable takes a value at generation time, except for `example.fr.md` which is only converted to a value if a `-main` argument has been passed to MLMD. If no `-main` file is defined, the text will stay as `example.fr.md` in the generated files.
+
+### Default text
+
+MLMD accepts default text in any part of the template: headings, table of contents title, normal text etc. The default text is used by MLMD when no language directive has been used to specify the language specific text.
+
+This feature will be described in [Default text: `.DEFAULT((` or `.((` directive](#default-text-default-or-directive).
+
+As explained above, end of lines will make MLMD interpret the current line so default text should lie on the same logical line of text as the other language specifics parts for the same text.
 
 ### Directives
 

@@ -663,9 +663,10 @@ namespace MultilingualMarkdown {
                         // get level
                         $titleLevel = $this->getCharUntil(',');
                         // parse and set toc title
-                        $title = $this->getCharUntil('"');// skip to " or \n
+                        $title = $this->getChar(); // read "
                         if ($this->curChar != '"') {
-                            $this->error("no '\"' around title text, got this: [$title]");
+                            $this->error("no '\"' around title text, check .toc directive");
+                            $this->getCharUntil(' ');
                         } else {
                             $title = $this->getCharUntil('"');
                         }
@@ -931,6 +932,27 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Normalize to UNIX EOL and delete triple EOLs and wrong characters.
+         * 
+         * @param string $text the input text to clean.
+         * 
+         * @return string the cleaned text.
+         */
+        private function getCleanText($text)
+        {
+            // normalize to unix eol
+            $text = str_replace("\r\n", "\n", $text);
+            //reduce triple EOL to double, and trim ending spaces & tabs
+            $text = str_replace(
+                ["\n\n\n"," \n","\t\n"],
+                ["\n\n",  "\n", "\n"],
+                $text
+            );
+            $text = trim($text, " \t\0\x0B");
+            return $text;
+        }
+
+        /**
          * Write to an output file, protect against doubled line feeds.
          *
          * @param string $language the language code
@@ -947,14 +969,7 @@ namespace MultilingualMarkdown {
                 }
             }
             // normalize to unix eol
-            $this->curOutputs[$language] = str_replace("\r\n", "\n", $this->curOutputs[$language]);
-            //reduce triple EOL to double, and trim ending spaces & tabs
-            $this->curOutputs[$language] = str_replace(
-                ["\n\n\n"," \n","\t\n"],
-                ["\n\n", "\n","\n"],
-                $this->curOutputs[$language]
-            );
-            $this->curOutputs[$language] = trim($this->curOutputs[$language], " \t\0\x0B");
+            $this->curOutputs[$language] = $this->getCleanText($this->curOutputs[$language]);
             
             // send to file and clear the buffer
             if (!empty($this->curOutputs[$language])) {
@@ -1244,6 +1259,7 @@ namespace MultilingualMarkdown {
             // expand variables and output content to language files
             foreach ($this->languages as $language => $bool) {
                 $text = array_key_exists($language, $final) ? $final[$language] : ($final['default'] ?? '');
+                $text = $this->getCleanText($text);
                 $text = $this->expandVariables($text, $basename, $language);
                 $text .= $endCR ? "\n" : '';
                 if (fwrite($this->outFiles[$language], $text) === false) {
@@ -1508,8 +1524,6 @@ namespace MultilingualMarkdown {
                         $this->outputToFiles($content);
                         $this->resetParsing();
                         break;
-                    case '\'':
-                        // fall through
                     case '"':
                         // quoted text, ignore directives
                         $content = $this->getContentUntil($this->curChar);

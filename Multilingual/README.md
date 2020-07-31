@@ -1,0 +1,704 @@
+# <a name="h17"></a>MLMD
+
+
+default text on line 1
+
+english text on line 3
+
+
+MLMD is a PHP script which generate one or more Markdown files for a set of declared languages from one or more multilingual markdown templates, using directives in the templates to distinguish each language parts.
+
+MLMD can add a Table Of Content in the generated Markdown files and number headings in all files and in tables of Content.
+
+The user has full control over the generated languages, the table of content generation and the headings numbering.
+
+## <a name="toc"></a>Table Of Contents
+
+-  [File Title](endspace.md#h1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) [This is 'endspace' file target](endspace.md#h3)
+<br />
+-  [File Title](example.md#h4)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) [First Title](example.md#h5)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.1) [Subtitle 1.1](example.md#h6)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2) [Subtitle 1.2](example.md#h9)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;2) [Second Title](example.md#h10)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1) [SubTitle 2.1](example.md#h11)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2) [SubTitle 2.2](example.md#h12)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;3) [Title for part 3](example.md#h15)
+<br />
+-  [mixeddefault.mlmd](mixeddefault.md#h16)
+<br />
+-  [MLMD](README.md#h17)
+<br />
+-  [Heading text for English .all(added text for all languages heading text for English again text for all languages](README.md#h47)
+<br />
+-  [Main Title](README.md#h51)
+<br />
+-  [Title for all languages](README.md#h55)
+<br />
+-  [English Title](README.md#h60)
+<br />
+-  [English Title](README.md#h61)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) [Installation](README.md#h18)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.1) [PHP version](README.md#h19)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2) [Storing](README.md#h20)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.3) [Using an alias to launch MLMD](README.md#h21)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;2) [How to Use MLMD](README.md#h24)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1) [Templates file pathes and names](README.md#h25)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2) [Input files (-i)](README.md#h26)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.3) [Main file (-main)](README.md#h27)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.4) [Output mode html/md (-out)](README.md#h28)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.5) [Headings numbering (-numbering)](README.md#h29)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;3) [Writing templates files](README.md#h32)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.1) [End of lines](README.md#h33)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.2) [Quoted text](README.md#h34)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.3) [Variables](README.md#h35)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.4) [Default text](README.md#h36)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.5) [Directives](README.md#h37)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.6) [Immediate vs enclosed effect](README.md#h38)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.7) [Default directives and effects](README.md#h39)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;4) [Declaring languages: `](README.md#h40)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1) [Syntax](README.md#h41)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2) [Notices](README.md#h42)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.3) [Example](README.md#h43)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;5) [Generating for all languages: `` directive](README.md#h44)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.1) [.ALL Syntax](README.md#h45)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.2) [.ALL Examples](README.md#h46)
+<br />
+-  [Heading text for English .all(added text for all languages heading text for English again text for all languages](README.md#h47)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) [Default text: `](README.md#h48)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.1) [.DEFAULT Syntax](README.md#h49)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2) [.DEFAULT Examples](README.md#h50)
+<br />
+-  [Main Title](README.md#h51)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) [Ignoring text: `.IGNORE` directive](README.md#h52)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.1) [.IGNORE Syntax](README.md#h53)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2) [.IGNORE Example](README.md#h54)
+<br />
+-  [Title for all languages](README.md#h55)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) [Generating for languages: `.<code>((`  directives](README.md#h56)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.1) [.<code> Syntax](README.md#h57)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2) [.<code> Examples](README.md#h58)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.3) [Heading for Engish generated file](README.md#h59)
+<br />
+-  [English Title](README.md#h60)
+<br />
+-  [English Title](README.md#h61)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) [Generating Table Of Content: `](README.md#h62)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.1) [Syntax](README.md#h63)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2) [Example](README.md#h67)
+
+
+out=
+## <a name="h18"></a>Installation
+
+
+MLMD consists of a main script `mlmd.php` and a few dependencies files. (`heading.class.php` and `generator.class.php`.) The script and its dependancies files can be put anywhere at user choice.
+
+### <a name="h19"></a>PHP version
+
+
+MLMD has been tested with PHP 7.3 cli version.
+
+To make sure PHP is accessible from a command line:
+
+```code
+php -v
+```
+
+.((should display:.)).fr((Cela doit afficher des lignes de texte similaires à ce qui suit :.))
+
+```code
+PHP 7.3.20 (cli) (built: Jul  9 22 23:5:54) ( NTS )
+Copyright (c) 1997-218 The PHP Group
+Zend Engine v3.3.2, Copyright (c) 1998-218 Zend Technologies
+with Zend OPcache v7.3.2, Copyright (c) 1999-218, by Zend Technologies
+```
+
+.((The directory where the PHP installation and its setting files lie can be displayed with `php --ini`..)).fr((Le répertoire d'installation de PHP et de ses fichiers de configuration peut être affiché avec la commande `php --ini`..))
+
+.((Earlier versions of PHP 7 may work but have not been tested. The Multibyte extension (mb) is needed but should not imply a specific setting as it should be embedded in standard PHP 7.3 distributions..)).fr((Les versions précédentes de PHP 7 peuvent fonctionner mais n'ont pas été testées. L'extension MultiByte (mb) est utilisée mais ne nécessite pas de réglage particulier car elle est intégrée par défaut dans les distributions standards de PHP 7..))
+
+### .((Storing.)).fr((Emplacement de)) MLMD
+
+.((The PHP script and its dependencies must be put in a directory with easy user access, e.g.:.)).fr((Le script et ses dépendances doivent se situer dans un répertoire accessible à l'utilisatezur, par exemple :.))
+
+* `~/phpscripts` .((on.)).fr((sur.)) macOS/Linux
+* `%HOMEDRIVE%%HOMEPATH%\phpscripts` .((on.)).fr((sur.)) on Windows
+
+.((Parameters that can be passed to the script are described in [How To Use MLMD](#how-to-use-mlmd).)).fr((Les paramètres du script sont décrits dans la partie [Utilisation de MLMD](#utilisation-de-mlmd).))
+
+### .((Using an alias to launch MLMD.)).fr((Utilisation d'un alias pour lancer MLMD.))
+
+.((This is optional and allows to type `mlmd` as if it were a command of the Operating System or command shell. Without aliases, the script must be launched by typing `php <your_path_to_mlmd>/mlmd.php`..)).fr((Ce qui suit est facultatif mais permet d'utiliser le script MLMD comme s'il était une commande du système d'exploitation. Sans les alias, le script doit être exécuté en tapant `php <chemin>/mlmd.php` avec el chemin où ont été stockés le script et ses dépendances..))
+
+.((The commands detailed in the following examples must be adapted to the directory where the script has been stored..)).fr((Les commandes indiquées ci-après doivent être adaptées pour le répertoire où se situe el script..))
+
+#### Linux / macOS / OS X
+
+* .((The following alias command must be put in the shell startup script (most likely `~/.bashrc`, `~/.zshrc` etc):.)).fr((La commande suivante peut être placée dans le script de démarrage du shell (en général `~/.bashrc`, `~/.zshrc` etc) :.))
+
+  ```code
+  alias mlmd=php ~/phpscripts/mlmd.php
+  ```
+
+#### Windows 10
+
+*
+
+```code
+  doskey mlmd=php %HOMEDRIVE%%HOMEPATH%\phpscripts\mlmd.php $*
+  ```
+
+* .((The file can be saved as `MLMD.CMD`or `mlmd.cmd` (letters case is ignored by Windows.) on the Desktop or any user accessible directory..)).fr((Le fichier est enregistré sous le nom `MLMD.CMD` ou `mlmd.cmd` (Windows ne différencie pas minuscules et majuscules dans les noms de fichiers.) sur le bureau ou dans n'importe quel répertoire accessible à l'utilisateur..))
+* .((A shortcut to this CMD file must be created (right-click then create shortcut)..)).fr((Un raccourci vers ce fichier est créé par un clic de droite suivi de la commande *Créer un raccourci*..))
+* .((The `shell:startup` directory must be opened (by hitting the Windows and R keys together and typing `shell:startup`)..)).fr((Le répertoire `shell:startup` est ouvert en tapant les touches Windows et R puis en tapant `shell:startup`..))
+* .((The shortcut must be moved from its directory to this startup directory..)).fr((Le raccourci créé à l'étape précédente est déplacé vers le répertoire startup..))
+* .((Windows must be restarted..)).fr((Windows doit être redémarré..))
+
+.((From then on, the `mlmd` alias will be available in any command line box as a normal command..)).fr((A partir de ce moment, l'alias `mlmd` sera disponible dans les boîtes de commandes.))
+
+.((This method may work with earlier versions of Windows but they have not been tested..)).fr((Cette méthode peut fonctionner avec des versions antérieures de Windows mais elles n'ont pas été testées..))
+
+## .((How to Use MLMD.)).fr((Utilisation de MLMD.))
+
+The syntax for `mlmd.php` and all available arguments is:
+
+```code
+php <path-to-mlmd>mlmd.php [-i <template_path> [...]] [-main=<file_path>] [-out=html|md] [-numbering=<numbering_scheme>]
+```
+
+The input files can be given to the script with the `-i` parameter, or they can be found in the current directory when the script is called if not such `-i` parameter is used. This is explained in [Input files](#input-files--i).
+
+### Templates file pathes and names
+
+The files names for the Markdown templates must end with `.base.md` or `.mlmd` extension. Files with other extensions will be ignored.
+
+When no template files parameter (`-i`) is given to the script, MLMD will explore the directory tree where it starts and generate files for all the templates it finds. The generated files will be put in the same directory as their template.
+
+The `-main` parameter sets the main input file and the root directory for all relative links in the generated files: the main file directory will be considered as the root directory. For consistency, no other file should lie above this root directory or in a directory outside the tree under this root.
+
+See [Directives](#directives) for directives syntax in the template files.
+
+### Input files (-i)
+
+To process specific files, use the `-i` parameter followed by the files pathes. To process more than one files, it is best to have them in a same tree and to start MLMD at the root directory where the main Markdown file lies so that file pathes in links can be relative to this root dir.
+
+* Process a given file: use `-i <template_path>`:
+
+  ```code
+  php ~/phpscripts/mlmd.php -i ~/project/README.mlmd
+  ```
+
+* Process multiple files: use multiples `-i <template_path>`:
+
+  ```code
+  php ~/phpscripts/mlmd.php -i ~/project/README.mlmd -i ~/project/HOWTOUSE.mlmd
+  ```
+
+* Process a whole directory and subdirectories: change to this directory and don't give any `-i` parameter:
+
+  ```code
+  cd ~/project
+  php ~/phpscripts/mlmd.php
+  ```
+
+  This syntax will process any file found in the directory tree which ends by `.base.md` or `.mlmd`, including those found in sub directories. Other files will be ignored.
+
+  Other parameters are also allowed in this mode.
+
+### Main file (-main)
+
+If a file is named `README.mlmd` in the directory where the script is started, it will be considered the main file of all the directory tree and all the links will use pathes relative to its directory. Notice the name casing: `README` is uppercase, while the `.mlmd` extension is lowercase. On Windows, case is not significant but the script still searches an uppercase `README`.
+
+If there is no `README.md` file in the starting directory, the `-main` parameter can be used to tell the script which template is the main file, and indirectly which directory is the root directory:
+
+```code
+php ~/phpscripts/mlmd.php -main ./main.mlmd
+```
+
+### Output mode html/md (-out)
+
+The `-out` parameter selects the HTML or Markdown links style in the Table Of Contents.
+
+To distinguish the two methods, here are some explanations.
+
+Markdown allows three ways for creating links to a heading in a file:
+
+* use standard HTML `<A>` anchors and links
+* use Markdown automatic heading targets
+* use Markdown `{:` targets in headings
+
+The standard HTML `<A name="target"></A>` anchors and `<A href="file#target"></A>` links can be used in MLMD templates just like they would in standard HTML or Markdown The Markdown automatic links `[](#heading-text)` also works as they would in a normal Markdown: MLMD won't change the anchors and links written using these forms.
+
+Common use standards for Markdown discourage the use of HTML, however it is perfectly valid to use HTML and for a number of reasons, HTML anchors are more versatile than Markdown links.
+
+Still, MLMD can generate a Table Of Contents using the `.toc` directive and will put links to headings in this table. This is where the `-out` parameter allows to select which method will be used for the TOC links:
+
+* `-out=html` will generate `<A name="target">` HTML anchors for each headings in each processed file and `<A href="file#target">` HTML links in the table Of Contents.
+* `-out=md` will generate `<A name="target">` HTML anchors for each headings in each processed file and `[](file#target)` Markdown links in the Table Of Contents.
+
+The Markdown mode could generate `{: #target}` Markdown anchors in headings but at the time of this writing, this syntax is unknown from most of the Markdown viewers and editors and has not been retained in MLMD yet.
+
+The choice of method is context dependent. The HTML method will generate standard HTML and is appropriate for published site content. The Markdown method won't use HTML tags for links and is appropriate for software or Github documentation.
+
+Whichever method is used, MLMD will generate unique identifiers for the anchors and links even if some headings are identical in a file, which is not supported by standard Markdown. The targets identifiers are computed at each run so adding a heading in a file won't break any link as they are all computed again on all files.
+
+### Headings numbering (-numbering)
+
+The `-numbering` parameter sets a numbering scheme for headings levels over all the generated files and tables of contents. For example, a third level heading could be numbered `A.2.5) some heading`. The numbering can be set globally using the `-numbering` script argument for taking effect in all the generated files. It can also be set file by file using the `.numbering` and `.toc` directives.
+
+#### Syntax
+
+The parameter consists of any number of levels definitions separated by a comma:
+
+```code
+-numbering=[<level>]:<symbol>[<separator>][,...]]
+```
+
+Each definition have the following parts:
+
+* `<level>` is optional and is a digit between `1` and `9` representing the heading level (which is the number of '#' at the heading beginning). By default, this defines the next level, starting with 1 and incrementing at each definition.
+* `:` is a mandatory separator after the optional level.
+* `<symbol>` is a mandatory symbol which can be an uppercase letter `A` to `Z`, a lowercase letter from `a` to `z` or a digit from `1` to `9`. It sets the starting symbol for the level numbering.
+* `separator` is an optional symbol which will be concatenated to the numbering symbol before the next level numbering. Convcentional symbols can be `.`, `-`or `)`. Omitting this separator for the last level is identical to using `)`.
+* `,` is a separator before the next level definition.
+
+A level always starts with the defined symbol, then all the following headings at the same level will increment this symbol. A Heading with a level above will reset the current level, and continue with the next number in the setting for the above level.
+
+#### Example
+
+This is how to number level 1 headings with the 'A', 'B' etc letters followed by a dash `-`, then add a number followed by a dot `.` for level 2 headings, then add a number for level 3 headings:
+
+```code
+-numbering=1:A-,2:1.,3:1
+```
+
+With this argument, the levels 4 and above headings will not be numbered and will not appear in table of contents by default. The table of contents generation directive can modify this setting. The first level 1 heading will be prefixed `A)`, then level 2 headings under it will be `A-1)`, `A-2)` etc. In the first of these level 2 parts, levels 3 headings will be numbered like `A-1.1`, then `A-1.2`, `A-1.3` etc. Level 4 and below headings won't be numbered.
+
+## Writing templates files
+
+The file templates must be named with a `.base.md` or `.mlmd` extension. They are UTF-8 text files with Linux/macOS or Windows end of lines. MLMD is UTF-8 compliant so macOS and Windows encoding could have side effect, as any character between codes 128 and 255 would be invalid UTF-8. The template files must use UTF-8 for any characters other than ASCII.
+
+The user has total control of which languages he/she wants to put in the templates. This only need one specific code for each language. Using ISO standard codes like `en-US` or `fr-FR` allow to easily link standard Web APIs for nation flags or other international content, but more simple codes like `en` or `fr` are faster to write.
+
+The following describes the MLMD directives and the variables which can be put in the templates to specialize parts of them for declared languages.
+
+### End of lines
+
+MLMD templates are interpreted on a line basis: it means that text for a language must be typed on a single line with the other languages specific text parts and no intermediary end of lines.
+
+Normal Markdown conventions are generally assuming that text lines should not be larger than about 80 characters. MLMD templates do not force this limit and in fact, all text for a given paragraph should rather be typed on a single line, partcularly if the default text feature is used. This is because MLMD will interpret the default and language text parts when it finds an end of line, so using end of line to cut the text in shorter lines and make it easier to read can in fact make MLMD go wrong.
+
+Although MLMD will generate Markdown files with lines much longer than 8 characters, Markdown viewers and Web Browsers are generally not constrained by this limit and will display the text correctly. Similarly, the modern text editors to type the MLMD templates will make the text fit into the displayed width even if there is no end of line.
+
+To make things clearer here is an example where each line is ended by the ENTER key:
+
+```code
+.((default text.))
+.fr((french text.))
+.en((english text.))
+```
+
+When MLMD finds the first line, it interprets the default text and put it in all the generated files because no other language specific text is on the line. The second line will put text only in the FR file, and the third line only in the EN file but both are preceeded by the default text, which was probably not the expected result.
+
+The correct way to write this is as below:
+
+```code
+.((default text.)).fr((french text.)).en((english text.))
+```
+
+Now, the default text will go in all the unspecified languages files, the french text will go in the FR file and the english text will go in the EN file.
+
+### Quoted text
+
+MLMD skips parts of text when it is surrounded by some quote characters and by code fences, and doesn't interpret directives and variables in the surrounded text:
+
+* <code>```</code>: code fences surround code text in which directives and variables will not be interpreted
+* `"`: double quotes around text neutralize directives and variables, e.g. `".(("` will not close the current directive
+* <code>`</code>: back-ticks around text also neutralize directives and variables, e.g. <code>`.((`</code> will not close the current directive
+
+Notice: simple quotes `'` have *no neutralizing effect*, so directives and variables in text surrounded by `'` *will* be interpreted. MLMD has been designed this way because the simple quote character is used alone in a lot of languages and not to surround text.
+
+### Variables
+
+MLMD recognizes a few *variables*. These variables can be put anywhere in headings or text in the templates and will take a language specific value in the generated files when MLMD is run.
+
+* The `README.md` variable will be replaced by the name of the generated file itself. It allows to link somewhere in the generated file whichever language is concerned.
+* The `en` variable will be replaced by the language code in each generated file. This can be used to link to Web available content or APIs.
+* The `example.md` variable will be replaced by the generated main file path, which allows to link to a global table of content for example.
+
+Each variable takes a value at generation time, except for `example.md` which is only converted to a value if a `-main` argument has been passed to MLMD. If no `-main` file is defined, the text will stay as `example.md` in the generated files.
+
+### Default text
+
+MLMD accepts default text in any part of the template: headings, table of contents title, normal text etc. The default text is used by MLMD when no language directive has been used to specify the language specific text.
+
+This feature will be described in [Default text: `.DEFAULT((` or `.((` directive](#default-text-default-or-directive).
+
+As explained above, end of lines will make MLMD interpret the current line so default text should lie on the same logical line of text as the other language specifics parts for the same text.
+
+### Directives
+
+Actions for generating the language specific files are set by *directives* in the templates.
+
+Directives are of two types:
+
+1. Immediate Directives begin with a dot `.` and are followed by parameters: they modify some of the MLMD settings
+2. Language Directives enclose text between an opening marker `((` and an ending marker `))`
+
+Here's a summary of the available directives:
+
+* `.languages` declares the language codes used in the template(s) and drives the files to generate.
+* `.all((` starts a text section which will be put in all the language files.
+* `.default((` or `.((` starts a section which will be put in the language files for which no language section is available on the same line.
+* `.ignore((` starts a text section which will not be put in any generated file.
+* `.<code>((` starts a text section which will be put only in the generated file for language `<code>` which has been declared in the `.languages` directive.
+* `.))` ends a section started by one of the `.((` directives and returns to the previous directive effect.
+* `.toc` generates a Table Of Contents using headings.
+* `.numbering` sets the headings numbering schemes.
+
+Directives are not case sensitive: `.fr((` is the same as `.FR((`.
+
+### Immediate vs enclosed effect
+
+The `.languages`, `.toc` and `.numbering` directives have an *immediate effect*. Although they can be placed anywhere, their aim imply that they generally should be alone on a single isolated line, and preferably in the beginning of template files.
+
+The other directives start with an opening `.<directive>((` marker which *encloses text* until a matching `.))` is met, or until another `((` directive is opened.
+
+> These enclosing directives can be embedded: each `.<directive>((` opening will suspend the previous directive effect, and the matching `.))` closing will resume it.
+
+### Default directives and effects
+
+Details will follow but it must be mentionned that the script has some defaults and that directives themselves also have defaults settings.
+
+* Anything preceeding the `.languages` directive is *ignored*. See [Declaring languages](#declaring-languages-languages).
+* Any empty lines before the first level 1 heading are ignored.
+* After the `.languages` directive, the generator acts as if a `.all((` directive had been met, so any text will go into all the languages files. See [Declaring languages](#declaring-languages-languages).
+* The `.default((` or `.((` directive will only have effect on languages which have not a defined content yet. See [Default directive](#default-text-default-or-).
+* The `.toc` directive has default values which generate an table of contents for local headings in the current file only. See [TOC](#generating-table-of-content-toc).
+
+## Declaring languages: `.LANGUAGES` directive
+
+The `.languages` directive declares the possible languages which can be found in the templates and optionally tells which one is the *main* language.
+
+The *main* language has files generated without the language code suffix, e.g. *README.md* while other languages will have the language code suffix, e.g. *README.fr.md*.
+
+### Syntax
+
+```code
+.languages <code>[[,<code>]...] [main=<code>]
+```
+
+Each  `<code>` declares a language which can then be used with `.<code>((` directives to start text sections for the `<code>` language.
+
+The optional `main=<code>` parameter tells which language is the main language: files generated for this main language will have an `.md` extension instead of a `.<code>.md` extension. As an example, `README.base.md` will generate a `README.md` for the main language, and a `README.<code>.md` for other language codes. This is particularly useful with Git deposits which require a `README.md` file at the deposit root.
+
+### Notices
+
+* No file is generated before the `.languages` directive is met: any preceeding text will be ignored.
+* The `.languages` directive is global so it can be put in the first processed file. If there is any doubt about which file will be processed first, the directive can be put in all the templates with no undesirable effect.
+* After the `.languages` directive, the generator will send output to all languages until a directive changes this. See the [`.all((` directive documentation](#generating-for-all-languages-all).
+
+### Example
+
+```code
+.languages en,fr main=en
+```
+
+Generated files will be named with a `.md` extension for the `en` language and with `.fr.md` for the `fr` language.
+
+## Generating for all languages: `.ALL((` directive
+
+The `.all((` directive starts a section of text which will be put in each of the languages files declared in the `.languages` directive.
+
+This directive is ended or suspended by:
+
+* The `.))` directive which returns to previous state.
+* The `.<code>((` directives which start a language specific portion of text.
+* The `.ignore((` directive which starts ignored text.
+* The `.default((` or `.((` directive which starts the default value for a portion of text in a line.
+
+By default, any text outside directives and appearing after the `.languages` directive is generated in all the languages files as if it were in an `.all((` section.
+
+### .ALL Syntax
+
+```code
+.all((
+```
+
+### .ALL Examples
+
+Directives can always be alone on a line, surrounding the text they act on:
+
+```code
+.all((
+text for all languages
+.))
+```
+
+They can also be put inline within text:
+
+```code
+.en((text for 'en' language .all((text for all languages.)) rest of text for 'en' language.))
+```
+
+And they can also be embedded within headings:
+
+```code
+# .en((Heading text for English .all(added text for all languages.)) heading text for English again .)) text for all languages
+```
+
+## Default text: `.DEFAULT((` or `.((` directive
+
+The `.default((`  or `.((` directive starts a default text section which will be put in the generated language files for which no specific language section is yet available on the same line.
+
+This directive only has effect on the line where it occurs, and only if no content has been stored on this line yet. Only the first `.default((` or `.((` directive on the line will have an effect, others appearing later on the line will be ignored.
+
+Putting text in `.default((` is **not** the same as `.all((`. Text for all languages will go in every generated files, while default text will only go in files for which there is no language section on the same line.
+
+The goal of the `.default((` directive is to prepare the original text and headings in a common language like english, then add language specific sections on the fly while still having the default text for languages which are not translated yet.
+
+### .DEFAULT Syntax
+
+```code
+.default((
+```
+
+or:
+
+```code
+.((
+```
+
+### .DEFAULT Examples
+
+The most obvious use of default text is in headings, as they are necessarily contained in one line. But it also works on text blocks, on a line basis.
+
+```code
+# .default((Main Title.)) .fr((Titre principal.))
+```
+
+This will put `# Main Title` in all the generated files except the `.fr.md` file where the generator will put `# Titre Principal`.
+
+For text blocks, the default directive is a little sensitive because it will only apply to languages which have absolutely no specific section on the same line. The common use is to avoid any text outside a directive or at least, to keep translated sections near the matching default section, like in the example below:
+
+```code
+.((This is the default original text..)) .fr(ceci est la traduction en français..))
+```
+
+This will put `This is the default original text.` in all files except the `.fr.md` file where it will put `Ceci est la traduction en français.`.
+
+Notice that text *outside directives* will go in all generated files, whether there is a default section or not.
+
+If you mix default text with text outside directives or use more than one default directive on a line, you will have side effects and probably unexpected results. Only the first default section will be used by the generator, and any text in an `.all((` section will cancel the default text.
+
+To get predictable and expected results, make sure you put your default section first on the line and you don't put text outside language sections. (See [Generating for languages](#generating-for-languages-code).)
+
+## Ignoring text: `.IGNORE` directive
+
+The `.ignore` directive starts an ignored section of text. Ignored text won't be put in any generated file. It is useful for TODO, comments, work-in-progress documentation parts which are not ready or appropriate for final generated files.
+
+This directive is ended or suspended by:
+
+* The `.))` directive which returns to previous state.
+* The `.all((` directive which starts a section for all languages.
+* The `.<code>((` directives which start a language specific portion of text.
+* The `.default((` or `.((` directive which starts the default value for a portion of text in a line.
+
+### .IGNORE Syntax
+
+```code
+.ignore((
+```
+
+### .IGNORE Example
+
+```code
+.ignore((
+text to ignore
+.))
+```
+
+It can also be put inline within text or headings:
+
+```code
+text to generate .ignore((text to ignore.)) other text to generate
+# Title for all languages .ignore((ignore this.))
+```
+
+## Generating for languages: `.<code>((`  directives
+
+The `.<code>((` directive starts a section of text which will be only put in the generated file for the `<code>` language and no other file. The language `<code>` must have been declared in the `.languages` directive or the section is ignored.
+
+This directive is ended or suspended by:
+
+* The `.))` directive which returns to previous state.
+* Another `.<code>((` directive which start another language specific section.
+* The `.all((` directive which starts a section for all languages.
+* The `.ignore` directive which starts ignored text.
+
+Language sections must be closed by a matching `.))`. Although sections can be chained, it is recommended to close a section before beginning an other one, else you'll have to close all of them at the end of sections. See examples below for language chaining.
+
+### .<code> Syntax
+
+```code
+.<code>((
+```
+
+### .<code> Examples
+
+The directive can enclose text or headings:
+
+```code
+.en((
+Text for English language only.
+
+### Heading for Engish generated file
+.))
+```
+
+It can also be put inline within text or headings:
+
+```code
+.fr((Texte pour le fichier en Français.)).en((text for the English file.))
+
+# .fr((Titre en Français.)).en((English Title.))
+```
+
+Notice that the apparently ending '.' in titles is in fact the dot from the `.))` directive. This somewhat misleading visual effect can be avoided by using spaces:
+
+```code
+.fr((Texte en Français.)) .en((English text.))
+```
+
+The spaces between directives are not put in the generated text. To put a space after some text it must put inside the directive:
+
+```code
+.fr((Texte en Français suivi d'un espace .)) .en((English text followed by a space .))
+```
+
+As mentioned above, language sections can be chained without closing them, but each one will hhave to be closed in the end. The line below has the same effect as the previous example:
+
+```code
+.fr(( Texte en Français .en(( English text .)).))
+```
+
+A section not closed stays active until it is closed or until next directive is met. In the next example, the closing on the first line ends the `.en` section, but the `.fr` stays active and the following text will be generated in the `.fr.md` file, until another `.))` is found.
+
+```code
+This text has no directive and will go in all files.
+.fr(( Texte en Français .en(( English text .))
+This text will only go into the french file because the opening . fr (( directive has not been closed yet. .))
+Now this text is in the `all` section and go in all files.
+# .fr(( Titre en Français .en(( English Title .))
+This text will only go into the french file because its opening directive has not been closed yet.
+```
+
+## Generating Table Of Content: `.toc` directive
+
+The `.toc` directive generates a Table Of Contents using choosen header levels.
+
+The header levels are defined by the `#` prefixes in Markdown syntax: `#` is header level 1, `##` is level 2 etc.
+
+By default, level 1 is ignored: it is considered as the file title, and levels 2 to 4 are put in TOC. But level 1 can be used to build a global TOC for a set of files.
+
+The Table of Contents has one link for each accepted heading. The table will be put at the place of the `.toc` directive.
+
+### Syntax
+
+The `.toc` directive must be written alone on its line with its parameters. Most of the time, the TOC lies after the file title and some introduction. A default TOC with no parameters will build a table of contents for the current file with headings `##` to `####`.
+
+```code
+.TOC [level=[m][-][n]] [title=m,"<title text>"] [numbering=m:<symbol><sep>[,...]] [out=md|html]
+```
+
+#### `level` parameter
+
+This parameter sets the headings which will appear in the TOC.
+
+Syntax for this parameter is `level=[m][-][n]`:
+
+* If neither `m` nor `n` are given, the TOC will contain heading levels 2 to 4 (matching headings `##` to `####`).
+* If `m` only is given, TOC titles will be level `m` headings only.
+* If `m-` is given without `n`, TOC titles will be level `m` to level 9 headings.
+* If `m-n` is given, TOC titles will be level `m` to level `n` headings.
+* If `-n` is given, TOC titles will be level 1 to level `n` headings.
+
+#### `title` parameter
+
+Syntax for this parameter is `title=m,"<title text>"`:
+
+* `t` is the heading level for the TOC title itself. Level 2 is recommended. (The TOC title will be a `##` heading.)
+* The title text can use language, all, ignore and default directives.
+* If no title text is given, `Table Of Contents` will be used.
+* If no title parameter is given, level 2 will be used.
+* The double quotes `"` around the title text are mandatory. If they are missing, an error is displayed and the rest of text following `title=` on the line is used as title text.
+
+#### `numbering` parameter
+
+This parameter allow an automatic numbering of the headings in the TOC and in files. Each level (# number) can have its own numbering scheme, each scheme being separated by a comma.
+
+* `m` is the heading level concerned by the numbering
+* <symbol> is a number (e.g: `1`) or a letter (e.g: `a`) for this level, case (`a` or `A`) is preserved and numbering starts with the given value
+* `sep` is the symbol to use after this level numbering, e.g `.` or `-`
+
+Any heading level above 9 will be ignored in the TOC.
+
+### Example
+
+```code
+.TOC level=1-3 title=2,".fr((Table des matières.)).en((Table Of Contents))" number=1:A-,2:1.,3:1
+```
+
+This directive generates a TOC using the headings `#` to `###` found in each file.
+
+The table title will be `## Table des Matières` in the `.fr.md` file, and `## Table Of Contents` for other languages.
+
+Numbering scheme will be `A` to `Z` for level 1 headings, `A-1` for level 2, and `A-1.1` for level 3 headings.
