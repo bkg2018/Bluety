@@ -401,9 +401,11 @@ namespace MultilingualMarkdown {
             $this->resetParsing();
             do {
                 $this->getChar();
-                $content .= $this->curChar;
-                if ($this->curChar == "\n") {
-                    $this->curLine += 1;
+                if ($this->curChar != "\r") { 
+                    $content .= $this->curChar;
+                    if ($this->curChar == "\n") {
+                        $this->curLine += 1;
+                    }
                 }
             } while (
                 ($this->curChar !== false) // beware character '0' would be interpreted as false
@@ -1540,6 +1542,8 @@ namespace MultilingualMarkdown {
                 $this->getChar($this->inFile);              
                 switch ($this->curChar) {
                     case false:
+                        break;
+                    case "\r":
                         break;
                     case '`':
                         // code fence?

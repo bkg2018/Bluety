@@ -43,7 +43,7 @@ Zend Engine v3.3.20, Copyright (c) 1998-2018 Zend Technologies
 
 ### .((Storing.)).fr((Emplacement de)) MLMD
 
-.((The PHP script and its dependencies must be put in a directory with easy user access, e.g.:.)).fr((Le script et ses dépendances doivent se situer dans un répertoire accessible à l'utilisatezur, par exemple :.))
+.((The PHP script and its dependencies must be put in a directory with easy user access, e.g.:.)).fr((Le script et ses dépendances doivent se situer dans un répertoire accessible à l'utilisateur, par exemple :.))
 
 * `~/phpscripts` .((on.)).fr((sur.)) macOS/Linux
 * `%HOMEDRIVE%%HOMEPATH%\phpscripts` .((on.)).fr((sur.)) on Windows
@@ -222,9 +222,7 @@ Normal Markdown conventions generally assume that text lines should not be large
 
 This constraint comes from the fact that MLMD interprets the default and language text parts when it finds an end of line, so using end of line to cut the text in shorter lines and make it easier to read will in fact make MLMD go wrong.
 
-Although MLMD will generate Markdown files with lines longer than 80 characters, Markdown viewers and Web Browsers are generally not constrained by this limit and will display the text correctly. Similarly, modern text editors used to type the MLMD templates will make the text fit into the displayed width even if there is no end of line.
-
-To make things clearer here is an example where files generation will be wrong because each line is ended with the ENTER key:
+Here is an example where files generation will be wrong because each line is ended with the ENTER key:
 
 ```code
 .((default text.))
@@ -232,9 +230,9 @@ To make things clearer here is an example where files generation will be wrong b
 .en((english text.))
 ```
 
-When MLMD finds the first line, it interprets the default text and put it in all the generated files because no other language specific text is on the line. The second line will put text only in the FR file, and the third line only in the EN file but both are preceeded by the default text, which was probably not the expected result.
+MLMD finds the first line, interprets the default text and put it in all the generated files because no other language specific text is on the same line. The second line will put text only in the FR file, and the third line only in the EN file but both are preceeded by the default text, which was probably not the expected result.
 
-The correct way to write this is as follows:
+The correct way to write this is with no end of line between directives:
 
 ```code
 .((default text.)).fr((french text.)).en((english text.))
@@ -242,23 +240,30 @@ The correct way to write this is as follows:
 
 Now, the default text will go in all the unspecified languages files of the line, the french text will go in the FR file and the english text will go in the EN file. The default text will not be written in the FR and EN files because they both have a specific part.
 
-### Quoted text
+#### Notes
 
-MLMD roughly copies the parts of text which are surrounded by reversed and double quote characters and code fences. In these parts of text, MLMD doesn't interpret directives and variables:
+> Although MLMD will generate Markdown files with lines longer than 80 characters, Markdown viewers and Web Browsers are generally not constrained by this limit and will display the text correctly. Similarly, modern text editors will make the text fit into the displayed width even if there is no end of line. (Most often they feature a 'soft-wrapping' setting or viewing option in menus.) 
+
+> Although this is not mandatory, it is best to close opened directives with `.))` on the same line as the opening directive, so the end of line will be out of default and language directives and be sent to all languages files.
+
+### Quoted text and code fences
+
+MLMD roughly copies the parts of text which are surrounded by back-ticks (reversed quote), double quote and code fences. In these parts of text, MLMD doesn't interpret directives and variables:
 
 * <code>```</code>: code fences surround code text in which directives and variables will not be interpreted
 * `"`: double quotes around text neutralize directives and variables, e.g. `".(("` will not close the current directive
 * <code>`</code>: back-ticks around text also neutralize directives and variables, e.g. <code>`.((`</code> will not close the current directive
 
-Notice: simple quotes `'` have *no neutralizing effect*, so directives and variables in text surrounded by `'` *will* be interpreted. MLMD has been designed this way because the simple quote character is used alone in a lot of languages and not to surround text.
+> Quoted and fenced text must be entirely put *inside* enclosing directives (default or language directives) because they cannot embed directives.
+> Simple quotes `'` have *no neutralizing effect*, so text surrounded by `'` *can embed directives*. MLMD has been designed this way because the simple quote character is used separately in a lot of languages for other uses than surrounding text.
 
 ### Variables
 
-MLMD recognizes a few *variables*. These variables can be put anywhere in headings or text in the templates and will take a language specific value in the generated files when MLMD is run.
+MLMD recognizes a few *variables*. These variables can be put anywhere in headings or text in the templates and will take a language specific value in the generated files.
 
-* The `{file}` variable will be replaced by the name of the generated file itself. It allows to link somewhere in the generated file whichever language is concerned.
-* The `{language}` variable will be replaced by the language code in each generated file. This can be used to link to Web available content or APIs.
-* The `{main}` variable will be replaced by the generated main file path, which allows to link to a global table of content for example.
+* The `{file}` variable will be replaced by the name of the generated file itself (e.g: `file.en.md`). This allows to link somewhere in the generated file whichever language is concerned.
+* The `{language}` variable will be replaced by the language code in each generated file (e.g: `en`). This can be used to link to Web content or APIs.
+* The `{main}` variable will be replaced by the generated main file path (from the `-main` script argument). This allows to link to anchors in the main file, like a global table of content for example.
 
 Each variable takes a value at generation time, except for `{main}` which is only converted to a value if a `-main` argument has been passed to MLMD. If no `-main` file is defined, the text will stay as `{main}` in the generated files.
 
@@ -309,6 +314,7 @@ Details will follow but it must be mentionned that the script has some defaults 
 * After the `.languages` directive, the generator acts as if a `.all((` directive had been met, so any text will go into all the languages files. See [Declaring languages](#declaring-languages-languages).
 * The `.default((` or `.((` directive will only have effect on languages which have not a defined content yet. See [Default directive](#default-text-default-or-).
 * The `.toc` directive has default values which generate an table of contents for local headings in the current file only. See [TOC](#generating-table-of-content-toc).
+* The table of contents generated in any file always has an implicit anchor named `toc` which can be used to link to it from any other file.
 
 ## Declaring languages: `.languages` directive
 
@@ -535,7 +541,10 @@ The header levels are defined by the `#` prefixes in Markdown syntax: `#` is hea
 
 By default, level 1 is ignored: it is considered as the file title, and levels 2 to 4 are put in TOC. But level 1 can be used to build a global TOC for a set of files.
 
-The Table of Contents has one link for each accepted heading. The table will be put at the place of the `.toc` directive.
+The Table of Contents has one link for each accepted heading. 
+
+> The table will be put at the place of the `.toc` directive.
+> The table has an automatic anchor named `toc` which can be used in links from other files.
 
 ### Syntax
 
@@ -579,6 +588,17 @@ Syntax for this parameter is `numbering=m:<symbol><sep>[,...]]`
 
 Any heading level above `9` will be ignored in the TOC.
 
+#### `out` parameter
+
+This parameter sets the style of internal links in the table of contents:
+
+* `out=html` will generate `<A name="target">` HTML anchors for each headings in each processed file and `<A href="file#target">` HTML links in the table Of Contents.
+* `out=md` will generate `<A name="target">` HTML anchors for each headings in each processed file and `[](file#target)` Markdown links in the Table Of Contents.
+
+If you omit this parameter, links will use the HTML style.
+
+> Identical headings: MLMD compute a unique anchor for all headings over all processed template files. It means headings with identical text like 'Example' or 'Syntax' will be different targets. This is not possible using Markdown automatic headings links, which are based on the headings text and would be identical (see [Markdopwn rule MD024](https://github.com/DavidAnson/markdownlint/blob/master/doc/Rules.md#md024---multiple-headings-with-the-same-content)), so even with the MD output mode, MLMD use unique targets instead of the automatic headings links based on the heading text.
+
 ### Example
 
 ```code
@@ -590,3 +610,23 @@ This directive generates a TOC using the headings `#` to `###` found in each fil
 The table title will be `## Table des Matières` in the `.fr.md` file, and `## Table Of Contents` for other languages.
 
 Numbering scheme will be `A` to `Z` for level 1 headings, `A-1` for level 2, and `A-1.1` for level 3 headings.
+
+TOC links will be HTML style (default output mode).
+
+## Conclusion
+
+Use MLMD to write multilingual documentations templates instead of maintaining different Markdown files for each language.
+
+Good use notes:
+
+> Template files must be UTF-8 encoded.
+> Use a default text for each paragraph and heading with the `.((` directive, then add languages translations after the default text with `.<code>((` directives.
+> Close each opened directive (with `.))`) on the same line.
+> Do not use end-of-lines between default text and/or different languages texts for a same text section.
+> Use the `-numbering` script argument to consistently number headings over all files.
+> Use no `-i` script argument to process all the template files in current directory and subdirectories.
+> Use the `.mlmd` extension to distinguish MLMD templates and actual Markdown files.
+
+I hope MLMD will help you to easily maintain multilingual documentations.
+
+F. Piérot
