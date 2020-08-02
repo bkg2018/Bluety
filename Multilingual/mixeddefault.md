@@ -1,1 +1,2 @@
- Text outside directives  And here's `.all` text
+
+default text Text outside directives  And here's `.all` text

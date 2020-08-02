@@ -1446,7 +1446,6 @@ namespace MultilingualMarkdown {
             } while ($this->curChar == '#' || $this->curChar == ' ' || $this->curChar == "\t");
             $content = $this->curChar . trim($this->getCharUntil("\n"));
             $this->storeHeading($level, $content);
-            $this->curLine += 1;
         }
 
         /**
