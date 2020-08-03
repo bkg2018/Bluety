@@ -1,45 +1,26 @@
 <?php
 
 /**
- * Multilingual Markdown generator
- * parameters:
- *  -i <filepath.mlmd|filepath.base.md> [...]
- *      generate each <filepath.xx.md> for languages 'xx' declared
- *      in '.languages' directive.
- *  -out=html|md
- *      choose HTML or MD for links and anchors for Table Of Contents
- *  -main=<mainFilename[.mlmd|.base.md]>
- *      choose the main file (generaly the one with global TOC)
+ * Multilingual Markdown generator - Generator class
+ * 
+ * Copyright 2020 Francis Piérot
  *
- * If no parameter is given, explore current and sub directories
- * for '*.base.md' and '.mlmd' files and generate files for each file found.
- * By default, main file will be README.mlmd or README.base.md
- * if such a file is found in current directory.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
+ * (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
+ * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
  *
- * Template files must be named with .base.md or .mlmd
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
+ * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * Directives control the languages specifics files generation:
- *  - .languages declares languages
- *  - .toc generates a table of contents
- *  - .numbering sets the heading numbering schemes (also available
- *     as script argument and toc parameter)
- *  - .all(( starts a section for all languages
- *  - .ignore(( starts an ignored section
- *  - .default(( starts a section for default text
- *  - .<language>(( starts a section for a specific language
- *  - .)) ends a section
- *
- * The following variables are expanded in the generated files:
- *
- * {file} expands to the current file name, localised for the language
- * {main} expands to the '-main' file name, localised for the language
- * {language} expands to the language code as declared in the '.languages' directive.
- *
- * @category  TODO
- * @package   TODO
+ * @package   mlmd_main_generator_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
- * @license   www.php.net/license/3_01.txt PHP License 3.01
+ * @license   https://opensource.org/licenses/mit-license.php MIT License
  * @link      TODO
  */
 
@@ -150,6 +131,7 @@ namespace MultilingualMarkdown {
         private $emptyOutput = true;            // ignore EOL until something else has been written to files
         private $levelsNumbering = [];          // numbering for each level scheme: 'A', 'a', '1'
         private $levelsSeparator = [];          // separator character for each level scheme: '.', '-' etc
+        private $fullNumeric = true;            // true if all levels numbering are numeric (used in MD output mode)
 
         // All files headings for toc
         private $headings = [];                 // all headers objects for each relative filename
@@ -196,6 +178,7 @@ namespace MultilingualMarkdown {
             $defs = explode(',', $numbering);
             $this->levelsNumbering = [];
             $this->levelsSeparator = [];
+            $this->fullNumeric = true;
             foreach ($defs as $def) {
                 $parts = explode(':', $def);
                 $level = $parts[0];
@@ -212,6 +195,9 @@ namespace MultilingualMarkdown {
                         } else {
                             $this->levelsNumbering[$level] = $num;
                             $this->levelsSeparator[$level] = mb_substr($parts[1], 1, 1, 'UTF-8');
+                            if (!is_numeric($num)) {
+                                $this->fullNumeric = false;
+                            }
                         }
                     } else {
                         $this->levelsNumbering[$level] = '';
@@ -222,10 +208,18 @@ namespace MultilingualMarkdown {
             ksort($this->levelsNumbering, SORT_NUMERIC);
             ksort($this->levelsSeparator, SORT_NUMERIC);
             $this->resetParsing();
+            $this->setHeadingsPrefixes();
+        }
 
-            /// compute prefixes for all headings
-            if (empty($this->headings)) {
-                return ;
+        /**
+         * Set all headings prefixes based on the numbering scheme.
+         * No effect if there are no headings yet or if there is no numbering scheme.
+         * 
+         * @return bool false if no headings or no numbering scheme
+         */
+        private function setHeadingsPrefixes() {
+            if (empty($this->headings) || empty($this->levelsNumbering)) {
+                return false;
             }
             foreach ($this->headings as &$headings) {
                 $curNumbering = []; // init all numbers for all levels
@@ -244,7 +238,11 @@ namespace MultilingualMarkdown {
                                 $curNumbering[$level] = 1;
                             }
                             if ($level <= $curLevel) {
-                                $prefix .= chr(ord($numbering) + $curNumbering[$level] - 1);
+                                if (is_numeric($numbering)) {
+                                    $prefix .= $numbering + $curNumbering[$level] - 1;
+                                } else {
+                                    $prefix .= chr(ord($numbering) + $curNumbering[$level] - 1);
+                                }
                                 if ($level == $curLevel) {
                                     $prefix .= ')'; //: end prefix
                                     break;
@@ -591,7 +589,7 @@ namespace MultilingualMarkdown {
          *            case (`a` or `A`) is preserved and numbering starts with the given value
          * - `sep` is the symbol to use after this level numbering, e.g `.` or `-`
          *
-         * @param any $dummy fake parameter
+         * @param string $dummy fake parameter
          *
          * @return nothing
          */
@@ -665,9 +663,9 @@ namespace MultilingualMarkdown {
                 $this->curWord .= $this->curChar;
                 switch (strtolower($this->curWord)) {
                     case 'title=': // title=m,"<text>"
-                        // get level
+                        // get level (used later)
                         $titleLevel = $this->getCharUntil(',');
-                        // parse and set toc title
+                        // parse and set toc title (used later)
                         $title = $this->getChar(); // read "
                         if ($this->curChar != '"') {
                             $this->error("no '\"' around title text, check .toc directive");
@@ -675,21 +673,20 @@ namespace MultilingualMarkdown {
                         } else {
                             $title = $this->getCharUntil('"');
                         }
-                        $this->curWord = '';
+                        $this->resetParsing();
                         break;
                     case 'out=': // out=html|md
-                        // get level
+                        // get mode (used later)
                         $outmode = $this->getCharUntil(' ');
-                        if (strcasecmp($outmode, 'md') != 0) {
-                            $outmode = 'html';
-                        }
+                        $this->setOutputHTML($outmode);
+                        $this->resetParsing();
                         break;
                     case 'level=':
                         // get definition until next space
                         $def = $this->getCharUntil(' ');
+                        // find start and end levels (used later in toc generation)
                         $dashpos = mb_stripos($def, '-', 0, 'UTF-8');
                         if ($dashpos === false) {
-                            // only one level
                             $startLevel = $endLevel = (int)$def;
                         } else {
                             $startLevel = (int)mb_substr($def, 0, $dashpos, 'UTF-8');
@@ -701,13 +698,16 @@ namespace MultilingualMarkdown {
                                 $endLevel = 9;
                             }
                         }
-                        $this->curWord = '';
+                        $this->resetParsing();
                         break;
                     case 'numbering=':
-                        $this->numbering(null);
+                        // directly set numbering scheme
+                        $defs = $this->getCharUntil(' ');
+                        $this->setNumbering($defs);
+                        $this->resetParsing();
                         break;
                     case ' ':/// separator
-                        $this->curWord = '';
+                        $this->resetParsing();
                         //fall-through
                     default:
                         break;
@@ -750,7 +750,7 @@ namespace MultilingualMarkdown {
                     }
                 }
                 /// end toc
-                $this->storeContent("\n\n", null, false, false, true);// keep EOLs
+                $this->storeContent("\n", null, false, false, true);// keep EOLs
             } else {
                 $numbering = [ $startLevel => 0];
                 $headings = $this->headings[$this->inFilename];
@@ -860,7 +860,11 @@ namespace MultilingualMarkdown {
                         if (isset($this->levelsNumbering[$curLevel])) {
                             foreach ($this->levelsNumbering as $level => $numbering) {
                                 if ($level <= $curLevel) {
-                                    $prefix .= chr(ord($numbering) + $curNumbering[$level] - 1);
+                                    if (is_numeric($numbering)) {
+                                        $prefix .= $numbering + $curNumbering[$level] - 1;
+                                    } else {
+                                        $prefix .= chr(ord($numbering) + $curNumbering[$level] - 1);
+                                    }
                                     if ($level == $curLevel) {
                                         $prefix .= ')'; //: end prefix
                                         break;
@@ -873,7 +877,18 @@ namespace MultilingualMarkdown {
                             $prefix .= '- ';
                         }
                     } else {
-                        $prefix .= chr(ord($this->levelsNumbering[$curLevel]) + $curNumbering[$curLevel] - 1) . '. ';
+                        // full numeric : "    1. xxxxxxx"
+                        // not full numeric: "<br />\n<nbsp><nbsp><nbsp><nbsp>1. xxxxxxx" exxcept level 1 no <br>
+                        $prefix = str_repeat(str_repeat($this->fullNumeric ? ' ' : '&nbsp;', 4), $curLevel - 1);
+                        if (is_numeric($this->levelsNumbering[$curLevel])) {
+                            $prefix .= $this->levelsNumbering[$curLevel] + $curNumbering[$curLevel] - 1;
+                        } else {
+                            $prefix .= chr(ord($this->levelsNumbering[$curLevel]) + $curNumbering[$curLevel] - 1);
+                        }
+                        $prefix .= '. ';
+                        if (!$this->fullNumeric && $curLevel > 1) {
+                            $prefix = "<br />\n" . $prefix;
+                        }
                     }
                     // output: prepare html anchor
                     $anchor = '{file}';
@@ -1361,11 +1376,11 @@ namespace MultilingualMarkdown {
                     $text = trim(fgets($this->inFile));
                     $this->curLine += 1;
                     // skip code fences
-                    if (substr($text,0,3) === '```') {
+                    if (strpos($text,'```') !== false) {
                         do {
                             $text = trim(fgets($this->inFile));
                             $this->curLine += 1;
-                        } while (substr($text,0,3) !== '```');
+                        } while (strpos($text,'```') !== false);
                     } else {
                         if (($text[0] ?? '') == '#') {
                             // prepare an object
