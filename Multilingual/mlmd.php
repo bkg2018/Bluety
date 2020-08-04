@@ -110,8 +110,10 @@ while ($arg < $argc) {
 
 // no file yet: build file list for current directory
 if (count($inFilenames) == 0) {
-    $generator->setRootDir(getcwd());
-    $inFilenames = \MultilingualMarkdown\exploreDirectory(getcwd());
+    if ($generator->getRootDir() === false) {
+        $generator->setRootDir(getcwd());
+    }
+    $inFilenames = \MultilingualMarkdown\exploreDirectory($generator->getRootDir());
 }
 
 // do the job
