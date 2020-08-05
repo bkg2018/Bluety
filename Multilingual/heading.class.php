@@ -36,5 +36,54 @@ namespace MultilingualMarkdown {
         public $line = '';      /// line number in source file
         public $prefix = '';    /// heading prefix in TOC and text, computed
                                 /// from 'numbering' directive or toc parameter
+
+        static $curNumber = 0;  /// current value for next $number
+        static $prevLevel = 0;  /// minimalistic security check - assumes headings are created following the text order
+
+        /**
+         * Build a heading with a source text and a line number in a file.
+         * 
+         * @param string $text   the source text for heading, including the '#' prefix.
+         * @param int    $line   the line number in the source file.
+         * @param object $logger the caller object with a logging function called error()
+         */
+        function __construct($text, $line, $logger) {
+            // sequential number for all headers of all files
+            $this->number = Heading::$curNumber + 1;
+            // count number of '#' = heading level
+            $this->level = Heading::getHeadingLevel($text);
+            if ($this->level > Heading::$prevLevel + 1) {
+                $logger->error("level {$this->level} heading skipped one or more heading levels");
+            }
+            $this->line = $line;
+            $this->text = trim(mb_substr($text, $this->level, null, 'UTF-8'));
+            Heading::$prevLevel = $this->level;
+            Heading::$curNumber += 1;
+        }
+
+        /**
+         * Resets the number to 0.
+         */
+        public function init() {
+            Heading::$curNumber = 0;
+        }
+
+        /**
+         * Compute heading level from the starting '#'s.
+         *
+         * @param string $content the text with '#'s from which to compute heading level.
+         *
+         * @return int the heading level
+         */
+        static function getHeadingLevel($content)
+        {
+            $heading = trim($content);
+            $level = 0;
+            $length = mb_strlen($heading, 'UTF-8');
+            while ($heading[$level] == '#' && $level <= $length) {
+                $level += 1;
+            }
+            return $level;
+        }
     }
 }

@@ -1,8 +1,23 @@
 This MLMD template is MLMD documentation source.
 
-These lines preceeding the `.languages` directive are ignored by MLMD.
+The lines preceeding the `.languages` directive are ignored by MLMD.
 
 .languages fr,en main=en
+
+Expanding : {file} blabla {main} blabla {language}
+
+Escaping : `{file}` blabla `` {main} `` blabla.{ {language} .}
+
+Mixed : `{file}` blabla {main} blabla .{ {language} .}
+
+Fence: ```code
+
+Escaping : `{file}` blabla `` {main} `` blabla.{ {language} .}
+
+```
+
+
+
 
 # .((Multilingual Markdown Generator.)).fr((Générateur de Markdown Multilingue.)) MLMD
 
@@ -628,6 +643,10 @@ The table title will be `## Table des Matières` in the `.fr.md` file, and `## T
 Numbering scheme will be `A` to `Z` for level 1 headings, `A-1` for level 2, and `A-1.1` for level 3 headings.
 
 TOC links will be HTML style (default output mode).
+
+## Examples
+
+The `Examples` directory has a few `mlmd` and `base.md` examples templates.
 
 ## Conclusion
 

@@ -1,3 +1,0 @@
-.LANGUAGES fr,en main=en
-
-.fr((autre ligne..)).((default text.)) Text outside directives .((other default, ignored!.)) .all((And here's `.all` text.))
