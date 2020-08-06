@@ -78,6 +78,7 @@ namespace MultilingualMarkdown {
         private $directiveStack = [];           // stack of previous directives
         private $languagesSet = false;          // ignore any input until '.languages' directive has been processed
         private $emptyOutput = true;            // ignore EOL until something else has been written to files
+        private $spaceOnly = true;              // Nothing else but space / tabs since beginning of current line
         private $levelsNumbering = [];          // numbering for each level scheme: 'A', 'a', '1'
         private $levelsSeparator = [];          // separator character for each level scheme: '.', '-' etc
         private $fullNumeric = true;            // true if all levels numbering are numeric (used in MD output mode)
@@ -313,6 +314,9 @@ namespace MultilingualMarkdown {
          */
         public function expandVariables($text, $basename, $language)
         {
+            if (empty($text)) {
+                return '';
+            }
             $extension = $language == $this->mainLanguage ? '.md' : ".{$language}.md";
             // parse text, skip escaped parts and expand variables
 
@@ -335,19 +339,51 @@ namespace MultilingualMarkdown {
             $prev1 = '';    // previous character
             $prev2 = '';    // previous 2 characters
             $prev3 = '';    // previous 3 characters
-            $startSpaceOnly = false;    // true if only tabs or spaces since last EOL
             $maxPos = mb_strlen($text, 'UTF-8');
             for ($pos = 0 ; $pos < $maxPos ; $pos += 1) {
                 $curChar = mb_substr($text, $pos, 1, 'UTF-8');
                 switch ($curChar) {
                 case "\n":
                     // set status, copy and go next char
-                    $startSpaceOnly = true;
                     $out .= $curChar;
+                    break;
+                case '.':
+                    // check .{ .} mlmd escaping
+                    if ($this->isMatchingContent('.{', $text, $pos)) {
+                        $nbParts += 1;
+                        $expand[$nbParts] = true;
+                        $textParts[$nbParts] = $out;
+                        $out = '';
+                        $curChar = ''; // do not store '.{' 
+                        $pos += 1;
+                        do {
+                            $out .= $curChar;
+                            $prev3 = $prev2 . $curChar;
+                            $prev2 = $prev1 . $curChar;
+                            $prev1 = $curChar;
+                            $pos += 1;
+                            if ($pos == $maxPos) {
+                                $curChar = '';
+                                break;
+                            } else {
+                                $curChar = mb_substr($text, $pos, 1, 'UTF-8');
+                            }
+                        } while (!$this->isMatchingContent('.}', $text, $pos));
+                        $nbParts += 1;
+                        $expand[$nbParts] = false;
+                        $textParts[$nbParts] = $out; // do not store '.}'
+                        $pos += 1; // skip '.}'
+                        $out = '';
+                    } else {
+                        // normal dot
+                        $out .= $curChar;                    }
                     break;
                 case '`':
                     // start escaped text
-                    if ($prev2 == "``" && $startSpaceOnly) {
+                    if ($this->isMatchingContent('```', $text, $pos)) {
+                        if ($pos != 0) {
+                            $this->warning("code fence start is not at the begining of line");
+                        }
                         // code fence: save current output as expanded text
                         $nbParts += 1;
                         $expand[$nbParts] = true;
@@ -371,10 +407,13 @@ namespace MultilingualMarkdown {
                         $expand[$nbParts] = false;
                         $textParts[$nbParts] = $out . $curChar;
                         $out = '';
-                    } else if ($prev1 == '`') {
+                    } else if ($this->isMatchingContent('``', $text, $pos)) {
                         // `` : skip escaped text until ``
-                        $result[] = [true => $out];
-                        $out = '';
+                        $nbParts += 1;
+                        $expand[$nbParts] = true;
+                        $textParts[$nbParts] = $out;
+                        $out = '`';
+                        $pos += 1;
                         do {
                             $out .= $curChar;
                             $prev1 = $curChar;
@@ -392,7 +431,9 @@ namespace MultilingualMarkdown {
                         $out = '';
                     } else {
                         // ` : skip escaped text
-                        $result[] = [true => $out];
+                        $nbParts += 1;
+                        $expand[$nbParts] = true;
+                        $textParts[$nbParts] = $out;
                         $out = '';
                         do {
                             $out .= $curChar;
@@ -411,9 +452,6 @@ namespace MultilingualMarkdown {
                     }
                     break;
                 default:
-                    if ($curChar != ' ' && $curChar != "\t") {
-                        $startSpaceOnly = false;
-                    }
                     $out .= $curChar;
                     break;
                 }
@@ -434,7 +472,7 @@ namespace MultilingualMarkdown {
                     if ($this->mainFilename !== false) {
                         $text = str_replace('{main}', $this->mainFilename . $extension, $text);
                     }
-                    $text = str_replace('{language}', $language, $text);
+                    $textParts[$part] = str_replace('{language}', $language, $text);
                 }
             }
 
@@ -506,6 +544,22 @@ namespace MultilingualMarkdown {
             $markerLen = mb_strlen($marker, 'UTF-8');
             $content = mb_substr($this->lineBuf, $this->lineBufPos, $markerLen, 'UTF-8');
             return strcmp($content, $marker) == 0;
+        }
+
+        /**
+         * Parser Tool: check if current and next characters match a string in a content.
+         *
+         * @param string $marker  the string to match starting with current character
+         * @param string $content the content to search in
+         * @param int    $pos     the current position in $content
+         * 
+         * @return bool true if marker has been found at current place
+         */
+        private function isMatchingContent($marker, $content, $pos)
+        {
+            $markerLen = mb_strlen($marker, 'UTF-8');
+            $subcontent = mb_substr($content, $pos, $markerLen, 'UTF-8');
+            return strcmp($subcontent, $marker) == 0;
         }
 
         /** 
@@ -668,6 +722,7 @@ namespace MultilingualMarkdown {
 
         /**
          * Directive .languages - declare authorized languages.
+         * This directive must be first text on its line, or only be preceeded by spaces or tabs.
          *
          * @param any $dummy fake parameter.
          *
@@ -675,6 +730,12 @@ namespace MultilingualMarkdown {
          */
         private function languages($dummy)
         {
+            if (!$this->spaceOnly) {
+                $this->error(".languages directive not first on line");
+                $this->outputToFiles($this->curChar);
+                $this->resetParsing();
+                return;
+            }
             $curWord = '';
             $stopNow = false;
             do {
@@ -1298,7 +1359,7 @@ namespace MultilingualMarkdown {
             // compute anchor name if needed
             if ($anchor == null) {
                 $headings = $this->headings[$this->relFilenames[$this->inFilename]] ?? false;
-                $index = $this->findHeadingIndex($headings, $level, $this->curLine);
+                $index = $this->findHeadingIndex($headings, $level, $this->curLine - 1); // line number is already on next line
                 $headerObject = $headings[$index] ?? null;
                 if ($headerObject) {
                     //TODO: '{:' syntax not known in MD viewers
@@ -1684,7 +1745,7 @@ namespace MultilingualMarkdown {
             // flags to ignore things until .languages is done and something has been written in files
             $this->languagesSet = false;    // .languages has been processed
             $this->emptyOutput = true;      // something usefull has been written to output
-            $spaceOnly = true;              // only space/tabs/cr/lf read since the beginning of current line
+            $this->spaceOnly = true;        // only space/tabs/cr/lf read since the beginning of current line
             // main loop on current opened input stream from $filename
             do {
                 // read one UTF-8 char and update status
@@ -1698,48 +1759,42 @@ namespace MultilingualMarkdown {
                     // CR: ignore (Windows end of lines = CR+LF, only LF is needed)
                     break;
                 case '`':
-                    if (!$this->languagesSet) {
-                        break;
-                    }
                     // back-tick: is it the start of a code fence?
-                    if ($spaceOnly && $this->isMatching('```')) {
+                    if ($this->spaceOnly && $this->isMatching('```')) {
                         $content = $this->getContentUntil("```\n");
                     } else {
                         // double back-tick escaping?
                         if ($this->isMatching('`` ')) {
-                            //$content = $this->getContentUntil(' ');
-                            //$this->outputToFiles('', true);
-                            //$this->outputToFiles($content, true, null, false);
-                            //$this->curChar = '';
                             $content = $this->getContentUntil(' ``');
                         } else {
                             // single back-tick escaping
                             $content = $this->getContentUntil('`');
                         }
                     }
-                    // output content, expand variables
-                    ///$this->outputToFiles('', true);
-                    ///$this->outputToFiles($content, true, null, false);
-                    $this->outputToFiles($content);
-                    $this->resetParsing();
-                    $spaceOnly = false;
-                    break;
-                case '"':
-                    if (!$this->languagesSet) {
-                        break;
+                    // output content, except when before .languages directive
+                    if ($this->languagesSet) {
+                        $this->outputToFiles($content);
                     }
+                    $this->spaceOnly = false;
+                    $this->resetParsing();
+                   break;
+                case '"':
                     // double quoted text
                     $content = $this->getContentUntil($this->curChar);
-                    //$this->outputToFiles('', true);
-                    //$this->outputToFiles($content, true, null, false);
-                    $this->outputToFiles($content);
+                    if ($this->languagesSet) {
+                        $this->outputToFiles($content);
+                    }
                     $this->resetParsing();
-                    $spaceOnly = false;
+                    $this->spaceOnly = false;
                     break;
                 case '.':
-                    // if already in directive detection, flush
-                    if ($this->prevChar == "\n" || $this->inDirective) {
+                    // if end of line, flush current output to files
+                    if ($this->prevChar == "\n") {
                         $this->outputToFiles($this->curWord, true);// forces flushing to files
+                        $this->resetParsing();
+                    } else if ($this->inDirective) {
+                        // store current content, and reset directive detection
+                        $this->outputToFiles($this->curWord);
                         $this->resetParsing();
                     }
                     // start directive detection?
@@ -1751,7 +1806,9 @@ namespace MultilingualMarkdown {
                             // output without expanding variables
                             //$this->outputToFiles('', true);
                             //$this->outputToFiles(mb_substr($content, 0, -2, 'UTF-8'), true, null, false);
-                            $this->outputToFiles($content);
+                            if ($this->languagesSet) {
+                                $this->outputToFiles($content);
+                            }
                             $this->resetParsing();
                         } else {                           
                             $this->inDirective = true;
@@ -1782,13 +1839,11 @@ namespace MultilingualMarkdown {
                     }
                     break;
                 case "\n":
-                    if (!$this->languagesSet) {
-                        break;
-                    }
                     $this->curLine += 1;
-                    if (!$this->emptyOutput) {
+                    if (!$this->emptyOutput && $this->languagesSet) {
                         $this->outputToFiles($this->curWord . $this->curChar);
                     }
+                    $this->spaceOnly = true;
                     $this->resetParsing();
                     break;
                 case '#':
@@ -1804,8 +1859,9 @@ namespace MultilingualMarkdown {
                     }
                     // not a heading: fall through to default processing
                 default:
-                    if ($this-curChar != ' ' && $this->curChar != "\t") {
-                        $spaceOnly = false;
+                    if (!$this->inDirective && $this->curChar != ' ' && $this->curChar != "\t") {
+                        // not looking for a directive, and not space/tabs
+                        $this->spaceOnly = false;
                     }
                     // not '.', '\n' or heading starting '#'
                     if ($this->inDirective) {

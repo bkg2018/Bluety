@@ -1,14 +1,25 @@
 This MLMD template is MLMD documentation source.
 
 The lines preceeding the `.languages` directive are ignored by MLMD.
+The empty lines before heading level 1 '#' are ignored.
+
+NOTES:
+
+*  Having some content before Heading level 1 is not conforming to Markdown conventions,
+   but MLMD only ignores empty lines so any text before the heading level 1 will be written
+   to generated files.
+
+*  Any text before the .languages directive is NOT sent to output files.
+
+*  To put `.languages` into introduction text it must be surrounded with escape
+   separators like `` `.languages` ``.
 
 .languages fr,en main=en
+Escaping : `{file}` blabla `` {main} `` blabla.{ {language} .}
+Mixed : `{file}` blabla {main} blabla .{ {language} .}
 
 Expanding : {file} blabla {main} blabla {language}
 
-Escaping : `{file}` blabla `` {main} `` blabla.{ {language} .}
-
-Mixed : `{file}` blabla {main} blabla .{ {language} .}
 
 Fence: ```code
 
