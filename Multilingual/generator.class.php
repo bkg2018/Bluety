@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 /**
  * Multilingual Markdown generator - Generator class
  * 
@@ -26,7 +26,10 @@
 
 namespace MultilingualMarkdown {
 
+    require_once 'logger.interface.php';
     require_once 'heading.class.php';
+    require_once 'heading_array.class.php';
+    require_once 'numbering.class.php';
     require_once 'fileutils.php';
 
 
@@ -36,8 +39,13 @@ namespace MultilingualMarkdown {
      * Generator class.
      * Accept input parameters and files, process all input files and generate output files.
      */
-    class Generator
-    {
+    class Generator implements Logger
+    {       
+        const HTML = 0;                         /// <a id="id"> anchors,    <a href="id"> links
+        const HTMLOLD = 1;                      /// <a id="name"> anchors,  <a href="id"> links
+        const MD = 2;                           /// <a id="id"> anchors,    [](id) links
+        private $OUTMODE = ['html' => self::HTML, 'htmlold' => self::HTMLOLD, 'md' => self::MD];
+
         // Directives and handling function names
         private $directives = [
             '.all(('        => 'all',           /// push current section and open all languages section
@@ -67,25 +75,29 @@ namespace MultilingualMarkdown {
         private $outFiles = [];                 /// '<language>' => file-handle
         private $lastWritten = [];              /// last  character written to file
         private $curOutputs = [];               /// current output buffers for files
-        private $outputHTML = true;             /// true=html or false=md, format for headings anchors and toc links
-        private $mainFilename = false;          /// -main parameter
-        private $rootDir = false;               /// root directory, or main file directory
+        private $outputMODE = self::MD;         /// value from $OUTMODE for anchors/links writing mode
+        private $mainFilename = null;           /// -main parameter
+        private $rootDir = null;                /// root directory, or main file directory
 
         // Directives status
         private $languages = [];                // declared languages
-        private $mainLanguage = false;           // optional main language (<code> deleted from MD output filename)
+        private $mainLanguage = null;           // optional main language (<code> deleted from MD output filename)
         private $curLanguage = 'ignore';        // current opened directive (all / <code> / ignore / default)
         private $directiveStack = [];           // stack of previous directives
         private $languagesSet = false;          // ignore any input until '.languages' directive has been processed
         private $emptyOutput = true;            // ignore EOL until something else has been written to files
         private $spaceOnly = true;              // Nothing else but space / tabs since beginning of current line
+        
+        /*
         private $levelsNumbering = [];          // numbering for each level scheme: 'A', 'a', '1'
         private $levelsSeparator = [];          // separator character for each level scheme: '.', '-' etc
         private $fullNumeric = true;            // true if all levels numbering are numeric (used in MD output mode)
+        */
 
-        // All files headings for toc
-        private $headings = [];                 // all headers objects for each relative filename
+        // All files headings and numbering for tables of contents (TOC)
         private $relFilenames = [];             // relative filenames for each filename
+        private $allHeadingArrays = [];         // HeadingArray for each relative filename
+        private $allNumberings = [];            // Numbering for each relative filename
 
         /**
          * Add a file to the input files array.
@@ -95,7 +107,7 @@ namespace MultilingualMarkdown {
          * 
          * @return bool false if the file doesn't exist or can't be accessed
          */
-        public function addInputFile($path)
+        public function addInputFile(string $path) : bool
         {
             if (!file_exists($path)) {
                 $this->error("file $path doesn't exist");
@@ -106,16 +118,18 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Set the output mode. Called by script arguments evaluation.
+         * Set the output mode.
+         * Default is MD style links.
          *
-         * @param string $mode 'html' to set the HTML mode (<A> links and anchors),
+         * @param string $mode 'htmlold' to set HTML mode (<A name> links and anchors),
+         *                     'html' to set HTML mode (<A id> links and anchors),
          *                     'md for MD mode ([]() links and {:# } anchors)
          *
          * @return nothing
          */
-        public function setOutputHTML($mode)
+        public function setOutputMODE(string $mode) : void
         {
-            $this->outputHTML = ($mode != 'md');
+            $this->outputMODE = $this->OUTMODE[$mode] ?? 'md';
         }
 
         /**
@@ -126,7 +140,7 @@ namespace MultilingualMarkdown {
          *
          * @return bool false if file doesn't exist
          */
-        public function setMainFilename($name = 'README.mlmd')
+        public function setMainFilename(string $name = 'README.mlmd') : bool
         {
             if (!file_exists($name) || !is_file($name)) {
                 return false;
@@ -143,96 +157,14 @@ namespace MultilingualMarkdown {
         /**
          * Set the numbering schemes.
          *
-         * @param string $numbering a string containing numbering scheme
+         * @param string $scheme a string containing numbering scheme
          *
          * @return nothing
          */
-        public function setNumbering($numbering)
+        public function setNumbering(string $scheme) : void
         {
-            $defs = explode(',', $numbering);
-            $this->levelsNumbering = [];
-            $this->levelsSeparator = [];
-            $this->fullNumeric = true;
-            foreach ($defs as $def) {
-                $parts = explode(':', $def);
-                $level = $parts[0];
-                if ($level < '1' || $level > '9') {
-                    $this->error("bad argument in -numbering '$def': level before ':' must be between '1' and '9'");
-                } else {
-                    $this->levelsNumbering[$level] = '';
-                    $this->levelsSeparator[$level] = '';
-                    if (count($parts) > 1) {
-                        $num = mb_substr($parts[1], 0, 1, 'UTF-8');
-                        if (($num < '1' || $num > '9') && ($num < 'a' || $num > 'z') && ($num < 'A' || $num > 'Z')) {
-                            $this->error(
-                                "bad argument in -numbering '$def': numbering after ':' " .
-                                "must be between '1' and '9', 'a' and 'z', or 'A' and 'Z'"
-                            );
-                        } else {
-                            $this->levelsNumbering[$level] = $num;
-                            $this->levelsSeparator[$level] = mb_substr($parts[1], 1, 1, 'UTF-8');
-                            if (!is_numeric($num)) {
-                                $this->fullNumeric = false;
-                            }
-                        }
-                    } else {
-                        $this->levelsNumbering[$level] = '';
-                        $this->levelsSeparator[$level] = '';
-                    }
-                }
-            }
-            ksort($this->levelsNumbering, SORT_NUMERIC);
-            ksort($this->levelsSeparator, SORT_NUMERIC);
+            $this->allNumberings = new Numbering($scheme, $this);
             $this->resetParsing();
-            $this->setHeadingsPrefixes();
-        }
-
-        /**
-         * Set all headings prefixes based on the numbering scheme.
-         * No effect if there are no headings yet or if there is no numbering scheme.
-         * 
-         * @return bool false if no headings or no numbering scheme
-         */
-        private function setHeadingsPrefixes()
-        {
-            if (empty($this->headings) || empty($this->levelsNumbering)) {
-                return false;
-            }
-            foreach ($this->headings as &$headings) {
-                $curNumbering = []; // init all numbers for all levels
-                $curLevel = 0; // start above first level
-                foreach ($headings as &$heading) {
-                    if ($heading->level > $curLevel) {
-                        $curNumbering[$heading->level] = 1; // initialize level below
-                    } else {
-                        $curNumbering[$heading->level] += 1; // next number in same or above level
-                    }
-                    $curLevel = $heading->level;
-                    $prefix = str_repeat(str_repeat('&nbsp;', 4), $curLevel - 1);
-                    if (isset($this->levelsNumbering[$curLevel])) {
-                        foreach ($this->levelsNumbering as $level => $numbering) {
-                            if (!isset($curNumbering[$level])) {
-                                $curNumbering[$level] = 1;
-                            }
-                            if ($level <= $curLevel) {
-                                if (is_numeric($numbering)) {
-                                    $prefix .= $numbering + $curNumbering[$level] - 1;
-                                } else {
-                                    $prefix .= chr(ord($numbering) + $curNumbering[$level] - 1);
-                                }
-                                if ($level == $curLevel) {
-                                    $prefix .= ')'; //: end prefix
-                                    break;
-                                } else {
-                                    $prefix .= $this->levelsSeparator[$level] ?? '';
-                                }
-                            }
-                        }
-                    } else {
-                        $prefix .= '- ';
-                    }
-                }
-            }
         }
 
         /**
@@ -242,7 +174,7 @@ namespace MultilingualMarkdown {
          *
          * @return bool false if the directory doesn't exist.
          */
-        public function setRootDir($rootDir)
+        public function setRootDir(string $rootDir) : bool
         {
             if (\file_exists($rootDir) && \is_dir($rootDir)) {
                 $this->rootDir = $rootDir;
@@ -254,9 +186,9 @@ namespace MultilingualMarkdown {
         /**
          * Get the current root directory.
          * 
-         * @return bool false if no root directory yet, else root directory.
+         * @return string null if no root directory yet, else root directory.
          */
-        public function getRootDir() 
+        public function getRootDir() : ?string
         {
             return $this->rootDir;
         }
@@ -268,31 +200,31 @@ namespace MultilingualMarkdown {
          * @param string $path the path to the file. If the path is relative to 
          *
          * @return string|bool the base name, without extension and using a path relative
-         *                     to rootDir, false if the path is not under rootDir
+         *                     to rootDir, null if the path is not under rootDir
          *                     or if there is no rootDir (-i script arguments)
          */
-        public function getBasename($path)
+        public function getBasename(string $path) : ?string
         {
             //  build relative path against root dir
-            if ($this->rootDir !== false) {
+            if ($this->rootDir !== null) {
                 $rootLen = mb_strlen($this->rootDir, 'UTF-8');
                 $baseDir = mb_substr(realpath($path), 0, $rootLen, 'UTF-8');
                 $cmpFunction = isWindows() ? "strcasecmp" : "strcmp";
                 if ($cmpFunction($baseDir, $this->rootDir) != 0) {
                     $this->error("wrong root dir for file [$path], should be [{$this->rootDir}]");
-                    return false;
+                    return null;
                 }
-                $extension = isMLMDfile(basename($path));
+                $extension = isMLMDfile(basename($path)) ?? '';
                 $path = mb_substr(realpath($path), $rootLen + 1, null, 'UTF-8');
                 return mb_substr($path, 0, -mb_strlen($extension, 'UTF-8'), 'UTF-8');
             } else {
-                if ($this->mainFilename !== false) {
+                if ($this->mainFilename !== null) {
                     // get root dir from main file path
                     $this->rootDir = dirname(realpath($this->mainFilename));
                     return $this->getBasename($path);
                 }
             }
-            $extension = isMLMDfile(basename($path));
+            $extension = isMLMDfile(basename($path)) ?? '';
             return basename($path, $extension);
         }
 
@@ -312,29 +244,22 @@ namespace MultilingualMarkdown {
          *
          * @return string the text with expanded variables
          */
-        public function expandVariables($text, $basename, $language)
+        public function expandVariables(string $text, string $basename, string $language) : string
         {
             if (empty($text)) {
                 return '';
             }
-            $extension = $language == $this->mainLanguage ? '.md' : ".{$language}.md";
+            $extension = (($language == $this->mainLanguage) ? '.md' : ".{$language}.md");
             // parse text, skip escaped parts and expand variables
 
             // $textParts is an array of strings, $expand  an array of bools.
-            /// for each escaped/non escaped part of text, $textParts[] holds the text
+            // For each escaped/non escaped part of text, $textParts[] holds the text
             // and $expand is true if the text must expand variables.
             // At the end of parsing, the $textParts array is imploded intop a string.
             $textParts = [];
             $expand = [];
             $nbParts = 0;
 
-            /*
-            $text = str_replace('{file}', $basename . $extension, $text);
-            if ($this->mainFilename !== false) {
-                $text = str_replace('{main}', $this->mainFilename . $extension, $text);
-            }
-            $text = str_replace('{language}', $language, $text);
-            */
             $out = '';      // current part
             $prev1 = '';    // previous character
             $prev2 = '';    // previous 2 characters
@@ -343,12 +268,15 @@ namespace MultilingualMarkdown {
             for ($pos = 0 ; $pos < $maxPos ; $pos += 1) {
                 $curChar = mb_substr($text, $pos, 1, 'UTF-8');
                 switch ($curChar) {
+                case "\r":
+                    // ignore
+                    break;
                 case "\n":
-                    // set status, copy and go next char
+                    // inside text, has no special effect simply copy to output
                     $out .= $curChar;
                     break;
                 case '.':
-                    // check .{ .} mlmd escaping
+                    // dot check mlmd escaping  .{ .} 
                     if ($this->isMatchingContent('.{', $text, $pos)) {
                         $nbParts += 1;
                         $expand[$nbParts] = true;
@@ -376,20 +304,21 @@ namespace MultilingualMarkdown {
                         $out = '';
                     } else {
                         // normal dot
-                        $out .= $curChar;                    }
+                        $out .= $curChar;
+                    }
                     break;
                 case '`':
-                    // start escaped text
+                    // back-tick start escaped text, check if it's a code fence
                     if ($this->isMatchingContent('```', $text, $pos)) {
                         if ($pos != 0) {
                             $this->warning("code fence start is not at the begining of line");
                         }
-                        // code fence: save current output as expanded text
+                        // this is a code fence: save current output as expanded text and reset output
                         $nbParts += 1;
                         $expand[$nbParts] = true;
                         $textParts[$nbParts] = $out;
                         $out = '';
-                        // copy until ```<eol>
+                        // copy output until closing fence ```<eol>
                         do {
                             $out .= $curChar;
                             $prev3 = $prev2 . $curChar;
@@ -403,12 +332,13 @@ namespace MultilingualMarkdown {
                                 $curChar = mb_substr($text, $pos, 1, 'UTF-8');
                             }
                         } while ($prev3 != '`' || $prev2 != '`' || $prev1 != '`' || $curChar != "\n");
+                        /// record as non-expanded part adn reset output
                         $nbParts += 1;
                         $expand[$nbParts] = false;
                         $textParts[$nbParts] = $out . $curChar;
                         $out = '';
                     } else if ($this->isMatchingContent('``', $text, $pos)) {
-                        // `` : skip escaped text until ``
+                        // double back-tick: skip escaped text until closing double back-tick``
                         $nbParts += 1;
                         $expand[$nbParts] = true;
                         $textParts[$nbParts] = $out;
@@ -469,7 +399,7 @@ namespace MultilingualMarkdown {
             for ($part = 1 ; $part <= $nbParts ; $part += 1) {
                 if ($expand[$part]) {
                     $text = str_replace('{file}', $basename . $extension, $textParts[$part]);
-                    if ($this->mainFilename !== false) {
+                    if ($this->mainFilename !== null) {
                         $text = str_replace('{main}', $this->mainFilename . $extension, $text);
                     }
                     $textParts[$part] = str_replace('{language}', $language, $text);
@@ -484,21 +414,19 @@ namespace MultilingualMarkdown {
         /**
          * Read a character from input file, buffered in line.
          *
-         * @param handle $file the current opened file handle
-         *
-         * @return bool|string next character, '\n' when EOL reached,  false when file and buffer are finished.
+         * @return bool|string next character, '\n' when EOL reached,  null when file and buffer are finished.
          */
-        private function getChar($file = null)
+        private function getChar() : ?string
         {
             // any  character left on current line?
             if ($this->lineBufPos < $this->lineBufLength - 1) {
                 $this->lineBufPos += 1;
             } else {
                 do {
-                    $this->lineBuf  = fgets($file ?? $this->inFile);
+                    $this->lineBuf  = fgets($this->inFile);
                     if (!$this->lineBuf) {
-                        $this->curChar = false;
-                        return false; // finished
+                        $this->curChar = null;
+                        return null; // finished
                     }
                     $this->lineBufPos = 0;
                     $this->lineBufLength = mb_strlen($this->lineBuf, 'UTF-8');
@@ -511,35 +439,42 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Parser Tool: read characters from current file until a given character is found.
+         * Parser Tool: read characters from current file until a given character or EOL is found.
          *
          * @param string $marker the ending character (one UTF-8 character allowed)
+         * @param bool   $eol    true to stop if end of line is found
          *
-         * @return string the characters read until the marker. The marker itself is not returned
+         * @return string the characters read until the marker. The marker or EOL itself is not returned
          *                but is available as $this->curChar. Return empty string if already on marker.
+         *                If $eol is set to true, the search stops if an end-of-line is found even
+         *                if the markker has not been found.
          */
-        private function getCharUntil($marker)
+        private function getCharUntil(string $marker, bool $eol) : string
         {
             $content = '';
-            $this->getChar($this->inFile);/// get first title character
-            while (($this->curChar !== false) && ($this->curChar !== $marker) && ($this->curChar !== "\n")) {
+            $this->getChar();/// read first title character, null if end of file
+            while (($this->curChar !== null) && ($this->curChar !== $marker)) {
+                if ($eol && ($this->curChar == "\n")) {
+                    break;
+                }
                 $content .= $this->curChar ?? '';
-                $this->getChar($this->inFile); // next char
+                $this->getChar(); // next char
                 if ($this->curChar == "\n") {
                     $this->curLine += 1;
                 }
+                
             }
             return $content;
         }
 
         /**
-         * Parser Tool: check if current and next characters match a string.
+         * Parser Tool: check if current and next characters match a string in current line buffer.
          *
-         * @param string $marker the string to match starting with current character
+         * @param string $marker the string to match, starting at current character
          * 
          * @return bool true if marker has been found at current place
          */
-        private function isMatching($marker)
+        private function isMatching(string $marker) : bool
         {
             $markerLen = mb_strlen($marker, 'UTF-8');
             $content = mb_substr($this->lineBuf, $this->lineBufPos, $markerLen, 'UTF-8');
@@ -555,7 +490,7 @@ namespace MultilingualMarkdown {
          * 
          * @return bool true if marker has been found at current place
          */
-        private function isMatchingContent($marker, $content, $pos)
+        private function isMatchingContent(string $marker, string $content, int $pos) : bool
         {
             $markerLen = mb_strlen($marker, 'UTF-8');
             $subcontent = mb_substr($content, $pos, $markerLen, 'UTF-8');
@@ -566,13 +501,16 @@ namespace MultilingualMarkdown {
          * Parser Tool: read content until an ending marker is found, including EOLs.
          * The returned string includes the end marker and reading is ready for next character.
          * Carriage return (\r) are deleted from content, line-feeds (\n) are sent back in content.
+         * The content is returned without ending marker if the end of file is met before.
          *
+         * @param string $marker the string to find
+         * 
          * @return string The content found, including the marker and any end-of-line on the way
          */
-        private function getContentUntil($marker)
+        private function getContentUntil(string $marker) : string
         {
             $markerLen = mb_strlen($marker, 'UTF-8');
-            $content = $this->curWord . $this->curChar;
+            $content = $this->curWord . ($this->curChar ?? '');
             $this->resetParsing();
             do {
                 $this->getChar();
@@ -583,15 +521,19 @@ namespace MultilingualMarkdown {
                     }
                 }
             } while (
-                ($this->curChar !== false) // beware character '0' would be interpreted as false
+                ($this->curChar !== null) // beware character '0' would be interpreted as false
                 && (mb_substr($content, -$markerLen, $markerLen, 'UTF-8') != $marker)
             );
             return $content;
         }
         /**
          * Parser Tool: skip a number of characters in stream.
+         * 
+         * @param int $number the number of characters to skip
+         * 
+         * @return nothing
          */
-        private function skipChar($number)
+        private function skipChar(int $number) : void
         {
             do {
                 $this->getChar();
@@ -600,14 +542,15 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Debugging echo.
+         * Debugging echo of current character and line info.
+         * To activate this echo, set the "debug" environment variable to "1".
          *
          * @return nothing
          */
-        private function debugEcho()
+        private function debugEcho() : void
         {
             if (getenv("debug") == "1") {
-                if (($this->curChar !== false) && ($this->prevChar == "\n")) {
+                if (($this->curChar !== null) && ($this->prevChar == "\n")) {
                     echo "[{$this->curLine}]:";
                 }
                 echo $this->curChar;
@@ -615,13 +558,13 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Send an error message to output and php log.
+         * Logger interface: Send an error message to output and php log.
          *
          * @param string $msg the text to display and log.
          *
          * @return nothing
          */
-        public function error($msg)
+        public function error(string $msg) : void
         {
             //echo "ERROR: $msg\n";
             if ($this->inFilename) {
@@ -631,13 +574,13 @@ namespace MultilingualMarkdown {
             }
         }
         /**
-         * Send a warning message to output and php log.
+         * Logger interface: Send a warning message to output and php log.
          *
          * @param string $msg the text to display and log.
          *
          * @return nothing
          */
-        public function warning($msg)
+        public function warning(string $msg) : void
         {
             //echo "ERROR: $msg\n";
             if ($this->inFilename) {
@@ -646,55 +589,62 @@ namespace MultilingualMarkdown {
                 error_log("arguments: MLMD warning: $msg");
             }
         }
+
         //MARK: Directives
+        // These functions are called when the corresponding directive is found, and
+        // receive a string parameter when appropriate. 
 
         /**
-         * Directive .all(( handling. Start to send to all languages.
+         * Directive .all(( handling. Start to send to all languages files.
+         * This directive doesn't need the given parameter.
          *
-         * @param any $dummy fake parameter.
+         * @param string $dummy unused
          *
          * @return nothing
          */
-        private function all($dummy)
+        private function all(?string $dummy) : void
         {
             array_push($this->directiveStack, $this->curLanguage);
             $this->curLanguage = 'all';
             $this->resetParsing();
         }
+
         /**
          * Directive .ignore(( handling. Start to ignore text.
          *
-         * @param any $dummy fake parameter.
+         * @param any $dummy unused
          *
          * @return nothing
          */
-        private function ignore($dummy)
+        private function ignore(?string $dummy) : void
         {
             array_push($this->directiveStack, $this->curLanguage);
             $this->curLanguage = 'ignore';
             $this->resetParsing();
         }
+
         /**
          * Directive .(( or .default(( - start default text.
          *
-         * @param any $dummy fake parameter.
+         * @param any $dummy unused
          *
          * @return nothing
          */
-        private function default($dummy)
+        private function default(?string $dummy) : void
         {
             array_push($this->directiveStack, $this->curLanguage);
             $this->curLanguage = 'default';
             $this->resetParsing();
         }
+
         /**
          * Directive .)) . Return to previous directive.
          *
-         * @param any $dummy fake parameter.
+         * @param any $dummy unused
          *
          * @return nothing
          */
-        private function end($dummy)
+        private function end(?string $dummy) : void
         {
             if (count($this->directiveStack) > 0) {
                 $this->curLanguage = array_pop($this->directiveStack);
@@ -703,6 +653,7 @@ namespace MultilingualMarkdown {
             }
             $this->resetParsing();
         }
+
         /**
          * Directive .<language>(( - start to send to one declared language.
          *
@@ -710,7 +661,7 @@ namespace MultilingualMarkdown {
          *
          * @return nothing
          */
-        private function change($directive)
+        private function change(?string $directive) : void
         {
             $code = mb_strtolower(mb_substr($directive, 1, -2, 'UTF-8'), 'UTF-8'); // '.en(('  -> 'en'
             if (array_key_exists($code, $this->languages)) {
@@ -724,11 +675,11 @@ namespace MultilingualMarkdown {
          * Directive .languages - declare authorized languages.
          * This directive must be first text on its line, or only be preceeded by spaces or tabs.
          *
-         * @param any $dummy fake parameter.
+         * @param any $dummy unused
          *
          * @return nothing
          */
-        private function languages($dummy)
+        private function languages(?string $dummy)
         {
             if (!$this->spaceOnly) {
                 $this->error(".languages directive not first on line");
@@ -739,8 +690,8 @@ namespace MultilingualMarkdown {
             $curWord = '';
             $stopNow = false;
             do {
-                $this->getChar($this->inFile);
-                if ($this->curChar !== false) {
+                $this->getChar();
+                if ($this->curChar !== null) {
                     switch ($this->curChar) {
                     case "\r":
                         // do not store CR (normalize to unix EOL)
@@ -763,7 +714,7 @@ namespace MultilingualMarkdown {
                         break;
                     }
                 }
-            } while (($this->curChar !== false) && !$stopNow);
+            } while (($this->curChar !== null) && !$stopNow);
 
             // finish languages registration, open files, set initial status
             if ($this->outFilenameTemplate == null) {
@@ -790,46 +741,57 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * .numbering directive handling. Sets the numbering schemes for headings and TOC.
-         * .numbering m:<symbol><sep>,...
+         * .numbering directive handling. 
+         * Sets the numbering schemes for headings and TOC:
+         *      .numbering m:<symbol><sep>,...
          *
-         * - `m` is the heading level
-         * - <symbol> is a number (e.g: `1`) or a letter (e.g: `a`) for this level,
-         *            case (`a` or `A`) is preserved and numbering starts with the given value
-         * - `sep` is the symbol to use after this level numbering, e.g `.` or `-`
+         *      - `m`      is the heading level
+         *      - <symbol> is a number (e.g: `1`) or a letter (e.g: `a`) for this level,
+         *                 case (`a` or `A`) is preserved and numbering starts with the given value
+         *      - `sep`    is the symbol to use after this level numbering, e.g `.` or `-`
          *
-         * @param string $dummy fake parameter
+         * The .numbering directive should be placed between the .languages directive and the first Heading level 1 for
+         * it to have a consistent effect. If it is placed after some headings, they won't be numbered.
+         * 
+         * @param string $dummy unused
          *
          * @return nothing
          */
-        private function numbering($dummy)
+        private function numbering(?string $dummy) : void
         {
             // skip initial space
-            $this->curWord = trim($this->getChar($this->inFile));
-            // get definition until next space / EOL
-            $defs = $this->getCharUntil(' ');
+            $this->curWord = trim($this->getChar());
+            // get definition until next space / stop if EOL
+            $defs = $this->getCharUntil(' ', true);
             $this->setNumbering($defs);
         }
 
         /**
          * Generate a TOC in current output files using the directive parameters and the headings array.
          *
-         * The generator has an outputHTML field to format links and anchors in two possibles modes.
+         * The generator has an outputMODE field to format links and anchors in two possibles modes.
          *
-         * HTML mode (outputHTML=true):
-         * Headings all have an anchor prior to the title, with a heading number:
-         *      <a name="h12"></a>
-         *      ### Heading text
-         * The TOC must link to these anchors using the following model:
-         *      [1.2 Heading text](<file>#h12)
+         * OLD HTML mode (outputMODE=self::HTMLOLD):
+         *      Headings all have an named anchor prior to the title, with a heading number:
+         *          <a name="h12"></a>
+         *          ### Heading text
+         *      The TOC must link to these anchors using the following model:
+         *          [1.2 Heading text](<file>#h12)
          *
-         * MD mode (outputHTML=false):
-         * Headings have an automatic MD anchor with their cleaned text, and they can define one using {: }:
-         *      ### Heading text {: #h12-heading-text}
-         * The TOC must link to these headings using the cleaned text:
-         *      [1.2 Heading text](<file>#heading-text)
-         * WARNING: MD method requires that all headings from a given file are unique in their file.
-         * If this is not true then HTML mode is more appropriate and will always work
+         * HTML mode (outputMODE=self::HTML):
+         *      Headings all have an anchor with an id prior to the title, with a heading number:
+         *          <a id="h12"></a>
+         *          ### Heading text
+         *      The TOC must link to these anchors using the following model:
+         *          [1.2 Heading text](<file>#h12)
+         * 
+         * MD mode (outputMODE=self::MD):
+         *      Headings have an automatic MD anchor with their cleaned text, and they can define one using {: }:
+         *          ### Heading text {: #h12-heading-text}
+         *      The TOC must link to these headings using the cleaned text:
+         *          [1.2 Heading text](<file>#heading-text)
+         *      WARNING: MD method requires that all headings from a given file are unique in their file.
+         *      If this is not true then HTML mode is more appropriate and will always work
          *
          * Numbering is optional and choosen by the directive parameters:
          *
@@ -851,11 +813,11 @@ namespace MultilingualMarkdown {
          *
          * .TOC level=1-3 title=2,.fr((Table des matières.)).en((Table Of Contents)) numbering=1:A-,2:1.,3:1
          *
-         * @param any $dummy fake parameter
+         * @param any $dummy unused
          *
          * @return nothing
          */
-        private function toc($dummy)
+        private function toc(?string $dummy) : void
         {
             // default parameters
             $title = "Table Of Contents";               // <text>    in title=m,"<text>"
@@ -864,35 +826,35 @@ namespace MultilingualMarkdown {
             $endLevel = 4;                              // n         in level=[m]-n
             $outmode = 'html';                          // format=html by default
             // skip initial space
-            $this->curWord = trim($this->getChar($this->inFile));
+            $this->curWord = trim($this->getChar());
             do {
-                $this->getChar($this->inFile);
+                $this->getChar();
 
                 // add to current word and check keywords
-                $this->curWord .= $this->curChar;
+                $this->curWord .= $this->curChar ?? '';
                 switch (strtolower($this->curWord)) {
                 case 'title=': // title=m,"<text>"
                     // get level (used later)
-                    $titleLevel = $this->getCharUntil(',');
+                    $titleLevel = $this->getCharUntil(',', true);
                     // parse and set toc title (used later)
                     $title = $this->getChar(); // read "
                     if ($this->curChar != '"') {
                         $this->error("no '\"' around title text, check .toc directive");
-                        $this->getCharUntil(' ');
+                        $this->getCharUntil(' ', true);
                     } else {
-                        $title = $this->getCharUntil('"');
+                        $title = $this->getCharUntil('"', true);
                     }
                     $this->resetParsing();
                     break;
                 case 'out=': // out=html|md
                     // get mode (used later)
-                    $outmode = $this->getCharUntil(' ');
-                    $this->setOutputHTML($outmode);
+                    $outmode = $this->getCharUntil(' ', true);
+                    $this->setOutputMODE($outmode);
                     $this->resetParsing();
                     break;
                 case 'level=':
                     // get definition until next space
-                    $def = $this->getCharUntil(' ');
+                    $def = $this->getCharUntil(' ', true);
                     // find start and end levels (used later in toc generation)
                     $dashpos = mb_stripos($def, '-', 0, 'UTF-8');
                     if ($dashpos === false) {
@@ -909,26 +871,24 @@ namespace MultilingualMarkdown {
                     }
                     $this->resetParsing();
                     break;
-                case 'numbering=':
-                    // directly set numbering scheme
-                    $defs = $this->getCharUntil(' ');
-                    $this->setNumbering($defs);
-                    $this->resetParsing();
-                    break;
                 case ' ':/// separator
                     $this->resetParsing();
                     //fall-through
                 default:
                     break;
                 }
-            } while ($this->curChar !== false && $this->curChar != "\n");
+            } while ($this->curChar !== null && $this->curChar != "\n");
 
             // generate TOC title with forced 'toc' anchor
             $this->storeHeading($titleLevel, $title, 'toc');
+
+            // apply numbering scheme to all headings arrays
+
             // generate toc lines for each file, only if start level is 1
             if ($startLevel == 1) {
                 $numbering = [$startLevel => 0];
-                foreach ($this->headings as $basename => $headings) {
+                foreach ($this->allHeadingArrays as $basename => $headingArray) {
+                    /*
                     // store first level 1 heading for the file
                     $index = $this->findHeadingIndex($headings, $startLevel, 0);
                     if ($index !== false) {
@@ -957,18 +917,21 @@ namespace MultilingualMarkdown {
                             );
                         }
                     }
+                    */
                 }
                 /// end toc
                 $this->storeContent("\n", null, false, false, true);// keep EOLs
             } else {
                 $numbering = [ $startLevel => 0];
-                $headings = $this->headings[$this->inFilename];
+                $headingArray = $this->allHeadingArrays[$this->inFilename];
+                /*
                 $index = $this->findHeadingIndex($headings, $startLevel, 0);
                 if ($index !== false) {
                     $this->storeTOClines($startLevel, $endLevel, $startLevel, $numbering, $index, $headings, $basename);
                 } else {
                     $this->error("starting level not found for TOC in file {$this->inFilename}");
                 }
+                */
             }
         }
 
@@ -1004,7 +967,7 @@ namespace MultilingualMarkdown {
          * @param string    $basename     the base name for the file containing the headings
          *
          * @return nothing
-         */
+         *
         private function storeTOClines(
             $startLevel,
             $endLevel,
@@ -1015,7 +978,7 @@ namespace MultilingualMarkdown {
             $basename
         ) {
             // truncate basename extension
-            $basename = basename($basename, isMLMDfile($basename));
+            $basename = basename($basename, isMLMDfile($basename) ?? '');
             $prevLevel = $curLevel;/// keep track for numbering
             // explore all headings starting at curIndex
             while ($curIndex < count($headings)) {
@@ -1064,7 +1027,7 @@ namespace MultilingualMarkdown {
                         /// object level < prevlevel: nothing to do
                     }
                     // output: prepare alpha/numeric prefix
-                    if ($this->outputHTML) {
+                    if (in_array($this->outputMODE, [self::HTML, self::HTMLOLD] )) {
                         $prefix = str_repeat(str_repeat('&nbsp;', 4), $curLevel - 1);
                         if (isset($this->levelsNumbering[$curLevel])) {
                             foreach ($this->levelsNumbering as $level => $numbering) {
@@ -1087,7 +1050,7 @@ namespace MultilingualMarkdown {
                         }
                     } else {
                         // full numeric : "    1. xxxxxxx"
-                        // not full numeric: "<br />\n<nbsp><nbsp><nbsp><nbsp>1. xxxxxxx" exxcept level 1 no <br>
+                        // not full numeric: "<br>\n<nbsp><nbsp><nbsp><nbsp>1. xxxxxxx" exxcept level 1 no <br>
                         $prefix = str_repeat(str_repeat($this->fullNumeric ? ' ' : '&nbsp;', 4), $curLevel - 1);
                         if (is_numeric($this->levelsNumbering[$curLevel])) {
                             $prefix .= $this->levelsNumbering[$curLevel] + $curNumbering[$curLevel] - 1;
@@ -1096,7 +1059,7 @@ namespace MultilingualMarkdown {
                         }
                         $prefix .= '. ';
                         if (!$this->fullNumeric && $curLevel > 1) {
-                            $prefix = "<br />\n" . $prefix;
+                            $prefix = "<br>\n" . $prefix;
                         }
                     }
                     // output: prepare html anchor
@@ -1106,11 +1069,11 @@ namespace MultilingualMarkdown {
                         $anchor .= "#h{$object->number}"; /// ex: {file}#h1
                     }
                     // output: HTML line break prefix for non-numeric prefixes, except for the absolute first line
-                    if ($this->outputHTML) {
+                    if (in_array($this->outputMODE, [self::HTML, self::HTMLOLD] )) {
                         if ((($curLevel != 1 || $curNumbering[$curLevel] != 1)  // not level 1, or not numeric
                             && ($curNumbering[$curLevel]) >= 1)                 // AND number not nul
                         ) {
-                            $prefix = "<br />\n{$prefix}";
+                            $prefix = "<br>\n{$prefix}";
                         }
                     }
                     // send parts to files, interpret directives and '{file}' meta
@@ -1139,27 +1102,7 @@ namespace MultilingualMarkdown {
             } // while curIndex ok
             return true;
         }
-
-        /**
-         * Find the first heading in the array for a level after a given line number.
-         *
-         * @param Heading[] $headings the array for all headings in a file
-         * @param int       $level    the heading level to look for
-         * @param int       $line     the line number where to start search
-         *
-         * @return bool|int false if no heading found, else the index of Heading object
-         */
-        private function findHeadingIndex(&$headings, $level = 1, $line = 0)
-        {
-            foreach ($headings as $index => $object) {
-                if ($object->line >= $line) {
-                    if ($object->level == $level) {
-                        return $index;
-                    }
-                }
-            }
-            return false;
-        }
+        */
 
         /**
          * Normalize to UNIX EOL and delete triple EOLs and wrong characters.
@@ -1168,7 +1111,7 @@ namespace MultilingualMarkdown {
          * 
          * @return string the cleaned text.
          */
-        private function getCleanText($text)
+        private function getCleanText(string $text) : string
         {
             // normalize to unix eol
             $text = str_replace("\r\n", "\n", $text);
@@ -1189,7 +1132,7 @@ namespace MultilingualMarkdown {
          *
          * @return nothing
          */
-        private function writeToFile($language)
+        private function writeToFile(string $language) : void
         {
             // file = $this->outFiles[$language]
             // content = $this->curOutputs[$language]
@@ -1226,7 +1169,7 @@ namespace MultilingualMarkdown {
          *
          * @return nothing
          */
-        private function outputToFiles($content, $flush = false, $basename = null, $expand = true)
+        private function outputToFiles(string $content, bool $flush = false, ?string $basename = null, bool $expand = true) : void
         {
             // check if there is anything else than EOLs in content
             if ($this->emptyOutput) {
@@ -1243,9 +1186,6 @@ namespace MultilingualMarkdown {
             switch ($this->curLanguage) {
             case 'all': // output to all files
                 foreach ($this->outFiles as $language => $outFile) {
-                    // replace filename in content?
-                    //$finalContent = str_replace('{file}', $basename .
-                    //      ($language == $this->mainLanguage ? '.md' : ".$language.md"), content);
                     //TODO: improve this, because it doesn't work if default is not declared first
                     if (!array_key_exists($language, $this->curOutputs)) {
                         $this->curOutputs[$language] = '';
@@ -1310,7 +1250,7 @@ namespace MultilingualMarkdown {
          *
          * @return nothing
          */
-        private function outputToArray($content, &$outputs, &$out)
+        private function outputToArray(string $content, array &$outputs, string &$out) : void
         {
             switch ($out) {
             case 'all':
@@ -1354,23 +1294,23 @@ namespace MultilingualMarkdown {
          *
          * @return boolean false if any writing error occurs, true if header stored correctly in files
          */
-        private function storeHeading($level, $content, $anchor = null)
+        private function storeHeading(int $level, string $content, string $anchor = null) : bool
         {
             // compute anchor name if needed
             if ($anchor == null) {
-                $headings = $this->headings[$this->relFilenames[$this->inFilename]] ?? false;
-                $index = $this->findHeadingIndex($headings, $level, $this->curLine - 1); // line number is already on next line
-                $headerObject = $headings[$index] ?? null;
+                $headingArray = $this->allHeadingArrays[$this->relFilenames[$this->inFilename]] ?? false;
+                $index = $headingArray->findIndex($level, $this->curLine - 1); // line number is already on next line
+                $headerObject = $headingArray->getAt($index);
                 if ($headerObject) {
                     //TODO: '{:' syntax not known in MD viewers
                     // despite https://developers.google.com/style/headings-targets
-                    //$anchor = $this->outputHTML ? "h{$headerObject->number}" : "{: #h{$headerObject->number}}";
+                    //$anchor = ($this->outputMODE != self::MD) ? "h{$headerObject->number}" : "{: #h{$headerObject->number}}";
                     $anchor = "h{$headerObject->number}";
                 }
             } else {
                 //TODO: '{:' syntax not known in MD viewers
                 //  despite  https://developers.google.com/style/headings-targets
-                //if (!$this->outputHTML) {
+                //if ($this->outputMODE == self::MD) {
                 //   $anchor = "{: #{$anchor}}";
                 //}
             }
@@ -1383,14 +1323,11 @@ namespace MultilingualMarkdown {
                     return false;
                 }
                 // write HTML anchor
-                ///TODO: always use html anchors
-                //if ($this->outputHTML) {
-                    // HTML: '#### <a name="anchor"></a>'
-                if (fwrite($this->outFiles[$language], "<a name=\"{$anchor}\"></a>") === false) {
+                $attr = ($this->outputMODE == self::HTMLOLD) ? 'name' : 'id';
+                if (fwrite($this->outFiles[$language], "<a $attr=\"{$anchor}\"></a>") === false) {
                     $this->error("unable to write to {$this->outFilenames[$language]}");
                     return false;
                 }
-                ///}
             }
             $this->emptyOutput = false;
             // write heading content, interpret variables, no EOL
@@ -1401,7 +1338,7 @@ namespace MultilingualMarkdown {
 
             /*TODO: {: anchors not known in MD viewers
             // write MD anchors
-            if (!$this->outputHTML) {
+            if ($this->outputMODE == self::MD) {
                 // MD  : '#### content{: #anchor}'
                 foreach ($this->languages as $language => $bool) {
                     if (fwrite($this->outFiles[$language], $anchor)===false) {
@@ -1413,6 +1350,7 @@ namespace MultilingualMarkdown {
             */
             // Finish heading with 2 x EOL
             $this->storeContent("\n\n", null, false, false, true);
+            return true;
         }
 
         /**
@@ -1429,7 +1367,7 @@ namespace MultilingualMarkdown {
          *
          * @return boolean false if any writing error occurs, true if header stored correctly in files
          */
-        private function storeContent($content, $basename, $keepSTART, $endCR = false, $keepCR = false)
+        private function storeContent(string $content, string $basename, bool $keepSTART, bool $endCR = false, bool $keepCR = false) : bool
         {
             $pos = 0;
             $inDirective = false;
@@ -1522,7 +1460,7 @@ namespace MultilingualMarkdown {
          *
          * @return nothing
          */
-        private function addLanguage($code)
+        private function addLanguage(string $code) : void
         {
             // main=<code> ?
             if (mb_stripos($code, 'main=', 0, 'UTF-8') !== false) {
@@ -1534,7 +1472,7 @@ namespace MultilingualMarkdown {
             }
         }
 
-        /*
+        /**
          * Find all headings and sub headings in a set of files.
          * The files which are not under the given root directory will be ignored.
          * Files with no headings will receive a heading using their filename
@@ -1543,13 +1481,13 @@ namespace MultilingualMarkdown {
          *
          * @return nothing
          */
-        public function exploreHeadings($filenames)
+        public function exploreHeadings(array $filenames) : void
         {
-            $this->headings = [];
-            $number = 1;
+            $this->allHeadingArrays = [];
+            Heading::init();// reset headings numbering to 0
             foreach ($filenames as $filename) {
                 // get relative filename, ignore if not the right root
-                if (isset($this->rootDir)) {
+                if ($this->rootDir !== null) {
                     $rootLen = mb_strlen($this->rootDir, 'UTF-8');
                     $baseDir = mb_substr($filename, 0, $rootLen, 'UTF-8');
                     if ($baseDir != $this->rootDir) {
@@ -1567,8 +1505,7 @@ namespace MultilingualMarkdown {
                     $this->error("could not open [$filename]");
                     continue;
                 }
-                $this->headings[$relFilename] = [];
-                Heading::init();// reset number to 0
+                $headingArray = new HeadingArray();
                 $this->curLine = 0;
                 $languageSet = false;
                 do {
@@ -1581,12 +1518,11 @@ namespace MultilingualMarkdown {
                         }
                         continue;
                     }
-                    // skip code fences
+                    // skip code fences and double back-ticks
                     $pos = strpos($text, '```');
                     if ($pos !== false) {
                         // escaped by double backticks+space / space+double backticks?
                         if (($pos <= 2) || (substr($text, $pos-3, 3) != '`` ') || (substr($text, $pos+3, 3) != ' ``')) {
-                            // skip code fence
                             do {
                                 $text = trim(fgets($this->inFile));
                                 $this->curLine += 1;
@@ -1594,18 +1530,22 @@ namespace MultilingualMarkdown {
                         }
                     } else {
                         if (($text[0] ?? '') == '#') {
-                            $this->headings[$relFilename][] = new Heading($text, $this->curLine, $this);
+                            $heading = new Heading($text, $this->curLine, $this);
+                            $headingArray->add($heading);
                         }
                     }
                 } while (!feof($this->inFile));
                 $this->closeInput();
                 // force a level 1 object if no headings
-                if (count($this->headings[$relFilename]) == 0) {
-                    $this->headings[$relFilename][] = new Heading('# ' . $relFilename, 1, $this);
+                if ($headingArray->isEmpty()) {
+                    $heading = new Heading('# ' . $relFilename, 1, $this);
+                    $headingArray->add($heading);
                 }
+                $this->allHeadingArrays[$relFilename] = $headingArray;      
+                unset ($headingArray);          
             } // next file
         }
-
+         
         /// Buffer for current word starting with a dot
         private $curWord = '';
         /// Flag to know if we're in a word starting with a dot
@@ -1618,7 +1558,7 @@ namespace MultilingualMarkdown {
          *
          * @return nothing
          */
-        private function resetParsing()
+        private function resetParsing() : void
         {
             $this->inDirective = false;
             $this->curWord = '';
@@ -1629,14 +1569,14 @@ namespace MultilingualMarkdown {
          *
          * @return nothing
          */
-        private function parseHeading()
+        private function parseHeading() : void
         {
             // get heading level and title
             $level = Heading::getHeadingLevel($this->lineBuf);
             do {
                 $this->getChar();
             } while ($this->curChar == '#' || $this->curChar == ' ' || $this->curChar == "\t");
-            $content = $this->curChar . trim($this->getCharUntil("\n"));
+            $content = ($this->curChar ?? '') . trim($this->getCharUntil("\n", true));
             $this->storeHeading($level, $content);
         }
 
@@ -1645,7 +1585,7 @@ namespace MultilingualMarkdown {
          *
          * @return false in all cases
          */
-        private function closeInput()
+        private function closeInput() : bool
         {
             if ($this->inFile != null) {
                 fclose($this->inFile);
@@ -1659,7 +1599,7 @@ namespace MultilingualMarkdown {
          *
          * @return false in all cases
          */
-        private function closeOutput()
+        private function closeOutput() : bool
         {
             foreach ($this->outFiles as &$outFile) {
                 if ($outFile != null) {
@@ -1680,7 +1620,7 @@ namespace MultilingualMarkdown {
          *
          * @return bool true if input file was opened correctly, false for any error.
          */
-        public function openInputFile($filename)
+        public function openInputFile(string $filename) : bool
         {
             // close any previous input file
             if ($this->inFile != null) {
@@ -1693,7 +1633,7 @@ namespace MultilingualMarkdown {
             $filePos = $posFunction($filename, $absolutePath);
             if ($filePos !== 0) {
                 // relative: check root dir
-                if (!empty($this->rootDir)) {
+                if (!empty($this->rootDir ?? '')) {
                     $filename = $this->rootDir . DIRECTORY_SEPARATOR . $filename;
                 }
             }
@@ -1706,7 +1646,7 @@ namespace MultilingualMarkdown {
             }
             // prepare output file template
             $extension = isMLMDfile($filename);
-            if ($extension === false) {
+            if ($extension === null) {
                 return $this->closeInput();
             }
 
@@ -1730,7 +1670,7 @@ namespace MultilingualMarkdown {
          *
          * @return bool true if input file processed correctly, false if any error.
          */
-        public function process($filename)
+        public function process(string $filename) : bool
         {
             // Check valid input
             if (!$this->openInputFile($filename)) {
@@ -1749,7 +1689,7 @@ namespace MultilingualMarkdown {
             // main loop on current opened input stream from $filename
             do {
                 // read one UTF-8 char and update status
-                $this->getChar($this->inFile);
+                $this->getChar();
                 // process this character              
                 switch ($this->curChar) {
                 case false:
@@ -1905,9 +1845,9 @@ namespace MultilingualMarkdown {
          *
          * @return nothing
          */
-        public function processFiles()
+        public function processFiles() : void
         {
-            if (empty($this->rootDir)) {
+            if (empty($this->rootDir ?? '')) {
                 $this->setRootDir(getcwd());
             }
             if (empty($this->allInFilepathes)) {

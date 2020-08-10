@@ -96,7 +96,7 @@ $generator = new \MultilingualMarkdown\Generator();
 $params = [
     '-i'            => ['addInputFile', 'file'],     // set one input file
     '-main'         => ['setMainFilename', 'file'],  // set a main filename
-    '-out'          => ['setOutputHTML', 'string'],  // set Markdown output mode
+    '-out'          => ['setOutputMODE', 'string'],  // set Markdown output mode
     '-numbering'    => ['setNumbering', 'string'],   // set the headings numbering scheme for headings and TOC
     '-h'            => [':displayHelp', '-']         // (global function) display help
 ];

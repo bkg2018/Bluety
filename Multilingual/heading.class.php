@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 /**
  * Multilingual Markdown generator - Heading class
  *
@@ -47,40 +47,44 @@ namespace MultilingualMarkdown {
          * @param int    $line   the line number in the source file.
          * @param object $logger the caller object with a logging function called error()
          */
-        function __construct($text, $line, $logger) {
+        function __construct(string $text, int $line, object $logger) 
+        {
             // sequential number for all headers of all files
-            $this->number = Heading::$curNumber + 1;
+            self::$curNumber += 1;
+            $this->number = self::$curNumber;
             // count number of '#' = heading level
-            $this->level = Heading::getHeadingLevel($text);
-            if ($this->level > Heading::$prevLevel + 1) {
+            $this->level = self::getHeadingLevel($text);
+            if ($this->level > self::$prevLevel + 1) {
                 $logger->error("level {$this->level} heading skipped one or more heading levels");
             }
             $this->line = $line;
             $this->text = trim(mb_substr($text, $this->level, null, 'UTF-8'));
-            Heading::$prevLevel = $this->level;
-            Heading::$curNumber += 1;
+            self::$prevLevel = $this->level;
         }
 
         /**
          * Resets the number to 0.
          */
-        public function init() {
+        public function init() : void 
+        {
             Heading::$curNumber = 0;
         }
 
         /**
          * Compute heading level from the starting '#'s.
+         * Static function, call as Heading::getHeadingLevel(string)
+         * also on instances like $heading->getHeadingLevel(string)
          *
          * @param string $content the text with '#'s from which to compute heading level.
          *
          * @return int the heading level
          */
-        static function getHeadingLevel($content)
+        static function getHeadingLevel(string $content) : int 
         {
-            $heading = trim($content);
+            $text = trim($content);
             $level = 0;
-            $length = mb_strlen($heading, 'UTF-8');
-            while ($heading[$level] == '#' && $level <= $length) {
+            $length = mb_strlen($text, 'UTF-8');
+            while (mb_substr($text, $level, 1) == '#' && $level < $length) {
                 $level += 1;
             }
             return $level;
