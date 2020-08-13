@@ -65,7 +65,7 @@ namespace MultilingualMarkdown {
         /**
          * Resets the number to 0.
          */
-        public function init() : void 
+        public static function init() : void 
         {
             Heading::$curNumber = 0;
         }

@@ -9,12 +9,12 @@ NOTES:
 
 * The .languages directive must be placed at the beginning of a line.
 
-* Having some content between the .languages directive and the heading level 1 is not 
+* Having some content between the .languages directive and the heading level 1 is not
   conforming to Markdown conventions, but MLMD only ignores empty lines and will write
   any text before the heading level 1 into all generated files.
 
-* The optional .numbering directive must be placed between the .languages and the 
-  level 1 '#' heading. It is ignored if a -numbering parameter is given 
+* The optional .numbering directive must be placed between the .languages and the
+  level 1 '#' heading. It is ignored if a -numbering parameter is given
   when calling MLMD.
 
 .languages fr,en main=en
@@ -31,7 +31,7 @@ NOTES:
 
 ## Installation
 
-.((MLMD consists of a main script `mlmd.php` and a few dependencies files. (`heading.class.php`, `generator.class.php`, `fileutils.php`.) The script and its dependancies files can be put anywhere at user choice..)).fr((MLMD est constitué d'un script principal `mlmd.php` et de dépendances  (`heading.class.php`, `generator.class.php`, `fileutils.php`). Le script et ses dépendances peuvent être placés dans n'importe quel répertoire accessible à l'utilisateur..))
+.((MLMD consists of a main script `mlmd.php` and a few dependencies files. The script and its dependancies files can be put anywhere at user choice..)).fr((MLMD est constitué d'un script principal `mlmd.php` et de dépendances. Le script et ses dépendances peuvent être placés dans n'importe quel répertoire accessible à l'utilisateur..))
 
 ### .((PHP version.)).fr((Version PHP.))
 
@@ -109,11 +109,11 @@ Zend Engine v3.3.20, Copyright (c) 1998-2018 Zend Technologies
 
 .((
 ```code
-php <path-to-mlmd>mlmd.php [-i <template_path> [...]] [-main=<file_path>] [-out=html|htmlold|md] [-numbering=<numbering_scheme>]
+php <path-to-mlmd>mlmd.php [-i <template_path> [...]] [-main <file_path>] [-out html|htmlold|md] [-numbering <numbering_scheme>]
 ```
 .)).fr((
 ```code
-php <chemin-de-mlmd>mlmd.php [-i <chemin_fichier> [...]] [-main=<chemin_fichier>] [-out=html|htmlold|md] [-numbering=<schéma_numérotation>]
+php <chemin-de-mlmd>mlmd.php [-i <chemin_fichier> [...]] [-main <chemin_fichier>] [-out html|htmlold|md] [-numbering <schéma_numérotation>]
 ```
 .))
 
@@ -182,60 +182,53 @@ Markdown allows three ways for creating links to a heading in a file:
 
 The standard old style HTML `<A name="target"></A>` or modern style HTML `<A id="target"></A>` anchors and `<A href="file#target"></A>` links can be used in MLMD templates just like they would in standard HTML or Markdown The Markdown automatic links `[](#heading-text)` also works as they would in a normal Markdown: MLMD won't change the anchors and links written using these forms.
 
-Common use standards for Markdown discourage the use of HTML, however it is perfectly valid to use HTML and for a number of reasons, 
-HTML anchors are more versatile than Markdown links.
+Common use standards for Markdown discourage the use of HTML, however it is perfectly valid to use HTML and HTML anchors are more versatile than Markdown links.
 
-Still, MLMD can generate a Table Of Contents using the `.toc` directive and will put links to headings in this table. 
+Still, MLMD can generate a Table Of Contents using the `.toc` directive and will put links to headings in this table.
 To this aim, the `-out` parameter allows to select which method will be used for the TOC links:
 
-* `-out=htmlold` will generate `<A name="target">` HTML anchors for each headings in each processed file and `<A href="file#target">` HTML links in the table Of Contents.
-* `-out=html` will generate `<A id="target">` HTML anchors for each headings in each processed file and `<A href="file#target">` HTML links in the table Of Contents.
-* `-out=md` will generate `<A id="target">` HTML anchors for each headings in each processed file and `[](file#target)` Markdown links in the Table Of Contents.
-* `-out=mdpure` will generate `[](file#target)` Markdown links in the Table Of Contents using Markdown automatic headings links.
+* `-out htmlold` will generate `<A name="target">` HTML anchors for each headings in each processed file and `<A href="file#target">` HTML links in the table Of Contents.
+* `-out html` will generate `<A id="target">` HTML anchors for each headings in each processed file and `<A href="file#target">` HTML links in the table Of Contents.
+* `-out md` will generate `<A id="target">` HTML anchors for each headings in each processed file and `[](file#target)` Markdown links in the Table Of Contents.
+* `-out mdpure` will generate `{#id}` Markdown anchors for each headings in each processed file and `[](file#target)` Markdown links in the Table Of Contents.
 
-The Markdown modes could generate `{: #target}` Markdown anchors for headings but at the time of this writing, this syntax is unknown from most of the Markdown viewers and editors and has not been retained in MLMD.
+All identifiers in anchors are guaranteed unique over all the processed files by MLMD.
 
-The right choice of method is context dependent. 
+There is no absolute best method, the choice for the right method is context dependent.
 
 #### Named HTML anchors: `htmlold` mode
 
-This mode uses plain old style `<a name"id">` anchors to headings targets and `<a href>` links in the TOC. It is best used in vanilia HTML context for existing documentations
-or systems to keep maximum compatibility with any Web browser. In this mode, all anchors are guaranteed unique above all the processed files.
+This mode uses plain old HTML style `<a name"id">` anchors to headings targets and `<a href>` links in the TOC. It is best used in vanilia HTML context for existing documentation
+or system, to keep maximum compatibility with possibly old Web browsers.
 
 #### Identified HTML anchors: `html` mode
 
 Recent standards have replaced the `name` attribute in HTML `<A>` anchors by the `id` attribute, which has the benefit of automatic interfacing with Javascript.
-This mode uses the new `id` attribute for anchors and `<a href>` links in the TOC and is well suited for HTML documentation in a modern, dynamic and scripted environment. 
-In this mode, all anchors are guaranteed unique above all the processed files.
+This mode uses the new `id` attribute for anchors and `<a href>` links in the TOC and is well suited for HTML documentation in a modern, dynamic scripted environment.
 
-#### Anchrored Markdown: `md` mode
+#### Anchored Markdown: `md` mode
 
-This hybrid mode uses HTML anchors with the `id` attribute and `[]()` Markdown links in the TOC. 
-The use of HTML anchors allow identifiers to be unique above all the processed files even if headings have identical text. 
-It is appropriate for software or Github documentation.
+This hybrid mode uses HTML anchors with the `id` attribute and `[]()` Markdown links in the TOC. It is appropriate for software or Github documentation
+ and works in a lot of different situations where HTML is allowed.
 
 #### Pure Markdown: `mdpure` mode
 
-This mode generate no anchors for headings and uses `[]()` automatic Markdown links in the TOC.
-Automatic links are computed from the heading text by cutting out any non-alphanumeric characters and changing spaces to dashes. It 
-is conforming to Markdown syntax by using no HTML elements.
-
-In this mode, there are no identifiers and targetted headings must all be different over their containing file, e.g. a file cannot contain two or more `#### Examples` headings, as only one could be reached
-with a [Example](#examples) automatic link. It is well suited
-in pure Markdown contexts or when files are automatically checked against Markdown conformity.
+This mode generate Markdown `{#}` anchors for headings and uses `[]()` Markdown links in the TOC. It is well suited in pure Markdown contexts or when files are
+automatically checked against Markdown conformity. However Markdown anchors may not work in all Markdown processors.; so if that happens, the `md` mode can be a better choice.
 
 #### About non-unique headings
 
-Except for a warning from Markdown lint tools, identical heading are not an issue *if they are not targeted by any link* so the `mdpure`
-output mode is applicable if the TOC doesn't include levels featuring identical headings.
+Except for a warning from Markdown lint tools, identical headings are not an actual issue *if they are not targeted by any link*. MLMD allocates anchor identifiers
+over all the processed files so even identical headings can be targeted unambigously in the TOC. However the user cannot know the MLMD identifiers before processing
+the files, so links in the text body cannot use the MLMD anchors.
 
-If the TOC includes levels 1 to 3, the file may contain identical level 4 headings like `#### Example`. 
-
-As the TOC, the file text cannot reliably use automatic links to these headings (e.g. `[see example](#example)` as they're ambiguous.
+To solve this, the best way is to  explicitely add anchors to the identical headings so they can be referenced in links. Either Markdown orHTML syntax can be used.
+MLMD will ignore these anchors and links and simply reproduce them in the generated files, provided they don't use the `a<integer>` format used by MLMD. (E.g. `a12`.).
+MLMD will add its own anchors and links which won't interfere with the text body anchors and links.
 
 ### Headings numbering: `-numbering` argument
 
-The `-numbering` parameter sets a numbering scheme for headings levels over all the generated files and in the tables of contents. 
+The `-numbering` parameter sets a numbering scheme for headings levels over all the generated files and in the tables of contents.
 For example, a third level heading could be numbered `A.2.5) Using objects`. The numbering can be set in two ways
 
 * globally for all generated files, using the `-numbering` script argument
@@ -249,7 +242,7 @@ the syntax is identical for the file directive and is addressed later.
 The parameter consists of any number of levels definitions separated by a comma:
 
 ```code
--numbering=[<level>]:[<prefix>]:<symbol>[<separator>][,...]]
+-numbering [<level>]:[<prefix>]:<symbol>[<separator>][,...]]
 ```
 
 Following are details about each definition part.
@@ -268,7 +261,7 @@ A level always starts with the defined symbol, then all the following headings a
 This is how to number level 1 headings with the 'A', 'B' etc letters followed by a dash `-`, then add a number followed by a dot `.` for level 2 headings, then add a number for level 3 headings:
 
 ```code
--numbering=1:Chapter :A-,2::1.,3::1
+-numbering 1:Chapter :A-,2::1.,3::1
 ```
 
 * Levels 4 and above headings will not be numbered and will not appear in table of Contents if the .toc directive doesn't ask for them. If they apear in TOC, they will use a dash '`-`' as prefix.
@@ -286,17 +279,35 @@ The user has total control over which languages he/she wants to put in the templ
 
 See [`.language` directive](#declaring-languages-languages-directive) for the syntax of languages declaration.
 
+### Headings
+
+- MLMD requires `#` prefixed headings and doesn't recognize the alternate syntax for level 1 and 2 headings, which is available by adding `==` or `--` on the line
+  following the heading. The `==`and `--` lines can be used but will not be sufficient for a heading to be recognized by MLMD.
+
+  ```code
+  # This heading will be found by MLMD
+
+  This one won't be found because it doesn't have a # prefix
+  ==========================================================
+
+  ## This one will be found
+  =========================
+  ```
+
+- At least one space must follow the `#`s prefix.
+- Closing `#` are allowed but have no effect.
+
 ### End-of-Lines and End-of-Paragraphs
 
-MLMD templates are interpreted on a paragraph basis: it means that default text and languages specific text parts 
+MLMD templates are interpreted on a paragraph basis, meaning that default text and languages specific text parts
 will reproduce end of lines as-is and take effect only when either *two end of lines* or *the end of file* is met.
 
 Generally, text outside any directive - including end-of-lines - would go into all the generated files, however MLMD makes an exception
 for end-of-line characters when they only separate two directives with no other text between them. In that case, the end-of-line is not
-sent to any generated files. This features helps a better text organisation while conforming to Markdown
+sent to any generated files. This features helps a better text organisation while conforming to Markdown.
 
-Normal Markdown conventions generally assume that text lines should not be larger than about 80 characters 
-but MLMD templates do not enforce this limit. All text for all languages of a given paragraph can 
+Normal Markdown conventions generally assume that text lines should not be larger than about 80 characters
+but MLMD templates do not enforce this limit. All text for all languages of a given paragraph can
 be typed on a single line or not, and use any line length.
 
 Here is an example:
@@ -309,11 +320,13 @@ Here is an example:
 Some other text...
 ```
 
-1. The block starts line 1 by setting default text which will go in any generated file except if a language specific is found for them.
+MLMD interprets the three lines block this way:
+
+1. The block starts line 1 by setting default text which will go in all generated file except thos for which a language specific section is found.
 2. The end-of-line at line 1 is ignored because it is immediately followed by another directive.
-3. Line 2 will put text only in the FR file.
+3. Line 2 will put text only in the FR file, which will ignore the default text.
 4. The end-of-line at line 2 is ignored because it is immediately followed by another directive.
-5. Line 3 will put text only in the EN file.
+5. Line 3 will put text only in the EN file, which will ignore the default text.
 6. The double end-of-line after line 3 ends the paragraph and generates text in relevant files.
 
 Because end-of-lines are ignored when they only separate directives, the following line is identical to the previous example:
@@ -328,15 +341,15 @@ The ignored end-of-line feature allow for easy line length Markdown conformance 
 
 #### Notes
 
-Although Markdown syntax limits lines to little more than 80 characters, Markdown viewers and Web Browsers generally do not 
-bother about this limit and will display the text correctly. Similarly, modern text editors will make the text fit into the 
+Although Markdown syntax limits lines to little more than 80 characters, Markdown viewers and Web Browsers generally do not
+bother about this limit and will display the text correctly. Similarly, modern text editors will make the text fit into the
 displayed width even if there is no end of line. Most often they feature a 'soft-wrapping' setting or viewing option in menus
-to put artificial end-of-lines which aren't actually in the file. For example, this option is called *Toggle Word Wrap* in 
-Visual Code and is accessible ![in the *View* menu:](Images/word_wrap_vscode.png). 
+to put artificial end-of-lines which aren't actually in the file. For example, this option is called *Toggle Word Wrap* in
+Visual Code and is accessible ![in the *View* menu:](Images/word_wrap_vscode.png).
 
 Although this is not mandatory, it is best to be consistent in the style of opening and closing directives relatively to their text.
-Either use separate lines around the text for both the opening and the closing directive, either put them on the same line around 
-the text:
+A file should either use separate lines around the text for both the opening and the closing directives, either put them on the same line around
+the text but avoid mixing both techniques.
 
 * Separated lines:
   ```code
@@ -352,17 +365,22 @@ the text:
 
 ### Escaping text
 
-Directives and variables can be neutralized in text by surrounding it with the opening escape `.{` and the closing escape `.}` 
-directives.
+Directives and variables can be neutralized in a text portion by surrounding it with the opening escape `.{` and the closing escape `.}`
+directives. The directives won't be copied to generated files, and variables and other directives will be copied as-is without axpansion or interpretation.
+
+* Example:
+  ```code
+  The .{.numbering.} directive sets the numbering scheme.
+  ```
 
 ### Quoted text and code fences
 
-MLMD roughly copies the parts of text which are surrounded by back-ticks (reversed quote), double quote and code fences. 
+MLMD roughly copies the parts of text which are surrounded by *back-ticks* (reversed quote), *double quotes* and *code fences*.
 In these parts of text, MLMD doesn't interpret directives and variables:
 
-* .{`` ``` ``.}: code fences surround code text in which directives and variables will not be interpreted
-* `"`: double quotes around text neutralize directives and variables, e.g. `".(("` will not close the current directive
-* .{`` ` ``.}: back-ticks around text also neutralize directives and variables, e.g. .{`.((`.} will not close the current directive
+* .{`` ``` ``.}: code fences surround code text in which directives and variables will not be interpreted.
+* `"`: double quotes around text neutralize directives and variables, e.g. `".(("` will not close the current directive.
+* .{`` ` ``.}: back-ticks around text also neutralize directives and variables, e.g. .{`.((`.} will not close the current directive.
 
 > Quoted and fenced text must be entirely put *inside* enclosing directives (default or language directives) as they cannot embed directives.
 > Simple quotes `'` have *no neutralizing effect*, so text surrounded by `'` *can embed directives*. MLMD has been designed this way because the simple quote character is used separately in a lot of languages for other uses than surrounding text.
@@ -393,11 +411,11 @@ Directives are of two types:
 1. Immediate Directives begin with a dot `.` and are followed by parameters: they modify some of the MLMD settings
 2. Language Directives enclose text between an opening marker `((` and an ending marker `))`
 
-Here's a summary of the immadiate directives:
+Here's a summary of the immediate directives:
 
-* `.languages` declares the language codes used in the template(s) and drives the files to generate.
-* `.toc` generates a Table Of Contents using headings.
-* `.numbering` sets the headings numbering schemes.
+* `.languages` declares the language codes available in all processed template(s).
+* `.numbering` sets the numbering scheme for the file headings and TOC.
+* `.toc` generates a Table Of Contents.
 
 Here's a summary of open/close directives:
 
@@ -406,28 +424,30 @@ Here's a summary of open/close directives:
 * `.ignore((` starts a text section which will not be put in any generated file.
 * `.<code>((` starts a text section which will be put only in the generated file for language `<code>` which has been declared in the `.languages` directive.
 * `.))` ends a section started by one of the `.((` directives and returns to the previous directive effect.
-* `.{` starts an escaped text section (directives and variables are neutralized)
-* `.}` ends an escaped text section 
+* `.{` starts an escaped text section (directives and variables are not interpreted or expanded)
+* `.}` ends an escaped text section
 
 Directives are not case sensitive: `.fr((` is the same as `.FR((`.
 
+Directives are not interpreted in escaped text, see [Quoted text and code fences](#quoted-text-and-code-fences).
+
 ### Immediate vs enclosed effect
 
-The `.languages`, `.toc` and `.numbering` directives have an *immediate effect*. Their goal imply that they generally should 
-be alone on a single isolated line, and preferably at the beginning of template files.
+The `.languages`, `.numbering` and `.toc` directives have an *immediate effect*. It imply that they generally should
+be alone on a single isolated line, and preferably at the beginning of template files. (This is mandatory for `.languages`.)
 
 The other directives start with an opening `.<directive>((` marker which *encloses text* until a matching `.))` is met, or until another `((` directive is opened.
 
 > These enclosing directives can be embedded: each `.<directive>((` opening will suspend the previous directive effect, and the matching `.))` closing will resume it.
 
-### Default directives and effects
+### Default directives values and effects
 
 Details will follow but it must be mentionned that the script has some defaults and that directives themselves also have defaults settings.
 
-* Anything preceeding the `.languages` directive is *ignored*. See [Declaring languages](#declaring-languages-languages).
+* Anything preceeding the `.languages` directive is *ignored* and won't be written in generated files. See [Declaring languages](#declaring-languages-languages).
 * Empty lines before the level 1 heading are ignored.
-* After the `.languages` directive, the generator acts as if a `.all((` directive had been met, so any text will go into all the languages files even before the level 1 heading notice that this is not Markdown compliant.
-* The `.default((` or `.((` directive will only have effect on languages which have not a defined content yet. See [Default directive](#default-text-default-or-).
+* After the `.languages` directive, the generator acts as if a `.all((` directive had been met, so any text will go into all the languages files even before the level 1 heading. Notice that text preceding level 1 heading is not Markdown compliant.
+* The `.default((` or `.((` directive will only have effect on languages which do not have a defined content yet, any previous `.all` text will make `.default` useless. See [Default directive](#default-text-default-or-).
 * The `.toc` directive has default values which generate an table of contents for local headings in the current file only. See [TOC](#generating-table-of-content-toc).
 * The table of contents generated in any file always has an implicit anchor named `toc` which can be used to link to it from any other file.
 
@@ -460,6 +480,81 @@ The optional `main=<code>` parameter tells which language is the main language: 
 ```
 
 Generated files will be named with a `.md` extension for the `en` language and with `.fr.md` for the `fr` language.
+
+## Defining a numbering scheme: `.numbering` directive
+
+The `.numbering` directive defines the numbering scheme for current file headings and TOC lines. The syntax is identical to the `-numbering` command line argument.
+
+> WARNING: If a `-numbering` command line argument has been given, the `.numbering` directive will have no effect.
+
+### Syntax
+
+```code
+.numbering [<level>]:[<prefix>]:<symbol>[<separator>][,...]]
+```
+
+Following are details about each definition part.
+
+* `<level>` is optional and is a digit between `1` and `9` representing the heading level (which is the number of '#' at the heading beginning). By default, this defines the next level, starting with 1 and incrementing at each definition.
+* `:` is a mandatory separator between parts of the definition.
+* `prefix` is an optional prefix for the level numbering, e.g. '`Chapter `'. The prefix only appears in the level numbering for the heading of this level, and will be omitted from inferior levels numbering.
+* `<symbol>` is a mandatory symbol which can be an uppercase letter `A` to `Z`, a lowercase letter from `a` to `z` or a digit from `1` to `9`. It sets the starting symbol for the level numbering.
+* `separator` is an optional symbol which will be concatenated to the numbering symbol before the next level numbering. Conventional symbols can be `.`, `-`or `)`. Omitting this separator for the last level is identical to using `)`.
+* `,` is a separator before the next level definition.
+
+## Generating Table Of Content: `.toc` directive
+
+The `.toc` directive generates a Table Of Contents using choosen header levels.
+
+The header levels are defined by the `#` prefixes in Markdown syntax: `#` is header level 1, `##` is level 2 etc.
+
+By default, level 1 is ignored: it is considered as the file title, and levels 2 to 4 are put in TOC. But level 1 can be used to build a global TOC for a set of files.
+
+The Table of Contents has one link for each accepted heading.
+
+> The table will be put at the place of the `.toc` directive.
+> The table has an automatic anchor named `toc` which can be used in links from other files.
+> If a numbering scheme has been set with the `-numbering` script argument or `.numbering` directive, it will be used for the toc headings.
+
+### Syntax
+
+The `.toc` directive must be written alone on its line with its parameters. Most of the time, the TOC lies after the file title and some introduction. A default TOC with no parameters will build a table of contents for the current file with headings `##` to `####`.
+
+```code
+.TOC [level=[m][-][n]] [title=m,"<title text>"] [out=md|html]
+```
+
+#### `level` parameter
+
+This parameter sets the headings which will appear in the TOC.
+
+Syntax for this parameter is `level=[m][-][n]`:
+
+* If neither `m` nor `n` are given, the TOC will contain heading levels 2 to 4 (matching headings `##` to `####`).
+* If `m` only is given, TOC titles will be level `m` headings only.
+* If `m-` is given without `n`, TOC titles will be level `m` to level 9 headings.
+* If `m-n` is given, TOC titles will be level `m` to level `n` headings.
+* If `-n` is given, TOC titles will be level 1 to level `n` headings.
+
+#### `title` parameter
+
+Syntax for this parameter is `title=m,"<title text>"`:
+
+* `t` is the heading level for the TOC title itself. Level 2 is recommended. (The TOC title will be a `##` heading.)
+* The title text can use language, all, ignore and default directives.
+* If no title text is given, `Table Of Contents` will be used.
+* If no title parameter is given, level 2 will be used.
+* The double quotes `"` around the title text are mandatory. If they are missing, an error is displayed and the rest of text following `title=` on the line is used as title text.
+
+### Examples
+
+```code
+.TOC level=1-3 title=2,".fr((Table des matières.)).en((Table Of Contents))"
+```
+
+This directive generates a TOC using the headings `#` to `###` found in each file.
+
+The table title will be `## Table des Matières` in the `.fr.md` file, and `## Table Of Contents` for other languages.
 
 ## Generating for all languages: `.all((` directive
 
@@ -539,7 +634,7 @@ An obvious use of default text is in headings:
 This will put `# Main Title` in all the generated files except the `.fr.md` file where the generator will put `# Titre Principal`.
 
 For text blocks, the default directive is a little sensitive because it will only apply to languages which have
-absolutely no specific section yet, and any preceeding text outside directives would go in all languages and neutralize default text.
+absolutely no specific section yet, and any preceding text outside directives would go in all languages and neutralize default text.
 The common use is to avoid any text outside a directive or at least, to keep translated sections near the matching default section,
 like in the following example:
 
@@ -638,7 +733,7 @@ The spaces between directives are not put in the generated text. To put a space 
 .fr((Texte en Français suivi d'un espace .)) .en((English text followed by a space .))
 ```
 
-As mentioned above, language sections can be chained without closing them, but each one will hhave to be closed in the end. The line below has the same effect as the previous example:
+As mentioned above, language sections can be chained without closing them, but each one will have to be closed in the end. The line below has the same effect as the previous example:
 
 ```code
 .fr(( Texte en Français .en(( English text .)).))
@@ -655,69 +750,16 @@ Now this text is in the `all` section and go in all files.
 This text will only go into the french file because its opening directive has not been closed yet.
 ```
 
-### Escaping text: `.{` and `.}` directives
+## Escaping text: `.{` and `.}` directives
 
 Any text can be 'escaped' by surrounding it with `.{` and `.}`.
 
-In the escaped text, directives and variables are ignored and text is copied in the current output files.
+In the escaped text, directives and variables are ignored and text is copied as-is in the generated files.
 
-In Markdown syntax, text can also be escaped by surrounding it with multiple back-ticks, like code fences .{`` ``` ``.} or double back-ticks .{`` `` ``.}. To actually write the escape sequence in the generated Markdowns, the MD escape sequence itself can be embedded in MLMD escaping:
+In Markdown syntax, text can also be escaped by surrounding it with multiple back-ticks, like code fences .{`` ``` ``.} or double back-ticks .{`` `` ``.}. 
+To actually write the escape sequence in the generated Markdowns, the MD escape sequence itself can be embedded in MLMD escaping:
 
 `.{`.{`` back-tick is '`' ``.}`.}`
-
-## Generating Table Of Content: `.toc` directive
-
-The `.toc` directive generates a Table Of Contents using choosen header levels.
-
-The header levels are defined by the `#` prefixes in Markdown syntax: `#` is header level 1, `##` is level 2 etc.
-
-By default, level 1 is ignored: it is considered as the file title, and levels 2 to 4 are put in TOC. But level 1 can be used to build a global TOC for a set of files.
-
-The Table of Contents has one link for each accepted heading. 
-
-> The table will be put at the place of the `.toc` directive.
-> The table has an automatic anchor named `toc` which can be used in links from other files.
-> If a numbering scheme has been set with the `-numbering` script argument or `.numbering` directive, it will be used for the toc headings.
-
-### Syntax
-
-The `.toc` directive must be written alone on its line with its parameters. Most of the time, the TOC lies after the file title and some introduction. A default TOC with no parameters will build a table of contents for the current file with headings `##` to `####`.
-
-```code
-.TOC [level=[m][-][n]] [title=m,"<title text>"] [out=md|html]
-```
-
-#### `level` parameter
-
-This parameter sets the headings which will appear in the TOC.
-
-Syntax for this parameter is `level=[m][-][n]`:
-
-* If neither `m` nor `n` are given, the TOC will contain heading levels 2 to 4 (matching headings `##` to `####`).
-* If `m` only is given, TOC titles will be level `m` headings only.
-* If `m-` is given without `n`, TOC titles will be level `m` to level 9 headings.
-* If `m-n` is given, TOC titles will be level `m` to level `n` headings.
-* If `-n` is given, TOC titles will be level 1 to level `n` headings.
-
-#### `title` parameter
-
-Syntax for this parameter is `title=m,"<title text>"`:
-
-* `t` is the heading level for the TOC title itself. Level 2 is recommended. (The TOC title will be a `##` heading.)
-* The title text can use language, all, ignore and default directives.
-* If no title text is given, `Table Of Contents` will be used.
-* If no title parameter is given, level 2 will be used.
-* The double quotes `"` around the title text are mandatory. If they are missing, an error is displayed and the rest of text following `title=` on the line is used as title text.
-
-### Examples
-
-```code
-.TOC level=1-3 title=2,".fr((Table des matières.)).en((Table Of Contents))"
-```
-
-This directive generates a TOC using the headings `#` to `###` found in each file.
-
-The table title will be `## Table des Matières` in the `.fr.md` file, and `## Table Of Contents` for other languages.
 
 
 ## Examples
@@ -728,18 +770,35 @@ The `Examples` directory has a few `mlmd` and `base.md` examples templates.
 
 Use MLMD to write multilingual documentations templates instead of maintaining different Markdown files for each language.
 
-Good use notes:
+Here are some notes.
 
-- Template files must be UTF-8 encoded.
-- Use a default text for each paragraph and heading with the `.((` directive, then add languages translations after the default text with `.<code>((` directives.
-- Close each opened directive (with `.))`).
-- Use end-of-lines between directives to separate different sections.
-- Do not use `.((` default text *and* `.all((` text together.
-- Use the `-numbering` script argument to consistently number headings over all files and in TOCs.
-- Use the '-out' script argument to choose between MD and HTML anchors and links styles.
-- Use no `-i` script argument to process all the template files in current directory and subdirectories.
-- Use the `.mlmd` extension to distinguish MLMD templates and actual Markdown files.
+- Files
+  - Template files must be UTF-8 encoded.
+  - Use the `.mlmd` extension to distinguish MLMD templates from actual Markdown files.
+  - Use the `-numbering` script argument to consistently number headings over all files and in TOCs.
+  - Use the '-out' script argument to have anchors and links adapted to your MD or HTML context.
+  - Use `-i` script arguments to choose the files to process, or omit `-i` to process all the
+    template files in current directory and subdirectories.
+
+- Headings, paragraphs
+  - Headings must have a `#`s prefix.
+  - Separate paragraphs with one empty line.
+  - Use a default text for each paragraph and heading with the `.((` directive, then add languages translations
+    after the default text using `.<code>((` directives.
+  - Close each opened directive with `.))`).
+  - Use one end-of-line between directives if you want to visually separate different sections without
+    actually generating an end-of-line
+  - Do not use `.((` default text *and* `.all((` text together in a paragraph.
+  - Use the variables to put language specific links or images in text body.
+
+- Table Of Contents (TOC)
+  - Use level 1 in `.toc` directive to generate a global TOC with links to all the processed templates.
+  - Use levels 2 to 9 in local `.toc` directive to link to headings in each file.
+  - Give your `.toc` directive a title and a heading level of 2
+  - Place your `.toc` directive after a level 1 heading and introductory text
+  - Use links to `#toc` anchor to place a link to the TOC in your text.
 
 I hope MLMD will help you to easily maintain multilingual documentations.
 
 F. Piérot
+August 2020

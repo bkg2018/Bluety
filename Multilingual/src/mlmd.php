@@ -84,7 +84,7 @@ The following variables are expanded in the generated files except in escaped te
 \n";
 }
 
-require 'generator.class.php';
+require_once 'include/Generator.class.php';
 
 //MARK: CLI launch
 
@@ -94,11 +94,11 @@ $generator = new \MultilingualMarkdown\Generator();
 // array of parameters: 'name' => [(public) function to call on the value, 'type' of value]
 // if function starts with a ':', call global function, else call Generator member function.
 $params = [
-    '-i'            => ['addInputFile', 'file'],     // set one input file
-    '-main'         => ['setMainFilename', 'file'],  // set a main filename
-    '-out'          => ['setOutputMODE', 'string'],  // set Markdown output mode
-    '-numbering'    => ['setNumbering', 'string'],   // set the headings numbering scheme for headings and TOC
-    '-h'            => [':displayHelp', '-']         // (global function) display help
+    '-i'            => ['addInputFile',     'file'],    // set one input file
+    '-main'         => ['setMainFilename',  'file'],    // set a main filename
+    '-out'          => ['setOutputMode',    'string'],  // set Markdown output mode
+    '-numbering'    => ['setNumbering',     'string'],  // set the headings numbering scheme for headings and TOC
+    '-h'            => [':displayHelp',     '-']        // (global function) display help
 ];
 $arg = 1;
 while ($arg < $argc) {

@@ -26,10 +26,10 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'logger.interface.php';
-    require_once 'heading.class.php';
-    require_once 'heading_array.class.php';
-    require_once 'numbering.class.php';
+    require_once 'Logger.interface.php';
+    require_once 'Heading.class.php';
+    require_once 'HeadingArray.class.php';
+    require_once 'Numbering.class.php';
     require_once 'fileutils.php';
 
 
@@ -55,7 +55,8 @@ namespace MultilingualMarkdown {
             '.))'           => 'end',           /// close current section and pop previous section
             '.languages'    => 'languages',     /// declare languages and start files generation
             '.numbering'    => 'numbering',     /// sets the numbering schemes for headings levels
-            '.toc'          => 'toc'            /// insert a table of contents
+            '.toc'          => 'toc',           /// insert a table of contents
+            '.{'            => 'escape'         /// start escaped text
         ];
 
         // Current input filename, file and reading status
@@ -75,7 +76,6 @@ namespace MultilingualMarkdown {
         private $outFiles = [];                 /// '<language>' => file-handle
         private $lastWritten = [];              /// last  character written to file
         private $curOutputs = [];               /// current output buffers for files
-        private $outputMODE = self::MD;         /// value from $OUTMODE for anchors/links writing mode
         private $mainFilename = null;           /// -main parameter
         private $rootDir = null;                /// root directory, or main file directory
 
@@ -87,17 +87,15 @@ namespace MultilingualMarkdown {
         private $languagesSet = false;          // ignore any input until '.languages' directive has been processed
         private $emptyOutput = true;            // ignore EOL until something else has been written to files
         private $spaceOnly = true;              // Nothing else but space / tabs since beginning of current line
-        
-        /*
-        private $levelsNumbering = [];          // numbering for each level scheme: 'A', 'a', '1'
-        private $levelsSeparator = [];          // separator character for each level scheme: '.', '-' etc
-        private $fullNumeric = true;            // true if all levels numbering are numeric (used in MD output mode)
-        */
 
         // All files headings and numbering for tables of contents (TOC)
         private $relFilenames = [];             // relative filenames for each filename
         private $allHeadingArrays = [];         // HeadingArray for each relative filename
         private $allNumberings = [];            // Numbering for each relative filename
+
+        // Initial settings
+        private $outputModeName = '';           // from -out command line argument
+        private $numberingScheme = '';          // from -numbering command line argument
 
         /**
          * Add a file to the input files array.
@@ -127,9 +125,13 @@ namespace MultilingualMarkdown {
          *
          * @return nothing
          */
-        public function setOutputMODE(string $mode) : void
+        public function setOutputMode(string $mode) : void
         {
-            $this->outputMODE = $this->OUTMODE[$mode] ?? 'md';
+            if (!OutputModes::isValid($mode)) {
+                $this->error("invalid output mode $mode, using \'md\'");
+                $mode = 'md';
+            }
+            $this->outputModeName = $mode;
         }
 
         /**
@@ -163,8 +165,7 @@ namespace MultilingualMarkdown {
          */
         public function setNumbering(string $scheme) : void
         {
-            $this->allNumberings = new Numbering($scheme, $this);
-            $this->resetParsing();
+            $this->numberingScheme = $scheme;
         }
 
         /**
@@ -742,16 +743,21 @@ namespace MultilingualMarkdown {
 
         /**
          * .numbering directive handling. 
-         * Sets the numbering schemes for headings and TOC:
-         *      .numbering m:<symbol><sep>,...
+         * Sets the numbering schemes for headings and TOC in current file.
+         * The directive ùuts be placed between the .languages directive and the level 1
+         * heading or it will miss numbering the headigns already processed.
+         * 
+         *      .numbering m:<prefix>:<symbol><sep>,...
          *
-         *      - `m`      is the heading level
+         *      - m        is the heading level to define
+         *      - <prefix> is a prefix string for level 1 heading only (e.g. Chapter )
          *      - <symbol> is a number (e.g: `1`) or a letter (e.g: `a`) for this level,
          *                 case (`a` or `A`) is preserved and numbering starts with the given value
-         *      - `sep`    is the symbol to use after this level numbering, e.g `.` or `-`
+         *      - <sep>    is the symbol to use after this level numbering before next level, e.g `.` or `-`
+         *                 it is nopt used for last level which is always followed by ')'
          *
-         * The .numbering directive should be placed between the .languages directive and the first Heading level 1 for
-         * it to have a consistent effect. If it is placed after some headings, they won't be numbered.
+         * The .numbering directive has no effect if a global numbering scheme has been set. (Using the 
+         * -numbering script argument.)
          * 
          * @param string $dummy unused
          *
@@ -762,8 +768,18 @@ namespace MultilingualMarkdown {
             // skip initial space
             $this->curWord = trim($this->getChar());
             // get definition until next space / stop if EOL
-            $defs = $this->getCharUntil(' ', true);
-            $this->setNumbering($defs);
+            $scheme = $this->getCharUntil(' ', true);
+
+            // Any global scheme?
+            if (!empty($this->numberingScheme)) {
+                return;
+            }
+            // set to current file
+            $relFilename = $this->relFilenames[$this->inFilename];
+            $this->allNumberings[$relFilename] = new Numbering($scheme, $this);
+            $this->allNumberings[$relFilename]->setOutputMode($this->outputModeName, $this);
+            ///$$ TODO
+            //$this->setNumbering($defs);
         }
 
         /**
@@ -846,12 +862,6 @@ namespace MultilingualMarkdown {
                     }
                     $this->resetParsing();
                     break;
-                case 'out=': // out=html|md
-                    // get mode (used later)
-                    $outmode = $this->getCharUntil(' ', true);
-                    $this->setOutputMODE($outmode);
-                    $this->resetParsing();
-                    break;
                 case 'level=':
                     // get definition until next space
                     $def = $this->getCharUntil(' ', true);
@@ -932,6 +942,17 @@ namespace MultilingualMarkdown {
                     $this->error("starting level not found for TOC in file {$this->inFilename}");
                 }
                 */
+            }
+        }
+
+        /**
+         * Escape text directive
+         */
+        private function escape($dummy) : void
+        {
+            $content = $this->getContentUntil('.}');
+            if ($this->languagesSet) {
+                $this->outputToFiles($content);
             }
         }
 
@@ -1323,7 +1344,7 @@ namespace MultilingualMarkdown {
                     return false;
                 }
                 // write HTML anchor
-                $attr = ($this->outputMODE == self::HTMLOLD) ? 'name' : 'id';
+                $attr = ($this->outputModeName == 'htmlold') ? 'name' : 'id';
                 if (fwrite($this->outFiles[$language], "<a $attr=\"{$anchor}\"></a>") === false) {
                     $this->error("unable to write to {$this->outFilenames[$language]}");
                     return false;
@@ -1505,7 +1526,7 @@ namespace MultilingualMarkdown {
                     $this->error("could not open [$filename]");
                     continue;
                 }
-                $headingArray = new HeadingArray();
+                $headingArray = new HeadingArray($relFilename);
                 $this->curLine = 0;
                 $languageSet = false;
                 do {
@@ -1535,6 +1556,7 @@ namespace MultilingualMarkdown {
                         }
                     }
                 } while (!feof($this->inFile));
+
                 $this->closeInput();
                 // force a level 1 object if no headings
                 if ($headingArray->isEmpty()) {
@@ -1739,21 +1761,21 @@ namespace MultilingualMarkdown {
                     }
                     // start directive detection?
                     if (empty($this->curWord) || !$this->inDirective) {
-                        // MLMD escaping .{ .} ?
+                        /*$$
+                        // escaping directive?
                         if ($this->isMatching('.{')) {
-                            //$this->skipChar(2);
                             $content = $this->getContentUntil('.}');
-                            // output without expanding variables
-                            //$this->outputToFiles('', true);
-                            //$this->outputToFiles(mb_substr($content, 0, -2, 'UTF-8'), true, null, false);
                             if ($this->languagesSet) {
                                 $this->outputToFiles($content);
                             }
                             $this->resetParsing();
-                        } else {                           
+                        } else { 
+                        */
                             $this->inDirective = true;
                             $this->curWord = $this->curChar;                
+                        /*$$
                         }
+                        */
                         break;
                     }
                     // currently in a directive?
