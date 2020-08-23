@@ -63,18 +63,24 @@ should be in this root directory or in subdirectories.
 
 Template files must be named with .base.md or .mlmd extension, other extensions are ignored.
 
-Directives in templates control the languages specifics files generation:
+Directives in templates control the languages specifics files generation.
 
+Global directives on one line:
 - .languages    declares languages codes (global)
 - .numbering    sets the heading numbering schemes (global, also available
                 as script argument and .toc parameter)
 - .toc          generates a table of contents using headings levels
+
+Directives anywhere in the text and in headings:
 - .all((        starts a section for all languages
 - .ignore((     starts an ignored section
 - .default((    starts a section for languages which don't have a specific section
 - .<language>(( starts a section specific to <language>
 - .))           ends a section
 - .{ .}         encloses escaped text (no variable expansion)
+
+Text can also be escaped between back-ticks '`', double back_ticks '``', 
+code fences '```' and double quotes '\"'. Escaped text neutralizes directives and variables.
 
 The following variables are expanded in the generated files except in escaped text:
 
@@ -161,3 +167,4 @@ while ($arg < $argc) {
 
 // do the job
 $generator->processFiles();
+echo "OK\n";

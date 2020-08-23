@@ -81,7 +81,7 @@ namespace MultilingualMarkdown {
          */
         public static function getFromName(string $name, Numbering& $numbering = null) : int
         {
-            $arrayName = $numbering->isActive() ? 'numberedMode' : 'nonNumberedMode';
+            $arrayName = $numbering ? ($numbering->isActive() ? 'numberedMode' : 'nonNumberedMode') : 'nonNumberedMode';
             if (\array_key_exists($name, self::$$arrayName)) {
                 return self::$$arrayName[$name];
             }

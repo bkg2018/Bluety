@@ -23,18 +23,20 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  * @link      TODO
  */
-
 namespace MultilingualMarkdown {
+
+    require_once 'OutputModes.class.php';
+
     /**
      * Heading class, used by $headings array for all headings from all files.
      */
     class Heading
     {
-        public $number = 0;     /// unique number over all files and headings
-        public $text = '';      /// heading text, including MLMD directives if needed
-        public $level = 0;      /// heading level = number of '#'s
-        public $line = '';      /// line number in source file
-        public $prefix = '';    /// heading prefix in TOC and text, computed
+        private $number = 0;    /// unique number over all files and headings
+        private $text = '';     /// heading text, including MLMD directives if needed
+        private $level = 0;     /// heading level = number of '#'s
+        private $line = '';     /// line number in source file
+        private $prefix = '';   /// heading prefix in TOC and text, computed
                                 /// from 'numbering' directive or toc parameter
 
         static $curNumber = 0;  /// current value for next $number
@@ -42,20 +44,24 @@ namespace MultilingualMarkdown {
 
         /**
          * Build a heading with a source text and a line number in a file.
+         * Line number is used by caller to check if it's processing the same heading.
+         * Level is used by Numbering to check against scheme and compute numbering prefix.
          * 
          * @param string $text   the source text for heading, including the '#' prefix.
          * @param int    $line   the line number in the source file.
          * @param object $logger the caller object with a logging function called error()
          */
-        function __construct(string $text, int $line, object $logger) 
+        function __construct(string $text, int $line, ?object $logger) 
         {
             // sequential number for all headers of all files
             self::$curNumber += 1;
             $this->number = self::$curNumber;
             // count number of '#' = heading level
-            $this->level = self::getHeadingLevel($text);
+            $this->level = self::getLevelFromText($text);
             if ($this->level > self::$prevLevel + 1) {
-                $logger->error("level {$this->level} heading skipped one or more heading levels");
+                if ($logger) {
+                    $logger->error("level {$this->level} heading skipped one or more heading levels");
+                }
             }
             $this->line = $line;
             $this->text = trim(mb_substr($text, $this->level, null, 'UTF-8'));
@@ -63,7 +69,7 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Resets the number to 0.
+         * Resets the global number to 0.
          */
         public static function init() : void 
         {
@@ -71,15 +77,73 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Global number of all headings accessor.
+         */
+        public function getNumber()
+        {
+            return $this->number;
+        }
+
+        /**
+         * Text accessor.
+         * The heading text doesn't include the '#' prefix.
+         */
+        public function getText()
+        {
+            return $this->text;
+        }
+
+        /**
+         * Level accessor.
+         */
+        public function getLevel() : int
+        {
+            return $this->level;
+        }
+
+        /**
+         * Check Level limits.
+         */
+        public function isLevelWithin(object $numbering) : bool
+        {
+            return ($this->level <= $numbering->getEnd() && $this->level >= $numbering->getStart());
+        }
+        
+        /**
+         * Line accessor.
+         */
+        public function getLine() : int
+        {
+            return $this->line;
+        }
+
+        /**
+         * Prefix write accessor.
+         * The prefix will be set by Numbering scheme and used by generator.
+         */
+        public function setPrefix(string $prefix) : void
+        {
+            $this->prefix = $prefix;
+        }
+
+        /**
+         * Prefix read accessor.
+         */
+        public function getPrefix() : string
+        {
+            return $this->prefix;
+        }
+
+        /**
          * Compute heading level from the starting '#'s.
-         * Static function, call as Heading::getHeadingLevel(string)
-         * also on instances like $heading->getHeadingLevel(string)
+         * Static function, call as Heading::getLevelFromText(string)
+         * also on instances like $heading->getLevelFromText(string)
          *
          * @param string $content the text with '#'s from which to compute heading level.
          *
          * @return int the heading level
          */
-        static function getHeadingLevel(string $content) : int 
+        static function getLevelFromText(string $content) : int 
         {
             $text = trim($content);
             $level = 0;
