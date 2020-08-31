@@ -1,7 +1,9 @@
 <?php
 
 /**
- * Multilingual Markdown generator - Logger interface
+ * Multilingual Markdown generator - TokenText class
+ *
+ * This class represents a token for normal text. In normal text output, variables are expanded.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -17,7 +19,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_logger_interface
+ * @package   mlmd_token_text_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -27,13 +29,54 @@
 declare(strict_types=1);
 
 namespace MultilingualMarkdown {
+
+    mb_internal_encoding('UTF-8');
+
+    require_once 'Token.class.php';
+
+    use MultilingualMarkdown\Token;
+    
     /**
-     * Heading class, used by $headings array for all headings from all files.
+     * Token for text.
      */
-    interface Logger
+    class TokenText extends Token
     {
-        public function error(string $msg, ?string $source = null, $line = false): bool;
-        public function warning(string $msg, ?string $source = null, $line = false): bool;
+        protected $content; /// text content for this token, including spaces and EOLs
+        protected $length;  /// number of UTF-8 characters
+
+        public function __construct($content)
+        {
+            parent::__construct(TokenType::TEXT);
+            $this->content = $content;
+            $this->length = mb_strlen($content);
+        }
+
+        /**
+         * Add a character or string to content.
+         *
+         * @param string $c the character or string to add.
+         */
+        public function addChar(string $c): void
+        {
+            $content .= $c;
+            $this->length = mb_strlen($this->content);
+        }
+
+        /**
+         * Return the content.
+         */
+        public function getText(): Streaming
+        {
+            return $this->content;
+        }
+
+        /**
+         * Return the number of UTF-8 characters in content.
+         */
+        public function getTextLength(): int
+        {
+            return $this->length;
+        }
     }
 
 }

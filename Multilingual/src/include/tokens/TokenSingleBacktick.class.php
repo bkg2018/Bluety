@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
-namespace MultilingualMarkdown;
-
-use PHPUnit\Framework\TestCase;
-use MultilingualMarkdown\Heading;
-
-/** Copyright 2020 Francis Piérot
+/**
+ * Multilingual Markdown generator - TokenSingleBacktick class
+ *
+ * This class represents a token for a single back-tick character around escaped text.
+ *
+ * Copyright 2020 Francis Piérot
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
  * (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
@@ -21,19 +19,31 @@ use MultilingualMarkdown\Heading;
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_heading_unit_tests
+ * @package   mlmd_token_single_backtick_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  * @link      TODO
  */
-class HeadingTest extends TestCase
-{
-    public function testGetLevel()
+
+declare(strict_types=1);
+
+namespace MultilingualMarkdown {
+
+    require_once 'TokenEscaper.class.php';
+
+    use MultilingualMarkdown\TokenEscaper;
+    
+    /**
+     * Class for the single back-tick escaper.
+     * The token will skip over the text until the closing double back-tick
+     * and send everything to outputs.
+     */
+    class TokenSingleBacktick extends TokenEscaper
     {
-        $heading = new Heading('### level 3', 5, null);
-        $this->assertEquals(3, $heading->getLevel());
-        $test = Heading::getLevelFromText('##### test');
-        $this->assertEquals(5, $test);
+        public function __construct()
+        {
+            parent::__construct('`');
+        }
     }
 }

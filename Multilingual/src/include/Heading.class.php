@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * Multilingual Markdown generator - Heading class
  *
@@ -11,7 +11,7 @@ declare(strict_types=1);
  * subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
@@ -23,7 +23,12 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  * @link      TODO
  */
+
+declare(strict_types=1);
+
 namespace MultilingualMarkdown {
+
+    mb_internal_encoding('UTF-8');
 
     require_once 'OutputModes.class.php';
 
@@ -39,19 +44,19 @@ namespace MultilingualMarkdown {
         private $prefix = '';   /// heading prefix in TOC and text, computed
                                 /// from 'numbering' directive or toc parameter
 
-        static $curNumber = 0;  /// current value for next $number
-        static $prevLevel = 0;  /// minimalistic security check - assumes headings are created following the text order
+        private static $curNumber = 0;  /// current value for next $number
+        private static $prevLevel = 0;  /// minimalistic security check - assumes headings are created following the text order
 
         /**
          * Build a heading with a source text and a line number in a file.
          * Line number is used by caller to check if it's processing the same heading.
          * Level is used by Numbering to check against scheme and compute numbering prefix.
-         * 
+         *
          * @param string $text   the source text for heading, including the '#' prefix.
          * @param int    $line   the line number in the source file.
          * @param object $logger the caller object with a logging function called error()
          */
-        function __construct(string $text, int $line, ?object $logger) 
+        public function __construct(string $text, int $line, ?object $logger)
         {
             // sequential number for all headers of all files
             self::$curNumber += 1;
@@ -64,14 +69,14 @@ namespace MultilingualMarkdown {
                 }
             }
             $this->line = $line;
-            $this->text = trim(mb_substr($text, $this->level, null, 'UTF-8'));
+            $this->text = trim(mb_substr($text, $this->level, null));
             self::$prevLevel = $this->level;
         }
 
         /**
          * Resets the global number to 0.
          */
-        public static function init() : void 
+        public static function init(): void
         {
             Heading::$curNumber = 0;
         }
@@ -79,7 +84,7 @@ namespace MultilingualMarkdown {
         /**
          * Global number of all headings accessor.
          */
-        public function getNumber()
+        public function getNumber(): int
         {
             return $this->number;
         }
@@ -88,7 +93,7 @@ namespace MultilingualMarkdown {
          * Text accessor.
          * The heading text doesn't include the '#' prefix.
          */
-        public function getText()
+        public function getText(): string
         {
             return $this->text;
         }
@@ -96,7 +101,7 @@ namespace MultilingualMarkdown {
         /**
          * Level accessor.
          */
-        public function getLevel() : int
+        public function getLevel(): int
         {
             return $this->level;
         }
@@ -104,7 +109,7 @@ namespace MultilingualMarkdown {
         /**
          * Check Level limits.
          */
-        public function isLevelWithin(object $numbering) : bool
+        public function isLevelWithin(object $numbering): bool
         {
             return ($this->level <= $numbering->getEnd() && $this->level >= $numbering->getStart());
         }
@@ -112,7 +117,7 @@ namespace MultilingualMarkdown {
         /**
          * Line accessor.
          */
-        public function getLine() : int
+        public function getLine(): int
         {
             return $this->line;
         }
@@ -121,7 +126,7 @@ namespace MultilingualMarkdown {
          * Prefix write accessor.
          * The prefix will be set by Numbering scheme and used by generator.
          */
-        public function setPrefix(string $prefix) : void
+        public function setPrefix(string $prefix): void
         {
             $this->prefix = $prefix;
         }
@@ -129,7 +134,7 @@ namespace MultilingualMarkdown {
         /**
          * Prefix read accessor.
          */
-        public function getPrefix() : string
+        public function getPrefix(): string
         {
             return $this->prefix;
         }
@@ -143,11 +148,11 @@ namespace MultilingualMarkdown {
          *
          * @return int the heading level
          */
-        static function getLevelFromText(string $content) : int 
+        public static function getLevelFromText(string $content): int
         {
             $text = trim($content);
             $level = 0;
-            $length = mb_strlen($text, 'UTF-8');
+            $length = mb_strlen($text);
             while (mb_substr($text, $level, 1) == '#' && $level < $length) {
                 $level += 1;
             }

@@ -10,7 +10,7 @@
  * subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
@@ -23,7 +23,9 @@
  * @link      TODO
  */
 
-function displayHelp() 
+mb_internal_encoding('UTF-8');
+
+function displayHelp()
 {
     echo "
 Multilingual Markdown generator - Main script
@@ -109,19 +111,19 @@ $params = [
 $arg = 1;
 while ($arg < $argc) {
     $done = false;
-    foreach ($params as $param => $def ) {
+    foreach ($params as $param => $def) {
         $function = $def[0];
         $type = $def[1];
-        $ok = (mb_strtolower($argv[$arg], 'UTF-8') == $param);
+        $ok = (mb_strtolower($argv[$arg]) == $param);
         if ($ok) {
-            if ($arg > $argc-1) {
+            if ($arg > $argc - 1) {
                 echo "WARNING: Missing value for parameter $param\n";
                 $value = '';
             } else {
                 $arg += 1;
                 $value = $argv[$arg];
             }
-            switch($type) {
+            switch ($type) {
                 case 'file':
                     if (!file_exists($value)) {
                         echo "ERROR: input file [$value] doesn't exist\n";
@@ -136,15 +138,15 @@ while ($arg < $argc) {
                     break;
                 case '-':
                     // no value for this parameter
-                break;
+                    break;
                 default:// never happens
                     echo "ERROR: unknown parameter type [$type] in script!\n";
                     exit(1);
             }
             if ($ok) {
                 // global or Generator function?
-                if ($function[0]==':') {
-                    $function = substr($function,1);
+                if ($function[0] == ':') {
+                    $function = substr($function, 1);
                     $function($value);
                 } else {
                     $generator->$function($value);

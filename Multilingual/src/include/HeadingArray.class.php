@@ -1,9 +1,9 @@
 <?php
-declare(strict_types=1);
+
 /**
  * Multilingual Markdown generator - Heading Array class
  * The array contains an object for each heading from one file. The object
- * has a level (the number of prefix '#'), a unique number (unique above all 
+ * has a level (the number of prefix '#'), a unique number (unique above all
  * processed files),
  *
  * Copyright 2020 Francis Piérot
@@ -14,7 +14,7 @@ declare(strict_types=1);
  * subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
@@ -27,7 +27,11 @@ declare(strict_types=1);
  * @link      TODO
  */
 
+declare(strict_types=1);
+
 namespace MultilingualMarkdown {
+
+    mb_internal_encoding('UTF-8');
 
     use MultilingualMarkdown\Heading;
     use MultilingualMarkdown\Numbering;
@@ -50,21 +54,22 @@ namespace MultilingualMarkdown {
         /**
          * Build the array, register the file base path (no extension)
          */
-        function __construct(string $file) {
+        public function __construct(string $file)
+        {
             $this->file = $file;
         }
 
         /**
          * Set the output mode.
          * The output mode can be combined with a numbering scheme, in which case
-         * the numbering scheme is reset to all 0 offsets and associated for the 
+         * the numbering scheme is reset to all 0 offsets and associated for the
          * given output mode. The scheme may have been set beforehand, but it can also be
          * set afterwards on the Numbering object.
-         * 
+         *
          * @param string $name      the output mode name, 'md', 'mdpure', 'html' or 'htmlold'
          * @param object $numbering the Numbering associated object if any, can be null or ignored
          */
-        public function setOutputMode(string $name, ?object $numbering = null) : void
+        public function setOutputMode(string $name, ?object $numbering = null): void
         {
             $this->outputMode = OutputModes::getFromName($name);
             if ($numbering !== null) {
@@ -75,10 +80,10 @@ namespace MultilingualMarkdown {
 
         /**
          * Check if array if empty.
-         * 
+         *
          * @return bool true if empty.
          */
-        public function isEmpty() : bool
+        public function isEmpty(): bool
         {
             return (count($this->allHeadings) ==  0);
         }
@@ -86,7 +91,7 @@ namespace MultilingualMarkdown {
         /**
          * Add a heading to the array
          */
-        public function add(Heading $heading) : void
+        public function add(Heading $heading): void
         {
             $this->allHeadings[] = $heading;
         }
@@ -94,13 +99,14 @@ namespace MultilingualMarkdown {
         /**
          * Reset exploration to first heading.
          */
-        public function resetCurrent() : void {
+        public function resetCurrent(): void
+        {
             $this->curIndex = 0;
         }
 
         /**
          * Get last indexx value for the array.
-         * 
+         *
          * @return int the last valid index value
          */
         public function getLastIndex()
@@ -110,10 +116,10 @@ namespace MultilingualMarkdown {
 
         /**
          * Access to current heading.
-         * 
+         *
          * @return Heading reference to the current heading.
          */
-        public function &getCurrent() : Heading
+        public function &getCurrent(): Heading
         {
             return $this->allHeadings[$this->curIndex];
         }
@@ -125,7 +131,7 @@ namespace MultilingualMarkdown {
          *
          * @return Heading reference to the heading, null if invalid index
          */
-        public function &getAt(int $index) : ?Heading
+        public function &getAt(int $index): ?Heading
         {
             if ($index < 0 || $index >= count($this->allHeadings)) {
                 return null;
@@ -135,11 +141,11 @@ namespace MultilingualMarkdown {
 
         /**
          * Go to next heading and get it.
-         * 
+         *
          * @return Heading reference to the new current heading
          *                 null if no more heading available
          */
-        public function &getNext() : ?Heading
+        public function &getNext(): ?Heading
         {
             if ($this->curIndex >= count($this->allHeadings) - 1) {
                 return null;
@@ -155,16 +161,16 @@ namespace MultilingualMarkdown {
          * @param int $index the index of the heading in the array, or -1 for current exploration index
          * @param int $start the highest heading level (1 = top)
          * @param int $end   the lowest heading level (> start)
-         * 
+         *
          * @return bool true if the current heading is the last available between start and $end,
          *              false if there is at least one relevant heading after it.
          */
-        public function isHeadingLastBetween(int $index = -1, int $start = 1, int $end = 9) : bool
+        public function isHeadingLastBetween(int $index = -1, int $start = 1, int $end = 9): bool
         {
             if ($index < 0) {
                 $index = $this->curIndex;
             }
-            for ($i = $index + 1 ; $i < count($this->allHeadings) ; $i += 1) {
+            for ($i = $index + 1; $i < count($this->allHeadings); $i += 1) {
                 if ($this->allHeadings[$i]->getLevel() >= $start && $this->allHeadings[$i]->getLevel() <= $end) {
                     return false;
                 }
@@ -178,11 +184,11 @@ namespace MultilingualMarkdown {
          * @param int $index the index of the heading in the array, or -1 for current exploration index
          * @param int $start the highest heading level (1 = top)
          * @param int $end   the lowest heading level (> start)
-         * 
+         *
          * @return bool true if the current heading is the last available between start and $end,
          *              false if there is at least one relevant heading after it.
          */
-        public function isHeadingBetween(int $index = -1, int $start = 1, int $end = 9) : bool
+        public function isHeadingBetween(int $index = -1, int $start = 1, int $end = 9): bool
         {
             if ($index < 0) {
                 $index = $this->curIndex;
@@ -201,7 +207,7 @@ namespace MultilingualMarkdown {
          *
          * @return int -1 if no heading found, else the index of Heading object
          */
-        public function findIndex(int $level = 1, int $line = 0) : ?int
+        public function findIndex(int $level = 1, int $line = 0): ?int
         {
             foreach ($this->allHeadings as $index => $object) {
                 if ($object->getLine() >= $line) {
@@ -215,18 +221,18 @@ namespace MultilingualMarkdown {
 
         /**
          * Check if an index is valid.
-         * 
+         *
          * @param int $index -1 for current index or a heading index
          * @param object $logger the caller object with an error() function, can be null to ignore errors.
-         * 
+         *
          * @return int|null same index if valid, current index if -1, null if invalid
          */
-        private function checkIndex(int $index = -1, ?object $logger = null) : ?int
+        private function checkIndex(int $index = -1, ?object $logger = null): ?int
         {
             if ($index < -1 || $index >= count($this->allHeadings)) {
                 if ($logger) {
                     $logger->error("invalid heading index $index");
-                }                
+                }
                 return null;
             }
             if ($index == -1) {
@@ -249,7 +255,7 @@ namespace MultilingualMarkdown {
          *
          * @return string the spacing prefix for current output mode, or null if error.
          */
-        public function getSpacing(int $index = -1, ?object $logger = null) : string
+        public function getSpacing(int $index = -1, ?object $logger = null): string
         {
             $index = $this->checkIndex($index, $logger);
             if ($index === null) {
@@ -290,7 +296,7 @@ namespace MultilingualMarkdown {
          *
          * @return string the anchor, or null if error.
          */
-        public function getAnchor(int $index, ?object $logger = null) : string
+        public function getAnchor(int $index, ?object $logger = null): string
         {
             $id = $this->allHeadings[$index]->getNumber();
             switch ($this->outputMode) {
@@ -306,18 +312,18 @@ namespace MultilingualMarkdown {
                 $logger->error("invalid output mode {$this->outputMode}");
             }
             return null;
-       }
+        }
 
         /**
          * Get TOC link for current or given heading in a given file.
          * The returned string includes the heading text as legend for the link.
          * The file path must be the output language file relative path where the anchor lies for this link.
-         * The caller is responsible for giving the relevant language file name and maximum 
+         * The caller is responsible for giving the relevant language file name and maximum
          * heading level so the last line can be detected.
-         * 
+         *
          * HTML all variants: <A href="file#id">text</A>
          * MD all variants: [text](file#id)
-         * 
+         *
          * @param string $path      the file path where lies the anchor, must be relative to root dir
          * @param int    $index     the index of the heading, -1 to use current exploration index.
          * @param int    $start     the minimum heading level (lowest number of '#'s)
@@ -328,7 +334,7 @@ namespace MultilingualMarkdown {
          * @return string the TOC link, or null if error.
 
          */
-        public function getTOCLink(string $path, int $index, int $start, int $end, ?object $logger = null) : string
+        public function getTOCLink(string $path, int $index, int $start, int $end, ?object $logger = null): string
         {
             $index = $this->checkIndex($index, $logger);
             if ($index === null) {
@@ -357,12 +363,12 @@ namespace MultilingualMarkdown {
          * Get Numbering for current or given heading.
          * The caller provide a Numbering object setup for current file.
          * A dash may prefix text for some output modes if requested (for TOC lines)
-         * 
+         *
          * HTMLNUM/HTMLOLDNUM:  `<numbering>)`
          * MDNUM:               `- <numbering>)`
          * MDPURE with NUM:     `1.`
          * all other variants:  `-`
-         * 
+         *
          * @param int    $index     the index of the heading, -1 to use current exploration index.
          * @param object $numbering the Numbering object in charge of current file numbering scheme.
          * @param bool   $addDash   true to add a dash prefix in MDNUM or non numbered modes
@@ -371,7 +377,7 @@ namespace MultilingualMarkdown {
          *
          * @return string the numbering string, or null if error.
         */
-        public function getNumberingText(int $index, object &$numbering, bool $addDash, ?object $logger = null) : string
+        public function getNumberingText(int $index, object &$numbering, bool $addDash, ?object $logger = null): string
         {
             if ($index >= 0) {
                 // jump to the idnex while updating the numbering
@@ -380,7 +386,7 @@ namespace MultilingualMarkdown {
                     return null;
                 }
                 $numbering->resetNumbering();
-                for ($i = 0 ; $i < $index ; $i += 1) {
+                for ($i = 0; $i < $index; $i += 1) {
                     $numbering->next($this->allHeadings[$i]->getLevel());
                 }
             } else {
@@ -396,14 +402,14 @@ namespace MultilingualMarkdown {
         /**
          * Get full line for current or given heading.
          * This must be used sequentially on all headings of the array or numbering won't be consistent
-         * regarding previous heading level. the whole sequence must be started with a Numbering and 
+         * regarding previous heading level. the whole sequence must be started with a Numbering and
          * current index reset.
          *
          * Components for heading line :
-         * 
+         *
          * HTML all variants:  <anchor>\n<numbering> <text>\n\n
          * MD all variants:    <numbering> <text><anchor>\n\n
-         * 
+         *
          * @param int    $index     index of the heading, -1 to use current exploration index.
          * @param object $numbering the Numbering object in charge of current file numbering scheme.
          * @param object $logger    the caller object with an error() function, can be null to ignore errors.
@@ -411,7 +417,7 @@ namespace MultilingualMarkdown {
          *
          * @return string the full heading line, or null if error.
          */
-        public function getHeadingLine(int $index, object &$numbering, ?object $logger = null) : ?string
+        public function getHeadingLine(int $index, object &$numbering, ?object $logger = null): ?string
         {
             $index = $this->checkIndex($index, $logger);
             if ($index === null) {
@@ -433,23 +439,23 @@ namespace MultilingualMarkdown {
         /**
          * Get TOC full line for current or given heading.
          * This must be used sequentially on all headings of the array or numbering won't be consistent
-         * regarding previous heading level. the whole sequence must be started with a Numbering and 
+         * regarding previous heading level. the whole sequence must be started with a Numbering and
          * current index reset.
          *
          * Components for TOC line :
-         * 
+         *
          * HTML all variants:  <spacing><numbering> <TOClink>\n\n
          * MD all variants:    <spacing><numbering> <TOClink>\n\n
-         * 
+         *
          * @param int    $index     index of the heading, -1 to use current exploration index.
          * @param object $numbering the Numbering object in charge of current file numbering scheme.
          * @param object $logger    the caller object with an error() function, can be null to ignore errors.
          * @see Logger interface
          *
-         * @return string the full heading line, or null if error or level not within 
+         * @return string the full heading line, or null if error or level not within
          *                numbering scheme limits.
          */
-        public function getTOCLine(int $index, object &$numbering, ?object $logger = null) : ?string
+        public function getTOCLine(int $index, object &$numbering, ?object $logger = null): ?string
         {
             $index = $this->checkIndex($index, $logger);
             if ($index === null) {

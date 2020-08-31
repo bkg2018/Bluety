@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
 * Multilingual Markdown generator - Numbering class
 * The class handles numbering schemes interpretation and automatic increment of heading levels numbers.
@@ -12,7 +12,7 @@ declare(strict_types=1);
 * subject to the following conditions:
 *
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
 * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
@@ -24,7 +24,12 @@ declare(strict_types=1);
 * @license   https://opensource.org/licenses/mit-license.php MIT License
 * @link      TODO
 */
+
+declare(strict_types=1);
+
 namespace MultilingualMarkdown {
+
+    mb_internal_encoding('UTF-8');
 
     require_once 'OutputModes.class.php';
 
@@ -52,12 +57,12 @@ namespace MultilingualMarkdown {
 
         /**
          * Return Roman number from decimal.
-         * 
+         *
          * @param int $number the number to translate
-         * 
+         *
          * @return string the corresponding Roman number
          */
-        public static function getRoman(int $number) : string
+        public static function getRoman(int $number): string
         {
             $result = '';
             foreach (self::$intToRoman as $limit => $roman) {
@@ -66,29 +71,29 @@ namespace MultilingualMarkdown {
                     $result .= $roman;
                 }
                 if ($number == 0) {
-                   break;
+                    break;
                 }
-            }            
+            }
             return $result;
         }
 
         /**
          * Return decimal from Roman number.
-         * The given string is interpreted as a Roman number until a non Roman notation is met, 
+         * The given string is interpreted as a Roman number until a non Roman notation is met,
          * or until the end of string. If the string is no Roman number, no error happens and the
          * value 0 is returned.
-         * 
+         *
          * @param string $roman the Roman number to translate
-         * 
+         *
          * @return int the integer value, until first non Roman character or end of $roman
          */
-        public static function getFromRoman(string $roman) : int
+        public static function getFromRoman(string $roman): int
         {
             $result = 0;
-            $maxpos = mb_strlen($roman,'UTF-8') - 1;
+            $maxpos = mb_strlen($roman) - 1;
             $pos = 0;
             while ($pos < $maxpos) {
-                // try 2 characters 
+                // try 2 characters
                 $test = mb_substr($roman, $pos, 2);
                 if (\array_key_exists($test, self::$romanToInt)) {
                     $result += self::$romanToInt[$test];
@@ -112,11 +117,11 @@ namespace MultilingualMarkdown {
          * If numbering scheme has been set, the output mode will use a numbered format.
          * If not, it will use a non-numbered format.
          * Setting a numbering scheme after setting the output mode will adjust the mode.
-         * 
+         *
          * @param string $name the output mode name 'md', 'mdpure', 'html' or 'htmlold'
          * @param object $logger the caller object with an error() function
          */
-        public function setOutputMode(string $name, ?object $logger = null) : void
+        public function setOutputMode(string $name, ?object $logger = null): void
         {
             $mode = OutputModes::getFromName($name, $this);
             if ($mode == OutputModes::INVALID) {
@@ -130,29 +135,29 @@ namespace MultilingualMarkdown {
 
         /**
          * Check if there is an ative scheme.
-         * 
+         *
          * @return bool true if a Numbering scheme is active, false if it is empty.
          */
-        public function isActive() : bool
+        public function isActive(): bool
         {
             return count($this->levelsNumbering) > 0;
         }
 
         /**
          * Restrict a level between 1 and 9.
-         * 
+         *
          * @param int $level the proposed level
-         * 
+         *
          * @return int the level adjusted to fit between 1 and 9
          */
-        public function checkLevel(int $level) : int
+        public function checkLevel(int $level): int
         {
             return ($level < 1) ? 1 : ($level > 9) ? 9 : $level;
         }
 
         /**
          * Build the numbering scheme.
-         * 
+         *
          * A numbering scheme is made of one or more definitions, each definition sets a scheme
          * for a heading level.
          *
@@ -174,22 +179,22 @@ namespace MultilingualMarkdown {
          * @param object $logger  the caller object with an error() function
          * @see Logger interface
          */
-        function __construct(string $scheme, ?object $logger = null) 
+        public function __construct(string $scheme, ?object $logger = null)
         {
             $this->levelsPrefix = []; // only allowed for level 1
             $this->levelsNumbering = [];
             $this->levelsRoman = [];
             $this->levelsSeparator = [];
             $this->curNumbering = [];
-            $this->definitionSeparator = ':'; 
-            $schemeLen = mb_strlen($scheme,'UTF-8');
+            $this->definitionSeparator = ':';
+            $schemeLen = mb_strlen($scheme);
             if ($schemeLen == 0) {
                 return ;
             }
 
             // catch the <defsep> character after first level
-            for( $pos = 0 ; $pos < $schemeLen ; $pos += 1) {
-                $c = mb_substr($scheme, $pos, 1, 'UTF-8');
+            for ($pos = 0; $pos < $schemeLen; $pos += 1) {
+                $c = mb_substr($scheme, $pos, 1);
                 if (!is_numeric($c)) {
                     $this->definitionSeparator = $c;
                     break;
@@ -226,8 +231,8 @@ namespace MultilingualMarkdown {
                 }
                 $this->levelsRoman[$level] = (($symbol == '&I') || ($symbol == '&i'));
                 if (
-                    ($symbol < '1' || $symbol > '9') 
-                    && ($symbol < 'a' || $symbol > 'z') 
+                    ($symbol < '1' || $symbol > '9')
+                    && ($symbol < 'a' || $symbol > 'z')
                     && ($symbol < 'A' || $symbol > 'Z')
                     && (!$this->levelsRoman[$level])
                 ) {
@@ -255,11 +260,11 @@ namespace MultilingualMarkdown {
          * Zeroing both limits (calling wioth no parameters) disables Numbering.
          * Numbering scheme is not required to define all levels
          * between start and end.
-         * 
+         *
          * @param int $start first elvel to number between 1 and 9, 0 to disable
          * @param int $end   last level to number between start and 9, 0 to disable
          */
-        public function setLevelLimits(int $start = 0, int $end = 0) : void
+        public function setLevelLimits(int $start = 0, int $end = 0): void
         {
             $this->start = $start;
             $this->end = $end;
@@ -283,9 +288,9 @@ namespace MultilingualMarkdown {
         /**
          * Resets all numbers on all levels.
          */
-        public function resetNumbering() : void
+        public function resetNumbering(): void
         {
-            foreach( $this->curNumbering as &$curNumbering) {
+            foreach ($this->curNumbering as &$curNumbering) {
                 $curNumbering = 0;
             }
             $this->prevLevel = 0;
@@ -303,7 +308,7 @@ namespace MultilingualMarkdown {
          *
          * Then the string using all levels symbols and numbers from level start to requested
          * level is computed.
-         * 
+         *
          * A dash is added as prefix for some output modes if requested (for TOC lines)
          *
          * HTMLNUM/HTMLOLDNUM:  `<numbering>)`
@@ -316,7 +321,7 @@ namespace MultilingualMarkdown {
          *
          * @return string the nmbering string to use on headings and TOC lines
          */
-        public function getText(int $level, bool $addDash) : string
+        public function getText(int $level, bool $addDash): string
         {
             $sequence = '';
             if ($addDash && in_array($this->outputMode, [OutputModes::MDNUM,OutputModes::MD,OutputModes::HTML,OutputModes::HTMLOLD])) {
@@ -329,8 +334,8 @@ namespace MultilingualMarkdown {
             // adjust number for this level
             $this->next($level);
 
-            // MD pure output mode : all numberings can be '1.' followed by a single space, and Markdown 
-            // viewers will figure out actual numbering. 
+            // MD pure output mode : all numberings can be '1.' followed by a single space, and Markdown
+            // viewers will figure out actual numbering.
             // MLMD give the actual level number (1. 2. 3. etc) , although not necessary.
             if ($this->outputMode == OutputModes::MDPURE) {
                 $number = $this->curNumbering[$level] + 1; // 0 becomes '1.', 1 becomes '2.' etc
@@ -344,9 +349,9 @@ namespace MultilingualMarkdown {
             }
 
             // build <symbol><separator>... string
-            for ($i = $this->start ; $i <= $level ; $i += 1) {
+            for ($i = $this->start; $i <= $level; $i += 1) {
                 // set <symbol><separator>
-                $numbering = $this->levelsNumbering[$i] ?? '1';  
+                $numbering = $this->levelsNumbering[$i] ?? '1';
                 if (is_numeric($numbering)) {
                     $sequence .= $numbering + $this->curNumbering[$i];
                 } else {
@@ -364,7 +369,7 @@ namespace MultilingualMarkdown {
                 if ($i < $level) {
                     $sequence .= $this->levelsSeparator[$i] ?? '';
                 } else {
-                    $sequence .= ') '; 
+                    $sequence .= ') ';
                 }
             }
             return $sequence;
@@ -382,7 +387,7 @@ namespace MultilingualMarkdown {
          *
          * @return nothing
          */
-        public function next(int $level) : void
+        public function next(int $level): void
         {
             if ($this->start == 0 && $this->end == 0) {
                 return;
@@ -395,5 +400,5 @@ namespace MultilingualMarkdown {
             }
             $this->prevLevel = $level;
         }
-    } // class
-}  // namespace
+    }
+}

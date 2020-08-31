@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
-namespace MultilingualMarkdown;
-
-use PHPUnit\Framework\TestCase;
-use MultilingualMarkdown\Heading;
-
-/** Copyright 2020 Francis Piérot
+/**
+ * Multilingual Markdown generator - TokenSpaceEscape class
+ *
+ * This class represents a token for four spaces multiples preceding escaped text at the beginning of a line.
+ *
+ * Copyright 2020 Francis Piérot
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
  * (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
@@ -21,19 +19,46 @@ use MultilingualMarkdown\Heading;
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_heading_unit_tests
+ * @package   mlmd_token_space_escape_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  * @link      TODO
  */
-class HeadingTest extends TestCase
-{
-    public function testGetLevel()
+
+declare(strict_types=1);
+
+namespace MultilingualMarkdown {
+
+    mb_internal_encoding('UTF-8');
+
+    require_once 'TokenEscaper.class.php';
+
+    use MultilingualMarkdown\TokenEscaper;
+    
+    /**
+     * Class for the 4*space escaper.
+     * Four spaces at the beginning of a line is considered as code text.
+     * The token will skip over the text until an empty line
+     * and send everything to outputs without interpreting variables and directives.
+     */
+    class TokenSpaceEscape extends TokenEscaper
     {
-        $heading = new Heading('### level 3', 5, null);
-        $this->assertEquals(3, $heading->getLevel());
-        $test = Heading::getLevelFromText('##### test');
-        $this->assertEquals(5, $test);
+        public function __construct()
+        {
+            parent::__construct('    ');
+        }
+
+        /**
+         * Check beginning of line before checking the key marker.
+         */
+        public function identify(string $buffer, int $pos): bool
+        {
+            $prevChar = ($pos > 0) ? mb_substr($buffer, $pos - 1, 1) : "\n";
+            if ($prevChar != "\n") {
+                return false;
+            }
+            return parent::identify($buffer, $pos);
+        }
     }
 }

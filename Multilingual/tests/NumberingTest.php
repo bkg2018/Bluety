@@ -1,12 +1,12 @@
 <?php
+
 declare(strict_types=1);
-require_once __DIR__ .'/../vendor/autoload.php';
+
+namespace MultilingualMarkdown;
 
 use PHPUnit\Framework\TestCase;
 use MultilingualMarkdown\Numbering;
 use MultilingualMarkdown\OutputModes;
-
-require_once 'src/include/Numbering.class.php';
 
 /** Copyright 2020 Francis Piérot
  *
@@ -16,7 +16,7 @@ require_once 'src/include/Numbering.class.php';
  * subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
@@ -30,7 +30,7 @@ require_once 'src/include/Numbering.class.php';
  */
 class NumberingTest extends TestCase
 {
-    public function error($msg) : void
+    public function error($msg): void
     {
         error_log("Error in Numbering: $msg");
     }
@@ -65,80 +65,80 @@ class NumberingTest extends TestCase
      */
     public function testHeadingsLevels()
     {
-        $numbering = New Numbering('1:Chapter:A:-,2::1:.,3::1:.');
-        $numbering->setLevelLimits(1,3);
-        $test = $numbering->getText(1,true);
-        $this->assertEquals('Chapter A) ',$test);
-        $test = $numbering->getText(1,true);
-        $this->assertEquals('Chapter B) ',$test);
-        $test = $numbering->getText(2,true);
-        $this->assertEquals('B-1) ',$test);
-        $test = $numbering->getText(2,true);
-        $this->assertEquals('B-2) ',$test);
-        $test = $numbering->getText(3,true);
-        $this->assertEquals('B-2.1) ',$test);
-        $test = $numbering->getText(2,true);
-        $this->assertEquals('B-3) ',$test);
+        $numbering = new Numbering('1:Chapter:A:-,2::1:.,3::1:.');
+        $numbering->setLevelLimits(1, 3);
+        $test = $numbering->getText(1, true);
+        $this->assertEquals('Chapter A) ', $test);
+        $test = $numbering->getText(1, true);
+        $this->assertEquals('Chapter B) ', $test);
+        $test = $numbering->getText(2, true);
+        $this->assertEquals('B-1) ', $test);
+        $test = $numbering->getText(2, true);
+        $this->assertEquals('B-2) ', $test);
+        $test = $numbering->getText(3, true);
+        $this->assertEquals('B-2.1) ', $test);
+        $test = $numbering->getText(2, true);
+        $this->assertEquals('B-3) ', $test);
 
         // limit to levels 2-3
         $numbering->resetNumbering();
-        $numbering->setLevelLimits(2,3);
-        $test = $numbering->getText(1,true);
-        $this->assertEquals('',$test);
-        $test = $numbering->getText(2,true);
-        $this->assertEquals('1) ',$test);
-        $test = $numbering->getText(2,true);
-        $this->assertEquals('2) ',$test);
-        $test = $numbering->getText(3,true);
-        $this->assertEquals('2.1) ',$test);
+        $numbering->setLevelLimits(2, 3);
+        $test = $numbering->getText(1, true);
+        $this->assertEquals('', $test);
+        $test = $numbering->getText(2, true);
+        $this->assertEquals('1) ', $test);
+        $test = $numbering->getText(2, true);
+        $this->assertEquals('2) ', $test);
+        $test = $numbering->getText(3, true);
+        $this->assertEquals('2.1) ', $test);
         
         // try roman numbers and another separator
-        $numbering = New Numbering('1/.((Chapter.)).fr(Chapitre.))/&I/-,2//&i/.,3//1/.');
-        $numbering->setLevelLimits(1,3);
-        $test = $numbering->getText(1,true);
-        $this->assertEquals('.((Chapter.)).fr(Chapitre.)) I) ',$test);
-        $test = $numbering->getText(1,true);
-        $test = $numbering->getText(2,true);
-        $this->assertEquals('II-i) ',$test);
-        $test = $numbering->getText(2,true);
-        $this->assertEquals('II-ii) ',$test);
-        $test = $numbering->getText(2,true);
-        $this->assertEquals('II-iii) ',$test);
-        $test = $numbering->getText(2,true);
-        $this->assertEquals('II-iv) ',$test);
-        $test = $numbering->getText(3,true);
-        $this->assertEquals('II-iv.1) ',$test);
-        $test = $numbering->getText(3,true);
-        $this->assertEquals('II-iv.2) ',$test);
-        $test = $numbering->getText(3,true);
-        $this->assertEquals('II-iv.3) ',$test);
-        $test = $numbering->getText(3,true);
-        $this->assertEquals('II-iv.4) ',$test);
+        $numbering = new Numbering('1/.((Chapter.)).fr(Chapitre.))/&I/-,2//&i/.,3//1/.');
+        $numbering->setLevelLimits(1, 3);
+        $test = $numbering->getText(1, true);
+        $this->assertEquals('.((Chapter.)).fr(Chapitre.)) I) ', $test);
+        $test = $numbering->getText(1, true);
+        $test = $numbering->getText(2, true);
+        $this->assertEquals('II-i) ', $test);
+        $test = $numbering->getText(2, true);
+        $this->assertEquals('II-ii) ', $test);
+        $test = $numbering->getText(2, true);
+        $this->assertEquals('II-iii) ', $test);
+        $test = $numbering->getText(2, true);
+        $this->assertEquals('II-iv) ', $test);
+        $test = $numbering->getText(3, true);
+        $this->assertEquals('II-iv.1) ', $test);
+        $test = $numbering->getText(3, true);
+        $this->assertEquals('II-iv.2) ', $test);
+        $test = $numbering->getText(3, true);
+        $this->assertEquals('II-iv.3) ', $test);
+        $test = $numbering->getText(3, true);
+        $this->assertEquals('II-iv.4) ', $test);
     }
 
     /** pure Markdown numbering */
     public function testPureMD()
     {
-        $numbering = New Numbering('1/.((Chapter.)).fr(Chapitre.))/&I/-,2//&i/.,3//1/.');
-        $numbering->setLevelLimits(1,3);
+        $numbering = new Numbering('1/.((Chapter.)).fr(Chapitre.))/&I/-,2//&i/.,3//1/.');
+        $numbering->setLevelLimits(1, 3);
         $numbering->setOutputMode('mdpure', $this);
-        $test = $numbering->getText(1,true);
-        $this->assertEquals('1. ',$test);
-        $test = $numbering->getText(1,true);
-        $this->assertEquals('2. ',$test);
-        $test = $numbering->getText(2,true);
-        $this->assertEquals('1. ',$test);
-        $test = $numbering->getText(2,true);
-        $this->assertEquals('2. ',$test);
-        $test = $numbering->getText(1,true);
-        $this->assertEquals('3. ',$test);
-        $test = $numbering->getText(2,true);
-        $this->assertEquals('1. ',$test);
-        $test = $numbering->getText(2,true);
-        $this->assertEquals('2. ',$test);
-        $test = $numbering->getText(3,true);
-        $this->assertEquals('1. ',$test);
-        $test = $numbering->getText(2,true);
-        $this->assertEquals('3. ',$test);
+        $test = $numbering->getText(1, true);
+        $this->assertEquals('1. ', $test);
+        $test = $numbering->getText(1, true);
+        $this->assertEquals('2. ', $test);
+        $test = $numbering->getText(2, true);
+        $this->assertEquals('1. ', $test);
+        $test = $numbering->getText(2, true);
+        $this->assertEquals('2. ', $test);
+        $test = $numbering->getText(1, true);
+        $this->assertEquals('3. ', $test);
+        $test = $numbering->getText(2, true);
+        $this->assertEquals('1. ', $test);
+        $test = $numbering->getText(2, true);
+        $this->assertEquals('2. ', $test);
+        $test = $numbering->getText(3, true);
+        $this->assertEquals('1. ', $test);
+        $test = $numbering->getText(2, true);
+        $this->assertEquals('3. ', $test);
     }
 }

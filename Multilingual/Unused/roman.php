@@ -10,7 +10,7 @@ function getRoman1(int $number) : string
         if ($number <= 0) {
            break;
         }
-    }            
+    }
     return $result;
 }
 function getRoman3(int $number) : string
@@ -24,12 +24,12 @@ function getRoman3(int $number) : string
                 break;
             }
         }
-    }            
+    }
     return $result;
 }
 
 
-function getRoman4($N) : string 
+function getRoman4($N) : string
 {
     $c='IVXLCDM';
     for($a=5, $b = $s = ''; $N ; $b++, $a ^= 7) {
@@ -72,13 +72,13 @@ function getRoman4($N) : string
  * @param int $number
  * @return string
  */
-function getRoman1(int $number) : string
+function getRoman1(int $number): string
 {
     $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
     $returnValue = '';
     while ($number > 0) {
         foreach ($map as $roman => $int) {
-            if($number >= $int) {
+            if ($number >= $int) {
                 $number -= $int;
                 $returnValue .= $roman;
                 break;
@@ -87,7 +87,7 @@ function getRoman1(int $number) : string
     }
     return $returnValue;
 }
-function getRoman2(int $number) : string
+function getRoman2(int $number): string
 {
     global $map;
     $returnValue = '';
@@ -97,28 +97,28 @@ function getRoman2(int $number) : string
             $returnValue .= $roman;
         }
         if ($number == 0) {
-           break;
+            break;
         }
-    }            
+    }
     return $returnValue;
 }
 
 $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
 
-function romanLoop(int $nbLoops,$index) : float
+function romanLoop(int $nbLoops, $index): float
 {
     $timer = microtime(true);
     $function = "getRoman$index";
-    for ($i = 0 ; $i < $nbLoops ; $i++) {
+    for ($i = 0; $i < $nbLoops; $i++) {
         $test = $function($i);
     }
     return microtime(true) - $timer;
 }
 
 $nbLoops = 20000;
-$timer1 = romanLoop($nbLoops,1);
+$timer1 = romanLoop($nbLoops, 1);
 $mean1 = $timer1 / $nbLoops;
-$timer2 = romanLoop($nbLoops,2);
+$timer2 = romanLoop($nbLoops, 2);
 $mean2 = $timer2 / $nbLoops;
 echo "1:$timer1\t$mean1\n";
 echo "2:$timer2\t$mean2\n";

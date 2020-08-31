@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
-namespace MultilingualMarkdown;
-
-use PHPUnit\Framework\TestCase;
-use MultilingualMarkdown\Heading;
-
-/** Copyright 2020 Francis Piérot
+/**
+ * Multilingual Markdown generator - TokenEmptyLine class
+ *
+ * This class represents a token for an empty line, meaning the end of a previous paragraph.
+ *
+ * Copyright 2020 Francis Piérot
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
  * (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
@@ -21,19 +19,46 @@ use MultilingualMarkdown\Heading;
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_heading_unit_tests
+ * @package   mlmd_token_empty_line_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  * @link      TODO
  */
-class HeadingTest extends TestCase
-{
-    public function testGetLevel()
+
+declare(strict_types=1);
+
+namespace MultilingualMarkdown {
+
+    mb_internal_encoding('UTF-8');
+
+    require_once 'TokenKeyworded.class.php';
+
+    use MultilingualMarkdown\TokenKeyworded;
+    
+    /**
+     * Class for end of paragraph, or empty line.
+     * This class is almost identical to TokenEOL but used in a different context.
+     * All empty lines are considered as an end of paragraph in Markdown.
+     */
+    class TokenEmptyLine extends TokenKeyworded
     {
-        $heading = new Heading('### level 3', 5, null);
-        $this->assertEquals(3, $heading->getLevel());
-        $test = Heading::getLevelFromText('##### test');
-        $this->assertEquals(5, $test);
+        public function __construct()
+        {
+            parent::__construct(TokenType::EMPTY_LINE, "\n", true);
+        }
+
+        /**
+         * Check beginning of line before checking the key marker.
+         */
+        public function identify(string $buffer, int $pos): bool
+        {
+            $prevChar = ($pos > 0) ? mb_substr($buffer, $pos - 1, 1) : "\n";
+            if ($prevChar != "\n") {
+                return false;
+            }
+            return parent::identify($buffer, $pos);
+        }
     }
+
 }

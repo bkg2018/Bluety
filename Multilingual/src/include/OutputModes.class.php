@@ -1,10 +1,10 @@
 <?php
-declare(strict_types=1);
+
 /**
- * Static class for output modes names and constants. 
+ * Static class for output modes names and constants.
  * An output mode defines the style for heading anchor, heading spacing prefix, numbering and TOC links.
  * This file must be included in classes using an output mode.
- * 
+ *
  * Copyright 2020 Francis Piérot
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
@@ -13,7 +13,7 @@ declare(strict_types=1);
  * subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
@@ -25,24 +25,27 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  * @link      TODO
  */
+
+declare(strict_types=1);
+
 namespace MultilingualMarkdown {
 
     class OutputModes
     {
-        const INVALID   = -1;
-        const MD        = 0;
-        const MDNUM     = self::MD + 1;
-        const MDPURE    = self::MDNUM + 1;
-        const HTML      = self::MDPURE + 1;
-        const HTMLNUM   = self::HTML + 1;
-        const HTMLOLD   = self::HTMLNUM + 1;
-        const HTMLOLDNUM= self::HTMLOLD + 1;
+        public const INVALID    = -1;
+        public const MD         = 0;
+        public const MDNUM      = self::MD + 1;
+        public const MDPURE     = self::MDNUM + 1;
+        public const HTML       = self::MDPURE + 1;
+        public const HTMLNUM    = self::HTML + 1;
+        public const HTMLOLD    = self::HTMLNUM + 1;
+        public const HTMLOLDNUM = self::HTMLOLD + 1;
 
         private static $modeName = [
             // mode -> mode name
             self::MD            => 'md',
             self::MDNUM         => 'md',
-            self::MDPURE        => 'mdpure', 
+            self::MDPURE        => 'mdpure',
             self::HTML          => 'html',
             self::HTMLNUM       => 'html',
             self::HTMLOLD       => 'htmlold',
@@ -66,20 +69,20 @@ namespace MultilingualMarkdown {
         /**
          * Check if a mode name is valid
          */
-        public static function isValid(string $name) : bool
+        public static function isValid(string $name): bool
         {
             return \array_key_exists($name, self::$nonNumberedMode);
         }
 
         /**
          * Get the mode constant for a mode name and a numbering scheme.
-         * 
+         *
          * @param string $name the mode name
          * @param object $numbering the Numbering object, can be omitted
-         * 
+         *
          * @return int the mode constant, or OutputModes::INVALID (-1) if invalid name.
          */
-        public static function getFromName(string $name, Numbering& $numbering = null) : int
+        public static function getFromName(string $name, Numbering &$numbering = null): int
         {
             $arrayName = $numbering ? ($numbering->isActive() ? 'numberedMode' : 'nonNumberedMode') : 'nonNumberedMode';
             if (\array_key_exists($name, self::$$arrayName)) {
@@ -90,12 +93,12 @@ namespace MultilingualMarkdown {
 
         /**
          * Get the name for a mode constant.
-         * 
+         *
          * @param int $mode the mode constant
-         * 
+         *
          * @return string the mode name, null if invalid constant.
          */
-        public static function getName(int $mode) : string
+        public static function getName(int $mode): string
         {
             if (\array_key_exists($mode, self::$modeName)) {
                 return self::$modeName[$mode];

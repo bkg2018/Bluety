@@ -1,6 +1,8 @@
 <?php
+
 declare(strict_types=1);
-require_once __DIR__ .'/../vendor/autoload.php';
+
+namespace MultilingualMarkdown;
 
 use PHPUnit\Framework\TestCase;
 use MultilingualMarkdown\Heading;
@@ -8,7 +10,7 @@ use MultilingualMarkdown\HeadingArray;
 use MultilingualMarkdown\OutputModes;
 use MultilingualMarkdown\Numbering;
 
-require_once 'src/include/HeadingArray.class.php';
+require_once '../src/include/HeadingArray.class.php';
 
 /** Copyright 2020 Francis Piérot
  *
@@ -18,7 +20,7 @@ require_once 'src/include/HeadingArray.class.php';
  * subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
@@ -33,7 +35,7 @@ require_once 'src/include/HeadingArray.class.php';
 class HeadingArrayTest extends TestCase
 {
     // build a test case
-    private function getTestData()
+    public function getTestData()
     {
         $a = new HeadingArray('main.mlmd');
         $a->add(new Heading('# heading 1', 1, null));               // 0
@@ -51,7 +53,7 @@ class HeadingArrayTest extends TestCase
     }
 
     // heading lines data for scheme with roman numbers
-    private function getHeadingDataRoman()
+    public function getHeadingDataRoman()
     {
         return ['.((Chapter.)).fr((Chapitre.)) I) heading 1<A id="a1"></A>',
         'I-1) heading 1.1<A id="a2"></A>',
@@ -67,7 +69,7 @@ class HeadingArrayTest extends TestCase
     }
 
     // TOC lines data for scheme with roman numbers
-    private function getTOCDataRoman()
+    public function getTOCDataRoman()
     {
         return ['- .((Chapter.)).fr((Chapitre.)) I) heading 1<A id="a1"></A>',
         '- I-1) heading 1.1<A id="a2"></A>',
@@ -87,7 +89,7 @@ class HeadingArrayTest extends TestCase
         Heading::init(); //: reset global numbers
         $a = $this->getTestData();
 
-        $index = $a->findIndex(2,6);
+        $index = $a->findIndex(2, 6);
         $this->assertEquals(3, $index);
 
         $a->resetCurrent();
@@ -108,8 +110,6 @@ class HeadingArrayTest extends TestCase
         $this->assertFalse($a->isHeadingLastBetween(-1, 1, 3));
         $h = $a->getNext();
         $this->assertTrue($a->isHeadingLastBetween(-1, 1, 3));
-        
-
     }
 
     public function testSpacing()
@@ -183,16 +183,16 @@ class HeadingArrayTest extends TestCase
     {
         Heading::init(); //: reset global numbers
         $a = $this->getTestData();
-        $numbering = New Numbering('1:Chapter:A:-,2::1:.,3::a:.,4::1:');
-        $numbering->setLevelLimits(1,3);
+        $numbering = new Numbering('1:Chapter:A:-,2::1:.,3::a:.,4::1:');
+        $numbering->setLevelLimits(1, 3);
 
         $test = $a->getNumberingText(0, $numbering, true);
         $this->assertEquals('- Chapter A) ', $test);
         $test = $a->getNumberingText(6, $numbering, true);
         $this->assertEquals('- B-2.b) ', $test);
 
-        $numbering = New Numbering('1:.((Chapter.)).fr((Chapitre.)):&I:-,2::1:.,3::a:.,4::1:');
-        $numbering->setLevelLimits(1,3);
+        $numbering = new Numbering('1:.((Chapter.)).fr((Chapitre.)):&I:-,2::1:.,3::a:.,4::1:');
+        $numbering->setLevelLimits(1, 3);
 
         $test = $a->getNumberingText(0, $numbering, true);
         $this->assertEquals('- .((Chapter.)).fr((Chapitre.)) I) ', $test);
@@ -207,7 +207,6 @@ class HeadingArrayTest extends TestCase
             echo "$i: $test\n";
         }
         */
-
     }
 
     public function testHeadingLines()
@@ -215,26 +214,25 @@ class HeadingArrayTest extends TestCase
         Heading::init(); //: reset global numbers
         $a = $this->getTestData();
         $h = $this->getHeadingDataRoman();
-        $numbering = New Numbering('1:.((Chapter.)).fr((Chapitre.)):&I:-,2::1:.,3::a:.,4::1:');
-        $numbering->setLevelLimits(1,3);
+        $numbering = new Numbering('1:.((Chapter.)).fr((Chapitre.)):&I:-,2::1:.,3::a:.,4::1:');
+        $numbering->setLevelLimits(1, 3);
         $numbering->resetNumbering();
         echo "\n\n";
-        for ($i = 0 ; $i <= $a->getLastIndex() ; $i += 1) {
+        for ($i = 0; $i <= $a->getLastIndex(); $i += 1) {
             $test = $a->getHeadingLine($i, $numbering);
             if ($test) {
                 $this->assertEquals($h[$i], $test);
             }
         }
-
-    }    
+    }
 
     public function testTOCLines()
     {
         Heading::init(); //: reset global numbers
         $a = $this->getTestData();
         $h = $this->getTOCDataRoman();
-        $numbering = New Numbering('1:.((Chapter.)).fr((Chapitre.)):&I:-,2::1:.,3::a:.,4::1:');
-        $numbering->setLevelLimits(1,3);
+        $numbering = new Numbering('1:.((Chapter.)).fr((Chapitre.)):&I:-,2::1:.,3::a:.,4::1:');
+        $numbering->setLevelLimits(1, 3);
         echo "\n\nMD:";
         $a->setOutputMode('md', $numbering);
         /*
