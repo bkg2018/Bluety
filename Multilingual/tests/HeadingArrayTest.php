@@ -38,17 +38,17 @@ class HeadingArrayTest extends TestCase
     public function getTestData()
     {
         $a = new HeadingArray('main.mlmd');
-        $a->add(new Heading('# heading 1', 1, null));               // 0
-        $a->add(new Heading('## heading 1.1', 3, null));            // 1
-        $a->add(new Heading('# heading 2', 5, null));               // 2
-        $a->add(new Heading('## heading 2.1', 7, null));            // 3
-        $a->add(new Heading('## heading 2.2', 9, null));            // 4
-        $a->add(new Heading('### heading 2.2.1', 11, null));        // 5
-        $a->add(new Heading('### heading 2.2.2', 13, null));        // 6
-        $a->add(new Heading('### heading 2.2.3', 15, null));        // 7
-        $a->add(new Heading('## heading 2.3', 17, null));           // 8
-        $a->add(new Heading('### heading 2.3.1', 19, null));        // 9
-        $a->add(new Heading('#### heading 2.3.1.1', 21, null));     // 10
+        $a[] = new Heading('# heading 1', 1, null);               // 0
+        $a[] = new Heading('## heading 1.1', 3, null);            // 1
+        $a[] = new Heading('# heading 2', 5, null);               // 2
+        $a[] = new Heading('## heading 2.1', 7, null);            // 3
+        $a[] = new Heading('## heading 2.2', 9, null);            // 4
+        $a[] = new Heading('### heading 2.2.1', 11, null);        // 5
+        $a[] = new Heading('### heading 2.2.2', 13, null);        // 6
+        $a[] = new Heading('### heading 2.2.3', 15, null);        // 7
+        $a[] = new Heading('## heading 2.3', 17, null);           // 8
+        $a[] = new Heading('### heading 2.3.1', 19, null);        // 9
+        $a[] = new Heading('#### heading 2.3.1.1', 21, null);     // 10
         return $a;
     }
 

@@ -38,6 +38,7 @@ namespace MultilingualMarkdown {
     require_once 'Logger.interface.php';
     require_once 'OutputModes.class.php';
     require_once 'File.class.php';
+    require_once 'LanguageList.class.php';
 
     use MultilingualMarkdown\Logger;
 
@@ -55,30 +56,24 @@ namespace MultilingualMarkdown {
         private $relFilenames = [];             /// relative filenames for each filename
         private $inFilename = null;             /// current file name e.g. 'example.mlmd' - relative to root dir
         private $inFile = null;                 /// current input file handle
-        private $buffer = '';                   /// current line content
-        private $bufferPosition = 0;            /// current pos in line buffer (utf-8)
-        private $bufferLength = 0;              /// current line size in characters (utf-8)
-        
+
         // Output filenames, files and writing status
         private $outFilenameTemplate = null;    /// as 'example'
         private $outFilenames = [];             /// '<language>' => 'example.md' / 'example.<language>.md'
         private $outFiles = [];                 /// '<language>' => file-handle
-        private $lastWritten = [];              /// last  character written to file
-        private $curOutputs = [];               /// current output buffers for files
         private $mainFilename = null;           /// -main parameter
         private $rootDir = null;                /// root directory, or main file directory
         private $rootDirLength = 0;             /// root directory utf-8 length
-        private $outputMode = OutputModes::MD;  /// output html or md style for headings and links in toc
 
-        // Languages handling
-        private $languages = [];                // all the languages codes declared in .languages directives
-        private $mainLanguage = null;           // optional main language (<code> deleted from MD output filename)
+        // Languages handling (LanguageList class)
+        private $languages = null;              /// all the languages codes declared in .languages directives
 
         /**
          * Initialize string function names.
          */
         public function __construct()
         {
+            $this->languages = new LanguageList();
             if (\isWindows()) {
                 global $posFunction, $cmpFunction;
                 $posFunction = 'mb_stripos' ;
@@ -163,6 +158,14 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Current filename accessor.
+         */
+        public function getInFilename(): ?string
+        {
+            return $this->inFilename;
+        }
+
+        /**
          * Set root directory for relative filenames.
          * Resets all registered input files relative to the new root directory.
          *
@@ -176,6 +179,8 @@ namespace MultilingualMarkdown {
                 $absoluteRoot = realpath($rootDir);
                 $this->rootDir = rtrim($absoluteRoot, "/\\");
                 $this->rootDirLength = mb_strlen($this->rootDir);
+                // reset relative filenames if needed
+                $this->readyInputs();
                 return true;
             }
             return $this->error("invalid root directory ($rootDir)", __FILE__, __LINE__);
@@ -303,6 +308,22 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Return an input file name, relative to root directory.
+         * Returns null if the index is invalid.
+         *
+         * @param int $index an index value between 0 and getInputFilesMaxIndex().
+         *
+         * @return string|null the rootdir relative file path or null if $index is invalid
+         */
+        public function getRelativeInputFile(int $index): ?string
+        {
+            if ($index < 0 || $index >= count($this->relFilenames)) {
+                return null;
+            }
+            return $this->relFilenames[$index];
+        }
+
+        /**
          * Get basename (no extension) from a filepath, relative to root directory or
          * to main file directory.
          *
@@ -381,7 +402,16 @@ namespace MultilingualMarkdown {
         {
             if ($this->inFile != null) {
                 fclose($this->inFile);
+                unset($this->inFile);
                 $this->inFile = null;
+            }
+            if (isset($this->inFilename)) {
+                unset($this->inFilename);
+                $this->inFilename = null;
+            }
+            if (isset($this->outFilenameTemplate)) {
+                unset($this->outFilenameTemplate);
+                $this->outFilenameTemplate = null;
             }
             return false;
         }
@@ -404,6 +434,23 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Reset the list of input files to the content of a directory and subdirectories.
+         * The directory becomes the root directory.
+         *
+         * @param string $rootDir the new root directory where to look for input files
+         *
+         * @return bool true if directory correctly explored, false for any problem
+         */
+        public function exploreDirectory(string $rootDir): bool
+        {
+            $this->closeInput();
+            $this->closeOutput();
+            $this->setRootDir($rootDir);
+            $this->allInFilePathes = exploreDirectory($this->rootDir);
+            return true;
+        }
+
+        /**
          * Get all input files ready for processing.
          * If the input file array or root directory are not set, use default values:
          * - root directory is set to the current working directory using PHP getcwd()
@@ -414,10 +461,9 @@ namespace MultilingualMarkdown {
             if (empty($this->rootDir ?? '')) {
                 $this->setRootDir(getcwd());
             }
-            if (empty($this->allInFilePathes)) {
-                $this->allInFilePathes = exploreDirectory($this->rootDir);
-            }
-            foreach ($this->allInFilePathes as $filename) {
+            unset($this->relFilenames);
+            $this->relFilenames = [];
+            foreach ($this->allInFilePathes as $index => $filename) {
                 // get relative filename, ignore if not the right root
                 $rootLen = mb_strlen($this->rootDir);
                 $baseDir = mb_substr($filename, 0, $rootLen);
@@ -426,60 +472,54 @@ namespace MultilingualMarkdown {
                     continue;
                 }
                 // relative filename is the index for the work arrays
-                $this->relFilenames[] = mb_substr($filename, $rootLen + 1);
+                $this->relFilenames[$index] = mb_substr($filename, $rootLen + 1);
             }
         }
 
         /**
-         * Add a language to the languages set.
-         * Prepare the output file for this language.
+         * Set languages list from a parameter string.
+         * This is just a relay to LanguagesList::setFrom().
          *
-         * @param string $code the language code to add.
+         * @param string $string  the parameter string
          *
-         * @return bool false if no input file opened yet
+         * @return bool true if languages have been set correctly and main language was
+         *              valid (if 'main=' was in the parameters.)
          */
-        public function addLanguage(string $code): bool
+        public function setLanguagesFrom(string $param): bool
         {
-            if ($this->inFile == null) {
-                return $this->error("cannot add a language when no input file is opened", __FILE__, __LINE__);
-            }
-            if ($this->outFilenameTemplate == null) {
-                return $this->error("cannot add a language with no output file template", __FILE__, __LINE__);
-            }
-            if (!\array_key_exists($code, $this->languages)) {
-                $this->languages[$code] = true;
-            }
-            if (\array_key_exists($code, $this->outFiles)) {
-                unset($this->outFiles[$code]);
-            }
-            $this->outFiles[$code] = null;
-            if (($this->mainLanguage ?? '') == $code) {
-                $this->outFilenames[$code] = "{$this->outFilenameTemplate}.md";
-            } else {
-                $this->outFilenames[$code] = "{$this->outFilenameTemplate}.{$code}.md";
+            return $this->languages->setFrom($param);
+        }
+
+        /**
+         * Prepare output filenames from the languages set and output template filename.
+         * This call must be done after all input files have been set and readyInputs() has
+         * been called.
+         */
+        public function readyOutputs(): bool
+        {
+            foreach ($this->languages as $index => $array) {
+                $code = $array['code'] ?? null;
+                $this->outFiles[$code] = null;
+                if ($this->outFilenameTemplate != null) {
+                    if ($this->languages->isMain($code)) {
+                        $this->outFilenames[$code] = "{$this->outFilenameTemplate}.md";
+                    } else {
+                        $this->outFilenames[$code] = "{$this->outFilenameTemplate}.{$code}.md";
+                    }
+                }
             }
             return true;
         }
 
-
         /**
-         * Set the main language.
+         * Set the main language code.
          * The main language will have output files only suffixed '.md' instead of '.code.md'.
-         * The main language code must hhave been set in the languages sets before calling this function.
          *
          * @param string $code the language code to set as main language
          */
-        public function setMainLanguage(string $code): void
+        public function setMainLanguage(string $code): bool
         {
-            if (\array_key_exists($code, $this->languages)) {
-                if ($this->mainLanguage != null) {
-                    $this->outFilenames[$this->mainLanguage] = "{$this->outFilenameTemplate}.{$code}.md";
-                }
-                $this->mainLanguage = $code;
-                $this->outFilenames[$code] = "{$this->outFilenameTemplate}.md";
-            } else {
-                $this->error("language $code has not been declared in .languages directive");
-            }
+            return $this->languages->setMain($code);
         }
     }
 }

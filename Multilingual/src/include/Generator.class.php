@@ -42,6 +42,7 @@ namespace MultilingualMarkdown {
     require_once 'FileUtilities.php';
     require_once 'Filer.class.php';
     require_once 'Lexer.class.php';
+    require_once 'Parser.class.php';
 
     /**
      * Generator class.
@@ -52,49 +53,35 @@ namespace MultilingualMarkdown {
         //------------------------------------------------------------------------------------------------------
         //MARK: Members
         //------------------------------------------------------------------------------------------------------
-        private $filer = null;                  /// input and output files handling
-        private $lexer = null;
-        private $allHeadingsArrays = [];        /// headings array for each input file
 
-        // Initial settings
+        // Handling classes instances
+        private $filer = null;                  /// Filer instance, input and output files handling
+        private $lexer = null;                  /// Lexer instance, transform text into token list
+        private $numbering = null;              /// Numbering instance
+        private $parser = null;                 /// Parser instance, interpret tokens
+
+        // Settings
         private $outputModeName = '';           /// from -out command line argument
         private $numberingScheme = '';          /// from -numbering command line argument
         
-        // initialize handlers
+        // Prepared datas
+        private $allHeadingsArrays = [];        /// headings array for each input file
+
+        // Initialize handlers and default settings
         public function __construct()
         {
             $this->filer = new Filer();
-            $this->outputModeName = 'md';
             $this->lexer = new Lexer();
+            $this->numbering = new Numbering('', $this);
+            $this->parser = new Parser();
+            $this->outputModeName = 'md';       // markdown links and toc style
+            $this->numberingScheme = '';        // no numbering
         }
 
         //------------------------------------------------------------------------------------------------------
-        //MARK: Logger interface
+        //MARK: Logger interface (relayed to Filer object)
         //------------------------------------------------------------------------------------------------------
 
-        /**
-         * Logger function: Send an error or warning to output and php log
-         *
-         * @param string $type   'error' or 'warning'
-         * @param string $msg    the text to display and log.
-         * @param string $source optional file name for MLMD script, can be null to ignore
-         * @param int    $line   optional line number for MLMD script
-         *
-         * @return false
-         */
-        private function log(string $type, string $msg, ?string $source = null, $line = false): bool
-        {
-            if ($this->inFilename) {
-                if ($source) {
-                    error_log("$source($line): MLMD {$type} in {$this->inFilename}({$this->curLine}): $msg");
-                } else {
-                    error_log("{$this->inFilename}({$this->curLine}): MLMD {$type}: $msg");
-                }
-            } else {
-                error_log("arguments: MLMD {$type}: $msg");
-            }
-            return false;
-        }
         /**
          * Logger interface: Send an error message to output and php log.
          *
@@ -106,7 +93,7 @@ namespace MultilingualMarkdown {
          */
         public function error(string $msg, ?string $source = null, $line = false): bool
         {
-            return $this->log('error', $msg, $source, $line);
+            return $this->filer->error($msg, $source, $line);
         }
         /**
          * Logger interface: Send a warning message to output and php log.
@@ -119,7 +106,7 @@ namespace MultilingualMarkdown {
          */
         public function warning(string $msg, ?string $source = null, $line = false): bool
         {
-            return $this->log('warning', $msg, $source, $line);
+            return $this->filer->warning($msg, $source, $line);
         }
 
         //------------------------------------------------------------------------------------------------------
@@ -200,19 +187,28 @@ namespace MultilingualMarkdown {
         //------------------------------------------------------------------------------------------------------
 
         /**
-         * Find all headings and sub headings in the set of input files.
+         * Find the languages directives and all headings and sub headings in the set of input files
+         * before processing them.
+         *
+         * - The languages directives found in all files will preset the list of output files
+         *   for each language for each input file.
+         *
+         * - The headings will be stored for TOC generation and possibly numbering.
+         *
          * Files with no headings will receive a level 1 heading using their filename
-         * so that TOC can point to them.
+         * so that TOC can point to them. If no languages directive has been found at all
+         * this is an error and the function will return false.
          *
-         * This has been put in a function only to make ProcessFiles() cleaner.
-         *
-         * @return nothing
+         * @return bool true if pre processing found languages and headings correctly, false
+         *              if there is no languages directive in any file.
          */
-        public function exploreHeadings(): void
+        public function preProcess(): bool
         {
+            $this->filer->readyInputs();
+            unset($this->allHeadingsArrays);
             $this->allHeadingsArrays = [];
-            Heading::init();// reset headings numbering to 0
-            /// Explore heading in each file
+            Heading::init();// reset global headings numbering to 0
+            // Explore each input file ($this->filer is iterable and returns relative filenames and index)
             foreach ($this->filer as $index => $relFilename) {
                 $filename = $this->filer->getInputFile($index); // full file path
                 if ($filename == null) {
@@ -235,13 +231,16 @@ namespace MultilingualMarkdown {
                 do {
                     $text = trim(fgets($file));
                     $curLine += 1;
-                    if (!$languageSet) {
-                        if (strncmp($text, $languagesDirective, $languagesDirectiveLength) == 0) {
-                            $languageSet = true;
-                        }
+                    // handle .languages directive
+                    if (strncasecmp($text, $languagesDirective, $languagesDirectiveLength) == 0) {
+                        $languageSet = mb_substr($text, $languagesDirectiveLength);
+                        $this->filer->setLanguagesFrom($languageSet);
+                    }
+                    // ignore lines before the .languages directive
+                    if ($languageSet === false) {
                         continue;
                     }
-                    // skip code fences and double back-ticks
+                    // skip escaped lines (code fences, double back-ticks)
                     $pos = strpos($text, '```');
                     if ($pos !== false) {
                         // escaped by double backticks+space / space+double backticks?
@@ -252,18 +251,19 @@ namespace MultilingualMarkdown {
                             } while (strpos($text, '```') === false);
                         }
                     } else {
+                        // store headings
                         if (($text[0] ?? '') == '#') {
                             $heading = new Heading($text, $curLine, $this);
-                            $headingArray->add($heading);
+                            $headingArray[] = $heading;
                         }
                     }
                 } while (!feof($file));
                 fclose($file);
 
                 // force a level 1 object if no headings
-                if ($headingArray->isEmpty()) {
+                if (count($headingArray) == 0) {
                     $heading = new Heading('# ' . $relFilename, 1, $this);
-                    $headingArray->add($heading);
+                    $headingArray[] = $heading;
                 }
                 $this->allHeadingsArrays[$relFilename] = $headingArray;
                 unset($headingArray);
@@ -284,8 +284,7 @@ namespace MultilingualMarkdown {
          */
         public function processFiles(): bool
         {
-            $this->filer->readyInputs();
-            $this->exploreHeadings();
+            $this->preProcess();
             foreach ($this->filer as $index => $relFilename) {
                 if (!$this->process($index)) {
                     return false;
@@ -299,8 +298,7 @@ namespace MultilingualMarkdown {
          * This process reads the input file stream, detects and interprets directives,
          * expand variables and sends output to files.
          *
-         * @param int $index index of the input file in the allInFilePathes array from
-         *                   the filer object.
+         * @param int $index index of the input file in the filer object.
          *
          * @return bool true if input file processed correctly, false if any error.
          */
@@ -309,8 +307,9 @@ namespace MultilingualMarkdown {
             if (!$this->filer->openFile($index)) {
                 return false;
             }
+            $this->filer->readyOutputs();
 
-
+            //TODO: process the input file
 
 
             return true;

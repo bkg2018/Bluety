@@ -1,9 +1,10 @@
 <?php
 
 /**
- * Multilingual Markdown generator - File class
+ * Multilingual Markdown generator - Parser class
  *
- * The File class stores informations about one processed file.
+ * The Parser class takes a tokens list and interpret them. It has an access to the calling Generator
+ * parser interface which allows it to get headings, write to file etc.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +20,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_file_class
+ * @package   mlmd_parser_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -30,9 +31,7 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'FileUtilities.php';
-    require_once 'Logger.interface.php';
-    require_once 'OutputModes.class.php';
+    mb_internal_encoding('UTF-8');
 
     use MultilingualMarkdown\Logger;
 
@@ -40,10 +39,8 @@ namespace MultilingualMarkdown {
     $posFunction = 'mb_strpos';
     $cmpFunction = 'strcmp';
 
-    class File
+    class Parser
     {
-        public $path;       /// full path, must start with root dir
-        public $relPath;     /// path relative to root dir
-        public $relName;     /// path relative to root dir and excluding extension
+        //TODO: fill this class
     }
 }

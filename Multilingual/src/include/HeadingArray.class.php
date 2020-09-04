@@ -35,6 +35,7 @@ namespace MultilingualMarkdown {
 
     use MultilingualMarkdown\Heading;
     use MultilingualMarkdown\Numbering;
+    
     require_once 'Heading.class.php';
     require_once 'Numbering.class.php';
 
@@ -44,12 +45,79 @@ namespace MultilingualMarkdown {
      * be relative to the path of the file where the link will be written.
      * It can be ignored when written in the origin file itself. (e.g. in local TOC.)
      */
-    class HeadingArray
+    class HeadingArray implements \SeekableIterator, \ArrayAccess, \Countable
     {
         private $allHeadings = [];  // all headings from a file
         private $curIndex = 0;      // current exploration index
         private $outputMode = OutputModes::MD;
         private $file = '';         // path of file relative to root dir for these headings
+
+        // Seekable Iterator interface
+        public function current()
+        {
+            if ($this->curIndex < count($this->allHeadings)) {
+                return $this->allHeadings[$this->curIndex];
+            }
+            \trigger_error("Invalid current index in headings array", E_ERROR);
+        }
+        public function key()
+        {
+            return $this->curIndex;
+        }
+        public function next()
+        {
+            if ($this->curIndex + 1 < count($this->allHeadings)) {
+                $this->curIndex += 1;
+            } else {
+                \trigger_error("No more next heading in array", E_ERROR);
+            }
+        }
+        public function rewind()
+        {
+            $this->curIndex = 0;
+        }
+        public function valid()
+        {
+            if ($this->curIndex < count($this->allHeadings)) {
+                return isset($this->allHeadings[$this->curIndex]);
+            }
+            return false;
+        }
+        public function seek($position)
+        {
+            if (\array_key_exists($this->allHeadings, $position)) {
+                $this->curIndex = $position;
+            } else {
+                \trigger_error("Invalid position $position in heading array", E_ERROR);
+            }
+        }
+        // ArrayAccess interface
+        public function offsetExists($index)
+        {
+            return isset($this->allHeadings[$index]);
+        }
+        public function offsetGet($index)
+        {
+            return $this->allHeadings[$index];
+        }
+        public function offsetSet($index, $value)
+        {
+            if ($index !== null) {
+                $this->allHeadings[$index] = $value;
+            } else {
+                $this->allHeadings[] = $value;
+            }
+        }
+        public function offsetUnset($index)
+        {
+            unset($this->allHeadings[$index]);
+            array_splice($this->allHeadings, $index, 1);
+        }
+        // Coutable interface
+        public function count()
+        {
+            return count($this->allHeadings);
+        }
 
         /**
          * Build the array, register the file base path (no extension)
@@ -78,23 +146,6 @@ namespace MultilingualMarkdown {
             }
         }
 
-        /**
-         * Check if array if empty.
-         *
-         * @return bool true if empty.
-         */
-        public function isEmpty(): bool
-        {
-            return (count($this->allHeadings) ==  0);
-        }
-
-        /**
-         * Add a heading to the array
-         */
-        public function add(Heading $heading): void
-        {
-            $this->allHeadings[] = $heading;
-        }
 
         /**
          * Reset exploration to first heading.

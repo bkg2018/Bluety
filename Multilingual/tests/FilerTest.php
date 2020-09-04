@@ -62,24 +62,14 @@ namespace MultilingualMarkdown {
 
             unset($filer);
             $filer = new Filer();
-            $filer->setRootDir('data');
+            $filer->exploreDirectory('data');
             $filer->readyInputs();
-
-            $this->assertTrue(true);
+            $name = $filer->getRelativeInputFile(0);
+            $this->assertEquals('test.mlmd', $name);
+            $name = $filer->getRelativeInputFile(1);
+            $this->assertEquals('subdata/tertiary.mlmd', $name);
+            $name = $filer->getRelativeInputFile(10);
+            $this->assertNull($name);
         }
     }
-
-    /*
-    //public function setMainLanguage(string $code): void
-    //public function addLanguage(string $code): void
-    public function readyInputs(): void
-    public function openInputFile(string $filename): bool
-    public function getBasename(string $path): ?string
-    public function getInputFile(int $index): ?string
-    public function getInputFilesMaxIndex(): int
-    //public function addInputFile(string $path): bool
-    public function setMainFilename(string $name = 'README.mlmd'): bool
-    public function getRootDir(): ?string
-    public function setRootDir(string $rootDir): bool
-    */
 }

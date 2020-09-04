@@ -42,7 +42,6 @@ namespace MultilingualMarkdown {
 
             $this->assertTrue(false);
         }
-
     }
 
     /*

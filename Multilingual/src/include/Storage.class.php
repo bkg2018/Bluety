@@ -33,181 +33,163 @@
 
 declare(strict_types=1);
 
-namespace MultilingualMarkdown;
+namespace MultilingualMarkdown {
 
-mb_internal_encoding('UTF-8');
+    require_once '../src/include/OutputModes.class.php';
 
-require_once '../src/include/OutputModes.class.php';
-
-class Storage
-{
-    // Input file and reading status
-    private $inFile = null;                 /// current input file handle
-    private $buffer = null;                 /// current line content
-    private $bufferPosition = 0;            /// current pos in line buffer (utf-8)
-    private $bufferLength = 0;              /// current line size in characters (utf-8)
-    private $curLine = 0;                   /// current line number from input file
-
-    // Output files and writing status
-    private $outFiles = [];                 /// '<language>' => file-handle
-    private $lastWritten = [];              /// last  character written to file
-    private $curOutputs = [];               /// current output buffers for files
-    private $rootDir = null;                /// root directory, or main file directory
-    private $outputMode = OutputModes::MD;  /// output html or md style for headings and links in toc
-
-    // Languages handling
-    private $languages = [];                // declared languages
-
-    /**
-     * Set an input file handle for further reading.
-     * This function releases any previous file and resets currents input buffer and status.
-     *
-     * @param resource $file the file handle for reading. Position is set to the beginning of file.
-     *
-     * @return bool true if the file and first paragraph is ready.
-     */
-    public function setInputFile($file): bool
+    class Storage
     {
-        if (!\is_resource($file)) {
-            return false;
-        }
-        if (isset($this->inFile)) {
-            unset($this->inFile);
-        }
-        $this->inFile = $file;
-        \rewind($file);
-        if (isset($this->buffer)) {
-            unset($this->buffer);
-        };
-        $this->bufferLength = 0;
-        $this->bufferPosition = 0;
-        $this->startLine = 0;
-        $this->endLine = 0;
-        return true;
-    }
+        // Input file and reading status
+        private $buffer = null;                 /// current line content
+        private $bufferPosition = 0;            /// current pos in line buffer (utf-8)
+        private $bufferLength = 0;              /// current line size in characters (utf-8)
+        private $curLine = 0;                   /// current line number from input file
 
-    /**
-     * Return the next UTF-8 paragraph, taken from the input file until an empty line or the end of file.
-     * Return false if already at end of file.
-     *
-     * @return string& a reference to the paragraphh buffer, or null when file and buffer are both finished.
-     */
-    public function &getNextParagraph(): ?string
-    {
-        static $nullGuard = null;
-        // no: read until empty line (or EOF)
-        if (isset($this->buffer)) {
-            unset($this->buffer);
+        // Output files and writing status
+        private $lastWritten = [];              /// last  character written to file
+        private $curOutputs = [];               /// current output buffers for files
+        private $outputMode = OutputModes::MD;  /// output html or md style for headings and links in toc
+
+        public function __construct()
+        {
+            mb_internal_encoding('UTF-8');
         }
-        $this->buffer = '';
-        do {
-            $line = fgets($this->inFile);
-            // EOF?
-            if (!$line) {
-                // return null now if buffer empty
-                if (empty($this->buffer)) {
-                    $this->bufferLength = 0;
-                    $this->curChar = null;
-                    return $nullGuard;
+
+        /**
+         * Set an input file handle for further reading.
+         * This function releases any previous file and resets currents input buffer and status.
+         *
+         * @param resource $file the file handle for reading. Position is set to the beginning of file.
+         *
+         * @return bool true if the file and first paragraph is ready.
+         */
+        public function setInputFile($file): bool
+        {
+            if (!\is_resource($file)) {
+                return false;
+            }
+            if (isset($this->inFile)) {
+                unset($this->inFile);
+            }
+            $this->inFile = $file;
+            \rewind($file);
+            if (isset($this->buffer)) {
+                unset($this->buffer);
+            };
+            $this->bufferLength = 0;
+            $this->bufferPosition = 0;
+            $this->startLine = 0;
+            $this->endLine = 0;
+            return true;
+        }
+
+        /**
+         * Return the next UTF-8 paragraph, taken from the input file until an empty line or the end of file.
+         * Return false if already at end of file.
+         *
+         * @return string& a reference to the paragraphh buffer, or null when file and buffer are both finished.
+         */
+        public function &getNextParagraph(): ?string
+        {
+            static $nullGuard = null;
+            // no: read until empty line (or EOF)
+            if (isset($this->buffer)) {
+                unset($this->buffer);
+            }
+            $this->buffer = '';
+            do {
+                $line = fgets($this->inFile);
+                // EOF?
+                if (!$line) {
+                    // return null now if buffer empty
+                    if (empty($this->buffer)) {
+                        $this->bufferLength = 0;
+                        $this->curChar = null;
+                        return $nullGuard;
+                    }
+                    // end of read, buffer not empty
+                    break;
+                } else {
+                    // delete Windows CR and store
+                    $line = \str_replace("\r", '', $line);
+                    $this->buffer .= $line;
+                    $this->startLine = $this->endLine + 1;
+                    $this->endLine += 1;
                 }
-                // end of read, buffer not empty
-                break;
+            // read until empty line
+            } while ($line != "\n");
+            // init status and characters
+            $this->bufferPosition = 0;
+            $this->bufferLength = mb_strlen($this->buffer);
+            $this->prevChar = $this->curChar ?? '';
+            $this->curChar = \mb_substr($this->buffer, 0, 1);
+            return $this->buffer;
+        }
+
+        /**
+         * Get the current paragraph length.
+         * Returns the number of UTF-8 characters in the paragraph, including EOLs.
+         */
+        public function getParagraphLength()
+        {
+            return $this->bufferLength;
+        }
+
+        /**
+         * Get the starting input line number for current paragraph.
+         */
+        public function getStartingLineNumber()
+        {
+            return $this->startLine;
+        }
+        /**
+         * Get the ending input line number for current paragraph.
+         */
+        public function getEndingLineNumber()
+        {
+            return $this->endLine;
+        }
+
+        /**
+         * Return the current UTF-8 character from current paragraph.
+         * Load next paragraph if no paragraph is loaded yet.
+         *
+         * @return null|string current character ('\n' for EOL),  null when file and buffer are finished.
+         */
+        public function curChar(): ?string
+        {
+            if (($this->bufferLength <= 0) || ($this->bufferPosition >= $this->bufferLength - 1)) {
+                $this->getNextParagraph();
+            }
+            return $this->curChar;
+        }
+
+        /**
+         * Return the next UTF-8 character from current buffer, return null if end of file.
+         *
+         * @return null|string new current character ('\n' for EOL),  null when file and buffer are finished.
+         */
+        public function nextChar(): ?string
+        {
+            // any  character left in current buffer?
+            if ($this->bufferPosition < $this->bufferLength - 1) {
+                $this->bufferPosition += 1;
             } else {
-                // delete Windows CR and store
-                $line = \str_replace("\r", '', $line);
-                $this->buffer .= $line;
-                $this->startLine = $this->endLine + 1;
-                $this->endLine += 1;
+                // no: read next paragraph
+                $this->getNextParagraph();
+                if ($this->bufferLength == 0) {
+                    return null;
+                }
             }
-        // read until empty line
-        } while ($line != "\n");
-        // init status and characters
-        $this->bufferPosition = 0;
-        $this->bufferLength = mb_strlen($this->buffer);
-        $this->prevChar = $this->curChar ?? '';
-        $this->curChar = \mb_substr($this->buffer, 0, 1);
-        return $this->buffer;
-    }
-
-    /**
-     * Get the current paragraph length.
-     * Returns the number of UTF-8 characters in the paragraph, including EOLs.
-     */
-    public function getParagraphLength()
-    {
-        return $this->bufferLength;
-    }
-
-    /**
-     * Get the starting input line number for current paragraph.
-     */
-    public function getStartingLineNumber()
-    {
-        return $this->startLine;
-    }
-    /**
-     * Get the ending input line number for current paragraph.
-     */
-    public function getEndingLineNumber()
-    {
-        return $this->endLine;
-    }
-
-    /**
-     * Return the current UTF-8 character from current paragraph.
-     * Load next paragraph if no paragraph is loaded yet.
-     *
-     * @return null|string current character ('\n' for EOL),  null when file and buffer are finished.
-     */
-    public function curChar(): ?string
-    {
-        if (($this->bufferLength <= 0) || ($this->bufferPosition >= $this->bufferLength - 1)) {
-            $this->getNextParagraph();
-        }
-        return $this->curChar;
-    }
-
-    /**
-     * Return the next UTF-8 character from current buffer, return null if end of file.
-     *
-     * @return null|string new current character ('\n' for EOL),  null when file and buffer are finished.
-     */
-    public function nextChar(): ?string
-    {
-        // any  character left in current buffer?
-        if ($this->bufferPosition < $this->bufferLength - 1) {
-            $this->bufferPosition += 1;
-        } else {
-            // no: read next paragraph
-            $this->getNextParagraph();
-            if ($this->bufferLength == 0) {
-                return null;
+            // adjust status
+            $this->prevChar = $this->curChar;
+            if ($this->prevChar == "\n") {
+                $this->curLine += 1;
             }
+            // get next utf-8 char
+            $this->curChar = mb_substr($this->buffer, $this->bufferPosition, 1);
+            //$this->debugEcho();
+            return $this->curChar;
         }
-        // adjust status
-        $this->prevChar = $this->curChar;
-        if ($this->prevChar == "\n") {
-            $this->curLine += 1;
-        }
-        // get next utf-8 char
-        $this->curChar = mb_substr($this->buffer, $this->bufferPosition, 1);
-        //$this->debugEcho();
-        return $this->curChar;
-    }
-
-    /**
-     * Add a language to the languages set.
-     *
-     * @param string $code the language code to add.
-     */
-    public function addLanguage(string $code): void
-    {
-        if (!\array_key_exists($code, $this->languages)) {
-            $this->languages[$code] = true;
-        }
-        if (\array_key_exists($code, $this->outFiles)) {
-            unset($this->outFiles[$code]);
-        }
-        $this->outFiles[$code] = null;
     }
 }
