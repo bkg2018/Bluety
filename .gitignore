@@ -4,3 +4,5 @@ Gerber_*/How-to-order-PCB.txt
 PCB_Back*.pdf
 PCB_Front*.pdf
 PCB_I_O *.pdf
+Multilingual/vendor/
+Multilingual/composer.lock
