@@ -130,7 +130,7 @@ namespace MultilingualMarkdown {
          * Get the current paragraph length.
          * Returns the number of UTF-8 characters in the paragraph, including EOLs.
          */
-        public function getParagraphLength()
+        public function getParagraphLength(): int
         {
             return $this->bufferLength;
         }
@@ -138,14 +138,14 @@ namespace MultilingualMarkdown {
         /**
          * Get the starting input line number for current paragraph.
          */
-        public function getStartingLineNumber()
+        public function getStartingLineNumber(): int
         {
             return $this->startLine;
         }
         /**
          * Get the ending input line number for current paragraph.
          */
-        public function getEndingLineNumber()
+        public function getEndingLineNumber(): int
         {
             return $this->endLine;
         }

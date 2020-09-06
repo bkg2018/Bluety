@@ -871,16 +871,14 @@ namespace MultilingualMarkdown {
          */
         private function writeToFile(string $language): void
         {
-            // file = $this->outFiles[$language]
-            // content = $this->curOutputs[$language]
+            // delete superfluous EOLs
             if (array_key_exists($language, $this->lastWritten)) {
                 while (substr($this->curOutputs[$language], 0, 1) == "\n" && $this->lastWritten[$language] == "\n\n") {
                     $this->curOutputs[$language] = substr($this->curOutputs[$language], 1);
                 }
             }
             // normalize to unix eol
-            $this->curOutputs[$language] = $this->getCleanText($this->curOutputs[$language]);
-            
+            $this->curOutputs[$language] = $this->getCleanText($this->curOutputs[$language]);            
             // send to file and clear the buffer
             if (!empty($this->curOutputs[$language] && isset($this->outFiles[$language]))) {
                 if (fwrite($this->outFiles[$language], $this->curOutputs[$language]) === false) {
@@ -1275,86 +1273,7 @@ namespace MultilingualMarkdown {
             }
         }
 
-        /**
-         * Find all headings and sub headings in a set of files.
-         * The files which are not under the given root directory will be ignored.
-         * Files with no headings will receive a heading using their filename
-         *
-         * @param string[] $filenames the pathes of the files to explore for headings
-         *
-         * @return nothing
-         *
-        public function exploreHeadings(array $filenames): void
-        {
-            $this->allHeadingArrays = [];
-            Heading::init();// reset headings numbering to 0
-            /// Explore heading in each file
-            foreach ($filenames as $filename) {
-                // get relative filename, ignore if not the right root
-                if ($this->rootDir !== null) {
-                    $rootLen = mb_strlen($this->rootDir);
-                    $baseDir = mb_substr($filename, 0, $rootLen);
-                    if ($baseDir != $this->rootDir) {
-                        $this->error("wrong root dir for file [$filename], should be [$this->rootDir]", __FILE__, __LINE__);
-                        continue;
-                    }
-                    $relFilename = mb_substr($filename, $rootLen + 1, null);
-                } else {
-                    $relFilename = $filename;
-                }
-                // relative filename is the index for the array of all headings arrays
-                $this->relFilenames[$filename] = $relFilename;
-                $this->inFile = fopen($filename, 'rb');
-                if ($this->inFile === false) {
-                    $this->error("could not open [$filename]", __FILE__, __LINE__);
-                    continue;
-                }
-                // create an array for headings of this file
-                $headingArray = new HeadingArray($relFilename);
-                // keep track of the line number for each heading
-                $curLine = 0;
-                // remember if the .languages directive has been read
-                $languageSet = false;
-                $languagesDirective = '.languages ';
-                $languagesDirectiveLength = strlen($languagesDirective);
-                // loop on each file line
-                do {
-                    $text = trim(fgets($this->inFile));
-                    $curLine += 1;
-                    if (!$languageSet) {
-                        if (strncmp($text, $languagesDirective, $languagesDirectiveLength) == 0) {
-                            $languageSet = true;
-                        }
-                        continue;
-                    }
-                    // skip code fences and double back-ticks
-                    $pos = strpos($text, '```');
-                    if ($pos !== false) {
-                        // escaped by double backticks+space / space+double backticks?
-                        if (($pos <= 2) || (substr($text, $pos - 3, 3) != '`` ') || (substr($text, $pos + 3, 3) != ' ``')) {
-                            do {
-                                $text = trim(fgets($this->inFile));
-                                $curLine += 1;
-                            } while (strpos($text, '```') === false);
-                        }
-                    } else {
-                        if (($text[0] ?? '') == '#') {
-                            $heading = new Heading($text, $curLine, $this);
-                            $headingArray->add($heading);
-                        }
-                    }
-                } while (!feof($this->inFile));
-
-                $this->closeInput();
-                // force a level 1 object if no headings
-                if ($headingArray->isEmpty()) {
-                    $heading = new Heading('# ' . $relFilename, 1, $this);
-                    $headingArray->add($heading);
-                }
-                $this->allHeadingArrays[$relFilename] = $headingArray;
-                unset($headingArray);
-            } // next file
-        }*/
+        
          
         /// Buffer for current word starting with a dot
         private $curWord = '';
@@ -1389,12 +1308,6 @@ namespace MultilingualMarkdown {
             $content = ($this->curChar ?? '') . trim($this->getCharUntil("\n", true));
             $this->storeHeading($level, $content);
         }
-
-
-
-
-
-
         
         /**
          * Parse an input file and generate files.
@@ -1572,7 +1485,7 @@ namespace MultilingualMarkdown {
             $this->outputToFiles($this->curWord, true);
             // MD047: single \n file ending if needed
             foreach ($this->languages as $language => $bool) {
-                if (substr($this->lastWritten[$language], -1, 1) != "\n") {
+                if (mb_substr($this->lastWritten[$language], -1, 1) != "\n") {
                     if (fwrite($this->outFiles[$language], "\n") === false) {
                         $this->error("cannot write EOL to {$this->outFilenames[$language]}", __FILE__, __LINE__);
                     }
@@ -1583,20 +1496,5 @@ namespace MultilingualMarkdown {
             return true;
         }
 
-        /**
-         * Process the input files list.
-         * Files must be added to the list using addInputFile() function.
-         * If no file has been added, process the files found in current directory
-         * and sub directories.
-         *
-         * @return nothing
-         *
-        public function processFiles(): void
-        {
-            $this->exploreHeadings($this->allInFilepathes);
-            foreach ($this->allInFilepathes as $filename) {
-                $this->process($filename);
-            }
-        }*/
     }
 }

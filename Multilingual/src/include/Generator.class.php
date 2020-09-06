@@ -199,6 +199,10 @@ namespace MultilingualMarkdown {
          * so that TOC can point to them. If no languages directive has been found at all
          * this is an error and the function will return false.
          *
+         * This function reads the files without going through Storage class and only looks
+         * for languages directives and headings, skipping over code fences and some
+         * escape text sequences.
+         *
          * @return bool true if pre processing found languages and headings correctly, false
          *              if there is no languages directive in any file.
          */
@@ -244,7 +248,7 @@ namespace MultilingualMarkdown {
                     $pos = strpos($text, '```');
                     if ($pos !== false) {
                         // escaped by double backticks+space / space+double backticks?
-                        if (($pos <= 2) || (substr($text, $pos - 3, 3) != '`` ') || (substr($text, $pos + 3, 3) != ' ``')) {
+                        if (($pos <= 2) || (mb_substr($text, $pos - 3, 3) != '`` ') || (mb_substr($text, $pos + 3, 3) != ' ``')) {
                             do {
                                 $text = trim(fgets($this->inFile));
                                 $curLine += 1;
@@ -268,6 +272,7 @@ namespace MultilingualMarkdown {
                 $this->allHeadingsArrays[$relFilename] = $headingArray;
                 unset($headingArray);
             } // next file
+            return true;
         }
 
         //------------------------------------------------------------------------------------------------------
@@ -297,6 +302,8 @@ namespace MultilingualMarkdown {
          * Process one of the input files and generate its output files.
          * This process reads the input file stream, detects and interprets directives,
          * expand variables and sends output to files.
+         * 
+         * Note: readyInputs() must have been called before any process() takes place.
          *
          * @param int $index index of the input file in the filer object.
          *
@@ -309,8 +316,17 @@ namespace MultilingualMarkdown {
             }
             $this->filer->readyOutputs();
 
-            //TODO: process the input file
+            //echo str_repeat('=', 120), "\n";
+            $c = $filer->curChar();
+            $charNumber = 0;
+            while ($c !== null) {
+                //echo $c;
+                $charNumber += 1;
+                $c = $storage->nextChar();
+            }
 
+            $this->filer->closeOutput();
+            $this->filer->closeInput();
 
             return true;
         }

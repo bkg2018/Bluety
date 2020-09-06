@@ -39,6 +39,7 @@ namespace MultilingualMarkdown {
     require_once 'OutputModes.class.php';
     require_once 'File.class.php';
     require_once 'LanguageList.class.php';
+    require_once 'Storage.class.php';
 
     use MultilingualMarkdown\Logger;
 
@@ -56,6 +57,7 @@ namespace MultilingualMarkdown {
         private $relFilenames = [];             /// relative filenames for each filename
         private $inFilename = null;             /// current file name e.g. 'example.mlmd' - relative to root dir
         private $inFile = null;                 /// current input file handle
+        private $storage = null;                /// input buffers handling object
 
         // Output filenames, files and writing status
         private $outFilenameTemplate = null;    /// as 'example'
@@ -79,6 +81,7 @@ namespace MultilingualMarkdown {
                 $posFunction = 'mb_stripos' ;
                 $cmpFunction = 'strcasecmp';
             }
+            $this->storage = new Storage();
         }
 
         /**
@@ -381,6 +384,9 @@ namespace MultilingualMarkdown {
                 return $this->error("cannot open file $filename", __FILE__, __LINE__);
             }
 
+            // prapare storage object
+            $this->storage->setInputFile($this->inFile);
+
             // retain base name with full path but no extension as template and reset line number
             $extension = \isMLMDfile($filename);
             $this->outFilenameTemplate = mb_substr($filename, 0, -mb_strlen($extension));
@@ -520,6 +526,50 @@ namespace MultilingualMarkdown {
         public function setMainLanguage(string $code): bool
         {
             return $this->languages->setMain($code);
+        }
+
+        //MARK: Relays to storage
+
+        /**
+         * Get the current paragraph length.
+         * Returns the number of UTF-8 characters in the paragraph, including EOLs.
+         */
+        public function getParagraphLength(): int
+        {
+            return $this->storage->getParagraphLength();
+        }
+        /**
+         * Get the starting input line number for current paragraph.
+         */
+        public function getStartingLineNumber(): int
+        {
+            return $this->storage->getStartingLineNumber();
+        }
+        /**
+         * Get the ending input line number for current paragraph.
+         */
+        public function getEndingLineNumber(): int
+        {
+            return $this->storage->getEndingLineNumber();
+        }
+        /**
+         * Return the current UTF-8 character from current paragraph.
+         * Load next paragraph if no paragraph is loaded yet.
+         *
+         * @return null|string current character ('\n' for EOL),  null when file and buffer are finished.
+         */
+        public function curChar(): ?string
+        {
+            return $this->storage->curChar();
+        }
+        /**
+         * Return the next UTF-8 character from current buffer, return null if end of file.
+         *
+         * @return null|string new current character ('\n' for EOL),  null when file and buffer are finished.
+         */
+        public function nextChar(): ?string
+        {
+            return $this->storage->nextChar();
         }
     }
 }

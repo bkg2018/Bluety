@@ -54,11 +54,7 @@ namespace MultilingualMarkdown {
         }
         public function next()
         {
-            if ($this->curIndex + 1 < count($this->allLanguages)) {
-                $this->curIndex += 1;
-            } else {
-                \trigger_error("No more next language in list", E_ERROR);
-            }
+            $this->curIndex += 1;
         }
         public function rewind()
         {
