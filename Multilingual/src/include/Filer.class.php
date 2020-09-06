@@ -179,7 +179,7 @@ namespace MultilingualMarkdown {
         public function setRootDir(string $rootDir): bool
         {
             if (\file_exists($rootDir) && \is_dir($rootDir)) {
-                $absoluteRoot = realpath($rootDir);
+                $absoluteRoot = normalizedPath(realpath($rootDir));
                 $this->rootDir = rtrim($absoluteRoot, "/\\");
                 $this->rootDirLength = mb_strlen($this->rootDir);
                 // reset relative filenames if needed
@@ -225,7 +225,7 @@ namespace MultilingualMarkdown {
             }
             if (empty($mainPath)) {
                 // file not found: reset root dir
-                $mainPath = \realpath($name);
+                $mainPath = normalizedPath(\realpath($name));
                 if ($mainPath === false) {
                     return $this->error("main file cannot be found ($name)", __FILE__, __LINE__);
                 }
@@ -255,19 +255,45 @@ namespace MultilingualMarkdown {
         public function addInputFile(string $path): bool
         {
             global $posFunction;
-
+            $path = normalizedPath($path);
             // check file extension
             $extension = isMLMDfile($path);
             if ($extension === null) {
                 return $this->error("invalid file extension ($filename)", __FILE__, __LINE__);
             }
             // check if it is relative or absolute
-            $absolutePath = realpath($path);
+            $absolutePath = normalizedPath(realpath($path));
             if ($absolutePath === false) {
                 return $this->error("file $path doesn't exist", __FILE__, __LINE__);
             }
             $filePos = $posFunction($absolutePath, $path, 0);
             if ($filePos !== 0) {
+                if ($filePos === false) {
+                    
+                    // delete anything before '/../' or '/./' in relative path
+                    foreach (['/../', '/./'] as $pattern) {
+                        do {
+                            $curPos = \mb_strrpos($path, $pattern);
+                            if ($curPos !== false) {
+                                $path = mb_substr($path, $curPos + mb_strlen($pattern));
+                            }
+                        } while ($curPos !== false);
+                    }
+                    // delete starting '../' or './' 
+                    foreach (['../', './'] as $pattern) {
+                        do {
+                            $curPos = \mb_strpos($path, $pattern);
+                            if ($curPos === 0) {
+                                $path = mb_substr($path, mb_strlen($pattern));
+                            }
+                        } while ($curPos !== false);
+                    }
+                    $filePos = $posFunction($absolutePath, $path, 0);
+                    if ($filePos === false) {
+                        // shouldn't happen
+                        return $this->error("impossible to find root directory from $path", __FILE__, __LINE__);
+                    }
+                }
                 // relative path: check against root dir or set it
                 $baseDir = mb_substr($absolutePath, 0, $filePos - 1);
                 if (empty($this->rootDir ?? '')) {
@@ -343,18 +369,18 @@ namespace MultilingualMarkdown {
             //  build relative path against root dir
             if ($this->rootDir !== null) {
                 $rootLen = mb_strlen($this->rootDir);
-                $baseDir = mb_substr(realpath($path), 0, $rootLen);
+                $baseDir = mb_substr(normalizedPath(realpath($path)), 0, $rootLen);
                 if ($cmpFunction($baseDir, $this->rootDir) != 0) {
                     $this->error("wrong root dir for file [$path], should be [{$this->rootDir}]", __FILE__, __LINE__);
                     return null;
                 }
                 $extension = isMLMDfile($path) ?? '';
-                $path = mb_substr(realpath($path), $rootLen + 1, null);
+                $path = mb_substr(normalizedPath(realpath($path)), $rootLen + 1, null);
                 return mb_substr($path, 0, -mb_strlen($extension));
             } else {
                 if ($this->mainFilename !== null) {
                     // get root dir from main file path
-                    $this->rootDir = dirname(realpath($this->mainFilename));
+                    $this->rootDir = normalizedPath(dirname(realpath($this->mainFilename)));
                     return $this->getBasename($path);
                 }
             }
@@ -404,7 +430,7 @@ namespace MultilingualMarkdown {
          *
          * @return false in all cases
          */
-        private function closeInput(): bool
+        public function closeInput(): bool
         {
             if ($this->inFile != null) {
                 fclose($this->inFile);
@@ -427,7 +453,7 @@ namespace MultilingualMarkdown {
          *
          * @return false in all cases
          */
-        private function closeOutput(): bool
+        public function closeOutput(): bool
         {
             foreach ($this->outFiles as &$outFile) {
                 if ($outFile != null) {
@@ -503,18 +529,24 @@ namespace MultilingualMarkdown {
          */
         public function readyOutputs(): bool
         {
+            if ($this->outFilenameTemplate == null) {
+                return $this->error("output file template not set", __FILE__, __LINE__);
+            }
+            $return = true;
             foreach ($this->languages as $index => $array) {
                 $code = $array['code'] ?? null;
                 $this->outFiles[$code] = null;
-                if ($this->outFilenameTemplate != null) {
-                    if ($this->languages->isMain($code)) {
-                        $this->outFilenames[$code] = "{$this->outFilenameTemplate}.md";
-                    } else {
-                        $this->outFilenames[$code] = "{$this->outFilenameTemplate}.{$code}.md";
-                    }
+                if ($this->languages->isMain($code)) {
+                    $this->outFilenames[$code] = "{$this->outFilenameTemplate}.md";
+                } else {
+                    $this->outFilenames[$code] = "{$this->outFilenameTemplate}.{$code}.md";
+                }
+                $this->outFiles[$code] = fopen($this->outFilenames[$code], "wb");
+                if ($this->outFiles[$code] == false) {
+                    $return &= $this->error("unable to open file {$this->outFilenames[$code]} for writing", __FILE__, __LINE__);
                 }
             }
-            return true;
+            return $return;
         }
 
         /**

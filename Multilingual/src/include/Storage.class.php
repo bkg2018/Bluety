@@ -35,7 +35,7 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once '../src/include/OutputModes.class.php';
+    require_once 'OutputModes.class.php';
 
     class Storage
     {

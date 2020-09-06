@@ -46,6 +46,21 @@ function isWindows(): bool
 }
 
 /**
+ * Normalize a path to use unix style separators.
+ * 
+ * @param string|bool|null $path the input path to normalize
+ * 
+ * @return string|bool|null the normalized path
+ */
+function normalizedPath($path)
+{
+    if ($path !== false && $path !== null) {
+        return str_replace('\\', '/', $path);
+    }
+    return $path;
+}
+
+/**
  * Check if a filename has an MLMD valid extension and get this extension.
  *
  * @param string $filename the file name or path to test.

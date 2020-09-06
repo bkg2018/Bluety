@@ -317,12 +317,12 @@ namespace MultilingualMarkdown {
             $this->filer->readyOutputs();
 
             //echo str_repeat('=', 120), "\n";
-            $c = $filer->curChar();
+            $c = $this->filer->curChar();
             $charNumber = 0;
             while ($c !== null) {
                 //echo $c;
                 $charNumber += 1;
-                $c = $storage->nextChar();
+                $c = $this->filer->nextChar();
             }
 
             $this->filer->closeOutput();
@@ -331,4 +331,13 @@ namespace MultilingualMarkdown {
             return true;
         }
     }
+    // minimal tests in debug mode
+    $generator = new Generator();
+    $generator->addInputFile('../../testdata/test.mlmd');
+    $generator->setMainFilename("test.mlmd");
+    $generator->addInputFile('../../testdata/subdata/secondary.mlmd');
+    $generator->addInputFile('../../testdata/subdata/tertiary.mlmd');
+    $generator->processFiles();
+
 }
+

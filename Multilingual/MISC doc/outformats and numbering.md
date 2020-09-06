@@ -56,7 +56,7 @@ Will generate in files:
 
 ```code
     ## A) First part
-    
+
     ### A-1) First sub-part of A
 
     #### A-1.1) First sub sub-part
@@ -68,7 +68,6 @@ Will generate in files:
     ### B-1) First sub-part of B
 ```
 
-
 | ***Element***                 | html        | htmlold     | md          | html+num    | htmlold+num | md+num      | mdpure      |
 :-------------------------------|-------------|-------------|-------------|-------------|-------------|-------------|-------------|
 ***Heading Anchor:***           |             |             |             |             |             |             |             |
@@ -76,7 +75,7 @@ Will generate in files:
    `<A id="id"></A><br>`        |      o      |      -      |      -      |      o      |      -      |      -      |      -      |
    `{#{id}}`                    |      -      |      -      |      o      |      -      |      -      |      o      |      o      |
 ***Hash Prefix***               |             |             |             |             |             |             |             |
-    `#` \* level                |      o      |      o      |      o      |      o      |      o      |      o      |      o      |
+   `# * level`                  |      o      |      o      |      o      |      o      |      o      |      o      |      o      |
 ***TOC heading space:***        |             |             |             |             |             |             |             |
    `4 x &nbsp; * (level-1)`     |      o      |      o      |      -      |      o      |      o      |      -      |      -      |
    `2 x <space> * (level-1)`    |      -      |      -      |      o      |      -      |      -      |      o      |      -      |
@@ -94,7 +93,6 @@ Will generate in files:
    `<hash> <num>) text<anchor>` |      -      |      -      |      -      |      o      |      o      |      o      |      -      |
    `<hash> text<anchor>`        |      o      |      o      |      o      |      -      |      -      |      -      |      -      |
    `<hash> 1. text`             |      -      |      -      |      -      |      -      |      -      |      -      |      o      |
-
 
 ## Implementation
 
@@ -126,8 +124,6 @@ TOC lines are only written if the corresponding heading is a level between start
 
 {heading} examples:
 
-<a name# 
-
 ### md / md + num
 
 - {anchor}:
@@ -142,4 +138,3 @@ TOC lines are only written if the corresponding heading is a level between start
     `- text`                        if the level has no definition
 - {TOC link}:
     `{spacing} - [{TOC text}](file#a{id})`
-

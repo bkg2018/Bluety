@@ -1,13 +1,11 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
     use PHPUnit\Framework\TestCase;
     use MultilingualMarkdown\Generator;
 
-    require_once '../src/include/Generator.class.php';
+//    require_once 'Generator.class.php';
 
     /** Copyright 2020 Francis Piérot
      *
@@ -33,28 +31,15 @@ namespace MultilingualMarkdown {
     {
         public function testInitialization()
         {
+            //echo getcwd() . "\n";
             $generator = new Generator();
-            $generator->addInputFile('data/test.mlmd');
+            $generator->addInputFile('testdata/test.mlmd');
             $generator->setMainFilename("test.mlmd");
-            $generator->addInputFile('data/subdata/secondary.mlmd');
-            $generator->addInputFile('data/subdata/tertiary.mlmd');
+            $generator->addInputFile('testdata/subdata/secondary.mlmd');
+            $generator->addInputFile('testdata/subdata/tertiary.mlmd');
             $generator->processFiles();
 
             $this->assertTrue(false);
         }
     }
-
-    /*
-    //public function setMainLanguage(string $code): void
-    //public function addLanguage(string $code): void
-    public function readyInputs(): void
-    public function openInputFile(string $filename): bool
-    public function getBasename(string $path): ?string
-    public function getInputFile(int $index): ?string
-    public function getInputFilesMaxIndex(): int
-    //public function addInputFile(string $path): bool
-    public function setMainFilename(string $name = 'README.mlmd'): bool
-    public function getRootDir(): ?string
-    public function setRootDir(string $rootDir): bool
-    */
 }
