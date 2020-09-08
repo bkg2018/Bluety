@@ -43,6 +43,10 @@ namespace MultilingualMarkdown {
         {
             parent::__construct(TokenType::OPEN_DIRECTIVE, '.ignore((', true);
         }
+        public function __toString()
+        {
+            return '<directive> .ignore((';
+        }
     }
 
 }

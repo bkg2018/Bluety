@@ -43,5 +43,9 @@ namespace MultilingualMarkdown {
         {
             parent::__construct('.numbering', true);
         }
+        public function __toString()
+        {
+            return '<directive> .numbering((';
+        }
     }
 }

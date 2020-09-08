@@ -47,5 +47,9 @@ namespace MultilingualMarkdown {
         {
             parent::__construct($type, $keyword, $ignoreCase);
         }
+        public function __toString()
+        {
+            return '- FORBIDDEN: base TokenStreamDirective class, check Lexer code -';
+        }
     }
 }

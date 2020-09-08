@@ -48,6 +48,10 @@ namespace MultilingualMarkdown {
         {
             parent::__construct(TokenType::EOL, "\n", true);
         }
+        public function __toString()
+        {
+            return '<EOL>';
+        }
     }
 
 }

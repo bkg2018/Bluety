@@ -43,6 +43,10 @@ namespace MultilingualMarkdown {
         {
             parent::__construct(TokenType::CLOSE_DIRECTIVE, '.))', true);
         }
+        public function __toString()
+        {
+            return '<directive> .))';
+        }
     }
 
 }

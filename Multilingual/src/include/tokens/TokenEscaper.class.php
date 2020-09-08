@@ -45,5 +45,16 @@ namespace MultilingualMarkdown {
         {
             parent::__construct(TokenType::ESCAPER, $marker, true);
         }
+        public function __toString()
+        {
+            return '- FORBIDDEN: base TokenEscaper class, check Lexer code -';
+        }
+        public function isType($type): bool
+        {
+            if ((\is_array($type) && \in_array(TokenType::ESCAPER, $type)) || ($type == 'TokenType::ESCAPER')) {
+                return true;
+            }
+            return parent::isType($type);
+        }
     }
 }

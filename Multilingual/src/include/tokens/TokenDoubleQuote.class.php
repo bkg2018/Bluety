@@ -45,6 +45,10 @@ namespace MultilingualMarkdown {
         {
             parent::__construct('``');
         }
+        public function __toString()
+        {
+            return '<escape> "';
+        }
     }
 
 }

@@ -43,6 +43,10 @@ namespace MultilingualMarkdown {
         {
             parent::__construct('.toc', true);
         }
+        public function __toString()
+        {
+            return '<directive> .toc';
+        }
     }
 
 }

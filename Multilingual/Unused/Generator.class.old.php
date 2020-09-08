@@ -878,7 +878,7 @@ namespace MultilingualMarkdown {
                 }
             }
             // normalize to unix eol
-            $this->curOutputs[$language] = $this->getCleanText($this->curOutputs[$language]);            
+            $this->curOutputs[$language] = $this->getCleanText($this->curOutputs[$language]);
             // send to file and clear the buffer
             if (!empty($this->curOutputs[$language] && isset($this->outFiles[$language]))) {
                 if (fwrite($this->outFiles[$language], $this->curOutputs[$language]) === false) {
@@ -1362,8 +1362,8 @@ namespace MultilingualMarkdown {
                             $content = $this->getContentUntil("```\n");
                         } else {
                             // double back-tick escaping?
-                            if ($this->isMatching('`` ')) {
-                                $content = $this->getContentUntil(' ``');
+                            if ($this->isMatching('``')) {
+                                $content = $this->getContentUntil('``');
                             } else {
                                 // single back-tick escaping
                                 $content = $this->getContentUntil('`');

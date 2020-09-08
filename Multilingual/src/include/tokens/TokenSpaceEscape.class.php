@@ -48,17 +48,21 @@ namespace MultilingualMarkdown {
         {
             parent::__construct('    ');
         }
+        public function __toString()
+        {
+            return '<escape> 4 spaces prefix';
+        }
 
         /**
          * Check beginning of line before checking the key marker.
          */
-        public function identify(string $buffer, int $pos): bool
+        public function identifyInBuffer(string $buffer, int $pos): bool
         {
             $prevChar = ($pos > 0) ? mb_substr($buffer, $pos - 1, 1) : "\n";
             if ($prevChar != "\n") {
                 return false;
             }
-            return parent::identify($buffer, $pos);
+            return parent::identifyInBuffer($buffer, $pos);
         }
     }
 }

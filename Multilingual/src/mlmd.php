@@ -23,8 +23,6 @@
  * @link      TODO
  */
 
-mb_internal_encoding('UTF-8');
-
 function displayHelp()
 {
     echo "
@@ -97,6 +95,7 @@ require_once 'include/Generator.class.php';
 //MARK: CLI launch
 
 // Create the generator instance
+mb_internal_encoding('UTF-8');
 $generator = new \MultilingualMarkdown\Generator();
 
 // array of parameters: 'name' => [(public) function to call on the value, 'type' of value]
@@ -168,5 +167,5 @@ while ($arg < $argc) {
 }
 
 // do the job
-$generator->processFiles();
+$generator->processAllFiles();
 echo "OK\n";

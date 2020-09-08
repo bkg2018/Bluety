@@ -46,6 +46,13 @@ namespace MultilingualMarkdown {
             parent::__construct($content);
             $this->type = TokenType::ESCAPED_TEXT;
         }
+        public function __toString()
+        {
+            return '<escaped text> ' .
+                (mb_strlen($this->content) < 40 ?
+                $this->content :
+                mb_substr($this->content, 0, 20) . '...' . mb_substr($this->content, -20));
+        }
     }
 
 }

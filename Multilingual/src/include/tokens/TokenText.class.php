@@ -50,6 +50,14 @@ namespace MultilingualMarkdown {
             $this->content = $content;
             $this->length = mb_strlen($content);
         }
+        public function __toString()
+        {
+            $maxlen = 60;
+            return '<text> ' .
+                    (mb_strlen($this->content) < $maxlen ?
+                        $this->content :
+                        mb_substr($this->content, 0, $maxlen / 2) . '...' . mb_substr($this->content, -$maxlen / 2));
+        }
 
         /**
          * Add a character or string to content.

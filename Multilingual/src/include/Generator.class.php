@@ -287,10 +287,12 @@ namespace MultilingualMarkdown {
          *
          * @return bool true if processing done correctly, false if any error.
          */
-        public function processFiles(): bool
+        public function processAllFiles(): bool
         {
+            $dashes = str_repeat('-', 60);
             $this->preProcess();
             foreach ($this->filer as $index => $relFilename) {
+                echo "$dashes\n$relFilename\n$dashes\n";
                 if (!$this->process($index)) {
                     return false;
                 }
@@ -302,7 +304,7 @@ namespace MultilingualMarkdown {
          * Process one of the input files and generate its output files.
          * This process reads the input file stream, detects and interprets directives,
          * expand variables and sends output to files.
-         * 
+         *
          * Note: readyInputs() must have been called before any process() takes place.
          *
          * @param int $index index of the input file in the filer object.
@@ -316,28 +318,30 @@ namespace MultilingualMarkdown {
             }
             $this->filer->readyOutputs();
 
-            //echo str_repeat('=', 120), "\n";
-            $c = $this->filer->curChar();
-            $charNumber = 0;
-            while ($c !== null) {
-                //echo $c;
-                $charNumber += 1;
-                $c = $this->filer->nextChar();
-            }
-
+            /*//echo str_repeat('=', 120), "\n";
+            $paragraph = $this->filer->getNextParagraph();
+            while ($paragraph !== null) {
+                $lineNumber = $this->filer->getStartingLineNumber();
+                $tokens = $this->lexer->getTokens($paragraph, $lineNumber, $this);
+                foreach ($tokens as $index => $token) {
+                    $t = (string)$token;
+                    echo "$t\n";
+                }
+                echo "----- end of paragraph -----\n";
+                $paragraph = $this->filer->getNextParagraph();
+            }*/
+            
+            
             $this->filer->closeOutput();
             $this->filer->closeInput();
 
             return true;
         }
     }
-    // minimal tests in debug mode
     $generator = new Generator();
     $generator->addInputFile('../../testdata/test.mlmd');
     $generator->setMainFilename("test.mlmd");
     $generator->addInputFile('../../testdata/subdata/secondary.mlmd');
     $generator->addInputFile('../../testdata/subdata/tertiary.mlmd');
-    $generator->processFiles();
-
+    $generator->processAllFiles();
 }
-

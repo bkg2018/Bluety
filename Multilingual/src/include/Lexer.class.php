@@ -46,6 +46,8 @@ namespace MultilingualMarkdown {
     require_once('tokens/TokenFence.class.php');
     require_once('tokens/TokenDoubleQuote.class.php');
     require_once('tokens/TokenSpaceEscape.class.php');
+    require_once('tokens/TokenText.class.php');
+    require_once('tokens/TokenEscapedText.class.php');
 
     class Lexer
     {
@@ -78,12 +80,42 @@ namespace MultilingualMarkdown {
 
         /**
          * Check if current position in a buffer matches a registered token and return the token.
-         * Return null if there is no known token at the given position.
+         * The function doesn't advance position, it just checks if there
+         * is a known token at the starting position. It may read enough characters from input
+         * for checking depending on what's left in buffer.
+         *
+         * @param objject $filer the input file handling object.
+         *
+         * @return null|object   the recognized token or null if none, which means
+         *                       caller Lexer will have to decide what to do with content
+         *                       (e.g. creating text tokens)
+         */
+        public function fetchToken(object $filer): ?Token
+        {
+            foreach ($this->tokens as $token) {
+                if ($token->identifyInFiler($filer)) {
+                    return $token;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * Check if current position in a buffer matches a registered token and return the token.
+         * The function doesn't advance position or change buffer, uit just checks if there
+         * is a known token at the starting position.
+         *
+         * @param string $buffer the UTF-8 content buffer where to search in
+         * @param int    $pos    the starting position for token search
+         *
+         * @return null|object   the recognized token or null if none, which means
+         *                       caller LExer will have to decide what to do with content
+         *                       (e.g. creating text tokens)
          */
         public function getToken(string $buffer, int $pos): ?Token
         {
             foreach ($this->tokens as $token) {
-                if ($token->identify($buffer, $pos)) {
+                if ($token->identifyInBuffer($buffer, $pos)) {
                     return $token;
                 }
             }
@@ -111,59 +143,71 @@ namespace MultilingualMarkdown {
          * @param int    $line      [IN/OUT] the initial line number for buffer content
          * @param object $logger    optional logger object with error/warning functions
          *
-         * @return array a Token array
+         * @return array a Token array, can be empty
          */
-        public function transform(string $buffer, int &$line, ?Logger $logger): array
+        public function getTokens(string &$buffer, int &$line, ?Logger $logger): array
         {
             $pos = 0;
-            $maxPos = mb_strlen($buffer) - 1;// last authorized position in buffer
-            $tokens = [];                           // array of tokens
-            $continue = true;                       // stop on an empty line, else continue
-            $text = '';                             // current text until a token is found
+            $maxPos = mb_strlen($buffer) - 1;   // last authorized position in buffer
+            $tokens = [];                       // array of tokens
+            $continue = true;                   // stop on an empty line, else continue
+            $text = '';                         // current text outside of tokens
+            $prevToken = null;                  // previous token copy, for any needed test
             $this->debugEcho("\n[$line]: ");
             do {
                 $token = $this->getToken($buffer, $pos);
                 if ($token) {
-                    // store current text in a text token if needed
+                    // if there is awaiting text, store it in a text or escaped text token
                     if (!empty($text)) {
-                        $tokens[] = new TokenText($text);
-                        $text = '';
+                        if (($prevToken != null) && $prevToken->isType(TokenType::ESCAPER)) {
+                            // is new token same escaper ?
+                            if ($token->isType($prevToken->getType())) {
+                                $tokens[] = new TokenEscapedText($text);
+                                $tokens[] = $token;
+                                $prevToken = null;
+                                $text = '';
+                                $pos += $token->getLength();
+                            } else {
+                                // not the ending escaper, just keep storing in $text
+                                $text .= mb_substr($buffer, $pos, 1);
+                                $pos += 1;
+                            }
+                        } else {
+                            // previous token was not a text escaper: store a text token and then the new token
+                            $tokens[] = new TokenText($text);
+                            $tokens[] = $token;
+                            $prevToken = $token;
+                            $text = '';
+                            $pos += $token->getLength();
+                        }
                     }
+
+                    //TODO:  token processing above and below?
+                    /*
                     // now store token after processing from it
                     $pos += $token->getLength();
-                    $token->process($buffer, $pos);
-                    $tokens[] = $token;
+                    $processed = $token->processInput($buffer, $pos);
+                    // processInput may return null, the token itself, or an array of tokens
+                    if (\is_array($processed)) {
+                        $tokens = array_merge($tokens, $processed);
+                    } else {
+                        $tokens[] = $token;
+                    }
                     $continue = !$token->isType(TokenType::EMPTY_LINE);
                     // adjust line number if needed
                     if ($token->isType([TokenType::EOL,TokenType::EMPTY_LINE])) {
                         $line += 1;
                         $this->debugEcho("\n[$line]: ");
-                    }
+                    }*/
                 } else {
+                    // no token found, store in $text to build a text token later.
                     $c = mb_substr($buffer, $pos, 1);
                     $text .= $c;
                     $pos += 1;
                     $this->debugEcho($c);
-                    // $logger->error('cannot find a valid directive or token');
-                    // break;
                 }
             } while (($pos <= $maxPos) && $continue);
             return $tokens;
-        }
-
-        /**
-         * Parse an input file and generate files.
-         * This process reads the input file stream, detects and interprets directives and sends output to files.
-         * Variables expansions is done in the outputToFiles() function.
-         *
-         * @param string $filename  The path to the input file. Can be relative or absolute, if relative it is
-         *                          relative to rootDir.
-         *
-         * @return bool true if input file processed correctly, false if any error.
-         */
-        public function process(string $filename): bool
-        {
-            return true;
         }
     }
 }

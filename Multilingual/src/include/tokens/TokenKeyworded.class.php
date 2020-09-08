@@ -61,7 +61,10 @@ namespace MultilingualMarkdown {
             $this->keywordLength = mb_strlen($keyword);
             $this->ignoreCase = $ignoreCase;
         }
-
+        public function __toString()
+        {
+            return '- FORBIDDEN: base TokenKeyworded class, check Lexer code -';
+        }
         /**
             * Identify self against an UTF-8 buffer and position.
             *
@@ -75,13 +78,23 @@ namespace MultilingualMarkdown {
             *
             * @return bool true if the token can be found at the given position in the gvien buffer
             */
-        public function identify(string $buffer, int $pos): bool
+        public function identifyInBuffer(string $buffer, int $pos): bool
         {
             $test = mb_substr($buffer, $pos, $this->keywordLength);
             $testLower = \mb_strtolower($test);
-            return ($ignorecase ? (\strcmp($testLower, $this->keywordLower) == 0) : (\strcmp($test, $this->keyword) == 0) );
+            return ($this->ignoreCase ? (\strcmp($testLower, $this->keyword) == 0) : (\strcmp($test, $this->keyword) == 0) );
         }
-
+        /**
+         * Let the token self-identify against an input handler Filer object.
+         *
+         * @param object $filer the Filer object
+         *
+         * @return bool true if theh current token can be found at current Filer position and buffer content.
+         */
+        public function identifyInFiler(object $filer): bool
+        {
+            return $filer->isMatching($this->keyword);
+        }
         /**
             * Return the length of the token identifier.
             */

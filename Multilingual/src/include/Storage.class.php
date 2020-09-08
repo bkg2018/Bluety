@@ -44,6 +44,9 @@ namespace MultilingualMarkdown {
         private $bufferPosition = 0;            /// current pos in line buffer (utf-8)
         private $bufferLength = 0;              /// current line size in characters (utf-8)
         private $curLine = 0;                   /// current line number from input file
+        private $currentChar = '';                  /// current character in input
+        private $previousChar = '';                 /// previous value of $currentChar
+        private $prePreviousChar = '';              /// previous previous value of $currentChar
 
         // Output files and writing status
         private $lastWritten = [];              /// last  character written to file
@@ -104,7 +107,7 @@ namespace MultilingualMarkdown {
                     // return null now if buffer empty
                     if (empty($this->buffer)) {
                         $this->bufferLength = 0;
-                        $this->curChar = null;
+                        $this->currentChar = null;
                         return $nullGuard;
                     }
                     // end of read, buffer not empty
@@ -121,9 +124,34 @@ namespace MultilingualMarkdown {
             // init status and characters
             $this->bufferPosition = 0;
             $this->bufferLength = mb_strlen($this->buffer);
-            $this->prevChar = $this->curChar ?? '';
-            $this->curChar = \mb_substr($this->buffer, 0, 1);
+            $this->prePreviousChar = $this->previousChar ?? '';
+            $this->previousChar = $this->currentChar ?? '';
+            $this->currentChar = \mb_substr($this->buffer, 0, 1);
             return $this->buffer;
+        }
+
+        /**
+         * Read characters from input and append to current buffer until
+         * at least $length characters are available or end of file is reached.
+         * Content is read line by line until wanted length is reached.
+         * Windows CR are deleted from input and ending line number is adjusted.
+         * Current char and position do not change.
+         *
+         * @param int $length number of character to make available in buffer
+         */
+        public function fetchCharacters(int $length): void
+        {
+            do {
+                $line = fgets($this->inFile);
+                if ($line !== false) {
+                    $line = \str_replace("\r", '', $line);// delete Windows CR
+                    $this->buffer .= $line;
+                    $this->bufferLength += mb_strlen($line);
+                    $this->endLine += 1;
+                } else {
+                    break;
+                }
+            } while ($this->bufferLength - $this->bufferPosition < $length);
         }
 
         /**
@@ -158,12 +186,37 @@ namespace MultilingualMarkdown {
          */
         public function curChar(): ?string
         {
-            if (($this->bufferLength <= 0) || ($this->bufferPosition >= $this->bufferLength - 1)) {
-                $this->getNextParagraph();
+            // immediate return if ready
+            if ($this->bufferPosition < $this->bufferLength) {
+                return $this->currentChar;
             }
-            return $this->curChar;
+            // need to read at least 1 char
+            $this->fetchCharacters(1);
+            if ($this->bufferPosition < $this->bufferLength) {
+                $this->currentChar = mb_substr($this->buffer, $this->bufferPosition, 1);
+                return $this->currentChar;
+            }
+            return null;
         }
 
+        /**
+         * Return the previous UTF-8 character .
+         *
+         * @return null|string previous character ('\n' for EOL).
+         */
+        public function prevChar(): ?string
+        {
+            return $this->previousChar;
+        }
+        /**
+         * Return the previous previous UTF-8 character .
+         *
+         * @return null|string previous character ('\n' for EOL).
+         */
+        public function prePrevChar(): ?string
+        {
+            return $this->prePreviousChar;
+        }
         /**
          * Return the next UTF-8 character from current buffer, return null if end of file.
          *
@@ -171,25 +224,38 @@ namespace MultilingualMarkdown {
          */
         public function nextChar(): ?string
         {
-            // any  character left in current buffer?
-            if ($this->bufferPosition < $this->bufferLength - 1) {
-                $this->bufferPosition += 1;
-            } else {
-                // no: read next paragraph
-                $this->getNextParagraph();
-                if ($this->bufferLength == 0) {
-                    return null;
-                }
-            }
-            // adjust status
-            $this->prevChar = $this->curChar;
-            if ($this->prevChar == "\n") {
+            $this->prePreviousChar = $this->previousChar;
+            $this->previousChar = $this->currentChar;
+            if ($this->previousChar == "\n") {
                 $this->curLine += 1;
             }
-            // get next utf-8 char
-            $this->curChar = mb_substr($this->buffer, $this->bufferPosition, 1);
-            //$this->debugEcho();
-            return $this->curChar;
+            // end of file?
+            $this->fetchCharacters(1);
+            if ($this->bufferPosition >= $this->bufferLength - 1) {
+                $this->currentChar = null;
+            } else {
+                // get next utf-8 char
+                $this->bufferPosition += 1;
+                $this->currentChar = mb_substr($this->buffer, $this->bufferPosition, 1);
+            }
+            return $this->currentChar;
+        }
+
+        /**
+         * Check if current and next characters match a string in current line buffer.
+         * This test fetch necessary characters if the buffer has less than needed
+         * left to read.
+         *
+         * @param string $marker the string to match, starting at current character
+         *
+         * @return bool true if marker has been found at current place
+         */
+        private function isMatching(string $marker): bool
+        {
+            $markerLen = mb_strlen($marker);
+            $this->fetchCharacters($markerLen);
+            $content = mb_substr($this->buffer, $this->bufferPosition, $markerLen);
+            return mb_str($content, $marker) == 0;
         }
     }
 }

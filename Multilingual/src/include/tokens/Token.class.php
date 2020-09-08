@@ -13,8 +13,13 @@
  * A Token is responsible for self-identification against a given buffer content and position, and for advancing
  * into the buffer if it has to process some content. These two functions are available on all Tokens and should at
  * least return false for identification or unchahged position for processing. Processing should not be
- * done without a positive self identification: the token will not check for this. Some tokens do no process
- * a bufffer but rather simply store a content: the function process() will then do nothing.
+ * done without a prealable positive self identification: the token will not check for this. Some tokens
+ * do no process a buffer but rather simply store an information: the function processInput() will then do nothing
+ * and will not advance the position more than right after the token.
+ *
+ * The Token also has an output() function which is called to possibly output some content to output files.
+ * The outputs are done through the Filer class instance which is given to output(). Tokens whichh have nothing
+ * to output will simply do nothing in the function. 
  *
  * Copyright 2020 Francis Piérot
  *
@@ -61,30 +66,60 @@ namespace MultilingualMarkdown {
                 $this->type = $type;
             }
         }
+        public function __toString()
+        {
+            return '- FORBIDDEN: base Token class, check Lexer code -';
+        }
 
         /**
-         * Self-Identify against an UTF-8 buffer and position.
+         * Let the token self-identify against an input handler Filer object.
+         *
+         * @param object $filer the Filer object
+         *
+         * @return bool true if theh current token can be found at current Filer position and buffer content.
          */
-        public function identify(string $buffer, int $pos): bool
+        public function identifyInFiler(object $filer): bool
+        {
+            return false;
+        }
+
+         /**
+         * Let the token self-identify against an UTF-8 buffer and position.
+         *
+         * @param string $buffer the buffer holding UTFF-8 content
+         * @param int    $pos    the position in buffer where to start identification.
+         */
+        public function identifyInBuffer(string $buffer, int $pos): bool
         {
             return false;
         }
 
         /**
          * Process the given buffer starting at the given position, which should be right
-         * after the token identifier.
+         * after the token identifier, and return an error code, null to keep the token as is,
+         * or an array of tokens if the token builds other tokens to store.
+         *
+         * If the current Token has to handle part of the following buffer content,
+         * it must process it and update the buffer position to right after any character
+         * which it takes care of. The corresponding buffer part will not be available
+         * to further tokens so the current token must store the content if needed, or
+         * withdraw it if it only has informational purposes.
+         *
+         * The function may return an array of tokens including the original token itself
+         * if it has to create more tokens for its content and work.
          *
          * Calling the process function with a wrong position can lead to wrong
-         * results so it should be called only after a positive self-identification.
+         * results: it must be called only after a positive self-identification.
          *
          * @param string $buffer the UTF-8 content to process
          * @param string $pos    [IN/OUT] the character position in $buffer where to start processing,
          *                       must be positionned just after the token keyword or symbols. This is
-         *                       not checked by the process() function.
+         *                       not checked by the processInput() function.
          *
-         * @return int the error code, 0 if there was no error. Error codes are token specific.
+         * @return int|null|array an error code > 0, or null to keep the token alone, or an array
+         *                        of tokens starting with the token itself.
          */
-        public function process(string $buffer, int &$pos): bool
+        public function processInput(string $buffer, int &$pos)
         {
             return true;
         }
@@ -105,11 +140,31 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Type accessor.
+         */
+        public function getType(): int
+        {
+            return $this->type;
+        }
+
+        /**
          * Return the length of the token identifier.
          */
         public function getLength(): int
         {
             return 0;
+        }
+
+        /**
+         * Output content to the Filer object or change its settings.
+         * The token must handle whatever it has to do with the output files: send text content,
+         * change current language, send raw text, etc.
+         *
+         * @param object $filer the Filer instance object (from Generator)
+         */
+        public function output(object $filer): bool
+        {
+            return true;
         }
     }
 

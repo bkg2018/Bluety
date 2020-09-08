@@ -43,5 +43,9 @@ namespace MultilingualMarkdown {
         {
             parent::__construct('.languages', true);
         }
+        public function __toString()
+        {
+            return '<directive> .languages((';
+        }
     }
 }

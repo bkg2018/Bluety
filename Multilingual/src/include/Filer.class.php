@@ -269,7 +269,6 @@ namespace MultilingualMarkdown {
             $filePos = $posFunction($absolutePath, $path, 0);
             if ($filePos !== 0) {
                 if ($filePos === false) {
-                    
                     // delete anything before '/../' or '/./' in relative path
                     foreach (['/../', '/./'] as $pattern) {
                         do {
@@ -279,7 +278,7 @@ namespace MultilingualMarkdown {
                             }
                         } while ($curPos !== false);
                     }
-                    // delete starting '../' or './' 
+                    // delete starting '../' or './'
                     foreach (['../', './'] as $pattern) {
                         do {
                             $curPos = \mb_strpos($path, $pattern);
@@ -585,10 +584,28 @@ namespace MultilingualMarkdown {
             return $this->storage->getEndingLineNumber();
         }
         /**
+         * Return the previous UTF-8 character .
+         *
+         * @return null|string previous character ('\n' for EOL).
+         */
+        public function prevChar(): ?string
+        {
+            return $this->storage->prevChar();
+        }
+        /**
+         * Return the previous previous UTF-8 character .
+         *
+         * @return null|string previous character ('\n' for EOL).
+         */
+        public function prePrevChar(): ?string
+        {
+            return $this->storage->prePrevChar();
+        }
+        /**
          * Return the current UTF-8 character from current paragraph.
          * Load next paragraph if no paragraph is loaded yet.
          *
-         * @return null|string current character ('\n' for EOL),  null when file and buffer are finished.
+         * @return null|string current character ('\n' for EOL), null when file and buffer are finished.
          */
         public function curChar(): ?string
         {
@@ -597,11 +614,38 @@ namespace MultilingualMarkdown {
         /**
          * Return the next UTF-8 character from current buffer, return null if end of file.
          *
-         * @return null|string new current character ('\n' for EOL),  null when file and buffer are finished.
+         * @return null|string new current character ('\n' for EOL), null when file and buffer are finished.
          */
         public function nextChar(): ?string
         {
             return $this->storage->nextChar();
         }
+        /**
+         * Return the next UTF-8 paragraph, taken from the input file until an empty line or the end of file.
+         * Return false if already at end of file.
+         *
+         * @return string& a reference to the paragraphh buffer, or null when file and buffer are both finished.
+         */
+        public function &getNextParagraph(): ?string
+        {
+            return $this->storage->getNextParagraph();
+        }
+        /**
+         * Check if current and next characters match a string in current line buffer.
+         * This test fetch necessary characters if the buffer has less than needed
+         * left to read.
+         *
+         * @param string $marker the string to match, starting at current character
+         *
+         * @return bool true if marker has been found at current place
+         */
+        public function isMatching(string $marker): bool
+        {
+            return $this->storage->isMatching($marker);
+        }
+
+        /**
+         * Return previous character.
+         */
     }
 }

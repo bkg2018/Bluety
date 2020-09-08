@@ -46,5 +46,9 @@ namespace MultilingualMarkdown {
         {
             parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, $keyword, $ignoreCase);
         }
+        public function __toString()
+        {
+            return '- FORBIDDEN: base TokenSingleLineDirective class, check Lexer code -';
+        }
     }
 }

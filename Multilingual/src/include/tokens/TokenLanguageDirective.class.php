@@ -45,5 +45,9 @@ namespace MultilingualMarkdown {
         {
             parent::__construct(TokenType::OPEN_DIRECTIVE, ".$language((", true);
         }
+        public function __toString()
+        {
+            return "<directive> .{$this->keyword}((";
+        }
     }
 }
