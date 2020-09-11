@@ -64,13 +64,13 @@ class StorageTest extends TestCase
         $file = fopen('test.mlmd', 'rt');
         $this->assertNotFalse($file);
         $storage->setInputFile($file);
-        $c = $storage->curChar();
+        $c = $storage->getCurChar();
         //echo str_repeat('=', 120), "\n";
         $charNumber = 0;
         while ($c !== null) {
             //echo $c;
             $charNumber += 1;
-            $c = $storage->nextChar();
+            $c = $storage->getNextChar();
         }
         // the test file is 431 bytes but holds 4 times the french 2-bytes UTF-8 character 'ç' so there are 427 characters
         $this->assertEquals(427, $charNumber);

@@ -84,7 +84,7 @@ namespace MultilingualMarkdown {
          * is a known token at the starting position. It may read enough characters from input
          * for checking depending on what's left in buffer.
          *
-         * @param objject $filer the input file handling object.
+         * @param object $filer the input file handling object.
          *
          * @return null|object   the recognized token or null if none, which means
          *                       caller Lexer will have to decide what to do with content
@@ -99,6 +99,41 @@ namespace MultilingualMarkdown {
             }
             return null;
         }
+        /**
+         * Look at next character from input.
+         * This call doesn't advance input position but rather just send back the next character
+         * from input file, or null at end of input file.
+         *
+         * @param object $filer   the input file handling object.
+         * @param int $charsNumber the number of characters to fetch
+         *
+         * @return null|string   the next character which will be read from input,
+         *                       null if already at end of file.
+         */
+        public function fetchNextChars(object $filer, int $charsNumber): ?string
+        {
+            return $filer->fetchNextChars($charsNumber);
+        }
+        /**
+         * Execute the effects of a sequence of tokens on outputs.
+         *
+         * @param object $filer     the Filer object which will receive outputs and settings
+         * @param array  $allTokens [IN/OUT] the sequence of tokens, will be emptied on output if no error
+         *
+         * @return bool true if all OK and token sequence is emptied, else an error occured
+         */
+        public function output(object &$filer, array &$allTokens)
+        {
+            foreach ($allTokens as $token) {
+                if (!$token->output($filer)) {
+                    return false;
+                }
+            }
+            for ($index = count($allTokens) - 1; $index >= 0; $index -= 1) {
+                unset($allTokens[$index]);
+            }
+            return true;
+        }
 
         /**
          * Check if current position in a buffer matches a registered token and return the token.
@@ -111,7 +146,7 @@ namespace MultilingualMarkdown {
          * @return null|object   the recognized token or null if none, which means
          *                       caller LExer will have to decide what to do with content
          *                       (e.g. creating text tokens)
-         */
+         *
         public function getToken(string $buffer, int $pos): ?Token
         {
             foreach ($this->tokens as $token) {
@@ -120,7 +155,7 @@ namespace MultilingualMarkdown {
                 }
             }
             return null;
-        }
+        }*/
 
         /**
          * Debugging echo of current character and line info.
@@ -136,6 +171,93 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Process an opened filer, input and output files ready.
+         * Builds sequences of tokens while reading input character by character,
+         * and periodically updates outputs when meeting some directives.
+         */
+        public function process(object $filer): bool
+        {
+            $c = $filer->getCurChar();  /// current character (between tokens)
+            $text = '';                 /// current text out of tokens
+            $emptyText = true;
+            $allTokens = [];            /// current token sequence to execute
+            $languageSet = false;       /// ignore input until .languages has been found
+            while ($c != null) {
+                switch ($c) {
+                    case '`':
+                    case '"':
+                        if (!$languageSet) {
+                            break;
+                        }
+                         // start of escaped text
+                        $token = $lexer->fetchToken($filer);
+                        if ($token) {
+                            // first, store current text if any
+                            if (!$emptyText) {
+                                $allTokens[] = new TokenText($text);
+                                $text = '';
+                                $emptyText = true;
+                            }
+                            // now store the escape sequence: escaper, text, escaper
+                            $token->processInput($filer, $allTokens);
+                            if ($token->ouputNow()) {
+                                $this->output($filer, $allTokens);
+                            }
+                            break;
+                        }
+                        if ($trace) {
+                            $filer->error("unrecognized escape character [$c] in text, should translate into a token", __FILE__, __LINE__);
+                        }
+                        $text .= $c;
+                        $emptyText = false;
+                        break;
+                    case '.':
+                        // eliminate trivial case when followed by a space or EOL
+                        $nextChar = $filer->fetchNextChars(1);
+                        if ($nextChar == ' ' || $nextChar == "\n" || $nextChar == "\t") {
+                            $token = null;
+                        } else {
+                            $token = $lexer->fetchToken($filer);
+                        }
+                        if ($token == null) {
+                            if (!$languageSet) {
+                                break;
+                            }
+                            // no directive: keep storing text
+                            $text .= $c;
+                            $emptyText = false;
+                        } else {
+                            if (!$languageSet && !$token->identifyInBuffer('.languages', 10)) {
+                                break;
+                            }
+// yes: store current text in a token
+                            if (!$emptyText) {
+                                $allTokens[] = new TokenText($text);
+                                $text = '';
+                                $emptyText = true;
+                            }
+                            $token->processInput($filer, $allTokens);
+                            if ($token->ouputNow()) {
+                                $this->output($filer, $allTokens);
+                            }                        }
+                        break;
+                    case '':
+                        break;
+                    default:
+                        $text .= $c;
+                        $emptyText = false;
+                        break;
+                }
+                $c = $filer->getNextChar();
+            }
+            // finish with anything left
+            if (!$emptyText) {
+                $allTokens[] = new TokenText($text);
+            }
+            $this->output($filer, $allTokens);
+        }
+
+        /**
          * Analyze an UTF-8 buffer content and transform it into an array of successive tokens.
          * The last token in a buffer is always EMPTY_LINE and no other empty line can be located in the buffer.
          *
@@ -144,7 +266,7 @@ namespace MultilingualMarkdown {
          * @param object $logger    optional logger object with error/warning functions
          *
          * @return array a Token array, can be empty
-         */
+         *
         public function getTokens(string &$buffer, int &$line, ?Logger $logger): array
         {
             $pos = 0;
@@ -183,7 +305,7 @@ namespace MultilingualMarkdown {
                     }
 
                     //TODO:  token processing above and below?
-                    /*
+                    
                     // now store token after processing from it
                     $pos += $token->getLength();
                     $processed = $token->processInput($buffer, $pos);
@@ -198,7 +320,7 @@ namespace MultilingualMarkdown {
                     if ($token->isType([TokenType::EOL,TokenType::EMPTY_LINE])) {
                         $line += 1;
                         $this->debugEcho("\n[$line]: ");
-                    }*/
+                    }
                 } else {
                     // no token found, store in $text to build a text token later.
                     $c = mb_substr($buffer, $pos, 1);
@@ -208,6 +330,6 @@ namespace MultilingualMarkdown {
                 }
             } while (($pos <= $maxPos) && $continue);
             return $tokens;
-        }
+        }*/
     }
 }

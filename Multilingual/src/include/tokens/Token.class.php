@@ -19,7 +19,7 @@
  *
  * The Token also has an output() function which is called to possibly output some content to output files.
  * The outputs are done through the Filer class instance which is given to output(). Tokens whichh have nothing
- * to output will simply do nothing in the function. 
+ * to output will simply do nothing in the function.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -95,7 +95,8 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Process the given buffer starting at the given position, which should be right
+         * Process the input starting at the current position, assuming the token starts
+         * at this position.which should be right
          * after the token identifier, and return an error code, null to keep the token as is,
          * or an array of tokens if the token builds other tokens to store.
          *
@@ -111,15 +112,14 @@ namespace MultilingualMarkdown {
          * Calling the process function with a wrong position can lead to wrong
          * results: it must be called only after a positive self-identification.
          *
-         * @param string $buffer the UTF-8 content to process
-         * @param string $pos    [IN/OUT] the character position in $buffer where to start processing,
-         *                       must be positionned just after the token keyword or symbols. This is
-         *                       not checked by the processInput() function.
+         * @param object $filer  the input file handling object, positionned on current character
+         * @param array  $tokens [IN/OUT] array of tokens where to store the token and any created
+         *                       tokens during the processing.
          *
          * @return int|null|array an error code > 0, or null to keep the token alone, or an array
          *                        of tokens starting with the token itself.
          */
-        public function processInput(string $buffer, int &$pos)
+        public function processInput(object $filer, array &$tokens): bool
         {
             return true;
         }
@@ -160,11 +160,20 @@ namespace MultilingualMarkdown {
          * The token must handle whatever it has to do with the output files: send text content,
          * change current language, send raw text, etc.
          *
-         * @param object $filer the Filer instance object (from Generator)
+         * @param object $filer the Filer instance object which receives outputs and settings
          */
-        public function output(object $filer): bool
+        public function output(object &$filer): bool
         {
             return true;
+        }
+
+        /**
+         * Tell if a token must process output immediately after being stored.
+         * This is mainly for one-line directives and the .)) ending directive.
+         */
+        public function ouputNow(): bool
+        {
+            return false;
         }
     }
 

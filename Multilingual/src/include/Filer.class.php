@@ -607,18 +607,32 @@ namespace MultilingualMarkdown {
          *
          * @return null|string current character ('\n' for EOL), null when file and buffer are finished.
          */
-        public function curChar(): ?string
+        public function getCurChar(): ?string
         {
-            return $this->storage->curChar();
+            return $this->storage->getCurChar();
         }
         /**
-         * Return the next UTF-8 character from current buffer, return null if end of file.
+         * Read and return the next UTF-8 character from current buffer, return null at end of file.
          *
          * @return null|string new current character ('\n' for EOL), null when file and buffer are finished.
          */
-        public function nextChar(): ?string
+        public function getNextChar(): ?string
         {
-            return $this->storage->nextChar();
+            return $this->storage->getNextChar();
+        }
+        /**
+         * Look at next UTF-8 characters.
+         * This call doesn't advance input position but rather just send back the next characters
+         * from input file, or null at end of input file.
+         *
+         * @param int $charsNumber the number of characters to fetch
+         *
+         * @return null|string     the next characters which will be read from input,
+         *                         null if already at end of file.
+         */
+        public function fetchNextChars(int $charsNumber): ?string
+        {
+            return $this->storage->fetchNextChars($charsNumber);
         }
         /**
          * Return the next UTF-8 paragraph, taken from the input file until an empty line or the end of file.

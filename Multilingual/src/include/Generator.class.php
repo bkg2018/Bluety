@@ -313,24 +313,16 @@ namespace MultilingualMarkdown {
          */
         public function process(int $index): bool
         {
-            if (!$this->filer->openFile($index)) {
+            $filer = &$this->filer;
+            $lexer = &$this->lexer;
+            if (!$filer->openFile($index)) {
                 return false;
             }
-            $this->filer->readyOutputs();
+            $filer->readyOutputs();
 
-            /*//echo str_repeat('=', 120), "\n";
-            $paragraph = $this->filer->getNextParagraph();
-            while ($paragraph !== null) {
-                $lineNumber = $this->filer->getStartingLineNumber();
-                $tokens = $this->lexer->getTokens($paragraph, $lineNumber, $this);
-                foreach ($tokens as $index => $token) {
-                    $t = (string)$token;
-                    echo "$t\n";
-                }
-                echo "----- end of paragraph -----\n";
-                $paragraph = $this->filer->getNextParagraph();
-            }*/
-            
+            $trace = true;
+
+            $lexer->process($filer);
             
             $this->filer->closeOutput();
             $this->filer->closeInput();

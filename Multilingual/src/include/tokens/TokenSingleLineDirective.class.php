@@ -50,5 +50,9 @@ namespace MultilingualMarkdown {
         {
             return '- FORBIDDEN: base TokenSingleLineDirective class, check Lexer code -';
         }
+        public function ouputNow(): bool
+        {
+            return true;
+        }
     }
 }

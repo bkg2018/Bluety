@@ -398,7 +398,7 @@ namespace MultilingualMarkdown {
          *
          * @return bool true if marker has been found at current place
          */
-        private function isMatching(string $marker): bool
+        public function isMatching(string $marker): bool
         {
             $markerLen = mb_strlen($marker);
             $content = mb_substr($this->lineBuf, $this->lineBufPos, $markerLen);

@@ -47,6 +47,9 @@ namespace MultilingualMarkdown {
         {
             return '<directive> .))';
         }
-    }
+        public function ouputNow(): bool
+        {
+            return true;
+        }    }
 
 }

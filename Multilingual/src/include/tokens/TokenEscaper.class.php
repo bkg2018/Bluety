@@ -41,6 +41,8 @@ namespace MultilingualMarkdown {
      */
     class TokenEscaper extends TokenKeyworded
     {
+        protected $text; /// the escaped text, including opening and closing escapers
+        
         public function __construct(string $marker)
         {
             parent::__construct(TokenType::ESCAPER, $marker, true);

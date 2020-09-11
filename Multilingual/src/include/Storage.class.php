@@ -142,14 +142,25 @@ namespace MultilingualMarkdown {
         public function fetchCharacters(int $length): void
         {
             do {
-                $line = fgets($this->inFile);
-                if ($line !== false) {
-                    $line = \str_replace("\r", '', $line);// delete Windows CR
-                    $this->buffer .= $line;
-                    $this->bufferLength += mb_strlen($line);
-                    $this->endLine += 1;
-                } else {
-                    break;
+                if ($this->bufferPosition + $length >= $this->bufferLength) {
+                    $line = fgets($this->inFile);
+                    if ($line !== false) {
+                        $line = \str_replace("\r", '', $line);// delete Windows CR
+                        $this->buffer .= $line;
+                        $this->bufferLength += mb_strlen($line);
+                        if ($this->bufferLength > 4096 && $this->bufferPosition > 1024) {
+                            $this->buffer = mb_substr($this->buffer, 1024);
+                            $this->bufferPosition -= 1024;
+                            $this->bufferLength = mb_strlen($this->buffer);
+                        }
+                        $this->endLine += 1;
+                        if ($this->curLine == 0) {
+                            $this->curLine = 1;
+                            $this->startLine = 1;
+                        }
+                    } else {
+                        break;
+                    }
                 }
             } while ($this->bufferLength - $this->bufferPosition < $length);
         }
@@ -184,7 +195,7 @@ namespace MultilingualMarkdown {
          *
          * @return null|string current character ('\n' for EOL),  null when file and buffer are finished.
          */
-        public function curChar(): ?string
+        public function getCurChar(): ?string
         {
             // immediate return if ready
             if ($this->bufferPosition < $this->bufferLength) {
@@ -222,7 +233,7 @@ namespace MultilingualMarkdown {
          *
          * @return null|string new current character ('\n' for EOL),  null when file and buffer are finished.
          */
-        public function nextChar(): ?string
+        public function getNextChar(): ?string
         {
             $this->prePreviousChar = $this->previousChar;
             $this->previousChar = $this->currentChar;
@@ -240,6 +251,23 @@ namespace MultilingualMarkdown {
             }
             return $this->currentChar;
         }
+        /**
+         * Return next UTF-8 characters from current buffer, return null if end of file.
+         * Do not advance reading position, just send back future cahracters to read.
+         * If the requested number of characters is not available, return what's left.
+         *
+         * @param int $charsNumber the number of characters to return
+         * @return null|string     the next characters which will be read,  null when file and buffer are finished.
+         */
+        public function fetchNextChars(int $charsNumber): ?string
+        {
+            $nextPosition = $this->bufferPosition + 1;
+            $this->fetchCharacters($charsNumber);
+            if ($nextPosition >= $this->bufferLength) {
+                return null;
+            }
+            return mb_substr($this->buffer, $nextPosition, $charsNumber);
+        }
 
         /**
          * Check if current and next characters match a string in current line buffer.
@@ -250,12 +278,12 @@ namespace MultilingualMarkdown {
          *
          * @return bool true if marker has been found at current place
          */
-        private function isMatching(string $marker): bool
+        public function isMatching(string $marker): bool
         {
             $markerLen = mb_strlen($marker);
             $this->fetchCharacters($markerLen);
             $content = mb_substr($this->buffer, $this->bufferPosition, $markerLen);
-            return mb_str($content, $marker) == 0;
+            return strcmp($content, $marker) == 0;
         }
     }
 }
