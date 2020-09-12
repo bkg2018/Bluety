@@ -510,15 +510,32 @@ namespace MultilingualMarkdown {
         /**
          * Set languages list from a parameter string.
          * This is just a relay to LanguagesList::setFrom().
+         * Also reprograms output files.
          *
          * @param string $string  the parameter string
          *
          * @return bool true if languages have been set correctly and main language was
          *              valid (if 'main=' was in the parameters.)
          */
-        public function setLanguagesFrom(string $param): bool
+        public function setLanguagesFrom(string $param, object $lexer): bool
         {
-            return $this->languages->setFrom($param);
+            $result = $this->languages->setFrom($param);
+            if ($result) {
+                $this->readyOutputs();
+            }
+            foreach ($this->languages as $index => $language) {
+                $lexer->addLanguage($language['code']);
+            }
+            return $result;
+        }
+
+        /**
+         * Read a number of characters including the current one and return the string.
+         * Return null if already at end of file.
+         */
+        public function getString(int $charsNumber): ?string
+        {
+            return $this->storage->getString($charsNumber);
         }
 
         /**
@@ -588,9 +605,9 @@ namespace MultilingualMarkdown {
          *
          * @return null|string previous character ('\n' for EOL).
          */
-        public function prevChar(): ?string
+        public function getPrevChar(): ?string
         {
-            return $this->storage->prevChar();
+            return $this->storage->getPrevChar();
         }
         /**
          * Return the previous previous UTF-8 character .
@@ -633,6 +650,22 @@ namespace MultilingualMarkdown {
         public function fetchNextChars(int $charsNumber): ?string
         {
             return $this->storage->fetchNextChars($charsNumber);
+        }
+        /**
+         * Look at previous UTF-8 characters.
+         * Cannot read more than further the beginning of file or the beginning
+         * of current buffer positions. The buffer at most up to 3072 characters before current
+         * position so it is safe to request for a lot of previous characters up to this limit
+         * but at the beginning the buffer will only have as much as the 4096 first
+         * characters of file.
+         *
+         * @param int $charsNumber the number of previous characters to fetch
+         *
+         * @return null|string     the characters before current position.
+         */
+        public function fetchPreviousChars(int $charsNumber): ?string
+        {
+            return $this->storage->fetchPreviousChars($charsNumber);
         }
         /**
          * Return the next UTF-8 paragraph, taken from the input file until an empty line or the end of file.

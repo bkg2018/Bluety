@@ -51,8 +51,8 @@ namespace MultilingualMarkdown {
         }
         /**
          * Process input: get text until we find another backtick. Update tokens array.
-         */
-        public function processInput(object $filer, array &$allTokens): bool
+         *
+        public function processInput(object $lexer, object $filer, array &$allTokens): bool
         {
             // skip single backtick and store text until other single backtick
             $this->text = $filer->getCurChar();
@@ -65,6 +65,6 @@ namespace MultilingualMarkdown {
             } while ($c != '`');
             $allTokens[] = $this;
             return true;
-        }
+        }*/
     }
 }

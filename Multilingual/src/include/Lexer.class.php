@@ -32,6 +32,7 @@ namespace MultilingualMarkdown {
 
     mb_internal_encoding('UTF-8');
 
+    // directives and static tokens
     require_once('tokens/TokenNumbering.class.php');
     require_once('tokens/TokenLanguages.class.php');
     require_once('tokens/TokenTOC.class.php');
@@ -48,10 +49,12 @@ namespace MultilingualMarkdown {
     require_once('tokens/TokenSpaceEscape.class.php');
     require_once('tokens/TokenText.class.php');
     require_once('tokens/TokenEscapedText.class.php');
+    // on demand directives
+    require_once('tokens/TokenLanguageDirective.class.php');
 
     class Lexer
     {
-        private $tokens = [];   // array of all predefined tokens and languages codes directives tokens added by .languages
+        private $tokens = [];           // array of all predefined tokens and languages codes directives tokens added by .languages
 
         public function __construct()
         {
@@ -190,7 +193,7 @@ namespace MultilingualMarkdown {
                             break;
                         }
                          // start of escaped text
-                        $token = $lexer->fetchToken($filer);
+                        $token = $this->fetchToken($filer);
                         if ($token) {
                             // first, store current text if any
                             if (!$emptyText) {
@@ -199,7 +202,7 @@ namespace MultilingualMarkdown {
                                 $emptyText = true;
                             }
                             // now store the escape sequence: escaper, text, escaper
-                            $token->processInput($filer, $allTokens);
+                            $token->processInput($this, $filer, $allTokens);
                             if ($token->ouputNow()) {
                                 $this->output($filer, $allTokens);
                             }
@@ -217,7 +220,7 @@ namespace MultilingualMarkdown {
                         if ($nextChar == ' ' || $nextChar == "\n" || $nextChar == "\t") {
                             $token = null;
                         } else {
-                            $token = $lexer->fetchToken($filer);
+                            $token = $this->fetchToken($filer);
                         }
                         if ($token == null) {
                             if (!$languageSet) {
@@ -227,25 +230,29 @@ namespace MultilingualMarkdown {
                             $text .= $c;
                             $emptyText = false;
                         } else {
-                            if (!$languageSet && !$token->identifyInBuffer('.languages', 10)) {
+                            // before .languages directive, ignore everything but the directive
+                            if (!$languageSet && !$token->identifyInBuffer('.languages', 0)) {
                                 break;
                             }
-// yes: store current text in a token
+                            // valid token: first store current text
                             if (!$emptyText) {
                                 $allTokens[] = new TokenText($text);
                                 $text = '';
                                 $emptyText = true;
                             }
-                            $token->processInput($filer, $allTokens);
+                            $token->processInput($this, $filer, $allTokens);
                             if ($token->ouputNow()) {
                                 $this->output($filer, $allTokens);
-                            }                        }
+                            }
+                        }
                         break;
                     case '':
                         break;
                     default:
-                        $text .= $c;
-                        $emptyText = false;
+                        if ($languageSet) {
+                            $text .= $c;
+                            $emptyText = false;
+                        }
                         break;
                 }
                 $c = $filer->getNextChar();
@@ -255,6 +262,20 @@ namespace MultilingualMarkdown {
                 $allTokens[] = new TokenText($text);
             }
             $this->output($filer, $allTokens);
+        }
+
+        /**
+         * Add a language to directive tokens.
+         *
+         * @param string $code language code as written in .languages directive
+         *
+         * @return bool true if the language is already known by Lexer
+         */
+        public function addLanguage(string $code): void
+        {
+            if (!\array_key_exists($code, $this->tokens)) {
+                $this->tokens[$code] = new TokenLanguageDirective($code);    
+            }
         }
 
         /**

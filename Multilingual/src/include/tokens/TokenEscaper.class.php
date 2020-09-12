@@ -49,7 +49,10 @@ namespace MultilingualMarkdown {
         }
         public function __toString()
         {
-            return '- FORBIDDEN: base TokenEscaper class, check Lexer code -';
+            return '<escaped text> ' .
+                (mb_strlen($this->text) < 40 ?
+                $this->text :
+                mb_substr($this->text, 0, 20) . '...' . mb_substr($this->text, -20));
         }
         public function isType($type): bool
         {
@@ -57,6 +60,26 @@ namespace MultilingualMarkdown {
                 return true;
             }
             return parent::isType($type);
+        }
+        /**
+         * Process input: get text until we find another double backtick. Update tokens array.
+         * Used by derived classes.
+         * Stores both escape markers as well as the escaped text.
+         */
+        public function processInput(object $lexer, object $filer, array &$allTokens): bool
+        {
+            $this->text = $this->skipSelf();
+            do {
+                $curChar = $filer->getNextChar();
+                if ($curChar == null) {
+                    break;
+                }
+                $this->text .= $curChar;
+                $prevChars = $filer->fetchPrevChars($this->keywordLength);
+            } while ($prevChars != $this->keyword);
+            // self store in token array
+            $allTokens[] = $this;
+            return true;
         }
     }
 }

@@ -102,5 +102,12 @@ namespace MultilingualMarkdown {
         {
             return $this->keywordLength;
         }
+        /**
+         * Skip over the keyword itselfg in the Filer input.
+         */
+        protected function skipSelf(object $filer): ?string
+        {
+            return $filer->getString($this->keywordLength);
+        }
     }
 }

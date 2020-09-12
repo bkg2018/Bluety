@@ -167,7 +167,7 @@ namespace MultilingualMarkdown {
                 return false;
             }
             // change spaces into a comma for easier explode()
-            $string = str_replace(' ', ',', $string);
+            $string = str_replace(' ', ',', trim($string));
             $allAssignments = explode(',', $string);
             $main = null;
             $result = true;

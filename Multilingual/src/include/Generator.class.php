@@ -226,15 +226,17 @@ namespace MultilingualMarkdown {
                 // create an array for headings of this file
                 $headingArray = new HeadingArray($relFilename);
                 // keep track of the line number for each heading
-                $curLine = 0;
+                $curLineNumber = 0;
                 // remember if the .languages directive has been read
                 $languageSet = false;
                 $languagesDirective = '.languages ';
                 $languagesDirectiveLength = strlen($languagesDirective);
                 // loop on each file line
                 do {
-                    $text = trim(fgets($file));
-                    $curLine += 1;
+                    $text = getNextLineTrimmed($file, $curLineNumber);
+                    if (!$text) {
+                        break;
+                    }
                     // handle .languages directive
                     if (strncasecmp($text, $languagesDirective, $languagesDirectiveLength) == 0) {
                         $languageSet = mb_substr($text, $languagesDirectiveLength);
@@ -250,14 +252,16 @@ namespace MultilingualMarkdown {
                         // escaped by double backticks+space / space+double backticks?
                         if (($pos <= 2) || (mb_substr($text, $pos - 3, 3) != '`` ') || (mb_substr($text, $pos + 3, 3) != ' ``')) {
                             do {
-                                $text = trim(fgets($this->inFile));
-                                $curLine += 1;
+                                $text = getNextLineTrimmed($file, $curLineNumber);
+                                if (!$text) {
+                                    break;
+                                }
                             } while (strpos($text, '```') === false);
                         }
                     } else {
                         // store headings
                         if (($text[0] ?? '') == '#') {
-                            $heading = new Heading($text, $curLine, $this);
+                            $heading = new Heading($text, $curLineNumber, $this);
                             $headingArray[] = $heading;
                         }
                     }
@@ -322,7 +326,7 @@ namespace MultilingualMarkdown {
 
             $trace = true;
 
-            $lexer->process($filer);
+             $lexer->process($filer);
             
             $this->filer->closeOutput();
             $this->filer->closeInput();
@@ -330,10 +334,4 @@ namespace MultilingualMarkdown {
             return true;
         }
     }
-    $generator = new Generator();
-    $generator->addInputFile('../../testdata/test.mlmd');
-    $generator->setMainFilename("test.mlmd");
-    $generator->addInputFile('../../testdata/subdata/secondary.mlmd');
-    $generator->addInputFile('../../testdata/subdata/tertiary.mlmd');
-    $generator->processAllFiles();
 }

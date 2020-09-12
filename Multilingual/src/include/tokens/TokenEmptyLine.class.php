@@ -67,7 +67,7 @@ namespace MultilingualMarkdown {
          */
         public function identifyInFiler(object $filer): bool
         {
-            $prevChar = $filer->prevChar();
+            $prevChar = $filer->getPrevChar();
             if ($prevChar != "\n") {
                 return false;
             }

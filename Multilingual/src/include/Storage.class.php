@@ -44,9 +44,9 @@ namespace MultilingualMarkdown {
         private $bufferPosition = 0;            /// current pos in line buffer (utf-8)
         private $bufferLength = 0;              /// current line size in characters (utf-8)
         private $curLine = 0;                   /// current line number from input file
-        private $currentChar = '';                  /// current character in input
-        private $previousChar = '';                 /// previous value of $currentChar
-        private $prePreviousChar = '';              /// previous previous value of $currentChar
+        private $currentChar = '';              /// current character in input
+        private $previousChar = null;           /// previous value of $currentChar
+        private $prePreviousChar = null;        /// previous previous value of $currentChar
 
         // Output files and writing status
         private $lastWritten = [];              /// last  character written to file
@@ -84,50 +84,6 @@ namespace MultilingualMarkdown {
             $this->startLine = 0;
             $this->endLine = 0;
             return true;
-        }
-
-        /**
-         * Return the next UTF-8 paragraph, taken from the input file until an empty line or the end of file.
-         * Return false if already at end of file.
-         *
-         * @return string& a reference to the paragraphh buffer, or null when file and buffer are both finished.
-         */
-        public function &getNextParagraph(): ?string
-        {
-            static $nullGuard = null;
-            // no: read until empty line (or EOF)
-            if (isset($this->buffer)) {
-                unset($this->buffer);
-            }
-            $this->buffer = '';
-            do {
-                $line = fgets($this->inFile);
-                // EOF?
-                if (!$line) {
-                    // return null now if buffer empty
-                    if (empty($this->buffer)) {
-                        $this->bufferLength = 0;
-                        $this->currentChar = null;
-                        return $nullGuard;
-                    }
-                    // end of read, buffer not empty
-                    break;
-                } else {
-                    // delete Windows CR and store
-                    $line = \str_replace("\r", '', $line);
-                    $this->buffer .= $line;
-                    $this->startLine = $this->endLine + 1;
-                    $this->endLine += 1;
-                }
-            // read until empty line
-            } while ($line != "\n");
-            // init status and characters
-            $this->bufferPosition = 0;
-            $this->bufferLength = mb_strlen($this->buffer);
-            $this->prePreviousChar = $this->previousChar ?? '';
-            $this->previousChar = $this->currentChar ?? '';
-            $this->currentChar = \mb_substr($this->buffer, 0, 1);
-            return $this->buffer;
         }
 
         /**
@@ -215,7 +171,7 @@ namespace MultilingualMarkdown {
          *
          * @return null|string previous character ('\n' for EOL).
          */
-        public function prevChar(): ?string
+        public function getPrevChar(): ?string
         {
             return $this->previousChar;
         }
@@ -250,6 +206,45 @@ namespace MultilingualMarkdown {
                 $this->currentChar = mb_substr($this->buffer, $this->bufferPosition, 1);
             }
             return $this->currentChar;
+        }
+        /**
+         * Look at previous UTF-8 characters.
+         * Cannot read more than further the beginning of file or the beginning
+         * of current buffer positions. The buffer at most up to 3072 characters before current
+         * position so it is safe to request for a lot of previous characters up to this limit
+         * but at the beginning the buffer will only have as much as the 4096 first
+         * characters of file.
+         *
+         * @param int $charsNumber the number of previous characters to fetch
+         *
+         * @return null|string     the characters before current position.
+         */
+        public function fetchPreviousChars(int $charsNumber): ?string
+        {
+            $startPosition = max(0, $this->bufferPosition - $charsNumber);
+            $length = min($charsNumber, $this->bufferPosition);
+            if ($length <= 0) {
+                return null;
+            }
+            return mb_substr($this->buffer, $startPosition, $length);            
+        }
+        /**
+         * Read a number of characters including the current one and return the string.
+         * Return null if already at end of file.
+         */
+        public function getString(int $charsNumber): ?string
+        {
+            // read char[0]
+            $result = $this->currentChar;
+            // append chars [1..N-1]
+            for ($i = 1; $i < $charsNumber; $i += 1) {
+                $c = $this->getNextChar();
+                if ($c == null) {
+                    break;
+                }
+                $result .= $c;
+            }
+            return $result;
         }
         /**
          * Return next UTF-8 characters from current buffer, return null if end of file.

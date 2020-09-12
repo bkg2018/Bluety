@@ -95,6 +95,15 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Skip over the token itself in the Filer object.
+         * This doesn't store anything and is mainly for use by the directives
+         * tokens themselves.
+         */
+        protected function skipSelf(object $filer): ?string
+        {
+        }
+
+        /**
          * Process the input starting at the current position, assuming the token starts
          * at this position.which should be right
          * after the token identifier, and return an error code, null to keep the token as is,
@@ -112,14 +121,15 @@ namespace MultilingualMarkdown {
          * Calling the process function with a wrong position can lead to wrong
          * results: it must be called only after a positive self-identification.
          *
-         * @param object $filer  the input file handling object, positionned on current character
+         * @param object $lexer  the Lexer object, used e.g. by languages directive to add tokens.
+         * @param object $filer  the input file handling object, positionned on current character.
          * @param array  $tokens [IN/OUT] array of tokens where to store the token and any created
          *                       tokens during the processing.
          *
          * @return int|null|array an error code > 0, or null to keep the token alone, or an array
          *                        of tokens starting with the token itself.
          */
-        public function processInput(object $filer, array &$tokens): bool
+        public function processInput(object $lexer, object $filer, array &$tokens): bool
         {
             return true;
         }
