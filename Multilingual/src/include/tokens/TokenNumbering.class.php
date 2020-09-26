@@ -30,14 +30,14 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenSingleLineDirective.class.php';
+    require_once 'TokenBaseSingleLine.class.php';
     
-    use MultilingualMarkdown\TokenSingleLineDirective;
+    use MultilingualMarkdown\TokenBaseSingleLine;
     
     /**
      * .NUMBERING directive token.
      */
-    class TokenNumbering extends TokenSingleLineDirective
+    class TokenNumbering extends TokenBaseSingleLine
     {
         public function __construct()
         {
@@ -47,5 +47,29 @@ namespace MultilingualMarkdown {
         {
             return '<directive> .numbering((';
         }
+       /**
+         * Process .numbering directive.
+         * Register the numbering scheme.
+         *
+         * @param object $lexer  the Lexer object
+         * @param object $filer  the Filer object ready for input, positionned on the directive
+         * @param array  $tokens [IGNORED] ignored by this directive
+         */
+        public function processInput(object $lexer, object $filer, array &$tokens): bool
+        {
+            // skip the directive (no need to store)
+            $this->skipSelf($filer);
+            // get the parameters until end of line
+            $params = '';
+            do {
+                $curChar = $filer->getNextChar();
+                if (($curChar == "\n") || ($curChar == null)) {
+                    break;
+                }
+                $params .= $curChar;
+            } while ($curChar !== null);
+            // set the numbering scheme in Lexer
+            return $lexer->setNumberingFrom($params, $filer);
+        }    
     }
 }

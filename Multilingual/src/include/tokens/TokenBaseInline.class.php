@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenDoubleQuote class
+ * Multilingual Markdown generator - TokenBaseInline class
  *
- * This class represents a token for a double quote escaper surrounding escaped text.
+ * This class represents a token for an opening directive of the .xxxx(( kind.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +19,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_double_quote_class
+ * @package   mlmd_token_stream_directive_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -30,25 +30,26 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenBaseEscaper.class.php';
+    require_once 'TokenBaseKeyworded.class.php';
 
-    use MultilingualMarkdown\TokenBaseEscaper;
-    
-   /**
-     * Class for the double quote escaper.
-     * The token will skip over the text until the closing double quote
-     * and send everything to outputs.
+    use MultilingualMarkdown\TokenBaseKeyworded;
+
+    /**
+     * Streaming text directive token.
+     * These directive tokens can be an 'open' directive like .all(( or a 'close'
+     * directive likke '.))'. Identification is done the same way.
+     *
+     * This class is not instanciated by itself but is base for actual directives tokens.
      */
-    class TokenDoubleQuote extends TokenBaseEscaper
+    class TokenBaseInline extends TokenBaseKeyworded
     {
-        public function __construct()
+        public function __construct(int $type, string $keyword, bool $ignoreCase)
         {
-            parent::__construct('"');
+            parent::__construct($type, $keyword, $ignoreCase);
         }
         public function __toString()
         {
-            return '<escape> "';
+            return '- FORBIDDEN: base TokenBaseInline class, check Lexer code -';
         }
     }
-
 }

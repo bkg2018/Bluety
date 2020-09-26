@@ -30,16 +30,16 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenEscaper.class.php';
+    require_once 'TokenBaseEscaper.class.php';
 
-    use MultilingualMarkdown\TokenEscaper;
+    use MultilingualMarkdown\TokenBaseEscaper;
     
     /**
      * Class for the double back-tick escaper.
      * The token will skip over the text until the closing double back-tick
      * and send everything to outputs.
      */
-    class TokenDoubleBacktick extends TokenEscaper
+    class TokenDoubleBacktick extends TokenBaseEscaper
     {
         public function __construct()
         {

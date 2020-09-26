@@ -30,16 +30,16 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenEscaper.class.php';
+    require_once 'TokenBaseEscaper.class.php';
 
-    use MultilingualMarkdown\TokenEscaper;
+    use MultilingualMarkdown\TokenBaseEscaper;
     
     /**
      * Class for the single back-tick escaper.
      * The token will skip over the text until the closing double back-tick
      * and send everything to outputs.
      */
-    class TokenSingleBacktick extends TokenEscaper
+    class TokenSingleBacktick extends TokenBaseEscaper
     {
         public function __construct()
         {
@@ -49,22 +49,5 @@ namespace MultilingualMarkdown {
         {
             return '<escape> `';
         }
-        /**
-         * Process input: get text until we find another backtick. Update tokens array.
-         *
-        public function processInput(object $lexer, object $filer, array &$allTokens): bool
-        {
-            // skip single backtick and store text until other single backtick
-            $this->text = $filer->getCurChar();
-            do {
-                $c = $filer->getNextChar();
-                if ($c == null) {
-                    break;
-                }
-                $this->text .= $c;
-            } while ($c != '`');
-            $allTokens[] = $this;
-            return true;
-        }*/
     }
 }

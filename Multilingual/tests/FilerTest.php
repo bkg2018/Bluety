@@ -47,11 +47,12 @@ namespace MultilingualMarkdown {
 
             // act as if file 0 was processed
             $filer->openFile(0);
+            /* language list moved to Lexer
             // act as if line is '.languages en,fr main=en'
             $filer->addLanguage('en');
             $filer->addLanguage('fr');
             $filer->setMainLanguage('en');
-
+            */
             unset($filer);
         }
 

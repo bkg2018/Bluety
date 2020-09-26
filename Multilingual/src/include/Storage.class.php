@@ -101,7 +101,7 @@ namespace MultilingualMarkdown {
                 if ($this->bufferPosition + $length >= $this->bufferLength) {
                     $line = fgets($this->inFile);
                     if ($line !== false) {
-                        $line = \str_replace("\r", '', $line);// delete Windows CR
+                        $line = rtrim($line, "\n\r") . "\n"; // end of line forced to \n
                         $this->buffer .= $line;
                         $this->bufferLength += mb_strlen($line);
                         if ($this->bufferLength > 4096 && $this->bufferPosition > 1024) {
@@ -230,19 +230,18 @@ namespace MultilingualMarkdown {
         }
         /**
          * Read a number of characters including the current one and return the string.
-         * Return null if already at end of file.
+         * Return null if already at end of file. The current position is set on first
+         * character past the string.
          */
         public function getString(int $charsNumber): ?string
         {
             // read char[0]
             $result = $this->currentChar;
+            $c = $this->getNextChar();
             // append chars [1..N-1]
-            for ($i = 1; $i < $charsNumber; $i += 1) {
-                $c = $this->getNextChar();
-                if ($c == null) {
-                    break;
-                }
+            for ($i = 1; ($i < $charsNumber) && ($c != null); $i += 1) {
                 $result .= $c;
+                $c = $this->getNextChar();
             }
             return $result;
         }
@@ -279,6 +278,28 @@ namespace MultilingualMarkdown {
             $this->fetchCharacters($markerLen);
             $content = mb_substr($this->buffer, $this->bufferPosition, $markerLen);
             return strcmp($content, $marker) == 0;
+        }
+
+        /**
+         * Set output mode.
+         * If numbering scheme has been set, the output mode will use a numbered format.
+         * If not, it will use a non-numbered format.
+         * Setting a numbering scheme after setting the output mode will adjust the mode.
+         *
+         * @param string $name     the output mode name 'md', 'mdpure', 'html' or 'htmlold'
+         * param object $numbering the numbering scheme object
+         * @param object $logger   the caller object with an error() function
+         */
+        public function setOutputMode(string $name, object $numbering, ?object $logger = null): void
+        {
+            $mode = OutputModes::getFromName($name, $numbering);
+            if ($mode == OutputModes::INVALID) {
+                if ($logger) {
+                    $logger->error("invalid output mode name '$name'");
+                }
+                return;
+            }
+            $this->outputMode = $mode;
         }
     }
 }

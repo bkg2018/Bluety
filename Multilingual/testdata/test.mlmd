@@ -6,20 +6,20 @@ Lines preceeding the `.languages` directive are ignored.
 
 # .((English File Title.)).fr((Titre de fichier Français.)) MLMD
 
-Example of `escaped` text.
-Example of `escaped` text.
+Example of `single backtick` text.
+Example of ``double backtick`` text.
 Example of ```not a code fence```  but escaped text.
 
 ```code
-This is escaped text in a code fence
+Code fenced text
 ```
 
-   This is code text withh a space prefix.
+    Code using space prefix.
 
-.((This is default text 1 with an ignored end of line between directives..))
-.fr((Voici le texte en Français 1 avec une fin de ligne ignorée entre les directives..))
+.((default text 1 with ignored EOL between directives..))
+.fr((texte en Français 1 avec EOL ignorée entre les directives..))
 
-.toc level=1-3
+.toc title=.((Default toc title.)).fr((Table des matières.)) level=1-3
 
 .((Inlined default text 2..)).fr((Texte Français en ligne 2..))
 

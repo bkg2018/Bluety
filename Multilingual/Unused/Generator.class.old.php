@@ -122,19 +122,6 @@ namespace MultilingualMarkdown {
         */
 
         /**
-         * Set the numbering schemes.
-         *
-         * @param string $scheme a string containing numbering scheme
-         *
-         * @return nothing
-         *
-        public function setNumbering(string $scheme): void
-        {
-            $this->numberingScheme = $scheme;
-        }
-        */
-
-        /**
          * Expand variables in a text for a language.
          * - {file} replaced by relative path of generated file ('example.en.md' for 'example.mlmd')
          * - {main} replaced by relative path of main file as declared by '-main='

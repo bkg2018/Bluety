@@ -36,10 +36,10 @@ namespace MultilingualMarkdown {
     require_once('tokens/TokenNumbering.class.php');
     require_once('tokens/TokenLanguages.class.php');
     require_once('tokens/TokenTOC.class.php');
-    require_once('tokens/TokenAllDirective.class.php');
-    require_once('tokens/TokenDefaultDirective.class.php');
-    require_once('tokens/TokenIgnoreDirective.class.php');
-    require_once('tokens/TokenEndDirective.class.php');
+    require_once('tokens/TokenOpenAll.class.php');
+    require_once('tokens/TokenOpenDefault.class.php');
+    require_once('tokens/TokenOpenIgnore.class.php');
+    require_once('tokens/TokenClose.class.php');
     require_once('tokens/TokenEmptyLine.class.php');
     require_once('tokens/TokenEOL.class.php');
     require_once('tokens/TokenSingleBacktick.class.php');
@@ -47,39 +47,72 @@ namespace MultilingualMarkdown {
     require_once('tokens/TokenFence.class.php');
     require_once('tokens/TokenDoubleQuote.class.php');
     require_once('tokens/TokenSpaceEscape.class.php');
-    require_once('tokens/TokenText.class.php');
-    require_once('tokens/TokenEscapedText.class.php');
     // on demand directives
-    require_once('tokens/TokenLanguageDirective.class.php');
+    require_once('tokens/TokenText.class.php');             // text outside/between directives
+    require_once('tokens/TokenOpenLanguage.class.php');     // .fr((  .en((  etc created when applying .languages directive
+    require_once('tokens/TokenHeading.class.php');          // all lines starting with a # become a heading token
+    // Headings numbering scheme
+    require_once('Numbering.class.php');
+    // HTML/MD various output modes (set in Lexer and in Numbering)
+    require_once('OutputModes.class.php');
 
     class Lexer
     {
-        private $tokens = [];           // array of all predefined tokens and languages codes directives tokens added by .languages
+        // Tokens
+        private $knownTokens = [];          /// array of all predefined tokens and languages codes directives tokens added by .languages
+
+        // Defined languages
+        private $languageList = null;       /// LanguageList object handling all available languages codes
+
+        // Prepared datas
+        private $allHeadingsArrays = [];    /// One HeadingArray for each input file
+        private $allNumberings = [];        /// One numbering scheme for each input file
+
+        // MD/HTML output modes for headings anchors and toc links
+        private $outputMode = OutputModes::MD;
+
+        // Status and settings
+        private $languageSet = false;   /// true when at least one language has been set
+        private $waitLanguages = true;  /// true to wait for .languages directive in each input file
+        private $languageStack = [];    /// stack of tokens names for languages switching, including .all, .default and .ignore
+        private $curLanguage = 'all';   /// name of current language token (index in $knownTokens)
+        private $ignoreLevel = 0;       /// number of opened 'ignore', do not output anything when this variable is not 0
 
         public function __construct()
         {
-            $this->tokens[] = new TokenNumbering();                     /// token singleton for .numbering
-            $this->tokens[] = new TokenLanguages();                     /// token singleton for .languages
-            $this->tokens[] = new TokenTOC();                           /// token singleton for .toc
+            // single line directives, derived from TokenBaseSingleLine
+            $this->knownTokens['numbering']  = new TokenNumbering();                 ///  .numbering
+            $this->knownTokens['languages']  = new TokenLanguages();                 ///  .languages
+            $this->knownTokens['toc']        = new TokenTOC();                       ///  .toc
 
-            $this->tokens[] = new TokenAllDirective();                  /// token singleton for .all((
-            $this->tokens[] = new TokenDefaultDirective('');            /// token singleton for .((
-            $this->tokens[] = new TokenDefaultDirective('default');     /// token singleton for .default((
-            $this->tokens[] = new TokenIgnoreDirective();               /// token singleton for .ignore((
-            $this->tokens[] = new TokenEndDirective();                  /// token singleton for .))
-            $this->tokens[] = new TokenEmptyLine();                     /// token singleton for \n at beginning of line
-            $this->tokens[] = new TokenEOL();                           /// token singleton for \n, must be found after empty line
-            $this->tokens[] = new TokenSingleBacktick();                /// token singleton for `
-            $this->tokens[] = new TokenDoubleBacktick();                /// token singleton for ``
-            $this->tokens[] = new TokenFence();                         /// token singleton for ```
-            $this->tokens[] = new TokenDoubleQuote();                   /// token singleton for "
-            $this->tokens[] = new TokenSpaceEscape();                   /// token singleton for 4 spaces
+            // streamed language directives
+            $this->knownTokens['all']        = new TokenOpenAll();                   ///  .all((
+            $this->knownTokens['default']    = new TokenOpenDefault('');             ///  .((
+            $this->knownTokens[]             = new TokenOpenDefault('default');      ///  .default((, identical to .((
+            $this->knownTokens['ignore']     = new TokenOpenIgnore();                ///  .ignore((
+            $this->knownTokens['close']      = new TokenClose();                     ///  .))
+
+            // other streamed directives
+            $this->knownTokens[]             = new TokenEmptyLine();                 ///  \n at beginning of line
+            $this->knownTokens['eol']        = new TokenEOL();                       ///  \n, must be checked later than TokenEmptyLine
+
+            // escaped text streamed directives, derived from TokenBaseEscaper
+            $this->knownTokens[]             = new TokenDoubleQuote();               ///  "
+            $this->knownTokens[]             = new TokenFence();                     ///  ```
+            $this->knownTokens[]             = new TokenDoubleBacktick();            ///  `` - must be checked later than TokenFence
+            $this->knownTokens[]             = new TokenSingleBacktick();            ///  `  - must be checked later than TokenDoubleBacktick
+            $this->knownTokens[]             = new TokenSpaceEscape();               ///  4 spaces
 
             // these tokens can be instanciated more than once:
-            //$this->tokens[] = new TokenLanguageDirective($language);
-            //$this->tokens[] = new TokenText($content);
-            //$this->tokens[] = new TokenEscapedText($content);
+            //$this->knownTokens[] = new TokenOpenLanguage($language);
+            //$this->knownTokens[] = new TokenText($content);
+
+            $this->languageList = new LanguageList();
+            $this->allNumberings = [];
+
         }
+
+        
 
         /**
          * Check if current position in a buffer matches a registered token and return the token.
@@ -95,7 +128,7 @@ namespace MultilingualMarkdown {
          */
         public function fetchToken(object $filer): ?Token
         {
-            foreach ($this->tokens as $token) {
+            foreach ($this->knownTokens as $token) {
                 if ($token->identifyInFiler($filer)) {
                     return $token;
                 }
@@ -127,38 +160,23 @@ namespace MultilingualMarkdown {
          */
         public function output(object &$filer, array &$allTokens)
         {
+            // debug trace
             foreach ($allTokens as $token) {
-                if (!$token->output($filer)) {
+                echo (string)$token . "\n";
+            }
+
+            foreach ($allTokens as $token) {
+                if (!$token->output($this, $filer)) {
                     return false;
                 }
             }
-            for ($index = count($allTokens) - 1; $index >= 0; $index -= 1) {
-                unset($allTokens[$index]);
+            $key = array_key_last($allTokens);
+            while ($key !== null) {
+                unset($allTokens[$key]);
+                $key = array_key_last($allTokens);
             }
             return true;
         }
-
-        /**
-         * Check if current position in a buffer matches a registered token and return the token.
-         * The function doesn't advance position or change buffer, uit just checks if there
-         * is a known token at the starting position.
-         *
-         * @param string $buffer the UTF-8 content buffer where to search in
-         * @param int    $pos    the starting position for token search
-         *
-         * @return null|object   the recognized token or null if none, which means
-         *                       caller LExer will have to decide what to do with content
-         *                       (e.g. creating text tokens)
-         *
-        public function getToken(string $buffer, int $pos): ?Token
-        {
-            foreach ($this->tokens as $token) {
-                if ($token->identifyInBuffer($buffer, $pos)) {
-                    return $token;
-                }
-            }
-            return null;
-        }*/
 
         /**
          * Debugging echo of current character and line info.
@@ -184,76 +202,79 @@ namespace MultilingualMarkdown {
             $text = '';                 /// current text out of tokens
             $emptyText = true;
             $allTokens = [];            /// current token sequence to execute
-            $languageSet = false;       /// ignore input until .languages has been found
+            if ($this->waitLanguages) {
+                $this->languageSet = false;
+            }
             while ($c != null) {
+                $storeText = false; // store current character in $text temporary buffer
+                $resetText = false; // empty $text temporary buffer
+                $token = null;
                 switch ($c) {
                     case '`':
                     case '"':
-                        if (!$languageSet) {
-                            break;
-                        }
-                         // start of escaped text
-                        $token = $this->fetchToken($filer);
-                        if ($token) {
-                            // first, store current text if any
-                            if (!$emptyText) {
-                                $allTokens[] = new TokenText($text);
-                                $text = '';
-                                $emptyText = true;
+                        if ($this->languageSet) {
+                            // start of escaped text
+                            $token = $this->fetchToken($filer);
+                            if ($token === null) {
+                                if ($trace) {
+                                    $filer->error("unrecognized escape character [$c] in text, should translate into a token", __FILE__, __LINE__);
+                                }
+                                $storeText = true;
                             }
-                            // now store the escape sequence: escaper, text, escaper
-                            $token->processInput($this, $filer, $allTokens);
-                            if ($token->ouputNow()) {
-                                $this->output($filer, $allTokens);
-                            }
-                            break;
+                        } 
+                        break;
+                    case '#':
+                        // eliminate trivial case (not preceded by EOL)
+                        $prevChar = $filer->getPrevChar();
+                        if ($prevChar != "\n") {
+                            $storeText = true;
+                        } else {
+                            //TODO: heading
                         }
-                        if ($trace) {
-                            $filer->error("unrecognized escape character [$c] in text, should translate into a token", __FILE__, __LINE__);
-                        }
-                        $text .= $c;
-                        $emptyText = false;
                         break;
                     case '.':
                         // eliminate trivial case when followed by a space or EOL
                         $nextChar = $filer->fetchNextChars(1);
-                        if ($nextChar == ' ' || $nextChar == "\n" || $nextChar == "\t") {
-                            $token = null;
-                        } else {
+                        if (($nextChar != ' ') && ($nextChar != "\n") && ($nextChar != "\t")) {
                             $token = $this->fetchToken($filer);
-                        }
-                        if ($token == null) {
-                            if (!$languageSet) {
-                                break;
+                            if ($token == null) {
+                                $storeText = $this->languageSet;
+                            } else {
+                                // before .languages directive, ignore everything but the directive
+                                if (!$this->languageSet && !$token->identifyInBuffer('.languages', 0)) {
+                                    $token = null;
+                                }
                             }
-                            // no directive: keep storing text
-                            $text .= $c;
-                            $emptyText = false;
                         } else {
-                            // before .languages directive, ignore everything but the directive
-                            if (!$languageSet && !$token->identifyInBuffer('.languages', 0)) {
-                                break;
-                            }
-                            // valid token: first store current text
-                            if (!$emptyText) {
-                                $allTokens[] = new TokenText($text);
-                                $text = '';
-                                $emptyText = true;
-                            }
-                            $token->processInput($this, $filer, $allTokens);
-                            if ($token->ouputNow()) {
-                                $this->output($filer, $allTokens);
-                            }
+                            $storeText = $this->languageSet;
                         }
                         break;
                     case '':
                         break;
                     default:
-                        if ($languageSet) {
-                            $text .= $c;
-                            $emptyText = false;
-                        }
+                        $storeText = $this->languageSet;
                         break;
+                }
+                // handle token if found one
+                if ($token) {
+                    // first, store current temporary text if any
+                    if (!$emptyText) {
+                        $allTokens[] = new TokenText($text);
+                        $resetText = true;
+                    }
+                    // let the token process further input if needed
+                    $token->processInput($this, $filer, $allTokens);
+                    // update output files at token request
+                    if ($token->ouputNow($this)) {
+                        $this->output($filer, $allTokens);
+                    }
+                }
+                if ($storeText) {
+                    $text .= $c;
+                    $emptyText = false;
+                } else if ($resetText) {
+                    $text = '';
+                    $emptyText = true;
                 }
                 $c = $filer->getNextChar();
             }
@@ -262,20 +283,212 @@ namespace MultilingualMarkdown {
                 $allTokens[] = new TokenText($text);
             }
             $this->output($filer, $allTokens);
+            return true;
         }
 
         /**
-         * Add a language to directive tokens.
+         * Pushes current language and set to given name.
+         * Name must be an index to $knownTokens: 'all', 'ignore', 'default' and each language code.
          *
-         * @param string $code language code as written in .languages directive
+         * @param string $name the new language code to set as current
          *
-         * @return bool true if the language is already known by Lexer
+         * @return bool true if name exists and stack has been updated, false if not
          */
-        public function addLanguage(string $code): void
+        public function pushLanguage(string $name, object &$filer): bool
         {
-            if (!\array_key_exists($code, $this->tokens)) {
-                $this->tokens[$code] = new TokenLanguageDirective($code);    
+            // name must exist as an index
+            if (!\in_array($name, $this->knownTokens)) {
+                array_push($this->languageStack, $this->curLanguage);
+                $this->curLanguage = $name;
+                // handle 'ignore'
+                if ($name == 'ignore') {
+                    $this->ignoreLevel += 1;
+                    // update Filer status
+                    $filer->setIgnoreLevel($this->ignoreLevel);
+                }
+                // update Filer status (will be ignored if ignore level > 0)
+                return $filer->setLanguage($this->languageList, $name);
             }
+            return false;
+        }
+
+        /**
+         * Return the language stack size.
+         * Each opening language directive - e.g. '.en((' - pushes one language on stack, and each
+         * closing directive - '.))' - pops the current language. When the stack is empty, no close
+         * directive has any more effect and the assumed behaviour of Lexer is atht of 'all' language
+         * where all input text wil go to each output language file.
+         */
+        public function getLanguageStackSize(): int
+        {
+            return count($this->languageStack);
+        }
+
+        /**
+         * Pop the last language name from stack.
+         * Stack is reduced by subtracting its last pushed name. The new current language is set from
+         * the new last value on stack.
+         * If nothing was in stack, this function returns null and 'all' should be assumed
+         * by caller so text will go to all output files when out of languages directives.
+         *
+         * @return string|null null when stack is empty, else returns the last pushed language name
+         */
+        public function popLanguage(object $filer): ?string
+        {
+            // pop a level from stack and get new current language
+            $popped = null;
+            $count = count($this->languageStack);
+            if ($count > 1) {
+                $popped = array_pop($this->languageStack);
+                $this->curLanguage = $this->languageStack[array_key_last($this->languageStack)];
+            } else {
+                if ($count == 1) {
+                    $popped = array_pop($this->languageStack);
+                }
+                $this->curLanguage = 'all';
+                $this->ignoreLevel = 0;
+            }
+            // handle when popping 'ignore'
+            if ($popped == 'ignore') {
+                if ($this->ignoreLevel >= 1) {
+                    $this->ignoreLevel -= 1;
+                }
+                // update Filer status
+                $filer->setIgnoreLevel($this->ignoreLevel);
+            }
+            // update Filer output language
+            $filer->setLanguage($this->languageList, $this->curLanguage);
+            return $this->curLanguage;
+        }
+
+        /**
+         * Return the current language.
+         */
+        public function getCurLanguage(): string
+        {
+            return $this->curLanguage;
+        }
+
+        /**
+         * Ready output files given current languages settings.
+         */
+        public function readyFiler(object $filer): bool
+        {
+            return $filer->readyOutputs($this->languageList);
+        }
+
+        /**
+         * Ready all headings by reading them from all input files.
+         */
+        public function readyHeadings(object $filer): void
+        {
+            unset($this->allHeadingsArrays);
+            $this->allHeadingsArrays = [];
+            $languagesToken = $this->knownTokens['languages'];
+            Heading::init();// reset global headings numbering to 0
+            // Explore each input file ($filer is iterable and returns relative filenames and index)
+            foreach ($filer as $index => $relFilename) {
+                $filename = $filer->getInputFile($index); // full file path
+                if ($filename == null) {
+                    continue;
+                }
+                $file = fopen($filename, 'rb');
+                if ($file === false) {
+                    $this->error("could not open [$filename]", __FILE__, __LINE__);
+                    continue;
+                }
+                // create an array for headings of this file
+                $headingArray = new HeadingArray($relFilename);
+                // keep track of the line number for each heading
+                $curLineNumber = 0;
+                // remember if the .languages directive has been read
+                $languageSet = false;
+                // loop on each file line@
+                do {
+                    $text = getNextLineTrimmed($file, $curLineNumber);
+                    if (!$text) {
+                        break;
+                    }
+                    // handle .languages directive
+                    if ($languagesToken->identifyInBuffer($text, 0)) {
+                        $languageSet = trim(mb_substr($text, $languagesToken->getLength()));
+                        $this->setLanguagesFrom($languageSet, $filer);
+                        continue;
+                    }
+                    // ignore lines before the .languages directive
+                    if ($languageSet === false) {
+                        continue;
+                    }
+                    // skip escaped lines (code fences, double back-ticks)
+                    $pos = strpos($text, '```');
+                    if ($pos !== false) {
+                        // escaped by double backticks+space / space+double backticks?
+                        if (($pos <= 2) || (mb_substr($text, $pos - 3, 3) != '`` ') || (mb_substr($text, $pos + 3, 3) != ' ``')) {
+                            do {
+                                $text = getNextLineTrimmed($file, $curLineNumber);
+                                if (!$text) {
+                                    break;
+                                }
+                            } while (strpos($text, '```') === false);
+                        }
+                    } else {
+                        // store headings
+                        if (($text[0] ?? '') == '#') {
+                            $heading = new Heading($text, $curLineNumber, $this);
+                            $headingArray[] = $heading;
+                        }
+                    }
+                } while (!feof($file));
+                fclose($file);
+
+                // force a level 1 object if no headings
+                if (count($headingArray) == 0) {
+                    $heading = new Heading('# ' . $relFilename, 1, $this);
+                    $headingArray[] = $heading;
+                }
+                $this->allHeadingsArrays[$relFilename] = $headingArray;
+                unset($headingArray);
+            } // next file
+        }
+
+        /**
+         * Set languages list from a parameter string.
+         * This is a relay to LanguagesList::setFrom().
+         * Also reprograms output files.
+         *
+         * @param string $parameters  the parameter string
+         * @param object $filer       the Filer object
+         *
+         * @return bool true if languages have been set correctly and main language was
+         *              valid (if 'main=' was in the parameters.)
+         */
+        public function setLanguagesFrom(string $parameters, object $filer): bool
+        {
+            $result = $this->languageList->setFrom($parameters);
+            if ($result) {
+                $filer->readyOutputs($this->languageList);
+                foreach ($this->languageList as $index => $language) {
+                    if (!\array_key_exists($language['code'], $this->knownTokens)) {
+                        $this->knownTokens[$language['code']] = new TokenOpenLanguage($language['code']);    
+                    }
+                }
+                $this->languageSet = isset($index);
+            }
+            return $result;
+        }
+
+        /**
+         * Set numbering scheme from a parameter string (for current file.)
+         * The scheme parameters can be set from .numbering directive (file local) or from
+         * command-line parameters (global).
+         */
+        public function setNumberingFrom(string $parameters, object $filer): bool
+        {
+            //$this->numbering = new Numbering($parameters, $this);
+            foreach ($filer as $index => $relFilename) {
+
+            }
+            return false;
         }
 
         /**

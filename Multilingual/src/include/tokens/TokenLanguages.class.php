@@ -30,14 +30,14 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenSingleLineDirective.class.php';
+    require_once 'TokenBaseSingleLine.class.php';
 
-    use MultilingualMarkdown\TokenSingleLineDirective;
+    use MultilingualMarkdown\TokenBaseSingleLine;
     
     /**
      * .LANGUAGES directive token.
      */
-    class TokenLanguages extends TokenSingleLineDirective
+    class TokenLanguages extends TokenBaseSingleLine
     {
         public function __construct()
         {
@@ -61,7 +61,7 @@ namespace MultilingualMarkdown {
         /**
          * Process .languages directive.
          * Register each language code and ISO association, and main language.
-         * Indirectly create a TokenLanguageDirective token in Lexer for each code.
+         * Indirectly create a TokenOpenLanguage token in Lexer for each code.
          *
          * @param object $lexer  the Lexer object, needed to add language open directives (e.g. '.en((')
          * @param object $filer  the Filer object ready for input, positionned on the directive
@@ -80,8 +80,8 @@ namespace MultilingualMarkdown {
                 }
                 $text .= $curChar;
             } while ($curChar !== null);
-            // set the language codes for output files in Filer and new language directive tokens in Lexer
-            return $filer->setLanguagesFrom($text, $lexer);
+            // set the language codes for output files and new language directive tokens in Lexer
+            return $lexer->setLanguagesFrom($text, $filer);
         }
         // no need for output() and outputNow()
     }

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenSingleLineDirective class
+ * Multilingual Markdown generator - TokenClose class
  *
- * This class represents a token for a single line directive.
+ * This class represents a token for the .)) ending directive which closes the streamed .xxxx(( directives.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +19,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_single_line_class
+ * @package   mlmd_token_end_directive_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -30,28 +30,40 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenTypes.class.php';
-    require_once 'TokenKeyworded.class.php';
+    require_once 'TokenBaseInline.class.php';
 
-    use MultilingualMarkdown\TokenKeyworded;
+    use MultilingualMarkdown\TokenBaseInline;
     
     /**
-     * Single line directive token.
-     *
-     * This class is not instanciated by itself but is base for actual directives tokens.
+     * .)) directive token.
      */
-    class TokenSingleLineDirective extends TokenKeyworded
+    class TokenClose extends TokenBaseInline
     {
-        public function __construct(string $keyword, bool $ignoreCase)
+        public function __construct()
         {
-            parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, $keyword, $ignoreCase);
+            parent::__construct(TokenType::CLOSE_DIRECTIVE, '.))', true);
         }
         public function __toString()
         {
-            return '- FORBIDDEN: base TokenSingleLineDirective class, check Lexer code -';
+            return '<directive> .))';
         }
-        public function ouputNow(): bool
+        // Store the token and  simulate language stacking (has no effect until outputs are actually done)
+        public function processInput(object $lexer, object $filer, array &$tokens): bool
         {
+            $this->skipSelf($filer);
+            $tokens[] = $this;
+            $lexer->popLanguage($filer); // update current language stack in Lexer
+            return true;
+        }
+        // Closing directive will have Lexer processing all stored tokens if it empties the language stack.
+        public function ouputNow(object $lexer): bool
+        {
+            return ($lexer->getLanguageStackSize() <= 1);
+        }
+        // Output: have Lexer updating the current output language
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->popLanguage($filer);
             return true;
         }
     }

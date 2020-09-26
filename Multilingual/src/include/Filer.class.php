@@ -36,12 +36,12 @@ namespace MultilingualMarkdown {
 
     require_once 'FileUtilities.php';
     require_once 'Logger.interface.php';
-    require_once 'OutputModes.class.php';
     require_once 'File.class.php';
     require_once 'LanguageList.class.php';
     require_once 'Storage.class.php';
 
     use MultilingualMarkdown\Logger;
+    use MultilingualMarkdown\languageList;
 
     // MB string functions depending on OS
     $posFunction = 'mb_strpos';
@@ -68,20 +68,23 @@ namespace MultilingualMarkdown {
         private $rootDirLength = 0;             /// root directory utf-8 length
 
         // Languages handling (LanguageList class)
-        private $languages = null;              /// all the languages codes declared in .languages directives
+        private $curLanguage = 'all';           /// current destination language for outputs e.g. 'en', 'fr'
+                                                /// can also be 'all', 'ignore', 'default'
+        private $ignoreLevel = 0;               /// number of 'ignore' to close in language stack
+                                                /// don't send any output while this variable is not 0
 
         /**
          * Initialize string function names.
          */
         public function __construct()
         {
-            $this->languages = new LanguageList();
             if (\isWindows()) {
                 global $posFunction, $cmpFunction;
                 $posFunction = 'mb_stripos' ;
                 $cmpFunction = 'strcasecmp';
             }
             $this->storage = new Storage();
+            $this->curLanguages = 'all';
         }
 
         /**
@@ -507,27 +510,7 @@ namespace MultilingualMarkdown {
             }
         }
 
-        /**
-         * Set languages list from a parameter string.
-         * This is just a relay to LanguagesList::setFrom().
-         * Also reprograms output files.
-         *
-         * @param string $string  the parameter string
-         *
-         * @return bool true if languages have been set correctly and main language was
-         *              valid (if 'main=' was in the parameters.)
-         */
-        public function setLanguagesFrom(string $param, object $lexer): bool
-        {
-            $result = $this->languages->setFrom($param);
-            if ($result) {
-                $this->readyOutputs();
-            }
-            foreach ($this->languages as $index => $language) {
-                $lexer->addLanguage($language['code']);
-            }
-            return $result;
-        }
+
 
         /**
          * Read a number of characters including the current one and return the string.
@@ -539,20 +522,38 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Skip over any space/tabulation.
+         *
+         * @return int the number of space and tabulations skipped over.
+         */
+        public function skipSpaces(): int
+        {
+            $count = 0;
+            $c = $this->storage->getCurChar();
+            while ($c == ' ' || $c == "\t") {
+                $count += 1;
+                $c = $this->storage->getNextChar();
+            }
+            return $count;
+        }
+
+        /**
          * Prepare output filenames from the languages set and output template filename.
          * This call must be done after all input files have been set and readyInputs() has
          * been called.
+         *
+         * @param object $languageList the LanguageList object 
          */
-        public function readyOutputs(): bool
+        public function readyOutputs(object $languageList): bool
         {
             if ($this->outFilenameTemplate == null) {
                 return $this->error("output file template not set", __FILE__, __LINE__);
             }
             $return = true;
-            foreach ($this->languages as $index => $array) {
+            foreach ($languageList as $index => $array) {
                 $code = $array['code'] ?? null;
                 $this->outFiles[$code] = null;
-                if ($this->languages->isMain($code)) {
+                if ($languageList->isMain($code)) {
                     $this->outFilenames[$code] = "{$this->outFilenameTemplate}.md";
                 } else {
                     $this->outFilenames[$code] = "{$this->outFilenameTemplate}.{$code}.md";
@@ -563,17 +564,6 @@ namespace MultilingualMarkdown {
                 }
             }
             return $return;
-        }
-
-        /**
-         * Set the main language code.
-         * The main language will have output files only suffixed '.md' instead of '.code.md'.
-         *
-         * @param string $code the language code to set as main language
-         */
-        public function setMainLanguage(string $code): bool
-        {
-            return $this->languages->setMain($code);
         }
 
         //MARK: Relays to storage
@@ -679,8 +669,8 @@ namespace MultilingualMarkdown {
         }
         /**
          * Check if current and next characters match a string in current line buffer.
-         * This test fetch necessary characters if the buffer has less than needed
-         * left to read.
+         * This will fetch more characters from input file if needed but won't advance the
+         * current reading position.
          *
          * @param string $marker the string to match, starting at current character
          *
@@ -692,7 +682,47 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Return previous character.
+         * Set the 'ignore' level.
+         * No output will occur while this level is not 0.
          */
+        public function setIgnoreLevel(int $level): void
+        {
+            $this->ignoreLevel = $level;
+        }
+
+        /**
+         * Set the current output language, also accepts 'all' or 'default'.
+         *
+         * @param object $languageList the LanguagesList object
+         * @param string $language     the language code to set as current
+         */
+        public function setLanguage(object $languageList, string $language): bool
+        {
+            if ($this->ignoreLevel > 0) {
+                return false;
+            }
+            if (($languageList == null) || (get_class($languageList) != 'MultilingualMarkdown\LanguageList')) {
+                return false;
+            }
+            if ($languageList->existLanguage($language)) {
+                $this->curLanguage = $language;
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * Set output mode.
+         * If numbering scheme has been set, the output mode will use a numbered format.
+         * If not, it will use a non-numbered format.
+         * Setting a numbering scheme after setting the output mode will adjust the mode.
+         *
+         * @param string $name      the output mode name 'md', 'mdpure', 'html' or 'htmlold'
+         * @param object $numbering the numbering scheme object
+         */
+        public function setOutputMode(string $name, object $numbering): void
+        {
+            $this->storage->setOutputMode($name, $numbering, $this);
+        }
     }
 }

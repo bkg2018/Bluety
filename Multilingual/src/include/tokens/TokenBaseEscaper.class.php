@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenEscaper class
+ * Multilingual Markdown generator - TokenBaseEscaper class
  *
  * This class represents a token for sequence of characters surrounding escaped text.
  *
@@ -30,16 +30,16 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenKeyworded.class.php';
+    require_once 'TokenBaseKeyworded.class.php';
 
-    use MultilingualMarkdown\TokenKeyworded;
+    use MultilingualMarkdown\TokenBaseKeyworded;
     
     /**
      * Class for an escaper starting/ending.
      * This class will store escaped text tokens by parsing until its closing marker.
      * This is why there are only opening escaper tokens and no closing ones.
      */
-    class TokenEscaper extends TokenKeyworded
+    class TokenBaseEscaper extends TokenBaseKeyworded
     {
         protected $text; /// the escaped text, including opening and closing escapers
         
@@ -62,21 +62,21 @@ namespace MultilingualMarkdown {
             return parent::isType($type);
         }
         /**
-         * Process input: get text until we find another double backtick. Update tokens array.
-         * Used by derived classes.
-         * Stores both escape markers as well as the escaped text.
+         * Process input: get text until we find another escape marker. 
+         * Update tokens array with the token itself. The escaped text is stored
+         * by the token.
          */
         public function processInput(object $lexer, object $filer, array &$allTokens): bool
         {
-            $this->text = $this->skipSelf();
-            do {
-                $curChar = $filer->getNextChar();
-                if ($curChar == null) {
-                    break;
-                }
-                $this->text .= $curChar;
-                $prevChars = $filer->fetchPrevChars($this->keywordLength);
-            } while ($prevChars != $this->keyword);
+            $this->text = $this->skipSelf($filer);
+            $curChar = $filer->getCurChar();
+            if ($curChar != null) {
+                do {
+                    $this->text .= $curChar;
+                    $curChar = $filer->getNextChar();
+                    $prevChars = $filer->fetchPreviousChars($this->keywordLength);
+                } while (($prevChars != $this->keyword) && ($curChar != null));
+            }
             // self store in token array
             $allTokens[] = $this;
             return true;

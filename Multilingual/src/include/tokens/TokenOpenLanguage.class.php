@@ -1,9 +1,10 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenEndDirective class
+ * Multilingual Markdown generator - TokenOpenLanguage class
  *
- * This class represents a token for the .)) ending directive which closes the streamed .xxxx(( directives.
+ * This class represents a token for an opening language code .<code>(( directive. The language code
+ * must have been declared in the .languages directive.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +20,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_end_directive_class
+ * @package   mlmd_token_language_directive_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -30,26 +31,37 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenStreamDirective.class.php';
+    require_once 'TokenBaseInline.class.php';
 
-    use MultilingualMarkdown\TokenStreamDirective;
-    
+    use MultilingualMarkdown\TokenBaseInline;
+
     /**
-     * .)) directive token.
+     * .<code>(( directive token.
+     * This kind of token is created by the .languages directive.
      */
-    class TokenEndDirective extends TokenStreamDirective
+    class TokenOpenLanguage extends TokenBaseInline
     {
-        public function __construct()
+        private $language = ''; // language code from .languages directives
+
+        public function __construct(string $language)
         {
-            parent::__construct(TokenType::CLOSE_DIRECTIVE, '.))', true);
+            $this->language = $language;
+            parent::__construct(TokenType::OPEN_DIRECTIVE, ".$language((", true);
         }
         public function __toString()
         {
-            return '<directive> .))';
+            return "<directive> .{$this->keyword}((";
         }
-        public function ouputNow(): bool
+        public function processInput(object $lexer, object $filer, array &$tokens): bool
         {
+            $this->skipSelf($filer);
+            $tokens[] = $this;
+            return $lexer->pushLanguage($this->language, $filer);
+        }
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->pushLanguage($this->language, $filer);
             return true;
-        }    }
-
+        }
+    }
 }

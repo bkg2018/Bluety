@@ -106,12 +106,15 @@ namespace MultilingualMarkdown {
         /**
          * Return code and ISO for a given language or null if it is not known.
          *
-         * @param string $code a code previously given to addLanguage
+         * @param string $code a code previously given in .languages directive
          *
          * @return array the values array for the language, or null if the language code is unknown.
          */
         public function getLanguage(string $code): ?array
         {
+            if (\in_array($code, ['all', 'ignore', 'default'])) {
+                return ['code' => $code];
+            }
             foreach ($this->allLanguages as $index => $array) {
                 if (isset($array['code']) && ($array['code'] == $code)) {
                     return $array;
@@ -120,6 +123,24 @@ namespace MultilingualMarkdown {
             return null;
         }
 
+        /**
+         * Check if a language code is valid.
+         * This includes special codes like 'all', 'ignore' and 'default', plus each
+         * language added by the .languages directives.
+         */
+        public function existLanguage($language)
+        {
+            if (\in_array($language, ['all', 'ignore', 'default'])) {
+                return true;
+            }
+            foreach ($this->allLanguages as $array) {
+                if (isset($array['code']) && ($array['code'] == $language)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
         /**
          * Tell if a language code is main language.
          * The main language has the effect of not putting the code in the output file extension,

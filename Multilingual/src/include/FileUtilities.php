@@ -121,7 +121,7 @@ function getNextLineTrimmed($file, int &$lineNumber)
 {
     $newLine = fgets($file);
     if ($newLine) {
-        $newLine = trim($newLine);
+        $newLine = rtrim($newLine, " \t\n\r") . "\n";
         $lineNumber += 1;
     }
     return $newLine;

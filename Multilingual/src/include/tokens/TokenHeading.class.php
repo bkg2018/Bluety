@@ -1,9 +1,10 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenAllDirective class
+ * Multilingual Markdown generator - TokenHeading class
  *
- * This class represents a token for the .all(( directive.
+ * This class represents a token for a heading in files. A heading is a line starting with at least one '#' character.
+ * The token is created by Lexer when meeting such condition. 
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +20,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_all_directive_class
+ * @package   mlmd_token_heading_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -30,23 +31,45 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenStreamDirective.class.php';
-    
-    use MultilingualMarkdown\TokenStreamDirective;
-    
+    require_once 'Token.class.php';
+
+    use MultilingualMarkdown\Token;
+
     /**
-     * .all(( directive token.
+     * Heading token.
      */
-    class TokenAllDirective extends TokenStreamDirective
+    class TokenHeading extends Token
     {
-        public function __construct()
+        private $heading = null;
+
+        public function __construct(object $heading)
         {
-            parent::__construct(TokenType::OPEN_DIRECTIVE, '.all((', true);
+            $this->heading = $heading;
+            parent::__construct(TokenType::HEADING);
         }
         public function __toString()
         {
-            return '<directive> .all((';
+            return "Heading .{$this->heading}((";
+        }
+        public function identifyInFiler(object $filer): bool
+        {
+            // must be preceded by an end of line or nothing (possible if first line in file)
+            $prevChar = $filer->getPrevChar();
+            if (($prevChar != null) && ($prevChar != "\n")) {
+                return false;
+            }
+            return true;
+        }
+        public function processInput(object $lexer, object $filer, array &$tokens): bool
+        {
+            $this->skipSelf($filer);
+            $tokens[] = $this;
+            return $lexer->pushLanguage($this->language, $filer);
+        }
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->pushLanguage($this->language, $filer);
+            return true;
         }
     }
-
 }

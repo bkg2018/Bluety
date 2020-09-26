@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenDefaultDirective class
+ * Multilingual Markdown generator - TokenBaseSingleLine class
  *
- * This class represents a token for the default text opening directive .(( or .default((.
+ * This class represents a token for a single line directive.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +19,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_default_directive_class
+ * @package   mlmd_token_single_line_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -30,23 +30,29 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenStreamDirective.class.php';
+    require_once 'TokenTypes.class.php';
+    require_once 'TokenBaseKeyworded.class.php';
 
-    use MultilingualMarkdown\TokenStreamDirective;
+    use MultilingualMarkdown\TokenBaseKeyworded;
     
     /**
-     * .default(( or .(( directive token.
+     * Single line directive token.
+     *
+     * This class is not instanciated by itself but is base for actual directives tokens.
      */
-    class TokenDefaultDirective extends TokenStreamDirective
+    class TokenBaseSingleLine extends TokenBaseKeyworded
     {
-        public function __construct(string $keyword)
+        public function __construct(string $keyword, bool $ignoreCase)
         {
-            parent::__construct(TokenType::OPEN_DIRECTIVE, ".$keyword((", true);
+            parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, $keyword, $ignoreCase);
         }
         public function __toString()
         {
-            return '<directive> .((';
+            return '- FORBIDDEN: base TokenBaseSingleLine class, check Lexer code -';
+        }
+        public function ouputNow(object $lexer): bool
+        {
+            return true;
         }
     }
-
 }

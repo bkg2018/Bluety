@@ -1,10 +1,9 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenLanguageDirective class
+ * Multilingual Markdown generator - TokenIgnoreDirective class
  *
- * This class represents a token for an opening language code .<code>(( directive. The language code
- * must have been declared in the .languages directive.
+ * This class represents a token for the .ignore(( directive.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -20,7 +19,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_language_directive_class
+ * @package   mlmd_token_ignore_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -31,23 +30,22 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenStreamDirective.class.php';
+    require_once 'TokenOpenLanguage.class.php';
 
-    use MultilingualMarkdown\TokenStreamDirective;
-
+    use MultilingualMarkdown\TokenOpenLanguage;
+    
     /**
-     * .<code>(( directive token.
-     * This kind of token is created by the .languages directive.
+     * .ignore(( directive token.
      */
-    class TokenLanguageDirective extends TokenStreamDirective
+    class TokenOpenIgnore extends TokenOpenLanguage
     {
-        public function __construct(string $language)
+        public function __construct()
         {
-            parent::__construct(TokenType::OPEN_DIRECTIVE, ".$language((", true);
+            parent::__construct('ignore');
         }
         public function __toString()
         {
-            return "<directive> .{$this->keyword}((";
+            return '<directive> .ignore((';
         }
     }
 }

@@ -32,9 +32,9 @@ namespace MultilingualMarkdown {
 
     mb_internal_encoding('UTF-8');
 
-    require_once 'TokenEscaper.class.php';
+    require_once 'TokenBaseEscaper.class.php';
 
-    use MultilingualMarkdown\TokenEscaper;
+    use MultilingualMarkdown\TokenBaseEscaper;
     
     /**
      * Class for the 4*space escaper.
@@ -42,7 +42,7 @@ namespace MultilingualMarkdown {
      * The token will skip over the text until an empty line
      * and send everything to outputs without interpreting variables and directives.
      */
-    class TokenSpaceEscape extends TokenEscaper
+    class TokenSpaceEscape extends TokenBaseEscaper
     {
         public function __construct()
         {
