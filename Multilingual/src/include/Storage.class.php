@@ -192,7 +192,7 @@ namespace MultilingualMarkdown {
             $this->fetchCharacters(1);
             // EOF?
             if ($this->bufferPosition >= $this->bufferLength - 1) {
-                $c = null;;
+                $c = null;
             } else {
                 $this->bufferPosition += 1;
                 $c = mb_substr($this->buffer, $this->bufferPosition, 1);
@@ -226,11 +226,11 @@ namespace MultilingualMarkdown {
             if ($length <= 0) {
                 return null;
             }
-            return mb_substr($this->buffer, $startPosition, $length);            
+            return mb_substr($this->buffer, $startPosition, $length);
         }
         /**
          * Read a string with a number of characters starting with the current one.
-         * Return null if already at end of file. The final current position is set 
+         * Return null if already at end of file. The final current position is set
          * on the first character past the string.
          */
         public function getString(int $charsNumber): ?string
