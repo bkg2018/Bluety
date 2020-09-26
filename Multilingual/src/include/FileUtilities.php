@@ -111,3 +111,18 @@ function exploreDirectory(string $dirName): array
     }
     return $filenames;
 }
+
+/**
+ * Return the next text line, trimmed from spaces.
+ * If the file is finished, returns false.
+ * Update file position and line number.
+ */
+function getNextLineTrimmed($file, int &$lineNumber)
+{
+    $newLine = fgets($file);
+    if ($newLine) {
+        $newLine = rtrim($newLine, " \t\n\r") . "\n";
+        $lineNumber += 1;
+    }
+    return $newLine;
+}

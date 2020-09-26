@@ -32,9 +32,9 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenKeyworded.class.php';
+    require_once 'TokenBaseKeyworded.class.php';
 
-    use MultilingualMarkdown\TokenKeyworded;
+    use MultilingualMarkdown\TokenBaseKeyworded;
     
     /**
      * Class for end-of-line.
@@ -42,7 +42,7 @@ namespace MultilingualMarkdown {
      * The Windows OS also uses "\r" before "\n" but the buffer reading routine
      * will withdraw them.
      */
-    class TokenEOL extends TokenKeyworded
+    class TokenEOL extends TokenBaseKeyworded
     {
         public function __construct()
         {

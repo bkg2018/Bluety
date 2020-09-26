@@ -36,12 +36,12 @@ namespace MultilingualMarkdown {
 
     require_once 'FileUtilities.php';
     require_once 'Logger.interface.php';
-    require_once 'OutputModes.class.php';
     require_once 'File.class.php';
     require_once 'LanguageList.class.php';
     require_once 'Storage.class.php';
 
     use MultilingualMarkdown\Logger;
+    use MultilingualMarkdown\languageList;
 
     // MB string functions depending on OS
     $posFunction = 'mb_strpos';
@@ -68,20 +68,23 @@ namespace MultilingualMarkdown {
         private $rootDirLength = 0;             /// root directory utf-8 length
 
         // Languages handling (LanguageList class)
-        private $languages = null;              /// all the languages codes declared in .languages directives
+        private $curLanguage = 'all';           /// current destination language for outputs e.g. 'en', 'fr'
+                                                /// can also be 'all', 'ignore', 'default'
+        private $ignoreLevel = 0;               /// number of 'ignore' to close in language stack
+                                                /// don't send any output while this variable is not 0
 
         /**
          * Initialize string function names.
          */
         public function __construct()
         {
-            $this->languages = new LanguageList();
             if (\isWindows()) {
                 global $posFunction, $cmpFunction;
                 $posFunction = 'mb_stripos' ;
                 $cmpFunction = 'strcasecmp';
             }
             $this->storage = new Storage();
+            $this->curLanguages = 'all';
         }
 
         /**
@@ -507,35 +510,50 @@ namespace MultilingualMarkdown {
             }
         }
 
+
+
         /**
-         * Set languages list from a parameter string.
-         * This is just a relay to LanguagesList::setFrom().
-         *
-         * @param string $string  the parameter string
-         *
-         * @return bool true if languages have been set correctly and main language was
-         *              valid (if 'main=' was in the parameters.)
+         * Read a number of characters including the current one and return the string.
+         * Return null if already at end of file.
          */
-        public function setLanguagesFrom(string $param): bool
+        public function getString(int $charsNumber): ?string
         {
-            return $this->languages->setFrom($param);
+            return $this->storage->getString($charsNumber);
+        }
+
+        /**
+         * Skip over any space/tabulation.
+         *
+         * @return int the number of space and tabulations skipped over.
+         */
+        public function skipSpaces(): int
+        {
+            $count = 0;
+            $c = $this->storage->getCurChar();
+            while ($c == ' ' || $c == "\t") {
+                $count += 1;
+                $c = $this->storage->getNextChar();
+            }
+            return $count;
         }
 
         /**
          * Prepare output filenames from the languages set and output template filename.
          * This call must be done after all input files have been set and readyInputs() has
          * been called.
+         *
+         * @param object $languageList the LanguageList object 
          */
-        public function readyOutputs(): bool
+        public function readyOutputs(object $languageList): bool
         {
             if ($this->outFilenameTemplate == null) {
                 return $this->error("output file template not set", __FILE__, __LINE__);
             }
             $return = true;
-            foreach ($this->languages as $index => $array) {
+            foreach ($languageList as $index => $array) {
                 $code = $array['code'] ?? null;
                 $this->outFiles[$code] = null;
-                if ($this->languages->isMain($code)) {
+                if ($languageList->isMain($code)) {
                     $this->outFilenames[$code] = "{$this->outFilenameTemplate}.md";
                 } else {
                     $this->outFilenames[$code] = "{$this->outFilenameTemplate}.{$code}.md";
@@ -546,17 +564,6 @@ namespace MultilingualMarkdown {
                 }
             }
             return $return;
-        }
-
-        /**
-         * Set the main language code.
-         * The main language will have output files only suffixed '.md' instead of '.code.md'.
-         *
-         * @param string $code the language code to set as main language
-         */
-        public function setMainLanguage(string $code): bool
-        {
-            return $this->languages->setMain($code);
         }
 
         //MARK: Relays to storage
@@ -588,9 +595,9 @@ namespace MultilingualMarkdown {
          *
          * @return null|string previous character ('\n' for EOL).
          */
-        public function prevChar(): ?string
+        public function getPrevChar(): ?string
         {
-            return $this->storage->prevChar();
+            return $this->storage->getPrevChar();
         }
         /**
          * Return the previous previous UTF-8 character .
@@ -607,18 +614,48 @@ namespace MultilingualMarkdown {
          *
          * @return null|string current character ('\n' for EOL), null when file and buffer are finished.
          */
-        public function curChar(): ?string
+        public function getCurChar(): ?string
         {
-            return $this->storage->curChar();
+            return $this->storage->getCurChar();
         }
         /**
-         * Return the next UTF-8 character from current buffer, return null if end of file.
+         * Read and return the next UTF-8 character from current buffer, return null at end of file.
          *
          * @return null|string new current character ('\n' for EOL), null when file and buffer are finished.
          */
-        public function nextChar(): ?string
+        public function getNextChar(): ?string
         {
-            return $this->storage->nextChar();
+            return $this->storage->getNextChar();
+        }
+        /**
+         * Look at next UTF-8 characters.
+         * This call doesn't advance input position but rather just send back the next characters
+         * from input file, or null at end of input file.
+         *
+         * @param int $charsNumber the number of characters to fetch
+         *
+         * @return null|string     the next characters which will be read from input,
+         *                         null if already at end of file.
+         */
+        public function fetchNextChars(int $charsNumber): ?string
+        {
+            return $this->storage->fetchNextChars($charsNumber);
+        }
+        /**
+         * Look at previous UTF-8 characters.
+         * Cannot read more than further the beginning of file or the beginning
+         * of current buffer positions. The buffer at most up to 3072 characters before current
+         * position so it is safe to request for a lot of previous characters up to this limit
+         * but at the beginning the buffer will only have as much as the 4096 first
+         * characters of file.
+         *
+         * @param int $charsNumber the number of previous characters to fetch
+         *
+         * @return null|string     the characters before current position.
+         */
+        public function fetchPreviousChars(int $charsNumber): ?string
+        {
+            return $this->storage->fetchPreviousChars($charsNumber);
         }
         /**
          * Return the next UTF-8 paragraph, taken from the input file until an empty line or the end of file.
@@ -632,8 +669,8 @@ namespace MultilingualMarkdown {
         }
         /**
          * Check if current and next characters match a string in current line buffer.
-         * This test fetch necessary characters if the buffer has less than needed
-         * left to read.
+         * This will fetch more characters from input file if needed but won't advance the
+         * current reading position.
          *
          * @param string $marker the string to match, starting at current character
          *
@@ -645,7 +682,47 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Return previous character.
+         * Set the 'ignore' level.
+         * No output will occur while this level is not 0.
          */
+        public function setIgnoreLevel(int $level): void
+        {
+            $this->ignoreLevel = $level;
+        }
+
+        /**
+         * Set the current output language, also accepts 'all' or 'default'.
+         *
+         * @param object $languageList the LanguagesList object
+         * @param string $language     the language code to set as current
+         */
+        public function setLanguage(object $languageList, string $language): bool
+        {
+            if ($this->ignoreLevel > 0) {
+                return false;
+            }
+            if (($languageList == null) || (get_class($languageList) != 'MultilingualMarkdown\LanguageList')) {
+                return false;
+            }
+            if ($languageList->existLanguage($language)) {
+                $this->curLanguage = $language;
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * Set output mode.
+         * If numbering scheme has been set, the output mode will use a numbered format.
+         * If not, it will use a non-numbered format.
+         * Setting a numbering scheme after setting the output mode will adjust the mode.
+         *
+         * @param string $name      the output mode name 'md', 'mdpure', 'html' or 'htmlold'
+         * @param object $numbering the numbering scheme object
+         */
+        public function setOutputMode(string $name, object $numbering): void
+        {
+            $this->storage->setOutputMode($name, $numbering, $this);
+        }
     }
 }

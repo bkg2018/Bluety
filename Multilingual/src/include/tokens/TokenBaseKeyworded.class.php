@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenKeyworded class
+ * Multilingual Markdown generator - TokenBaseKeyworded class
  *
  * This class represents a token identified by a sequence of characters.
  *
@@ -44,7 +44,7 @@ namespace MultilingualMarkdown {
         *
         * This class is not used by itself by extended into separate classes for each token.
         */
-    class TokenKeyworded extends Token
+    class TokenBaseKeyworded extends Token
     {
         protected $keyword = '';        /// keyword identifying the token
         protected $keywordLength = 0;   /// number of UTF-8 characters
@@ -63,7 +63,7 @@ namespace MultilingualMarkdown {
         }
         public function __toString()
         {
-            return '- FORBIDDEN: base TokenKeyworded class, check Lexer code -';
+            return '- FORBIDDEN: base TokenBaseKeyworded class, check Lexer code -';
         }
         /**
             * Identify self against an UTF-8 buffer and position.
@@ -101,6 +101,17 @@ namespace MultilingualMarkdown {
         public function getLength(): int
         {
             return $this->keywordLength;
+        }
+        /**
+         * Skip over the keyword itselfg in the Filer input.
+         */
+        protected function skipSelf(object $filer): ?string
+        {
+            return $filer->getString($this->keywordLength);
+        }
+        public function output(object $lexer, object $filer): bool
+        {
+            return parent::output($lexer, $filer);
         }
     }
 }

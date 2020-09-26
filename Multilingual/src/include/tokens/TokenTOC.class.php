@@ -30,14 +30,14 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenSingleLineDirective.class.php';
+    require_once 'TokenBaseSingleLine.class.php';
 
-    use MultilingualMarkdown\TokenSingleLineDirective;
+    use MultilingualMarkdown\TokenBaseSingleLine;
     
     /**
      * .TOC directive token.
      */
-    class TokenTOC extends TokenSingleLineDirective
+    class TokenTOC extends TokenBaseSingleLine
     {
         public function __construct()
         {

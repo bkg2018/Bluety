@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenSingleLineDirective class
+ * Multilingual Markdown generator - TokenOpenDefault class
  *
- * This class represents a token for a single line directive.
+ * This class represents a token for the default text opening directive .(( or .default((.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +19,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_single_line_class
+ * @package   mlmd_token_default_directive_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -30,25 +30,34 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenTypes.class.php';
-    require_once 'TokenKeyworded.class.php';
+    require_once 'TokenOpenLanguage.class.php';
 
-    use MultilingualMarkdown\TokenKeyworded;
+    use MultilingualMarkdown\TokenOpenLanguage;
     
     /**
-     * Single line directive token.
-     *
-     * This class is not instanciated by itself but is base for actual directives tokens.
+     * .default(( or .(( directive token.
      */
-    class TokenSingleLineDirective extends TokenKeyworded
+    class TokenOpenDefault extends TokenOpenLanguage
     {
-        public function __construct(string $keyword, bool $ignoreCase)
+        public function __construct(string $keyword)
         {
-            parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, $keyword, $ignoreCase);
+            parent::__construct($keyword);
         }
         public function __toString()
         {
-            return '- FORBIDDEN: base TokenSingleLineDirective class, check Lexer code -';
+            return '<directive> .((';
+        }
+        public function processInput(object $lexer, object $filer, array &$tokens): bool
+        {
+            $this->skipSelf($filer);
+            $tokens[] = $this;
+            return $lexer->pushLanguage('default', $filer);
+        }
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->pushLanguage('default', $filer);
+            return true;
         }
     }
+
 }

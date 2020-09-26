@@ -32,16 +32,16 @@ namespace MultilingualMarkdown {
 
     mb_internal_encoding('UTF-8');
 
-    require_once 'TokenKeyworded.class.php';
+    require_once 'TokenBaseKeyworded.class.php';
 
-    use MultilingualMarkdown\TokenKeyworded;
+    use MultilingualMarkdown\TokenBaseKeyworded;
     
     /**
      * Class for end of paragraph, or empty line.
      * This class is almost identical to TokenEOL but used in a different context.
      * All empty lines are considered as an end of paragraph in Markdown.
      */
-    class TokenEmptyLine extends TokenKeyworded
+    class TokenEmptyLine extends TokenBaseKeyworded
     {
         public function __construct()
         {
@@ -67,7 +67,7 @@ namespace MultilingualMarkdown {
          */
         public function identifyInFiler(object $filer): bool
         {
-            $prevChar = $filer->prevChar();
+            $prevChar = $filer->getPrevChar();
             if ($prevChar != "\n") {
                 return false;
             }

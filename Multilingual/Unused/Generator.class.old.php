@@ -122,19 +122,6 @@ namespace MultilingualMarkdown {
         */
 
         /**
-         * Set the numbering schemes.
-         *
-         * @param string $scheme a string containing numbering scheme
-         *
-         * @return nothing
-         *
-        public function setNumbering(string $scheme): void
-        {
-            $this->numberingScheme = $scheme;
-        }
-        */
-
-        /**
          * Expand variables in a text for a language.
          * - {file} replaced by relative path of generated file ('example.en.md' for 'example.mlmd')
          * - {main} replaced by relative path of main file as declared by '-main='
@@ -398,7 +385,7 @@ namespace MultilingualMarkdown {
          *
          * @return bool true if marker has been found at current place
          */
-        private function isMatching(string $marker): bool
+        public function isMatching(string $marker): bool
         {
             $markerLen = mb_strlen($marker);
             $content = mb_substr($this->lineBuf, $this->lineBufPos, $markerLen);

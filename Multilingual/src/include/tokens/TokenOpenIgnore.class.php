@@ -30,23 +30,22 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenStreamDirective.class.php';
+    require_once 'TokenOpenLanguage.class.php';
 
-    use MultilingualMarkdown\TokenStreamDirective;
+    use MultilingualMarkdown\TokenOpenLanguage;
     
     /**
      * .ignore(( directive token.
      */
-    class TokenIgnoreDirective extends TokenStreamDirective
+    class TokenOpenIgnore extends TokenOpenLanguage
     {
         public function __construct()
         {
-            parent::__construct(TokenType::OPEN_DIRECTIVE, '.ignore((', true);
+            parent::__construct('ignore');
         }
         public function __toString()
         {
             return '<directive> .ignore((';
         }
     }
-
 }

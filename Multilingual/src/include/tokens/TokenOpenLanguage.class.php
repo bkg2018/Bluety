@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenLanguageDirective class
+ * Multilingual Markdown generator - TokenOpenLanguage class
  *
  * This class represents a token for an opening language code .<code>(( directive. The language code
  * must have been declared in the .languages directive.
@@ -31,23 +31,37 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenStreamDirective.class.php';
+    require_once 'TokenBaseInline.class.php';
 
-    use MultilingualMarkdown\TokenStreamDirective;
+    use MultilingualMarkdown\TokenBaseInline;
 
     /**
      * .<code>(( directive token.
      * This kind of token is created by the .languages directive.
      */
-    class TokenLanguageDirective extends TokenStreamDirective
+    class TokenOpenLanguage extends TokenBaseInline
     {
+        private $language = ''; // language code from .languages directives
+
         public function __construct(string $language)
         {
+            $this->language = $language;
             parent::__construct(TokenType::OPEN_DIRECTIVE, ".$language((", true);
         }
         public function __toString()
         {
             return "<directive> .{$this->keyword}((";
+        }
+        public function processInput(object $lexer, object $filer, array &$tokens): bool
+        {
+            $this->skipSelf($filer);
+            $tokens[] = $this;
+            return $lexer->pushLanguage($this->language, $filer);
+        }
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->pushLanguage($this->language, $filer);
+            return true;
         }
     }
 }

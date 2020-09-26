@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenAllDirective class
+ * Multilingual Markdown generator - TokenOpenAll class
  *
  * This class represents a token for the .all(( directive.
  *
@@ -30,23 +30,22 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenStreamDirective.class.php';
+    require_once 'TokenOpenLanguage.class.php';
     
-    use MultilingualMarkdown\TokenStreamDirective;
+    use MultilingualMarkdown\TokenOpenLanguage;
     
     /**
      * .all(( directive token.
      */
-    class TokenAllDirective extends TokenStreamDirective
+    class TokenOpenAll extends TokenOpenLanguage
     {
         public function __construct()
         {
-            parent::__construct(TokenType::OPEN_DIRECTIVE, '.all((', true);
+            parent::__construct('all');
         }
         public function __toString()
         {
             return '<directive> .all((';
         }
     }
-
 }

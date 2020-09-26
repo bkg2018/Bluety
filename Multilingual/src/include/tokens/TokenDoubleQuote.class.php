@@ -30,20 +30,20 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenEscaper.class.php';
+    require_once 'TokenBaseEscaper.class.php';
 
-    use MultilingualMarkdown\TokenEscaper;
+    use MultilingualMarkdown\TokenBaseEscaper;
     
    /**
      * Class for the double quote escaper.
      * The token will skip over the text until the closing double quote
      * and send everything to outputs.
      */
-    class TokenDoubleQuote extends TokenEscaper
+    class TokenDoubleQuote extends TokenBaseEscaper
     {
         public function __construct()
         {
-            parent::__construct('``');
+            parent::__construct('"');
         }
         public function __toString()
         {

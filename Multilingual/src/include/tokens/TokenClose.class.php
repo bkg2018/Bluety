@@ -1,10 +1,9 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenEscapedText class
+ * Multilingual Markdown generator - TokenClose class
  *
- * This class represents a token for escaped text. Escaped text is surrounded by escaper tokens
- * and will be output as-is, without variables or directives interpretation.
+ * This class represents a token for the .)) ending directive which closes the streamed .xxxx(( directives.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -20,7 +19,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_escaped_text_class
+ * @package   mlmd_token_end_directive_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -31,28 +30,41 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenText.class.php';
+    require_once 'TokenBaseInline.class.php';
 
-    use MultilingualMarkdown\TokenText;
+    use MultilingualMarkdown\TokenBaseInline;
     
     /**
-     * Class for escaped text.
-     * Escaped text do not expand variables nor interpret directives.
+     * .)) directive token.
      */
-    class TokenEscapedText extends TokenText
+    class TokenClose extends TokenBaseInline
     {
-        public function __construct($content)
+        public function __construct()
         {
-            parent::__construct($content);
-            $this->type = TokenType::ESCAPED_TEXT;
+            parent::__construct(TokenType::CLOSE_DIRECTIVE, '.))', true);
         }
         public function __toString()
         {
-            return '<escaped text> ' .
-                (mb_strlen($this->content) < 40 ?
-                $this->content :
-                mb_substr($this->content, 0, 20) . '...' . mb_substr($this->content, -20));
+            return '<directive> .))';
+        }
+        // Store the token and  simulate language stacking (has no effect until outputs are actually done)
+        public function processInput(object $lexer, object $filer, array &$tokens): bool
+        {
+            $this->skipSelf($filer);
+            $tokens[] = $this;
+            $lexer->popLanguage($filer); // update current language stack in Lexer
+            return true;
+        }
+        // Closing directive will have Lexer processing all stored tokens if it empties the language stack.
+        public function ouputNow(object $lexer): bool
+        {
+            return ($lexer->getLanguageStackSize() <= 1);
+        }
+        // Output: have Lexer updating the current output language
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->popLanguage($filer);
+            return true;
         }
     }
-
 }

@@ -31,9 +31,9 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenEscaper.class.php';
+    require_once 'TokenBaseEscaper.class.php';
 
-    use MultilingualMarkdown\TokenEscaper;
+    use MultilingualMarkdown\TokenBaseEscaper;
     
     /**
      * Class for the code fence.
@@ -41,7 +41,7 @@ namespace MultilingualMarkdown {
      * by a language name. The token will skip over the reste of current line and
      * send everything to outputs while watching for ending fence.
      */
-    class TokenFence extends TokenEscaper
+    class TokenFence extends TokenBaseEscaper
     {
         public function __construct()
         {

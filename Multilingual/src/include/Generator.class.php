@@ -38,7 +38,6 @@ namespace MultilingualMarkdown {
     require_once 'Logger.interface.php';
     require_once 'Heading.class.php';
     require_once 'HeadingArray.class.php';
-    require_once 'Numbering.class.php';
     require_once 'FileUtilities.php';
     require_once 'Filer.class.php';
     require_once 'Lexer.class.php';
@@ -57,22 +56,18 @@ namespace MultilingualMarkdown {
         // Handling classes instances
         private $filer = null;                  /// Filer instance, input and output files handling
         private $lexer = null;                  /// Lexer instance, transform text into token list
-        private $numbering = null;              /// Numbering instance
         private $parser = null;                 /// Parser instance, interpret tokens
 
         // Settings
         private $outputModeName = '';           /// from -out command line argument
         private $numberingScheme = '';          /// from -numbering command line argument
+        private $waitLanguages = true;          /// wait for .languages directive in each file
         
-        // Prepared datas
-        private $allHeadingsArrays = [];        /// headings array for each input file
-
         // Initialize handlers and default settings
         public function __construct()
         {
             $this->filer = new Filer();
             $this->lexer = new Lexer();
-            $this->numbering = new Numbering('', $this);
             $this->parser = new Parser();
             $this->outputModeName = 'md';       // markdown links and toc style
             $this->numberingScheme = '';        // no numbering
@@ -182,6 +177,23 @@ namespace MultilingualMarkdown {
             $this->numberingScheme = $scheme;
         }
 
+        /**
+         * Set the 'wait .languages directive' flag.
+         * If this flag is set, each input file processing will ignore anything preceding the .languages
+         * directive. The languages are set by preprocessing all the input files before processing,
+         * so this flag will not make mlmd actually wait for .languages directives but it makes them
+         * mandatory.
+         * Flag set TRUE:  mlmd will ignore lines of text which precede .languages
+         * Flag set FALSE: mlmd will process lines of text which precede .languages
+         * As a corollary, if the flag is set to FALSE then only one .languages directive is necessary
+         * over the set of all input files, and if it is set to TRUE then input files not featuring
+         * a .languages directive will generate empty output because all lines will be ignored.
+         */
+        public function setWaitLanguages(bool $yes): void
+        {
+            $this->waitLanguages = $yes;
+        }
+        
         //------------------------------------------------------------------------------------------------------
         //MARK: TOOLS
         //------------------------------------------------------------------------------------------------------
@@ -209,69 +221,7 @@ namespace MultilingualMarkdown {
         public function preProcess(): bool
         {
             $this->filer->readyInputs();
-            unset($this->allHeadingsArrays);
-            $this->allHeadingsArrays = [];
-            Heading::init();// reset global headings numbering to 0
-            // Explore each input file ($this->filer is iterable and returns relative filenames and index)
-            foreach ($this->filer as $index => $relFilename) {
-                $filename = $this->filer->getInputFile($index); // full file path
-                if ($filename == null) {
-                    continue;
-                }
-                $file = fopen($filename, 'rb');
-                if ($file === false) {
-                    $this->error("could not open [$filename]", __FILE__, __LINE__);
-                    continue;
-                }
-                // create an array for headings of this file
-                $headingArray = new HeadingArray($relFilename);
-                // keep track of the line number for each heading
-                $curLine = 0;
-                // remember if the .languages directive has been read
-                $languageSet = false;
-                $languagesDirective = '.languages ';
-                $languagesDirectiveLength = strlen($languagesDirective);
-                // loop on each file line
-                do {
-                    $text = trim(fgets($file));
-                    $curLine += 1;
-                    // handle .languages directive
-                    if (strncasecmp($text, $languagesDirective, $languagesDirectiveLength) == 0) {
-                        $languageSet = mb_substr($text, $languagesDirectiveLength);
-                        $this->filer->setLanguagesFrom($languageSet);
-                    }
-                    // ignore lines before the .languages directive
-                    if ($languageSet === false) {
-                        continue;
-                    }
-                    // skip escaped lines (code fences, double back-ticks)
-                    $pos = strpos($text, '```');
-                    if ($pos !== false) {
-                        // escaped by double backticks+space / space+double backticks?
-                        if (($pos <= 2) || (mb_substr($text, $pos - 3, 3) != '`` ') || (mb_substr($text, $pos + 3, 3) != ' ``')) {
-                            do {
-                                $text = trim(fgets($this->inFile));
-                                $curLine += 1;
-                            } while (strpos($text, '```') === false);
-                        }
-                    } else {
-                        // store headings
-                        if (($text[0] ?? '') == '#') {
-                            $heading = new Heading($text, $curLine, $this);
-                            $headingArray[] = $heading;
-                        }
-                    }
-                } while (!feof($file));
-                fclose($file);
-
-                // force a level 1 object if no headings
-                if (count($headingArray) == 0) {
-                    $heading = new Heading('# ' . $relFilename, 1, $this);
-                    $headingArray[] = $heading;
-                }
-                $this->allHeadingsArrays[$relFilename] = $headingArray;
-                unset($headingArray);
-            } // next file
+            $this->lexer->readyHeadings($this->filer);
             return true;
         }
 
@@ -313,24 +263,16 @@ namespace MultilingualMarkdown {
          */
         public function process(int $index): bool
         {
-            if (!$this->filer->openFile($index)) {
+            $filer = &$this->filer;
+            $lexer = &$this->lexer;
+            if (!$filer->openFile($index)) {
                 return false;
             }
-            $this->filer->readyOutputs();
+            $lexer->readyFiler($filer);
 
-            /*//echo str_repeat('=', 120), "\n";
-            $paragraph = $this->filer->getNextParagraph();
-            while ($paragraph !== null) {
-                $lineNumber = $this->filer->getStartingLineNumber();
-                $tokens = $this->lexer->getTokens($paragraph, $lineNumber, $this);
-                foreach ($tokens as $index => $token) {
-                    $t = (string)$token;
-                    echo "$t\n";
-                }
-                echo "----- end of paragraph -----\n";
-                $paragraph = $this->filer->getNextParagraph();
-            }*/
-            
+            $trace = true;
+
+            $lexer->process($filer);
             
             $this->filer->closeOutput();
             $this->filer->closeInput();
@@ -338,10 +280,4 @@ namespace MultilingualMarkdown {
             return true;
         }
     }
-    $generator = new Generator();
-    $generator->addInputFile('../../testdata/test.mlmd');
-    $generator->setMainFilename("test.mlmd");
-    $generator->addInputFile('../../testdata/subdata/secondary.mlmd');
-    $generator->addInputFile('../../testdata/subdata/tertiary.mlmd');
-    $generator->processAllFiles();
 }

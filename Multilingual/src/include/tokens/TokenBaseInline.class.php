@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenStreamDirective class
+ * Multilingual Markdown generator - TokenBaseInline class
  *
  * This class represents a token for an opening directive of the .xxxx(( kind.
  *
@@ -30,9 +30,9 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenKeyworded.class.php';
+    require_once 'TokenBaseKeyworded.class.php';
 
-    use MultilingualMarkdown\TokenKeyworded;
+    use MultilingualMarkdown\TokenBaseKeyworded;
 
     /**
      * Streaming text directive token.
@@ -41,7 +41,7 @@ namespace MultilingualMarkdown {
      *
      * This class is not instanciated by itself but is base for actual directives tokens.
      */
-    class TokenStreamDirective extends TokenKeyworded
+    class TokenBaseInline extends TokenBaseKeyworded
     {
         public function __construct(int $type, string $keyword, bool $ignoreCase)
         {
@@ -49,7 +49,7 @@ namespace MultilingualMarkdown {
         }
         public function __toString()
         {
-            return '- FORBIDDEN: base TokenStreamDirective class, check Lexer code -';
+            return '- FORBIDDEN: base TokenBaseInline class, check Lexer code -';
         }
     }
 }
