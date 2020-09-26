@@ -378,13 +378,17 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Ready all headings by reading them from all input files.
+         * Ready all headings, numberings and languages by reading
+         * only related directives from all input files.
          */
-        public function readyHeadings(object $filer): void
+        public function preProcess(object $filer): void
         {
             unset($this->allHeadingsArrays);
+            unset($this->allNumberings);
             $this->allHeadingsArrays = [];
-            $languagesToken = $this->knownTokens['languages'];
+            $this->allNumberings = [];
+            $languagesToken = $this->knownTokens['languages']; // shortcut
+            $numberingToken = $this->knownTokens['numbering']; // shortcut
             Heading::init();// reset global headings numbering to 0
             // Explore each input file ($filer is iterable and returns relative filenames and index)
             foreach ($filer as $index => $relFilename) {
@@ -409,15 +413,20 @@ namespace MultilingualMarkdown {
                     if (!$text) {
                         break;
                     }
-                    // handle .languages directive
+                    // handle .languages directive before anything else
                     if ($languagesToken->identifyInBuffer($text, 0)) {
                         $languageSet = trim(mb_substr($text, $languagesToken->getLength()));
                         $this->setLanguagesFrom($languageSet, $filer);
                         continue;
                     }
-                    // ignore lines before the .languages directive
+                    // ignore any line before the .languages directive
                     if ($languageSet === false) {
                         continue;
+                    }
+                    // handle .numbering directive
+                    if ($numberingToken->identifyInBuffer($text,0)) {
+                        $numberingScheme = trim(mb_substr($text, $numberingToken->getLength()));
+                        $this->allNumberings[$relFilename] = new Numbering($numberingScheme, $this);
                     }
                     // skip escaped lines (code fences, double back-ticks)
                     $pos = strpos($text, '```');

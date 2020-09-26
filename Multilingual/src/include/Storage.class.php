@@ -198,17 +198,19 @@ namespace MultilingualMarkdown {
                 $c = mb_substr($this->buffer, $this->bufferPosition, 1);
             }
             // adjust previous 3 characters array
-            if ($this->currentChars[1] == "\n") {
+            if (($this->currentChars[1] ?? '') == "\n") {
                 $this->curLine += 1;
             }
-            array_pop($this->currentChars);         // unset [2]
+            if (count($this->currentChars) > 2) {
+                array_pop($this->currentChars);         // unset [2]
+            }
             array_unshift($this->currentChars, $c); // insert [0]
             return $this->currentChars[0];
         }
         /**
          * Look at previous UTF-8 characters.
          * Cannot read more than further the beginning of file or the beginning
-         * of current buffer positions. The buffer at most up to 3072 characters before current
+         * of current buffer position. The buffer is at most up to 3072 characters before current
          * position so it is safe to request for a lot of previous characters up to this limit
          * but at the beginning the buffer will only have as much as the 4096 first
          * characters of file.
@@ -227,14 +229,14 @@ namespace MultilingualMarkdown {
             return mb_substr($this->buffer, $startPosition, $length);            
         }
         /**
-         * Read a number of characters including the current one and return the string.
-         * Return null if already at end of file. The current position is set on first
-         * character past the string.
+         * Read a string with a number of characters starting with the current one.
+         * Return null if already at end of file. The final current position is set 
+         * on the first character past the string.
          */
         public function getString(int $charsNumber): ?string
         {
             // read char[0]
-            $result = $this->currentChar;
+            $result = $this->currentChar[0] ?? '';
             $c = $this->getNextChar();
             // append chars [1..N-1]
             for ($i = 1; ($i < $charsNumber) && ($c != null); $i += 1) {
@@ -245,7 +247,7 @@ namespace MultilingualMarkdown {
         }
         /**
          * Return next UTF-8 characters from current buffer, return null if end of file.
-         * Do not advance reading position, just send back future cahracters to read.
+         * Do not advance reading position, just send back future characters to read.
          * If the requested number of characters is not available, return what's left.
          *
          * @param int $charsNumber the number of characters to return
