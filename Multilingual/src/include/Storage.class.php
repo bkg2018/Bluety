@@ -44,9 +44,7 @@ namespace MultilingualMarkdown {
         private $bufferPosition = 0;            /// current pos in line buffer (utf-8)
         private $bufferLength = 0;              /// current line size in characters (utf-8)
         private $curLine = 0;                   /// current line number from input file
-        private $currentChar = '';                  /// current character in input
-        private $previousChar = '';                 /// previous value of $currentChar
-        private $prePreviousChar = '';              /// previous previous value of $currentChar
+        private $currentChars = [];             /// array of last 3 characters: [0] = current, [1] = previous, [2] = pre-previous
 
         // Output files and writing status
         private $lastWritten = [];              /// last  character written to file
@@ -107,7 +105,8 @@ namespace MultilingualMarkdown {
                     // return null now if buffer empty
                     if (empty($this->buffer)) {
                         $this->bufferLength = 0;
-                        $this->currentChar = null;
+                        array_pop($this->currentChars);
+                        array_unshift($this->currentChars, null);
                         return $nullGuard;
                     }
                     // end of read, buffer not empty
@@ -124,9 +123,8 @@ namespace MultilingualMarkdown {
             // init status and characters
             $this->bufferPosition = 0;
             $this->bufferLength = mb_strlen($this->buffer);
-            $this->prePreviousChar = $this->previousChar ?? '';
-            $this->previousChar = $this->currentChar ?? '';
-            $this->currentChar = \mb_substr($this->buffer, 0, 1);
+            array_pop($this->currentChars);
+            array_unshift($this->currentChars, \mb_substr($this->buffer, 0, 1));
             return $this->buffer;
         }
 
@@ -188,13 +186,13 @@ namespace MultilingualMarkdown {
         {
             // immediate return if ready
             if ($this->bufferPosition < $this->bufferLength) {
-                return $this->currentChar;
+                return $this->currentChars[0];
             }
-            // need to read at least 1 char
+            // need to append at least 1 char from input
             $this->fetchCharacters(1);
             if ($this->bufferPosition < $this->bufferLength) {
-                $this->currentChar = mb_substr($this->buffer, $this->bufferPosition, 1);
-                return $this->currentChar;
+                $this->currentChars[0] = mb_substr($this->buffer, $this->bufferPosition, 1);
+                return $this->currentChars[0];
             }
             return null;
         }
@@ -206,7 +204,7 @@ namespace MultilingualMarkdown {
          */
         public function prevChar(): ?string
         {
-            return $this->previousChar;
+            return $this->currentChars[1] ?? null;
         }
         /**
          * Return the previous previous UTF-8 character .
@@ -215,7 +213,7 @@ namespace MultilingualMarkdown {
          */
         public function prePrevChar(): ?string
         {
-            return $this->prePreviousChar;
+            return $this->currentChars[2] ?? null;
         }
         /**
          * Return the next UTF-8 character from current buffer, return null if end of file.
@@ -224,21 +222,21 @@ namespace MultilingualMarkdown {
          */
         public function nextChar(): ?string
         {
-            $this->prePreviousChar = $this->previousChar;
-            $this->previousChar = $this->currentChar;
-            if ($this->previousChar == "\n") {
+            $this->fetchCharacters(1);
+            // EOF?
+            if ($this->bufferPosition >= $this->bufferLength - 1) {
+                $c = null;;
+            } else {
+                $this->bufferPosition += 1;
+                $c = mb_substr($this->buffer, $this->bufferPosition, 1);
+            }
+            // adjust previous 3 characters array
+            if ($this->currentChars[1] == "\n") {
                 $this->curLine += 1;
             }
-            // end of file?
-            $this->fetchCharacters(1);
-            if ($this->bufferPosition >= $this->bufferLength - 1) {
-                $this->currentChar = null;
-            } else {
-                // get next utf-8 char
-                $this->bufferPosition += 1;
-                $this->currentChar = mb_substr($this->buffer, $this->bufferPosition, 1);
-            }
-            return $this->currentChar;
+            array_pop($this->currentChars);         // unset [2]
+            array_unshift($this->currentChars, $c); // insert [0]
+            return $this->currentChars[0];
         }
 
         /**
