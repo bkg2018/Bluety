@@ -221,7 +221,7 @@ namespace MultilingualMarkdown {
         public function preProcess(): bool
         {
             $this->filer->readyInputs();
-            $this->lexer->readyHeadings($this->filer);
+            $this->lexer->preProcess($this->filer);
             return true;
         }
 

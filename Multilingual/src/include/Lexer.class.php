@@ -462,8 +462,8 @@ namespace MultilingualMarkdown {
 
         /**
          * Set languages list from a parameter string.
-         * This is a relay to LanguagesList::setFrom().
-         * Also reprograms output files.
+         * This is a relay to LanguagesList::setFrom() and creates tokens for
+         * each language opening directive.
          *
          * @param string $parameters  the parameter string
          * @param object $filer       the Filer object
@@ -475,13 +475,13 @@ namespace MultilingualMarkdown {
         {
             $result = $this->languageList->setFrom($parameters);
             if ($result) {
-                $filer->readyOutputs($this->languageList);
                 foreach ($this->languageList as $index => $language) {
                     if (!\array_key_exists($language['code'], $this->knownTokens)) {
                         $this->knownTokens[$language['code']] = new TokenOpenLanguage($language['code']);    
                     }
                 }
                 $this->languageSet = isset($index);
+                $filer->readyOutputs($this->languageList);
             }
             return $result;
         }
