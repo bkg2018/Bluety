@@ -221,7 +221,7 @@ namespace MultilingualMarkdown {
         public function preProcess(): bool
         {
             $this->filer->readyInputs();
-            $this->lexer->readyHeadings($this->filer);
+            $this->lexer->preProcess($this->filer);
             return true;
         }
 
@@ -263,16 +263,12 @@ namespace MultilingualMarkdown {
          */
         public function process(int $index): bool
         {
-            $filer = &$this->filer;
-            $lexer = &$this->lexer;
-            if (!$filer->openFile($index)) {
+            if (!$this->filer->openFile($index)) {
                 return false;
             }
-            $lexer->readyFiler($filer);
+            $this->lexer->readyFiler($this->filer);
 
-            $trace = true;
-
-            $lexer->process($filer);
+            $this->lexer->process($this->filer);
             
             $this->filer->closeOutput();
             $this->filer->closeInput();

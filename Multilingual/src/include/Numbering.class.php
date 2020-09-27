@@ -202,18 +202,20 @@ namespace MultilingualMarkdown {
             }
             // get all definitions and interpret each one
             $defs = explode(',', $scheme);
+            $level = 0;
             foreach ($defs as $def) {
                 $parts = explode($this->definitionSeparator, $def);
-                if (count($parts) != 4) {
+                /*if (count($parts) < 3) {
                     if ($logger) {
                         $logger->error("invalid .numbering scheme '$def': ignored");
                     }
                     continue;
-                }
-                $level = $parts[0];
-                $prefix = $parts[1];
-                $symbol = $parts[2];
-                $separator = $parts[3];
+                }*/
+                $prevLevel = $level;
+                $level = $parts[0] ?? ($prevLevel + 1);
+                $prefix = $parts[1] ?? '';
+                $symbol = $parts[2] ?? '1';
+                $separator = $parts[3] ?? '';
                 if ($level < '1' || $level > '9') {
                     if ($logger) {
                         $logger->error("invalid .numbering scheme '$def': level must be between 1 and 9");

@@ -402,7 +402,7 @@ namespace MultilingualMarkdown {
         public function openFile(int $index): bool
         {
             if ($index < 0 || $index > $this->getInputFilesMaxIndex()) {
-                return $this->error("invalid indexx $index for file", __FILE__, __LINE__);
+                return $this->error("invalid index $index for file", __FILE__, __LINE__);
             }
             // open or exit
             $this->closeInput();
