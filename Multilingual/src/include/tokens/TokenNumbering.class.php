@@ -68,8 +68,9 @@ namespace MultilingualMarkdown {
                 }
                 $params .= $curChar;
             } while ($curChar !== null);
-            // set the numbering scheme in Lexer
-            return $lexer->setNumberingFrom($params, $filer);
+            // set the numbering scheme in Lexer ** already done by Lexer preprocessing
+            // return $lexer->setNumberingFrom($params, $filer);
+            return true;
         }    
     }
 }

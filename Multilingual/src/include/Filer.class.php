@@ -391,6 +391,14 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Tell if a file is currently opened and output files can be prepared.
+         */
+        public function hasOpenedFile()
+        {
+            return ($this->inFile != null);
+        }
+
+        /**
          * Open one of the input files and prepare the output filename template.
          * If another file is already opened for input, it is closed.
          *

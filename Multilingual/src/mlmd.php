@@ -94,12 +94,12 @@ require_once 'include/Generator.class.php';
 
 //MARK: CLI launch
 
-// Create the generator instance
+/// Create the generator instance
 mb_internal_encoding('UTF-8');
 $generator = new \MultilingualMarkdown\Generator();
 
-// array of parameters: 'name' => [(public) function to call on the value, 'type' of value]
-// if function starts with a ':', call global function, else call Generator member function.
+/// Array of parameters: 'name' => [(public) function to call on the value, 'type' of value]
+/// if function starts with a ':', call global function, else call Generator member function.
 $params = [
     '-i'            => ['addInputFile',     'file'],    // set one input file
     '-main'         => ['setMainFilename',  'file'],    // set a main filename

@@ -60,7 +60,6 @@ namespace MultilingualMarkdown {
 
         // Settings
         private $outputModeName = '';           /// from -out command line argument
-        private $numberingScheme = '';          /// from -numbering command line argument
         private $waitLanguages = true;          /// wait for .languages directive in each file
         
         // Initialize handlers and default settings
@@ -70,7 +69,6 @@ namespace MultilingualMarkdown {
             $this->lexer = new Lexer();
             $this->parser = new Parser();
             $this->outputModeName = 'md';       // markdown links and toc style
-            $this->numberingScheme = '';        // no numbering
         }
 
         //------------------------------------------------------------------------------------------------------
@@ -174,7 +172,7 @@ namespace MultilingualMarkdown {
          */
         public function setNumbering(string $scheme): void
         {
-            $this->numberingScheme = $scheme;
+            $this->lexer->setNumbering($scheme);
         }
 
         /**
@@ -266,7 +264,7 @@ namespace MultilingualMarkdown {
             if (!$this->filer->openFile($index)) {
                 return false;
             }
-            $this->lexer->readyFiler($this->filer);
+            $this->lexer->readyOutputs($this->filer);
 
             $this->lexer->process($this->filer);
             

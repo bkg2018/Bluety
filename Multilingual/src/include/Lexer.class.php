@@ -77,6 +77,7 @@ namespace MultilingualMarkdown {
         private $languageStack = [];    /// stack of tokens names for languages switching, including .all, .default and .ignore
         private $curLanguage = 'all';   /// name of current language token (index in $knownTokens)
         private $ignoreLevel = 0;       /// number of opened 'ignore', do not output anything when this variable is not 0
+        private $numberingScheme = '';  /// default numbering scheme from -numbering command line argument
 
         public function __construct()
         {
@@ -370,9 +371,9 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Ready output files given current languages settings.
+         * Ready output files for current languages settings and opened input file.
          */
-        public function readyFiler(object $filer): bool
+        public function readyOutputs(object $filer): bool
         {
             return $filer->readyOutputs($this->languageList);
         }
@@ -458,6 +459,14 @@ namespace MultilingualMarkdown {
                 $this->allHeadingsArrays[$relFilename] = $headingArray;
                 unset($headingArray);
             } // next file
+            // check every file gets a numbering if there is a default one
+            if (!empty($this->numberingScheme)) {
+                foreach ($filer as $index => $relFilename) {
+                    if (! \array_key_exists($relFilename, $this->allNumberings)) {
+                        $this->allNumberings[$relFilename] = new Numbering($this->numberingScheme, $this);
+                    }
+                }
+            }
         }
 
         /**
@@ -475,15 +484,29 @@ namespace MultilingualMarkdown {
         {
             $result = $this->languageList->setFrom($parameters);
             if ($result) {
-                $filer->readyOutputs($this->languageList);
                 foreach ($this->languageList as $index => $language) {
                     if (!\array_key_exists($language['code'], $this->knownTokens)) {
                         $this->knownTokens[$language['code']] = new TokenOpenLanguage($language['code']);    
                     }
                 }
                 $this->languageSet = isset($index);
+                if ($filer->hasOpenedFile()) {
+                    $filer->readyOutputs($this->languageList);
+                }
             }
             return $result;
+        }
+
+        /**
+         * Set the numbering scheme.
+         *
+         * @param string $scheme a string containing numbering scheme.
+         *
+         * @return nothing
+         */
+        public function setNumbering(string $scheme): void
+        {
+            $this->numberingScheme = $scheme;
         }
 
         /**
@@ -493,9 +516,13 @@ namespace MultilingualMarkdown {
          */
         public function setNumberingFrom(string $parameters, object $filer): bool
         {
-            $relFilename = '';
-            foreach ($filer as $index => $relFilename) {
-                $this->numbering = new Numbering($parameters, $this);
+            // only if an iteration is currently running on $filer
+            if ($filer->valid()) {
+                $relFilename = $filer->current();
+                if (\array_key_exists($relFilename, $this->allNumberings)) {
+                    unset($this->allNumberings[$relFilename]);
+                }
+                $this->allNumberings[$relFilename] = new Numbering($parameters, $this);
             }
             return false;
         }
