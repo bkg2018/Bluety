@@ -40,7 +40,7 @@ namespace MultilingualMarkdown {
     class Storage
     {
         // Input file and reading status
-        private $buffer = null;                 /// current line content
+        private $buffer = '';                   /// current line content
         private $bufferPosition = 0;            /// current pos in line buffer (utf-8)
         private $bufferLength = 0;              /// current line size in characters (utf-8)
         private $curLine = 0;                   /// current line number from input file
@@ -76,6 +76,7 @@ namespace MultilingualMarkdown {
             \rewind($file);
             if (isset($this->buffer)) {
                 unset($this->buffer);
+                $this->buffer = '';
             };
             $this->bufferLength = 0;
             $this->bufferPosition = 0;

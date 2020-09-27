@@ -462,8 +462,8 @@ namespace MultilingualMarkdown {
 
         /**
          * Set languages list from a parameter string.
-         * This is a relay to LanguagesList::setFrom() and creates tokens for
-         * each language opening directive.
+         * This is a relay to LanguagesList::setFrom().
+         * Also reprograms output files.
          *
          * @param string $parameters  the parameter string
          * @param object $filer       the Filer object
@@ -475,13 +475,13 @@ namespace MultilingualMarkdown {
         {
             $result = $this->languageList->setFrom($parameters);
             if ($result) {
+                $filer->readyOutputs($this->languageList);
                 foreach ($this->languageList as $index => $language) {
                     if (!\array_key_exists($language['code'], $this->knownTokens)) {
                         $this->knownTokens[$language['code']] = new TokenOpenLanguage($language['code']);    
                     }
                 }
                 $this->languageSet = isset($index);
-                $filer->readyOutputs($this->languageList);
             }
             return $result;
         }
@@ -493,86 +493,11 @@ namespace MultilingualMarkdown {
          */
         public function setNumberingFrom(string $parameters, object $filer): bool
         {
-            //$this->numbering = new Numbering($parameters, $this);
+            $relFilename = '';
             foreach ($filer as $index => $relFilename) {
-
+                $this->numbering = new Numbering($parameters, $this);
             }
             return false;
         }
-
-        /**
-         * Analyze an UTF-8 buffer content and transform it into an array of successive tokens.
-         * The last token in a buffer is always EMPTY_LINE and no other empty line can be located in the buffer.
-         *
-         * @param string $buffer    the UTF-8 content buffer to transform
-         * @param int    $line      [IN/OUT] the initial line number for buffer content
-         * @param object $logger    optional logger object with error/warning functions
-         *
-         * @return array a Token array, can be empty
-         *
-        public function getTokens(string &$buffer, int &$line, ?Logger $logger): array
-        {
-            $pos = 0;
-            $maxPos = mb_strlen($buffer) - 1;   // last authorized position in buffer
-            $tokens = [];                       // array of tokens
-            $continue = true;                   // stop on an empty line, else continue
-            $text = '';                         // current text outside of tokens
-            $prevToken = null;                  // previous token copy, for any needed test
-            $this->debugEcho("\n[$line]: ");
-            do {
-                $token = $this->getToken($buffer, $pos);
-                if ($token) {
-                    // if there is awaiting text, store it in a text or escaped text token
-                    if (!empty($text)) {
-                        if (($prevToken != null) && $prevToken->isType(TokenType::ESCAPER)) {
-                            // is new token same escaper ?
-                            if ($token->isType($prevToken->getType())) {
-                                $tokens[] = new TokenEscapedText($text);
-                                $tokens[] = $token;
-                                $prevToken = null;
-                                $text = '';
-                                $pos += $token->getLength();
-                            } else {
-                                // not the ending escaper, just keep storing in $text
-                                $text .= mb_substr($buffer, $pos, 1);
-                                $pos += 1;
-                            }
-                        } else {
-                            // previous token was not a text escaper: store a text token and then the new token
-                            $tokens[] = new TokenText($text);
-                            $tokens[] = $token;
-                            $prevToken = $token;
-                            $text = '';
-                            $pos += $token->getLength();
-                        }
-                    }
-
-                    //TODO:  token processing above and below?
-                    
-                    // now store token after processing from it
-                    $pos += $token->getLength();
-                    $processed = $token->processInput($buffer, $pos);
-                    // processInput may return null, the token itself, or an array of tokens
-                    if (\is_array($processed)) {
-                        $tokens = array_merge($tokens, $processed);
-                    } else {
-                        $tokens[] = $token;
-                    }
-                    $continue = !$token->isType(TokenType::EMPTY_LINE);
-                    // adjust line number if needed
-                    if ($token->isType([TokenType::EOL,TokenType::EMPTY_LINE])) {
-                        $line += 1;
-                        $this->debugEcho("\n[$line]: ");
-                    }
-                } else {
-                    // no token found, store in $text to build a text token later.
-                    $c = mb_substr($buffer, $pos, 1);
-                    $text .= $c;
-                    $pos += 1;
-                    $this->debugEcho($c);
-                }
-            } while (($pos <= $maxPos) && $continue);
-            return $tokens;
-        }*/
     }
 }

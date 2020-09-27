@@ -507,7 +507,7 @@ Generated files will be named with a `.md` extension for the `en` language and w
 
 The `.numbering` directive defines the numbering scheme for current file headings and TOC lines. The syntax is identical to the `-numbering` command line argument.
 
-> WARNING: If a `-numbering` command line argument has been given, the `.numbering` directive will have no effect.
+> WARNING: the `-numbering` command line argument has global effect on all files, while the `.numbering` directive only applies to the file where it appears.
 
 ### Syntax
 

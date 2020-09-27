@@ -3,6 +3,7 @@ This MLMD template is a test file.
 Lines preceeding the `.languages` directive are ignored.
 
 .languages fr,en main=en
+.numbering 1:.((Chapter .)).fr((Chapitre .)):&I:-,2::1:.,3::1
 
 # .((English File Title.)).fr((Titre de fichier Français.)) MLMD
 
