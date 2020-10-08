@@ -101,6 +101,7 @@ namespace MultilingualMarkdown {
          */
         protected function skipSelf(object $filer): ?string
         {
+            return null;
         }
 
         /**
@@ -176,6 +177,7 @@ namespace MultilingualMarkdown {
          */
         public function output(object $lexer, object $filer): bool
         {
+            
             return true;
         }
 

@@ -46,7 +46,7 @@ namespace MultilingualMarkdown {
             if ($this->curIndex < count($this->allLanguages)) {
                 return $this->allLanguages[$this->curIndex];
             }
-            \trigger_error("Invalid current index in language list", E_ERROR);
+            \trigger_error("Invalid current index in language list", E_USER_ERROR);
         }
         public function key()
         {
@@ -72,7 +72,7 @@ namespace MultilingualMarkdown {
             if (\array_key_exists($this->allLanguages, $position)) {
                 $this->curIndex = $position;
             } else {
-                \trigger_error("Invalid position $position in language list", E_ERROR);
+                \trigger_error("Invalid position $position in language list", E_USER_ERROR);
             }
         }
         // ArrayAccess interface

@@ -47,12 +47,6 @@ namespace MultilingualMarkdown {
         {
             return '<directive> .((';
         }
-        public function processInput(object $lexer, object $filer, array &$tokens): bool
-        {
-            $this->skipSelf($filer);
-            $tokens[] = $this;
-            return $lexer->pushLanguage('default', $filer);
-        }
         public function output(object $lexer, object $filer): bool
         {
             $lexer->pushLanguage('default', $filer);

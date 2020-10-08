@@ -1,9 +1,20 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenSingleBacktick class
+ * Multilingual Markdown generator - TokenEscaperTripleBacktick class
  *
- * This class represents a token for a single back-tick character around escaped text.
+ * This class represents a token for a triple back-tick sequence around escaped text. Normaly this
+ * should be only used by code fences at the beginning of lines, but using a token for triple backtick
+ * handles wrong syntax where triple `is used within text.
+ * 
+ * Without this token :
+ *      text ```escaped text```text
+ * becomes :
+ *      <text ><double backtick ``(`escaped text)``><single backtick `(text   *** not closed until next ``
+ *
+ * With the triple backtick token :
+ *      <text><triple backtick ```(escaped text)```><text>
+ * this token must be checked after code fence but before double-backtick token.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +30,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_single_backtick_class
+ * @package   mlmd_token_triple_backtick_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -35,19 +46,15 @@ namespace MultilingualMarkdown {
     use MultilingualMarkdown\TokenBaseEscaper;
     
     /**
-     * Class for the single back-tick escaper.
+     * Class for the double back-tick escaper.
      * The token will skip over the text until the closing double back-tick
      * and send everything to outputs.
      */
-    class TokenSingleBacktick extends TokenBaseEscaper
+    class TokenEscaperTripleBacktick extends TokenBaseEscaper
     {
         public function __construct()
         {
-            parent::__construct('`');
-        }
-        public function __toString()
-        {
-            return '<escape> `';
+            parent::__construct('```');
         }
     }
 }

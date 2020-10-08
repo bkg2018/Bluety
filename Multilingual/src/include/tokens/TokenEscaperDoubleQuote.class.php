@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenDoubleBacktick class
+ * Multilingual Markdown generator - TokenEscaperDoubleQuote class
  *
- * This class represents a token for a double back-tick sequence around escaped text.
+ * This class represents a token for a double quote escaper surrounding escaped text.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +19,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_double_backtick_class
+ * @package   mlmd_token_double_quote_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -34,21 +34,17 @@ namespace MultilingualMarkdown {
 
     use MultilingualMarkdown\TokenBaseEscaper;
     
-    /**
-     * Class for the double back-tick escaper.
-     * The token will skip over the text until the closing double back-tick
+   /**
+     * Class for the double quote escaper.
+     * The token will skip over the text until the closing double quote
      * and send everything to outputs.
      */
-    class TokenDoubleBacktick extends TokenBaseEscaper
+    class TokenEscaperDoubleQuote extends TokenBaseEscaper
     {
         public function __construct()
         {
-            parent::__construct('``');
+            parent::__construct('"');
         }
-        public function __toString()
-        {
-            return '<escape> ``';
-        }
-
     }
+
 }

@@ -42,11 +42,12 @@ namespace MultilingualMarkdown {
     require_once('tokens/TokenClose.class.php');
     require_once('tokens/TokenEmptyLine.class.php');
     require_once('tokens/TokenEOL.class.php');
-    require_once('tokens/TokenSingleBacktick.class.php');
-    require_once('tokens/TokenDoubleBacktick.class.php');
-    require_once('tokens/TokenFence.class.php');
-    require_once('tokens/TokenDoubleQuote.class.php');
-    require_once('tokens/TokenSpaceEscape.class.php');
+    require_once('tokens/TokenEscaperSingleBacktick.class.php');
+    require_once('tokens/TokenEscaperDoubleBacktick.class.php');
+    require_once('tokens/TokenEscaperTripleBacktick.class.php');
+    require_once('tokens/TokenEscaperFence.class.php');
+    require_once('tokens/TokenEscaperDoubleQuote.class.php');
+    require_once('tokens/TokenEscaperSpace.class.php');
     // on demand directives
     require_once('tokens/TokenText.class.php');             // text outside/between directives
     require_once('tokens/TokenOpenLanguage.class.php');     // .fr((  .en((  etc created when applying .languages directive
@@ -78,6 +79,8 @@ namespace MultilingualMarkdown {
         private $curLanguage = 'all';   /// name of current language token (index in $knownTokens)
         private $ignoreLevel = 0;       /// number of opened 'ignore', do not output anything when this variable is not 0
         private $numberingScheme = '';  /// default numbering scheme from -numbering command line argument
+        private $storeText = false;     /// flag for current character, can be changed by token input processing
+        private $currentChar = '';      /// current character, can be changed by token input processing
 
         public function __construct()
         {
@@ -88,8 +91,8 @@ namespace MultilingualMarkdown {
 
             // streamed language directives
             $this->knownTokens['all']        = new TokenOpenAll();                   ///  .all((
-            $this->knownTokens['default']    = new TokenOpenDefault('');             ///  .((
-            $this->knownTokens[]             = new TokenOpenDefault('default');      ///  .default((, identical to .((
+            $this->knownTokens['']           = new TokenOpenDefault('');             ///  .((
+            $this->knownTokens['default']    = new TokenOpenDefault('default');      ///  .default((, identical to .((
             $this->knownTokens['ignore']     = new TokenOpenIgnore();                ///  .ignore((
             $this->knownTokens['close']      = new TokenClose();                     ///  .))
 
@@ -98,11 +101,12 @@ namespace MultilingualMarkdown {
             $this->knownTokens['eol']        = new TokenEOL();                       ///  \n, must be checked later than TokenEmptyLine
 
             // escaped text streamed directives, derived from TokenBaseEscaper
-            $this->knownTokens[]             = new TokenDoubleQuote();               ///  "
-            $this->knownTokens[]             = new TokenFence();                     ///  ```
-            $this->knownTokens[]             = new TokenDoubleBacktick();            ///  `` - must be checked later than TokenFence
-            $this->knownTokens[]             = new TokenSingleBacktick();            ///  `  - must be checked later than TokenDoubleBacktick
-            $this->knownTokens[]             = new TokenSpaceEscape();               ///  4 spaces
+            $this->knownTokens['"']          = new TokenEscaperDoubleQuote();               ///  "
+            $this->knownTokens['```c']       = new TokenEscaperFence();                     ///  ```
+            $this->knownTokens['```']        = new TokenEscaperTripleBacktick();            ///  ``` - must be checked later than TokenEscaperFence
+            $this->knownTokens['``']         = new TokenEscaperDoubleBacktick();            ///  `` - must be checked later than TokenEscaperTripleBacktick
+            $this->knownTokens['`']          = new TokenEscaperSingleBacktick();            ///  `  - must be checked later than TokenEscaperDoubleBacktick
+            $this->knownTokens['    ']       = new TokenEscaperSpace();               ///  4 spaces
 
             // these tokens can be instanciated more than once:
             //$this->knownTokens[] = new TokenOpenLanguage($language);
@@ -113,6 +117,25 @@ namespace MultilingualMarkdown {
 
         }
 
+        /**
+         * Set/Clear the flag to store current character in current text flow.
+         */
+        public function setStoreText(bool $yes): void
+        {
+            $this->storeText = $yes;
+        }
+
+        /**
+         * Set current character.
+         */
+        public function setCurrentChar(string $char): void
+        {
+            $this->currentChar = $char;
+        }
+
+        /**
+         * 
+         */
         
 
         /**
@@ -161,34 +184,25 @@ namespace MultilingualMarkdown {
          */
         public function output(object &$filer, array &$allTokens)
         {
-            // debug trace
-            foreach ($allTokens as $token) {
-                echo (string)$token . "\n";
-            }
-
             foreach ($allTokens as $token) {
                 if (!$token->output($this, $filer)) {
                     return false;
                 }
             }
-            $key = array_key_last($allTokens);
-            while ($key !== null) {
-                unset($allTokens[$key]);
-                $key = array_key_last($allTokens);
-            }
+            unsetArrayContent($allTokens);
             return true;
         }
 
         /**
          * Debugging echo of current character and line info.
-         * To activate this echo, set the "debug" environment variable to "1".
+         * To activate this echo, set the "debug" environment variable to "1" before launching php.
          *
          * @return nothing
          */
-        private function debugEcho(string $c): void
+        private function debugEcho(string $char): void
         {
             if (getenv("debug") == "1") {
-                echo $c;
+                echo $char;
             }
         }
 
@@ -199,18 +213,21 @@ namespace MultilingualMarkdown {
          */
         public function process(object $filer): bool
         {
-            $c = $filer->getCurChar();  /// current character (between tokens)
+            $relFilename = $filer->current();
+            $this->currentChar = $filer->getCurrentChar();  /// current character (between tokens)
             $text = '';                 /// current text out of tokens
             $emptyText = true;
             $allTokens = [];            /// current token sequence to execute
             if ($this->waitLanguages) {
                 $this->languageSet = false;
             }
-            while ($c != null) {
-                $storeText = false; // store current character in $text temporary buffer
+            while ($this->currentChar != null) {
+                echo $this->currentChar;
+                $this->storeText = false; // store current character in $text temporary buffer
                 $resetText = false; // empty $text temporary buffer
                 $token = null;
-                switch ($c) {
+                $curLineNumber = $filer->getCurrentLineNumber();
+                switch ($this->currentChar) {
                     case '`':
                     case '"':
                         if ($this->languageSet) {
@@ -218,9 +235,9 @@ namespace MultilingualMarkdown {
                             $token = $this->fetchToken($filer);
                             if ($token === null) {
                                 if ($trace) {
-                                    $filer->error("unrecognized escape character [$c] in text, should translate into a token", __FILE__, __LINE__);
+                                    $filer->error("unrecognized escape character [{$this->currentChar}] in text, should translate into a token", __FILE__, __LINE__);
                                 }
-                                $storeText = true;
+                                $this->storeText = true;
                             }
                         } 
                         break;
@@ -228,9 +245,19 @@ namespace MultilingualMarkdown {
                         // eliminate trivial case (not preceded by EOL)
                         $prevChar = $filer->getPrevChar();
                         if ($prevChar != "\n") {
-                            $storeText = true;
+                            $this->storeText = true;
                         } else {
-                            //TODO: heading
+                            /*// may have to store previous text now
+                            if (!$emptyText) {
+                                $allTokens[] = new TokenText($text);
+                                $text = '';
+                                $emptyText = true;
+                            }*/
+                            $headingsArray = $this->allHeadingsArrays[$relFilename];
+                            $heading = $headingsArray->findByLine($filer->getCurrentLineNumber());
+                            if ($heading !== null) {
+                                $token = new TokenHeading($heading);
+                            }
                         }
                         break;
                     case '.':
@@ -239,7 +266,7 @@ namespace MultilingualMarkdown {
                         if (($nextChar != ' ') && ($nextChar != "\n") && ($nextChar != "\t")) {
                             $token = $this->fetchToken($filer);
                             if ($token == null) {
-                                $storeText = $this->languageSet;
+                                $this->storeText = $this->languageSet;
                             } else {
                                 // before .languages directive, ignore everything but the directive
                                 if (!$this->languageSet && !$token->identifyInBuffer('.languages', 0)) {
@@ -247,13 +274,13 @@ namespace MultilingualMarkdown {
                                 }
                             }
                         } else {
-                            $storeText = $this->languageSet;
+                            $this->storeText = $this->languageSet;
                         }
                         break;
                     case '':
                         break;
                     default:
-                        $storeText = $this->languageSet;
+                        $this->storeText = $this->languageSet;
                         break;
                 }
                 // handle token if found one
@@ -270,14 +297,14 @@ namespace MultilingualMarkdown {
                         $this->output($filer, $allTokens);
                     }
                 }
-                if ($storeText) {
-                    $text .= $c;
+                if ($this->storeText) {
+                    $text .= $this->currentChar;
                     $emptyText = false;
                 } else if ($resetText) {
                     $text = '';
                     $emptyText = true;
                 }
-                $c = $filer->getNextChar();
+                $this->currentChar = $filer->getNextChar();
             }
             // finish with anything left
             if (!$emptyText) {
@@ -298,7 +325,10 @@ namespace MultilingualMarkdown {
         public function pushLanguage(string $name, object &$filer): bool
         {
             // name must exist as an index
-            if (!\in_array($name, $this->knownTokens)) {
+            if (empty($name)) {
+                $name = 'default';
+            }
+            if (\array_key_exists($name, $this->knownTokens)) {
                 array_push($this->languageStack, $this->curLanguage);
                 $this->curLanguage = $name;
                 // handle 'ignore'
@@ -310,6 +340,7 @@ namespace MultilingualMarkdown {
                 // update Filer status (will be ignored if ignore level > 0)
                 return $filer->setLanguage($this->languageList, $name);
             }
+            $filer->error("unknown language '$name'");
             return false;
         }
 
@@ -384,10 +415,8 @@ namespace MultilingualMarkdown {
          */
         public function preProcess(object $filer): void
         {
-            unset($this->allHeadingsArrays);
-            unset($this->allNumberings);
-            $this->allHeadingsArrays = [];
-            $this->allNumberings = [];
+            resetArray($this->allHeadingsArrays);
+            resetArray($this->allNumberings);
             $languagesToken = $this->knownTokens['languages']; // shortcut
             $numberingToken = $this->knownTokens['numbering']; // shortcut
             Heading::init();// reset global headings numbering to 0

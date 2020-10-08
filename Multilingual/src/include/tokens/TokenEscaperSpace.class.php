@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenSpaceEscape class
+ * Multilingual Markdown generator - TokenEscaperSpace class
  *
  * This class represents a token for four spaces multiples preceding escaped text at the beginning of a line.
  *
@@ -42,15 +42,11 @@ namespace MultilingualMarkdown {
      * The token will skip over the text until an empty line
      * and send everything to outputs without interpreting variables and directives.
      */
-    class TokenSpaceEscape extends TokenBaseEscaper
+    class TokenEscaperSpace extends TokenBaseEscaper
     {
         public function __construct()
         {
             parent::__construct('    ');
-        }
-        public function __toString()
-        {
-            return '<escape> 4 spaces prefix';
         }
 
         /**
@@ -63,6 +59,10 @@ namespace MultilingualMarkdown {
                 return false;
             }
             return parent::identifyInBuffer($buffer, $pos);
+        }
+        public function ouputNow(object $lexer): bool
+        {
+            return ($lexer->getLanguageStackSize() <= 1);
         }
     }
 }

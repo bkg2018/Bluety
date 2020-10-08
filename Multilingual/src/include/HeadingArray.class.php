@@ -51,6 +51,7 @@ namespace MultilingualMarkdown {
         private $curIndex = 0;      // current exploration index
         private $outputMode = OutputModes::MD;
         private $file = '';         // path of file relative to root dir for these headings
+        private $null = null;
 
         // Seekable Iterator interface
         public function current()
@@ -58,7 +59,7 @@ namespace MultilingualMarkdown {
             if ($this->curIndex < count($this->allHeadings)) {
                 return $this->allHeadings[$this->curIndex];
             }
-            \trigger_error("Invalid current index in headings array", E_ERROR);
+            \trigger_error("Invalid current index in headings array", E_USER_ERROR);
         }
         public function key()
         {
@@ -69,7 +70,7 @@ namespace MultilingualMarkdown {
             if ($this->curIndex + 1 < count($this->allHeadings)) {
                 $this->curIndex += 1;
             } else {
-                \trigger_error("No more next heading in array", E_ERROR);
+                \trigger_error("No more next heading in array", E_USER_ERROR);
             }
         }
         public function rewind()
@@ -88,7 +89,7 @@ namespace MultilingualMarkdown {
             if (\array_key_exists($this->allHeadings, $position)) {
                 $this->curIndex = $position;
             } else {
-                \trigger_error("Invalid position $position in heading array", E_ERROR);
+                \trigger_error("Invalid position $position in heading array", E_USER_ERROR);
             }
         }
         // ArrayAccess interface
@@ -270,6 +271,19 @@ namespace MultilingualMarkdown {
             return -1;
         }
 
+        /** Find a heading with given line number.
+         * Return null if not found.
+         */
+        public function &findByLine(int $line): ?Heading
+        {
+            foreach ($this->allHeadings as &$heading) {
+                if ($heading->getLine() >= $line) {
+                    return $heading;
+                }
+            }
+            return $this->null;
+        }
+
         /**
          * Check if an index is valid.
          *
@@ -284,7 +298,7 @@ namespace MultilingualMarkdown {
                 if ($logger) {
                     $logger->error("invalid heading index $index");
                 }
-                return null;
+                return $this->null;
             }
             if ($index == -1) {
                 return $this->curIndex;

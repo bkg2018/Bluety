@@ -30,7 +30,7 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'FileUtilities.php';
+    require_once 'Utilities.php';
     require_once 'Logger.interface.php';
     require_once 'OutputModes.class.php';
 

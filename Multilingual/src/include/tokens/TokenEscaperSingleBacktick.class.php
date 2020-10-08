@@ -1,10 +1,9 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenFence class
+ * Multilingual Markdown generator - TokenEscaperSingleBacktick class
  *
- * This class represents a token for code fence start or end at the beginning of a line (or after spaces only) present
- * before and after escaped text lines.
+ * This class represents a token for a single back-tick character around escaped text.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -20,7 +19,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_fence_class
+ * @package   mlmd_token_single_backtick_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -36,21 +35,15 @@ namespace MultilingualMarkdown {
     use MultilingualMarkdown\TokenBaseEscaper;
     
     /**
-     * Class for the code fence.
-     * The code fence opening starts with a triple back-tick possibly followed
-     * by a language name. The token will skip over the reste of current line and
-     * send everything to outputs while watching for ending fence.
+     * Class for the single back-tick escaper.
+     * The token will skip over the text until the closing double back-tick
+     * and send everything to outputs.
      */
-    class TokenFence extends TokenBaseEscaper
+    class TokenEscaperSingleBacktick extends TokenBaseEscaper
     {
         public function __construct()
         {
-            parent::__construct('```');
-        }
-        public function __toString()
-        {
-            return '<escape> code fence';
+            parent::__construct('`');
         }
     }
-
 }

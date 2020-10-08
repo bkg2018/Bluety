@@ -32,39 +32,13 @@ require_once '../src/include/Storage.class.php';
  */
 class StorageTest extends TestCase
 {
-    public function testReadParagraphs()
-    {
-        $storage = new Storage();
-        $file = fopen('test.mlmd', 'rt');
-        $this->assertNotFalse($file);
-        $storage->setInputFile($file);
-
-        $buffer = '';
-        $paragraphCount = 0;
-        $bufferLength = 0;
-        while ($buffer !== null) {
-            $buffer = $storage->getNextParagraph();
-            $bufferLength = $storage->getParagraphLength();
-            if ($buffer != null) {
-                $paragraphCount += 1;
-                echo str_repeat('=', 120), "\n";
-                echo "[{$storage->getStartingLineNumber()}-{$storage->getEndingLineNumber()}]:", $buffer;
-            }
-        }
-        fclose($file);
-        $this->assertEquals(12, $paragraphCount);
-        $this->assertEquals(24, $storage->getStartingLineNumber());
-        $this->assertEquals(24, $storage->getEndingLineNumber());
-        $this->assertEquals(12, $bufferLength); // 'end of file\n'  = 12 characters
-    }
-
     public function testGetChar()
     {
         $storage = new Storage();
         $file = fopen('test.mlmd', 'rt');
         $this->assertNotFalse($file);
         $storage->setInputFile($file);
-        $c = $storage->getCurChar();
+        $c = $storage->getCurrentChar();
         //echo str_repeat('=', 120), "\n";
         $charNumber = 0;
         while ($c !== null) {

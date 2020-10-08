@@ -50,8 +50,7 @@ namespace MultilingualMarkdown {
         // Store the token and  simulate language stacking (has no effect until outputs are actually done)
         public function processInput(object $lexer, object $filer, array &$tokens): bool
         {
-            $this->skipSelf($filer);
-            $tokens[] = $this;
+            parent::processInput($lexer, $filer, $tokens);
             $lexer->popLanguage($filer); // update current language stack in Lexer
             return true;
         }

@@ -43,8 +43,8 @@ namespace MultilingualMarkdown {
         private $buffer = '';                   /// current line content
         private $bufferPosition = 0;            /// current pos in line buffer (utf-8)
         private $bufferLength = 0;              /// current line size in characters (utf-8)
-        private $curLine = 0;                   /// current line number from input file
-        private $currentChars = [];             /// array of last 3 characters: [0] = current, [1] = previous, [2] = pre-previous
+        private $curLine = 1;                   /// current line number from input file
+        private $previousChars = [];             /// array of last 3 characters: [0] = current, [1] = previous, [2] = pre-previous
 
         // Output files and writing status
         private $lastWritten = [];              /// last  character written to file
@@ -80,8 +80,7 @@ namespace MultilingualMarkdown {
             };
             $this->bufferLength = 0;
             $this->bufferPosition = 0;
-            $this->startLine = 0;
-            $this->endLine = 0;
+            $this->curLine = 1;
             return true;
         }
 
@@ -108,10 +107,8 @@ namespace MultilingualMarkdown {
                             $this->bufferPosition -= 1024;
                             $this->bufferLength = mb_strlen($this->buffer);
                         }
-                        $this->endLine += 1;
                         if ($this->curLine == 0) {
                             $this->curLine = 1;
-                            $this->startLine = 1;
                         }
                     } else {
                         break;
@@ -121,27 +118,11 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Get the current paragraph length.
-         * Returns the number of UTF-8 characters in the paragraph, including EOLs.
+         * Get the current line number for current reading position.
          */
-        public function getParagraphLength(): int
+        public function getCurrentLineNumber()
         {
-            return $this->bufferLength;
-        }
-
-        /**
-         * Get the starting input line number for current paragraph.
-         */
-        public function getStartingLineNumber(): int
-        {
-            return $this->startLine;
-        }
-        /**
-         * Get the ending input line number for current paragraph.
-         */
-        public function getEndingLineNumber(): int
-        {
-            return $this->endLine;
+            return $this->curLine;
         }
 
         /**
@@ -150,17 +131,17 @@ namespace MultilingualMarkdown {
          *
          * @return null|string current character ('\n' for EOL),  null when file and buffer are finished.
          */
-        public function getCurChar(): ?string
+        public function getCurrentChar(): ?string
         {
             // immediate return if ready
             if ($this->bufferPosition < $this->bufferLength) {
-                return $this->currentChars[0];
+                return $this->previousChars[0];
             }
             // need to append at least 1 char from input
             $this->fetchCharacters(1);
             if ($this->bufferPosition < $this->bufferLength) {
-                $this->currentChars[0] = mb_substr($this->buffer, $this->bufferPosition, 1);
-                return $this->currentChars[0];
+                $this->previousChars[0] = mb_substr($this->buffer, $this->bufferPosition, 1);
+                return $this->previousChars[0];
             }
             return null;
         }
@@ -172,7 +153,7 @@ namespace MultilingualMarkdown {
          */
         public function getPrevChar(): ?string
         {
-            return $this->currentChars[1] ?? null;
+            return $this->previousChars[1] ?? null;
         }
         /**
          * Return the previous previous UTF-8 character .
@@ -181,7 +162,7 @@ namespace MultilingualMarkdown {
          */
         public function prePrevChar(): ?string
         {
-            return $this->currentChars[2] ?? null;
+            return $this->previousChars[2] ?? null;
         }
         /**
          * Return the next UTF-8 character from current buffer, return null if end of file.
@@ -198,15 +179,16 @@ namespace MultilingualMarkdown {
                 $this->bufferPosition += 1;
                 $c = mb_substr($this->buffer, $this->bufferPosition, 1);
             }
-            // adjust previous 3 characters array
-            if (($this->currentChars[1] ?? '') == "\n") {
+            // adjust previous characters array
+            if (count($this->previousChars) > 2) {
+                array_pop($this->previousChars);        // unset [2]
+            }
+            array_unshift($this->previousChars, $c);    // insert [0], pushes 0/1 to 1/2
+            // update line number if prev char was EOL
+            if (($this->previousChars[1] ?? '') == "\n") {
                 $this->curLine += 1;
             }
-            if (count($this->currentChars) > 2) {
-                array_pop($this->currentChars);         // unset [2]
-            }
-            array_unshift($this->currentChars, $c); // insert [0]
-            return $this->currentChars[0];
+            return $this->previousChars[0];
         }
         /**
          * Look at previous UTF-8 characters.
@@ -237,7 +219,7 @@ namespace MultilingualMarkdown {
         public function getString(int $charsNumber): ?string
         {
             // read char[0]
-            $result = $this->currentChar[0] ?? '';
+            $result = $this->previousChars[0] ?? '';
             $c = $this->getNextChar();
             // append chars [1..N-1]
             for ($i = 1; ($i < $charsNumber) && ($c != null); $i += 1) {

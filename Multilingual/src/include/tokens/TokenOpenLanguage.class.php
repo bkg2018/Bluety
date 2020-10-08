@@ -54,8 +54,7 @@ namespace MultilingualMarkdown {
         }
         public function processInput(object $lexer, object $filer, array &$tokens): bool
         {
-            $this->skipSelf($filer);
-            $tokens[] = $this;
+            parent::processInput($lexer, $filer, $tokens);
             return $lexer->pushLanguage($this->language, $filer);
         }
         public function output(object $lexer, object $filer): bool

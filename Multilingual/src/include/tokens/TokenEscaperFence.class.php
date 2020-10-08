@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenHeading class
+ * Multilingual Markdown generator - TokenEscaperFence class
  *
- * This class represents a token for a heading in files. A heading is a line starting with at least one '#' character.
- * The token is created by Lexer when meeting such condition. 
+ * This class represents a token for code fence start or end at the beginning of a line (or after spaces only) present
+ * before and after escaped text lines.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -20,7 +20,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_heading_class
+ * @package   mlmd_token_fence_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -31,51 +31,55 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'Token.class.php';
+    require_once 'TokenBaseEscaper.class.php';
 
-    use MultilingualMarkdown\Token;
-
+    use MultilingualMarkdown\TokenBaseEscaper;
+    
     /**
-     * Heading token.
+     * Class for the code fence.
+     * The code fence opening starts with a triple back-tick possibly followed
+     * by a language name. The token will skip over the reste of current line and
+     * send everything to outputs while watching for ending fence.
      */
-    class TokenHeading extends Token
+    class TokenEscaperFence extends TokenBaseEscaper
     {
-        private $heading = null;
-
-        public function __construct(object $heading)
+        public function __construct()
         {
-            $this->heading = $heading;
-            parent::__construct(TokenType::HEADING);
+            parent::__construct('```');
         }
-        public function __toString()
+        /**
+         * Identify self against an UTF-8 buffer and position.
+         * Make sure code fence starts a new line.
+         */
+        public function identifyInBuffer(string $buffer, int $pos): bool
         {
-            return "Heading .{$this->heading}((";
-        }
-        public function identifyInFiler(object $filer): bool
-        {
-            // must be preceded by an end of line or nothing (possible if first line in file)
-            $prevChar = $filer->getPrevChar();
-            if (($prevChar != null) && ($prevChar != "\n")) {
+            if ($pos <= 0) {
+                return true;
+            }
+            $lf = mb_substr($buffer, $pos - 1, 1);
+            if ($lf != "\n") {
                 return false;
             }
-            return true;
+            return parent::identifyInBuffer($buffer, $pos);
         }
-        public function processInput(object $lexer, object $filer, array &$tokens): bool
+        /**
+         * Let the token self-identify against an input handler Filer object.
+         *
+         * @param object $filer the Filer object
+         *
+         * @return bool true if theh current token can be found at current Filer position and buffer content.
+         */
+        public function identifyInFiler(object $filer): bool
         {
-            do {
-                $c = $filer->getNextChar();
-            } while (($c != "\n") && ($c != null));
-            $lexer->setStoreText(true);
-            $lexer->setCurrentChar($filer->getNextChar());
-            return true;
+            if ($filer->getPrevChar() != "\n") {
+                return false;
+            }
+            return parent::identifyInFiler($filer);
         }
         public function ouputNow(object $lexer): bool
         {
             return ($lexer->getLanguageStackSize() <= 1);
         }
-        public function output(object $lexer, object $filer): bool
-        {
-            return true;
-        }
     }
+
 }

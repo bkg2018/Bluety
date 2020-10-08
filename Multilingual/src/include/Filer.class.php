@@ -34,7 +34,7 @@ namespace MultilingualMarkdown {
 
     mb_internal_encoding('UTF-8');
 
-    require_once 'FileUtilities.php';
+    require_once 'Utilities.php';
     require_once 'Logger.interface.php';
     require_once 'File.class.php';
     require_once 'LanguageList.class.php';
@@ -101,9 +101,9 @@ namespace MultilingualMarkdown {
         {
             if ($this->inFilename) {
                 if ($source) {
-                    error_log("$source($line): MLMD {$type} in {$this->inFilename}({$this->curLine}): $msg");
+                    error_log("$source($line): MLMD {$type} in {$this->inFilename}(" . $this->storage->getCurrentLineNumber() . "): $msg");
                 } else {
-                    error_log("{$this->inFilename}({$this->curLine}): MLMD {$type}: $msg");
+                    error_log("{$this->inFilename}(" . $this->storage->getCurrentLineNumber() . "): MLMD {$type}: $msg");
                 }
             } else {
                 error_log("arguments: MLMD {$type}: $msg");
@@ -170,7 +170,13 @@ namespace MultilingualMarkdown {
         {
             return $this->inFilename;
         }
-
+        /**
+         * Get the current line number for current reading position.
+         */
+        public function getCurrentLineNumber()
+        {
+            return $this->storage->getCurrentLineNumber();
+        }
         /**
          * Set root directory for relative filenames.
          * Resets all registered input files relative to the new root directory.
@@ -427,7 +433,6 @@ namespace MultilingualMarkdown {
             $extension = \isMLMDfile($filename);
             $this->outFilenameTemplate = mb_substr($filename, 0, -mb_strlen($extension));
             $this->inFilename = $filename;
-            $this->curLine = 1;
             $this->curLanguage = 'ignore';
             $this->closeOutput();
             // the output files will be opened by the .languages directive for
@@ -537,7 +542,7 @@ namespace MultilingualMarkdown {
         public function skipSpaces(): int
         {
             $count = 0;
-            $c = $this->storage->getCurChar();
+            $c = $this->storage->getCurrentChar();
             while ($c == ' ' || $c == "\t") {
                 $count += 1;
                 $c = $this->storage->getNextChar();
@@ -577,28 +582,6 @@ namespace MultilingualMarkdown {
         //MARK: Relays to storage
 
         /**
-         * Get the current paragraph length.
-         * Returns the number of UTF-8 characters in the paragraph, including EOLs.
-         */
-        public function getParagraphLength(): int
-        {
-            return $this->storage->getParagraphLength();
-        }
-        /**
-         * Get the starting input line number for current paragraph.
-         */
-        public function getStartingLineNumber(): int
-        {
-            return $this->storage->getStartingLineNumber();
-        }
-        /**
-         * Get the ending input line number for current paragraph.
-         */
-        public function getEndingLineNumber(): int
-        {
-            return $this->storage->getEndingLineNumber();
-        }
-        /**
          * Return the previous UTF-8 character .
          *
          * @return null|string previous character ('\n' for EOL).
@@ -622,9 +605,9 @@ namespace MultilingualMarkdown {
          *
          * @return null|string current character ('\n' for EOL), null when file and buffer are finished.
          */
-        public function getCurChar(): ?string
+        public function getCurrentChar(): ?string
         {
-            return $this->storage->getCurChar();
+            return $this->storage->getCurrentChar();
         }
         /**
          * Read and return the next UTF-8 character from current buffer, return null at end of file.
@@ -665,16 +648,7 @@ namespace MultilingualMarkdown {
         {
             return $this->storage->fetchPreviousChars($charsNumber);
         }
-        /**
-         * Return the next UTF-8 paragraph, taken from the input file until an empty line or the end of file.
-         * Return false if already at end of file.
-         *
-         * @return string& a reference to the paragraphh buffer, or null when file and buffer are both finished.
-         */
-        public function &getNextParagraph(): ?string
-        {
-            return $this->storage->getNextParagraph();
-        }
+
         /**
          * Check if current and next characters match a string in current line buffer.
          * This will fetch more characters from input file if needed but won't advance the

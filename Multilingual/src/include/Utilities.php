@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Multilingual Markdown generator - File Utilities functions
+ * Multilingual Markdown generator - Utilities functions
  *
  * Copyright 2020 Francis Piérot
  *
@@ -43,6 +43,27 @@ function isWindows(): bool
         return (stripos($systemRoot, 'windows') !== false);
     }
     return false;
+}
+
+/**
+ * Unset all content from an array but keep the array itself.
+ */
+function unsetArrayContent(array & $array)
+{
+    $key = array_key_last($array);
+    while ($key !== null) {
+        unset($array[$key]);
+        $key = array_key_last($array);
+    }
+}
+/**
+ * Unset all content from an array and reset the array itself to an empty array.
+ */
+function resetArray(array & $array)
+{
+    unsetArrayContent($array);
+    unset($array);
+    $array = [];
 }
 
 /**

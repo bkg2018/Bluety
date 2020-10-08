@@ -68,15 +68,18 @@ namespace MultilingualMarkdown {
          */
         public function processInput(object $lexer, object $filer, array &$allTokens): bool
         {
-            $this->text = $this->skipSelf($filer);
-            $curChar = $filer->getCurChar();
-            if ($curChar != null) {
+            $this->text = $this->keyword;
+            $this->skipSelf($filer);
+            $currentChar = $filer->getCurrentChar();
+            if ($currentChar != null) {
                 do {
-                    $this->text .= $curChar;
-                    $curChar = $filer->getNextChar();
+                    $this->text .= $currentChar;
+                    $currentChar = $filer->getNextChar();
                     $prevChars = $filer->fetchPreviousChars($this->keywordLength);
-                } while (($prevChars != $this->keyword) && ($curChar != null));
+                } while (($prevChars != $this->keyword) && ($currentChar != null));
             }
+            $lexer->setStoreText(true);
+            $lexer->setCurrentChar($currentChar);
             // self store in token array
             $allTokens[] = $this;
             return true;

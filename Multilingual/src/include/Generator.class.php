@@ -38,7 +38,7 @@ namespace MultilingualMarkdown {
     require_once 'Logger.interface.php';
     require_once 'Heading.class.php';
     require_once 'HeadingArray.class.php';
-    require_once 'FileUtilities.php';
+    require_once 'Utilities.php';
     require_once 'Filer.class.php';
     require_once 'Lexer.class.php';
     require_once 'Parser.class.php';
@@ -240,7 +240,7 @@ namespace MultilingualMarkdown {
             $dashes = str_repeat('-', 60);
             $this->preProcess();
             foreach ($this->filer as $index => $relFilename) {
-                echo "$dashes\n$relFilename\n$dashes\n";
+                echo "$dashes\nPROCESSING FILE: $relFilename\n$dashes\n";
                 if (!$this->process($index)) {
                     return false;
                 }

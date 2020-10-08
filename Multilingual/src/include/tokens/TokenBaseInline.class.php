@@ -51,5 +51,14 @@ namespace MultilingualMarkdown {
         {
             return '- FORBIDDEN: base TokenBaseInline class, check Lexer code -';
         }
+        public function processInput(object $lexer, object $filer, array &$tokens): bool
+        {
+            $this->skipSelf($filer);
+            $tokens[] = $this;
+            // replace current character in Lexer and set it to be stored in current text
+            $lexer->setStoreText(true);
+            $lexer->setCurrentChar($filer->getCurrentChar());
+            return true;
+        }    
     }
 }
