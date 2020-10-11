@@ -33,7 +33,7 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    mb_internal_encoding('UTF-8');
+    \mb_internal_encoding('UTF-8');
 
     require_once 'Logger.interface.php';
     require_once 'Heading.class.php';

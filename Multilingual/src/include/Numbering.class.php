@@ -152,7 +152,7 @@ namespace MultilingualMarkdown {
          */
         public function checkLevel(int $level): int
         {
-            return ($level < 1) ? 1 : ($level > 9) ? 9 : $level;
+            return ($level < 1) ? 1 : (($level > 9) ? 9 : $level);
         }
 
         /**

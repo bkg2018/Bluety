@@ -292,7 +292,7 @@ namespace MultilingualMarkdown {
                     // let the token process further input if needed
                     $token->processInput($this, $filer, $allTokens);
                     // update output files at token request
-                    if ($token->ouputNow($this)) {
+                    if ($token->ouputNow($this) && (count($allTokens) > 0)) {
                         $this->output($filer, $allTokens);
                     }
                 }
@@ -309,7 +309,9 @@ namespace MultilingualMarkdown {
             if (!$emptyText) {
                 $allTokens[] = new TokenText($text);
             }
-            $this->output($filer, $allTokens);
+            if (count($allTokens) > 0) {
+                $this->output($filer, $allTokens);
+            }
             return true;
         }
 

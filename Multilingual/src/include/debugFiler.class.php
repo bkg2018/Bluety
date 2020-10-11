@@ -54,7 +54,7 @@ namespace MultilingualMarkdown {
             if ($c !== null) {
                 echo $c;
             } else {
-                echo '<null>';
+                echo "<null>\n";
             }
             return $c;
         }
@@ -69,7 +69,7 @@ namespace MultilingualMarkdown {
                     echo $s, $c;
                 }
             } else {
-                echo '<null>';
+                echo "<null>\n";
             }
             return $s;
         }
