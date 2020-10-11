@@ -39,7 +39,7 @@ namespace MultilingualMarkdown {
     require_once 'Heading.class.php';
     require_once 'HeadingArray.class.php';
     require_once 'Utilities.php';
-    require_once 'Filer.class.php';
+    require_once 'debugFiler.class.php'; // includes normal Filer
     require_once 'Lexer.class.php';
     require_once 'Parser.class.php';
 
@@ -65,10 +65,13 @@ namespace MultilingualMarkdown {
         // Initialize handlers and default settings
         public function __construct()
         {
-            $this->filer = new Filer();
+            if (getenv("debug") != 0) {
+
+            } 
+            $this->filer = (getenv("debug") != 0) ? new debugFiler() : new Filer();
             $this->lexer = new Lexer();
             $this->parser = new Parser();
-            $this->outputModeName = 'md';       // markdown links and toc style
+            $this->outputModeName = 'md'; 
         }
 
         //------------------------------------------------------------------------------------------------------

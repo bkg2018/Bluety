@@ -35,7 +35,6 @@ namespace MultilingualMarkdown {
     {
         public function testInitialization()
         {
-            //echo getcwd() . "\n";
             $generator = new Generator();
             $generator->addInputFile('testdata/test.mlmd');
             $generator->setMainFilename("test.mlmd");

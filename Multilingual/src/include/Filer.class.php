@@ -542,10 +542,10 @@ namespace MultilingualMarkdown {
         public function skipSpaces(): int
         {
             $count = 0;
-            $c = $this->storage->getCurrentChar();
+            $c = $this->getCurrentChar();
             while ($c == ' ' || $c == "\t") {
                 $count += 1;
-                $c = $this->storage->getNextChar();
+                $c = $this->getNextChar();
             }
             return $count;
         }

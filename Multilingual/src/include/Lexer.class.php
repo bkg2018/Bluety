@@ -222,7 +222,6 @@ namespace MultilingualMarkdown {
                 $this->languageSet = false;
             }
             while ($this->currentChar != null) {
-                echo $this->currentChar;
                 $this->storeText = false; // store current character in $text temporary buffer
                 $resetText = false; // empty $text temporary buffer
                 $token = null;

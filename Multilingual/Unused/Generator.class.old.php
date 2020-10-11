@@ -347,7 +347,6 @@ namespace MultilingualMarkdown {
             }
             // get next utf-8 char
             $this->curChar = mb_substr($this->lineBuf, $this->lineBufPos, 1);
-            //$this->debugEcho();
             return $this->curChar;
         }
 
