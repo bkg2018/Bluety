@@ -60,13 +60,13 @@ namespace MultilingualMarkdown {
             }
             return true;
         }
-        public function processInput(object $lexer, object $filer, array &$tokens): bool
+        public function processInput(object $lexer, object $filer, array &$allTokens): bool
         {
             do {
                 $c = $filer->getNextChar();
             } while (($c != "\n") && ($c != null));
-            $lexer->setStoreText(true);
-            $lexer->setCurrentChar($filer->getNextChar());
+            $lexer->setStoreText(false);
+            $allTokens[] = $this;
             return true;
         }
         public function ouputNow(object $lexer): bool
@@ -75,6 +75,7 @@ namespace MultilingualMarkdown {
         }
         public function output(object $lexer, object $filer): bool
         {
+            $lexer->debugEcho("<HEADING {$this->heading}\n");
             return true;
         }
     }

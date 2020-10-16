@@ -78,6 +78,7 @@ namespace MultilingualMarkdown {
                     $prevChars = $filer->fetchPreviousChars($this->keywordLength);
                 } while (($prevChars != $this->keyword) && ($currentChar != null));
             }
+            // replace current character by next one and tell Lexer to store it as new current text start
             $lexer->setStoreText(true);
             $lexer->setCurrentChar($currentChar);
             // self store in token array

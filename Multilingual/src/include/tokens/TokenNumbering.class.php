@@ -68,11 +68,10 @@ namespace MultilingualMarkdown {
                 }
                 $params .= $curChar;
             } while ($curChar !== null);
-            // set the numbering scheme in Lexer ** already done by Lexer preprocessing
+            // Lexer preprocessing has already set the numbering, simply ignore this line
             // return $lexer->setNumberingFrom($params, $filer);
-            $lexer->setStoreText(true);
-            $lexer->setCurrentChar($curChar);
+            $lexer->setStoreText(false);
             return true;
-        }    
+        }
     }
 }

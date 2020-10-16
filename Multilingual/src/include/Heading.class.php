@@ -73,8 +73,13 @@ namespace MultilingualMarkdown {
             self::$prevLevel = $this->level;
         }
 
+        public function __toString()
+        {
+            return "#[$this->level]:$this->text";
+        }
+
         /**
-         * Resets the global number to 0.
+         * Resets the global (unique) number to 0.
          */
         public static function init(): void
         {

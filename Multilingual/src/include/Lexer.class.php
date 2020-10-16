@@ -81,6 +81,7 @@ namespace MultilingualMarkdown {
         private $numberingScheme = '';  /// default numbering scheme from -numbering command line argument
         private $storeText = false;     /// flag for current character, can be changed by token input processing
         private $currentChar = '';      /// current character, can be changed by token input processing
+        private $currentText = '';      /// Current text flow, to be stored as a text token before next tokken
 
         public function __construct()
         {
@@ -126,17 +127,21 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * reset current text flow.
+         */
+        public function resetCurrentText(): void
+        {
+            $this->currentText = '';
+            $this->emptyText = true;
+        }
+
+        /**
          * Set current character.
          */
         public function setCurrentChar(string $char): void
         {
             $this->currentChar = $char;
         }
-
-        /**
-         * 
-         */
-        
 
         /**
          * Check if current position in a buffer matches a registered token and return the token.
@@ -199,7 +204,7 @@ namespace MultilingualMarkdown {
          *
          * @return nothing
          */
-        private function debugEcho(string $char): void
+        public function debugEcho(string $char): void
         {
             if (getenv("debug") == "1") {
                 echo $char;
@@ -215,15 +220,14 @@ namespace MultilingualMarkdown {
         {
             $relFilename = $filer->current();
             $this->currentChar = $filer->getCurrentChar();  /// current character (between tokens)
-            $text = '';                 /// current text out of tokens
+            $this->currentText = '';                 /// current text out of tokens
             $emptyText = true;
             $allTokens = [];            /// current token sequence to execute
             if ($this->waitLanguages) {
                 $this->languageSet = false;
             }
             while ($this->currentChar != null) {
-                $this->storeText = false; // store current character in $text temporary buffer
-                $resetText = false; // empty $text temporary buffer
+                $this->storeText = false; // store current character in $this->currentText temporary buffer
                 $token = null;
                 $curLineNumber = $filer->getCurrentLineNumber();
                 switch ($this->currentChar) {
@@ -246,19 +250,13 @@ namespace MultilingualMarkdown {
                         if ($prevChar != "\n") {
                             $this->storeText = true;
                         } else {
-                            /*// may have to store previous text now
-                            if (!$emptyText) {
-                                $allTokens[] = new TokenText($text);
-                                $text = '';
-                                $emptyText = true;
-                            }*/
                             $headingsArray = $this->allHeadingsArrays[$relFilename];
                             $heading = $headingsArray->findByLine($filer->getCurrentLineNumber());
                             if ($heading !== null) {
                                 $token = new TokenHeading($heading);
                             }
                         }
-                        break;
+                         break;
                     case '.':
                         // eliminate trivial case when followed by a space or EOL
                         $nextChar = $filer->fetchNextChars(1);
@@ -286,8 +284,9 @@ namespace MultilingualMarkdown {
                 if ($token) {
                     // first, store current temporary text if any
                     if (!$emptyText) {
-                        $allTokens[] = new TokenText($text);
-                        $resetText = true;
+                        $allTokens[] = new TokenText($this->currentText);
+                        $this->currentText = '';
+                        $emptyText = true;
                     }
                     // let the token process further input if needed
                     $token->processInput($this, $filer, $allTokens);
@@ -297,21 +296,20 @@ namespace MultilingualMarkdown {
                     }
                 }
                 if ($this->storeText) {
-                    $text .= $this->currentChar;
+                    $this->currentText .= $this->currentChar;
                     $emptyText = false;
-                } else if ($resetText) {
-                    $text = '';
-                    $emptyText = true;
                 }
                 $this->currentChar = $filer->getNextChar();
             }
             // finish with anything left
             if (!$emptyText) {
-                $allTokens[] = new TokenText($text);
+                $allTokens[] = new TokenText($this->currentText);
             }
             if (count($allTokens) > 0) {
                 $this->output($filer, $allTokens);
             }
+            \unsetArrayContent($allTokens);
+            $this->currentText = '';
             return true;
         }
 
