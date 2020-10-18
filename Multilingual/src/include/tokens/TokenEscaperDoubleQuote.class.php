@@ -45,6 +45,11 @@ namespace MultilingualMarkdown {
         {
             parent::__construct('"');
         }
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->debugEcho('<DOUBLE QUOTE ' . $this->debugText() . ">\n");
+            return true;
+        }
     }
 
 }

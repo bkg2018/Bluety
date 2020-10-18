@@ -80,6 +80,11 @@ namespace MultilingualMarkdown {
         {
             return ($lexer->getLanguageStackSize() <= 1);
         }
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->debugEcho('<CODE FENCE ' . $this->debugText() . ">\n");
+            return true;
+        }
     }
 
 }

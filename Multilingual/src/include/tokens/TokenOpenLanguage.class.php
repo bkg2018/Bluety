@@ -55,10 +55,11 @@ namespace MultilingualMarkdown {
         public function processInput(object $lexer, object $filer, array &$tokens): bool
         {
             parent::processInput($lexer, $filer, $tokens);
-            return $lexer->pushLanguage($this->language, $filer);
+            return true;
         }
         public function output(object $lexer, object $filer): bool
         {
+            $lexer->debugEcho("<OPEN {$this->language}>\n");
             $lexer->pushLanguage($this->language, $filer);
             return true;
         }

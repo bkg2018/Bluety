@@ -52,12 +52,10 @@ namespace MultilingualMarkdown {
         }
         public function __toString()
         {
-            $maxlen = 60;
-            return '<text> ' .
-                    (mb_strlen($this->content) < $maxlen ?
-                        $this->content :
-                        mb_substr($this->content, 0, $maxlen / 2) . '...' . mb_substr($this->content, -$maxlen / 2));
+            return $this->debugText();
         }
+
+
 
         /**
          * Add a character or string to content.
@@ -84,6 +82,12 @@ namespace MultilingualMarkdown {
         public function getTextLength(): int
         {
             return $this->length;
+        }
+
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->debugEcho("<TEXT: {$this->debugText()}>\n");
+            return true;
         }
     }
 

@@ -73,5 +73,11 @@ namespace MultilingualMarkdown {
             }
             return parent::identifyInFiler($filer);
         }
+
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->debugEcho("<EMPTYLINE>\n");
+            return true;
+        }
     }
 }

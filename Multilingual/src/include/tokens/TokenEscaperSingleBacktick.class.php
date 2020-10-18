@@ -45,5 +45,11 @@ namespace MultilingualMarkdown {
         {
             parent::__construct('`');
         }
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->debugEcho('<SINGLE BACKTICK ' . $this->debugText() . ">\n");
+            return true;
+        }
+
     }
 }

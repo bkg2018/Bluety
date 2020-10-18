@@ -80,6 +80,7 @@ namespace MultilingualMarkdown {
         private $ignoreLevel = 0;       /// number of opened 'ignore', do not output anything when this variable is not 0
         private $numberingScheme = '';  /// default numbering scheme from -numbering command line argument
         private $storeText = false;     /// flag for current character, can be changed by token input processing
+        private $readNextChar = true;   /// flag tokens can set to ignore next char reading
         private $currentChar = '';      /// current character, can be changed by token input processing
         private $currentText = '';      /// Current text flow, to be stored as a text token before next tokken
 
@@ -124,6 +125,13 @@ namespace MultilingualMarkdown {
         public function setStoreText(bool $yes): void
         {
             $this->storeText = $yes;
+        }
+        /**
+         * Set/Clear the flag to allow next character reading.
+         */
+        public function setReadNextChar(bool $yes): void
+        {
+            $thihs->readNextChar = $yes;
         }
 
         /**
@@ -228,6 +236,7 @@ namespace MultilingualMarkdown {
             }
             while ($this->currentChar != null) {
                 $this->storeText = false; // store current character in $this->currentText temporary buffer
+                $this->readNextChar = true;
                 $token = null;
                 $curLineNumber = $filer->getCurrentLineNumber();
                 switch ($this->currentChar) {
@@ -294,12 +303,14 @@ namespace MultilingualMarkdown {
                     if ($token->ouputNow($this) && (count($allTokens) > 0)) {
                         $this->output($filer, $allTokens);
                     }
-                }
+                } 
                 if ($this->storeText) {
                     $this->currentText .= $this->currentChar;
                     $emptyText = false;
                 }
-                $this->currentChar = $filer->getNextChar();
+                if ($this->readNextChar) {
+                    $this->currentChar = $filer->getNextChar();
+                }
             }
             // finish with anything left
             if (!$emptyText) {

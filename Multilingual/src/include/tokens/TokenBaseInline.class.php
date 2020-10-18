@@ -59,6 +59,6 @@ namespace MultilingualMarkdown {
             $lexer->setStoreText(true);
             $lexer->setCurrentChar($filer->getCurrentChar());
             return true;
-        }    
+        }
     }
 }

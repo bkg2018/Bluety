@@ -51,7 +51,7 @@ namespace MultilingualMarkdown {
         public function processInput(object $lexer, object $filer, array &$tokens): bool
         {
             parent::processInput($lexer, $filer, $tokens);
-            $lexer->popLanguage($filer); // update current language stack in Lexer
+            $lexer->setReadNextChar(false);
             return true;
         }
         // Closing directive will have Lexer processing all stored tokens if it empties the language stack.
@@ -62,6 +62,7 @@ namespace MultilingualMarkdown {
         // Output: have Lexer updating the current output language
         public function output(object $lexer, object $filer): bool
         {
+            $lexer->debugEcho("<CLOSE {$lexer->getCurLanguage()}>\n");
             $lexer->popLanguage($filer);
             return true;
         }

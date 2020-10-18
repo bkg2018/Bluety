@@ -47,5 +47,11 @@ namespace MultilingualMarkdown {
         {
             return '<directive> .all((';
         }
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->debugEcho("<OPEN all>\n");
+            $lexer->pushLanguage('all', $filer);
+            return true;
+        }
     }
 }

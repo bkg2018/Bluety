@@ -169,7 +169,41 @@ namespace MultilingualMarkdown {
            $lexer->setStoreText(false);
            return true;
         }
+ 
+         /**
+         * Return a text where ascii control codes are replaced by [n]. 
+         */
+        protected function debugTextPart(string $text): string
+        {
+            $result = '';
+            if (isset($this->length) && isset($this->content)) {
+                for ($pos =  0 ; $pos < $this->length ; $pos += 1) {
+                    $c = mb_substr($text, $pos, 1);
+                    $result .= $c < ' ' ? '['.ord($c).']' : $c;
+                }
+            }
+            return $result;
+        }
+
         /**
+         * Return a summary of the text token content with neutralized control codes and max length of 60 characters.
+         */
+        protected function debugText(): string
+        {
+            $result = '';
+            if (isset($this->length) && isset($this->content)) {
+                $maxlen = 60;
+                if ($this->length < $maxlen) {
+                    return $this->debugTextPart($this->content);
+                }
+                $start = mb_substr($this->content, 0, $maxlen / 2);
+                $end = mb_substr($this->content, -$maxlen / 2);
+                $result = $this->debugTextPart($start) . '...' . $this->debugTextPart($end);
+            }
+            return $result;
+        }
+
+       /**
          * Output content to the Filer object or change its settings.
          * The token must handle whatever it has to do with the output files: send text content,
          * change current language, send raw text, etc.
@@ -178,7 +212,7 @@ namespace MultilingualMarkdown {
          */
         public function output(object $lexer, object $filer): bool
         {
-            
+            $lexer->debugEcho('<no output() for class ' . get_class($this) . ">\n");
             return true;
         }
 

@@ -67,6 +67,10 @@ namespace MultilingualMarkdown {
             } while (($c != "\n") && ($c != null));
             $lexer->setStoreText(false);
             $allTokens[] = $this;
+            // skip final EOL
+            if ($c !== null) {
+                $c = $filer->getNextChar();
+            }
             return true;
         }
         public function ouputNow(object $lexer): bool
@@ -75,7 +79,7 @@ namespace MultilingualMarkdown {
         }
         public function output(object $lexer, object $filer): bool
         {
-            $lexer->debugEcho("<HEADING {$this->heading}\n");
+            $lexer->debugEcho("<HEADING {$this->heading}>\n");
             return true;
         }
     }

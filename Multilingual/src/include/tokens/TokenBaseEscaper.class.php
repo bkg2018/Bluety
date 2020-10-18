@@ -41,7 +41,8 @@ namespace MultilingualMarkdown {
      */
     class TokenBaseEscaper extends TokenBaseKeyworded
     {
-        protected $text; /// the escaped text, including opening and closing escapers
+        protected $content = '';/// the escaped text, including opening and closing escapers
+        protected $length = 0;  /// character length of content
         
         public function __construct(string $marker)
         {
@@ -49,10 +50,7 @@ namespace MultilingualMarkdown {
         }
         public function __toString()
         {
-            return '<escaped text> ' .
-                (mb_strlen($this->text) < 40 ?
-                $this->text :
-                mb_substr($this->text, 0, 20) . '...' . mb_substr($this->text, -20));
+            return $this->debugText();
         }
         public function isType($type): bool
         {
@@ -68,16 +66,17 @@ namespace MultilingualMarkdown {
          */
         public function processInput(object $lexer, object $filer, array &$allTokens): bool
         {
-            $this->text = $this->keyword;
+            $this->content = $this->keyword;
             $this->skipSelf($filer);
             $currentChar = $filer->getCurrentChar();
             if ($currentChar != null) {
                 do {
-                    $this->text .= $currentChar;
+                    $this->content .= $currentChar;
                     $currentChar = $filer->getNextChar();
                     $prevChars = $filer->fetchPreviousChars($this->keywordLength);
                 } while (($prevChars != $this->keyword) && ($currentChar != null));
             }
+            $this->length = mb_strlen($this->content);
             // replace current character by next one and tell Lexer to store it as new current text start
             $lexer->setStoreText(true);
             $lexer->setCurrentChar($currentChar);

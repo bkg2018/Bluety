@@ -46,7 +46,6 @@ namespace MultilingualMarkdown {
         {
 //            echo $this->dashes,"\nOUTPUT:\n",$this->dashes,"\n";
             foreach ($allTokens as $token) {
-                echo 'OUTPUT:',(string)$token;
                 if (!$token->output($this, $filer)) {
                     return false;
                 }

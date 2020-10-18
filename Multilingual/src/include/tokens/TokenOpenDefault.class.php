@@ -49,6 +49,7 @@ namespace MultilingualMarkdown {
         }
         public function output(object $lexer, object $filer): bool
         {
+            $lexer->debugEcho("<OPEN default>\n");
             $lexer->pushLanguage('default', $filer);
             return true;
         }

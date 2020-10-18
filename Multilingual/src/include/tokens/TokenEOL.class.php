@@ -50,7 +50,7 @@ namespace MultilingualMarkdown {
         }
         public function __toString()
         {
-            return '<EOL>';
+            return "<EOL>\n";
         }
     }
 

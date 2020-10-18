@@ -47,6 +47,30 @@ namespace MultilingualMarkdown {
         {
             return '<directive> .toc';
         }
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->debugEcho("<TOC - TODO: output toc content>\n");
+            return true;
+        }
+        public function processInput(object $lexer, object $filer, array &$allTokens): bool
+        {
+            // skip the directive (no need to store)
+            $this->skipSelf($filer);
+            // store the parameters until end of line
+            $this->content = '';
+            do {
+                $curChar = $filer->getNextChar();
+                if (($curChar == "\n") || ($curChar == null)) {
+                    break;
+                }
+                $this->content .= $curChar;
+            } while ($curChar !== null);
+            $lexer->setStoreText(true);
+            $lexer->setCurrentChar($curChar);
+            //TODO: ???
+            $this->length = mb_strlen($this->content);
+            return true;
+        }
     }
 
 }

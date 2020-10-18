@@ -64,5 +64,10 @@ namespace MultilingualMarkdown {
         {
             return ($lexer->getLanguageStackSize() <= 1);
         }
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->debugEcho('<4-SPACES ' . $this->debugText() . ">\n");
+            return true;
+        }
     }
 }
