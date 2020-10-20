@@ -65,12 +65,13 @@ namespace MultilingualMarkdown {
             do {
                 $c = $filer->getNextChar();
             } while (($c != "\n") && ($c != null));
-            $lexer->setStoreText(false);
             $allTokens[] = $this;
             // skip final EOL
             if ($c !== null) {
                 $c = $filer->getNextChar();
             }
+            $lexer->setStoreCurrentChar(false);
+            $lexer->setReadNextChar(true);
             return true;
         }
         public function ouputNow(object $lexer): bool

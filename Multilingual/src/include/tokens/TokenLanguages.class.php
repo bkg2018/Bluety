@@ -80,8 +80,9 @@ namespace MultilingualMarkdown {
                 }
                 $text .= $curChar;
             } while ($curChar !== null);
-            $lexer->setStoreText(true);
             $lexer->setCurrentChar($curChar);
+            $lexer->setStoreCurrentChar(false);
+            $lexer->setReadNextChar(false);
             // set the language codes for output files and new language directive tokens in Lexer
             return $lexer->setLanguagesFrom($text, $filer);
         }

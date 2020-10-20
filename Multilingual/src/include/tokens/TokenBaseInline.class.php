@@ -55,9 +55,10 @@ namespace MultilingualMarkdown {
         {
             $this->skipSelf($filer);
             $tokens[] = $this;
-            // replace current character in Lexer and set it to be stored in current text
-            $lexer->setStoreText(true);
+            // replace current character by next one for next loop
             $lexer->setCurrentChar($filer->getCurrentChar());
+            $lexer->setStoreCurrentChar(false);
+            $lexer->setReadNextChar(false);
             return true;
         }
     }

@@ -62,7 +62,7 @@ namespace MultilingualMarkdown {
         /**
          * Process input: get text until we find another escape marker. 
          * Update tokens array with the token itself. The escaped text is stored
-         * by the token.
+         * by the token. 
          */
         public function processInput(object $lexer, object $filer, array &$allTokens): bool
         {
@@ -77,9 +77,10 @@ namespace MultilingualMarkdown {
                 } while (($prevChars != $this->keyword) && ($currentChar != null));
             }
             $this->length = mb_strlen($this->content);
-            // replace current character by next one and tell Lexer to store it as new current text start
-            $lexer->setStoreText(true);
+            // replace current character by next one for next loop
             $lexer->setCurrentChar($currentChar);
+            $lexer->setStoreCurrentChar(false);
+            $lexer->setReadNextChar(false);
             // self store in token array
             $allTokens[] = $this;
             return true;

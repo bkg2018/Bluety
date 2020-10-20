@@ -51,7 +51,6 @@ namespace MultilingualMarkdown {
         public function processInput(object $lexer, object $filer, array &$tokens): bool
         {
             parent::processInput($lexer, $filer, $tokens);
-            $lexer->setReadNextChar(false);
             return true;
         }
         // Closing directive will have Lexer processing all stored tokens if it empties the language stack.

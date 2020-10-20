@@ -70,7 +70,8 @@ namespace MultilingualMarkdown {
             } while ($curChar !== null);
             // Lexer preprocessing has already set the numbering, simply ignore this line
             // return $lexer->setNumberingFrom($params, $filer);
-            $lexer->setStoreText(false);
+            $lexer->setStoreCurrentChar(false);
+            $lexer->setReadNextChar(false);
             return true;
         }
     }

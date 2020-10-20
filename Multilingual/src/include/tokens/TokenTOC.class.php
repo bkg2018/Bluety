@@ -65,8 +65,8 @@ namespace MultilingualMarkdown {
                 }
                 $this->content .= $curChar;
             } while ($curChar !== null);
-            $lexer->setStoreText(true);
-            $lexer->setCurrentChar($curChar);
+            $lexer->setStoreCurrentChar(false);
+            $lexer->setReadNextChar(false);
             //TODO: ???
             $this->length = mb_strlen($this->content);
             return true;
