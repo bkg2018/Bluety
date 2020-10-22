@@ -41,7 +41,9 @@ namespace MultilingualMarkdown {
     require_once 'Utilities.php';
     require_once 'debugFiler.class.php'; // includes normal Filer
     require_once 'debugLexer.class.php'; // includes normal Lexer
-    require_once 'Parser.class.php';
+
+    use MultilingualMarkdown\debugLexer;
+    use MultilingualMarkdown\Lexer;
 
     /**
      * Generator class.
@@ -56,7 +58,6 @@ namespace MultilingualMarkdown {
         // Handling classes instances
         private $filer = null;                  /// Filer instance, input and output files handling
         private $lexer = null;                  /// Lexer instance, transform text into token list
-        private $parser = null;                 /// Parser instance, interpret tokens
 
         // Settings
         private $outputModeName = '';           /// from -out command line argument
@@ -70,7 +71,6 @@ namespace MultilingualMarkdown {
             } 
             $this->filer = /*(getenv("debug") != 0) ? new debugFiler() : */ new Filer();
             $this->lexer = (getenv("debug") != 0) ? new debugLexer() : new Lexer();
-            $this->parser = new Parser();
             $this->outputModeName = 'md'; 
         }
 

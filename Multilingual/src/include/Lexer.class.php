@@ -68,20 +68,21 @@ namespace MultilingualMarkdown {
         // Prepared datas
         private $allHeadingsArrays = [];    /// One HeadingArray for each input file
         private $allNumberings = [];        /// One numbering scheme for each input file
+        private $allStartingLines = [];     /// Line numbers after languages directive in each file
 
         // MD/HTML output modes for headings anchors and toc links
         private $outputMode = OutputModes::MD;
 
         // Status and settings
-        private $languageSet = false;   /// true when at least one language has been set
-        private $waitLanguages = true;  /// true to wait for .languages directive in each input file
-        private $languageStack = [];    /// stack of tokens names for languages switching, including .all, .default and .ignore
-        private $curLanguage = 'all';   /// name of current language token (index in $knownTokens)
-        private $ignoreLevel = 0;       /// number of opened 'ignore', do not output anything when this variable is not 0
-        private $numberingScheme = '';  /// default numbering scheme from -numbering command line argument
-        private $readNextChar = true;   /// flag tokens can set to ignore next char reading
-        private $currentChar = '';      /// current character, can be changed by token input processing
-        private $currentText = '';      /// Current text flow, to be stored as a text token before next tokken
+        private $languageSet = false;       /// true when at least one language has been set
+        private $waitLanguages = true;      /// true to wait for .languages directive in each input file
+        private $languageStack = [];        /// stack of tokens names for languages switching, including .all, .default and .ignore
+        private $curLanguage = 'all';       /// name of current language token (index in $knownTokens)
+        private $ignoreLevel = 0;           /// number of opened 'ignore', do not output anything when this variable is not 0
+        private $numberingScheme = '';      /// default numbering scheme from -numbering command line argument
+        private $readNextChar = true;       /// flag tokens can set to ignore next char reading
+        private $currentChar = '';          /// current character, can be changed by token input processing
+        private $currentText = '';          /// Current text flow, to be stored as a text token before next tokken
 
         public function __construct()
         {
@@ -228,21 +229,45 @@ namespace MultilingualMarkdown {
         public function process(object $filer): bool
         {
             $relFilename = $filer->current();
-            $this->currentChar = $filer->getCurrentChar();  /// current character (between tokens)
-            $this->currentText = '';    /// current text out of tokens
+            $this->currentChar = '';
+            $this->currentText = '';
             $emptyText = true;
-            $allTokens = [];            /// current token sequence to execute
+            $allTokens = [];
+            // skip right after languages directive
+            $this->languageSet = false;
             if ($this->waitLanguages) {
-                $this->languageSet = false;
-                while ($this->languageSet) {
-
-                }
+                $curLineNumber = $this->allStartingLines[$relFilename];
+                do {
+                    $this->currentChar = $filer->getNextChar();
+                    if ($this->currentChar === null) return false;
+                } while ($filer->getCurrentLineNumber() <= $curLineNumber);
+                $this->languageSet = true;
             }
-
+            // now interpret current character
             while ($this->currentChar != null) {
                 $token = null;
                 $curLineNumber = $filer->getCurrentLineNumber();
+                $token = null;
                 switch ($this->currentChar) {
+                    case '.':
+                        // eliminate trivial case when followed by a space or EOL
+                        $nextChar = $filer->fetchNextChars(1);
+                        if (($nextChar != ' ') && ($nextChar != "\n") && ($nextChar != "\t")) {
+                            // try to recognize a token starting now
+                            $token = $this->fetchToken($filer);
+                            if ((!$this->languageSet) && ($token !== null) && (!$token->identifyInBuffer('.languages', 0))) {
+                                $token = null;
+                            }
+                        }
+                        // no token?
+                        if ($token == null) {
+                            $this->currentText .= $this->currentChar;
+                            $emptyText = false;
+                            $this->currentChar = $filer->getNextChar();
+                            break;
+                        }
+
+                        break;
                     case '`':
                     case '"':
                         if ($this->languageSet) {
@@ -267,21 +292,6 @@ namespace MultilingualMarkdown {
                             }
                         }
                          break;
-                    case '.':
-                        // eliminate trivial case when followed by a space or EOL
-                        $nextChar = $filer->fetchNextChars(1);
-                        if (($nextChar != ' ') && ($nextChar != "\n") && ($nextChar != "\t")) {
-                            $token = $this->fetchToken($filer);
-                            if ($token == null) {
-                            } else {
-                                // before .languages directive, ignore everything but the directive
-                                if (!$this->languageSet && !$token->identifyInBuffer('.languages', 0)) {
-                                    $token = null;
-                                }
-                            }
-                        } else {
-                        }
-                        break;
                     case '':
                         break;
                     default:
@@ -448,6 +458,8 @@ namespace MultilingualMarkdown {
                     if ($languagesToken->identifyInBuffer($text, 0)) {
                         $languageSet = trim(mb_substr($text, $languagesToken->getLength()));
                         $this->setLanguagesFrom($languageSet, $filer);
+                        // remember line number for languages directive
+                        $this->allStartingLines[$relFilename] = $curLineNumber;
                         continue;
                     }
                     // ignore any line before the .languages directive
@@ -480,6 +492,11 @@ namespace MultilingualMarkdown {
                     }
                 } while (!feof($file));
                 fclose($file);
+
+                // force fake line number for languages directive if none
+                if (!isset($this->allStartingLines[$relFilename])) {
+                    $this->allStartingLines[$relFilename] = 0;
+                }
 
                 // force a level 1 object if no headings
                 if (count($headingArray) == 0) {
