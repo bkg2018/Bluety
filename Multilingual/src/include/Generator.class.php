@@ -242,6 +242,7 @@ namespace MultilingualMarkdown {
         {
             $dashes = str_repeat('-', 60);
             $this->preProcess();
+            $this->lexer->initSet();
             foreach ($this->filer as $index => $relFilename) {
                 echo "$dashes\nPROCESSING FILE: $relFilename\n$dashes\n";
                 if (!$this->process($index)) {
@@ -268,12 +269,9 @@ namespace MultilingualMarkdown {
                 return false;
             }
             $this->lexer->readyOutputs($this->filer);
-
             $this->lexer->process($this->filer);
-            
             $this->filer->closeOutput();
             $this->filer->closeInput();
-
             return true;
         }
     }

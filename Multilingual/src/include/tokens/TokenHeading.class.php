@@ -37,15 +37,19 @@ namespace MultilingualMarkdown {
 
     /**
      * Heading token.
+     *
+     * The token stores a copy of the Heading object given at creation: it
+     * won't find the heading object itself because the token has no knowledge of
+     * the preprocessed datas in Lexer.
      */
-    class TokenHeading extends Token
+    class TokenHeading extends TokenBaseSingleLine
     {
         private $heading = null;
 
         public function __construct(object $heading)
         {
             $this->heading = $heading;
-            parent::__construct(TokenType::HEADING);
+            parent::__construct(TokenType::HEADING, '#', true);
         }
         public function __toString()
         {
@@ -60,24 +64,13 @@ namespace MultilingualMarkdown {
             }
             return true;
         }
-        public function processInput(object $lexer, object $filer, array &$allTokens): bool
-        {
-            do {
-                $c = $filer->getNextChar();
-            } while (($c != "\n") && ($c != null));
-            $allTokens[] = $this;
-            // skip final EOL
-            if ($c !== null) {
-                $c = $filer->getNextChar();
-            }
-            $lexer->setStoreCurrentChar(false);
-            $lexer->setReadNextChar(true);
-            return true;
-        }
         public function ouputNow(object $lexer): bool
         {
             return ($lexer->getLanguageStackSize() <= 1);
         }
+        /**
+         * TODO: actual output
+         */
         public function output(object $lexer, object $filer): bool
         {
             $lexer->debugEcho("<HEADING {$this->heading}>\n");

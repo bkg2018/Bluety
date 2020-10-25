@@ -211,6 +211,7 @@ namespace MultilingualMarkdown {
             }
             return mb_substr($this->buffer, $startPosition, $length);
         }
+        
         /**
          * Read a string with a number of characters starting with the current one.
          * Return null if already at end of file. The final current position is set

@@ -60,6 +60,24 @@ namespace MultilingualMarkdown {
             }
             return parent::identifyInBuffer($buffer, $pos);
         }
+
+        /**
+         * Process input: get text until end of line.
+         * Update tokens array with the token itself. The escaped text is stored
+         * by the token. 
+         */
+        public function processInput(object $lexer, object $filer, array &$allTokens): bool
+        {
+            $this->content = $filer->getEndOfLine(); // include the 4 spaces prefix
+            // add the end of line character
+            $this->content .= $filer->getCurrentChar();
+            $this->length = mb_strlen($this->content);
+            // go next character
+            $lexer->setCurrentChar($filer->getNextChar());
+            $allTokens[] = $this;
+            return true;
+        }
+
         public function ouputNow(object $lexer): bool
         {
             return ($lexer->getLanguageStackSize() <= 1);

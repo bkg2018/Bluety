@@ -73,7 +73,19 @@ namespace MultilingualMarkdown {
             }
             return parent::identifyInFiler($filer);
         }
+        /**
+         * Processing input : goto next character
+         */
+        public function processInput(object $lexer, object $filer, array &$tokens): bool
+        {
+           $tokens[] = $this;
+           $lexer->setCurrentChar($filer->getNextChar());
+           return true;
+        }
 
+        /**
+         * Output an empty line.
+         */
         public function output(object $lexer, object $filer): bool
         {
             $lexer->debugEcho("<EMPTYLINE>\n");

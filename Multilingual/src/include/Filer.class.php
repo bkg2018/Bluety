@@ -527,7 +527,8 @@ namespace MultilingualMarkdown {
 
         /**
          * Read a number of characters including the current one and return the string.
-         * Return null if already at end of file.
+         * Return null if already at end of file. The final current position is set
+         * on the first character past the string.
          */
         public function getString(int $charsNumber): ?string
         {
@@ -609,15 +610,49 @@ namespace MultilingualMarkdown {
         {
             return $this->storage->getCurrentChar();
         }
+
         /**
          * Read and return the next UTF-8 character from current buffer, return null at end of file.
          *
-         * @return null|string new current character ('\n' for EOL), null when file and buffer are finished.
+         * @return null|string new current character ('\n' for EOL), null at end of file
          */
         public function getNextChar(): ?string
         {
             return $this->storage->getNextChar();
         }
+
+        /**
+         * Skip every character starting at next one until next line starts. Do not read the first character on new line,
+         * so at exit the current character is the current line EOL.
+         * 
+         * @return null|string EOL or null at end of file
+         */
+        public function gotoNextLine(): ?string
+        {
+            do {
+                $char = $this->getNextChar();
+            } while (($char !== null) && ($char != "\n"));
+            return $char;
+        }
+
+        /**
+         * Read and return the text until the end of line. Do not include
+         * the end of line character in the returned text. 
+         */
+        public function getEndOfLine(): ?string
+        {
+            $text = $this->getCurrentChar();
+            $continue = true;
+            do {
+                $c = $this->getNextChar();
+                $continue = (($c != "\n") && ($c !=  null));
+                if ($continue) {
+                    $text .= $c;
+                }
+            } while ($continue);
+            return $text;
+        }
+
         /**
          * Look at next UTF-8 characters.
          * This call doesn't advance input position but rather just send back the next characters

@@ -36,39 +36,48 @@ namespace MultilingualMarkdown {
     
     /**
      * .TOC directive token.
+     * 
+     * The token stores the parameters following it as a string, and
+     * interpret them in output() to send the decorated headings.
      */
     class TokenTOC extends TokenBaseSingleLine
     {
         public function __construct()
         {
-            parent::__construct('.toc', true);
+            parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, '.toc', true);
         }
         public function __toString()
         {
             return '<directive> .toc';
         }
+
+        /**
+         * Do the actual TOC output into filer.
+         * The output will be done in tyhe current output context so care
+         * should be taken not to put .TOC directive in a language specific
+         * text part, unless the expected effect is to restrain a toc to
+         * a specific language.
+         */
         public function output(object $lexer, object $filer): bool
         {
             $lexer->debugEcho("<TOC - TODO: output toc content>\n");
             return true;
         }
+
+        /**
+         * TOC directive input processing.
+         *
+         * Processing input is only a matter of reading until end of line
+         * and storing content. Actual output is done in output().
+         */
         public function processInput(object $lexer, object $filer, array &$allTokens): bool
         {
             // skip the directive (no need to store)
             $this->skipSelf($filer);
             // store the parameters until end of line
-            $this->content = '';
-            do {
-                $curChar = $filer->getNextChar();
-                if (($curChar == "\n") || ($curChar == null)) {
-                    break;
-                }
-                $this->content .= $curChar;
-            } while ($curChar !== null);
-            $lexer->setStoreCurrentChar(false);
-            $lexer->setReadNextChar(false);
-            //TODO: ???
+            $this->content = $filer->getEndOfLine();
             $this->length = mb_strlen($this->content);
+            $lexer->setCurrentChar($filer->getNextChar());
             return true;
         }
     }

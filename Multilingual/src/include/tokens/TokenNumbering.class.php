@@ -41,38 +41,11 @@ namespace MultilingualMarkdown {
     {
         public function __construct()
         {
-            parent::__construct('.numbering', true);
+            parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, '.numbering', true);
         }
         public function __toString()
         {
             return '<directive> .numbering((';
-        }
-       /**
-         * Process .numbering directive.
-         * Register the numbering scheme.
-         *
-         * @param object $lexer  the Lexer object
-         * @param object $filer  the Filer object ready for input, positionned on the directive
-         * @param array  $tokens [IGNORED] ignored by this directive
-         */
-        public function processInput(object $lexer, object $filer, array &$tokens): bool
-        {
-            // skip the directive (no need to store)
-            $this->skipSelf($filer);
-            // get the parameters until end of line
-            $params = '';
-            do {
-                $curChar = $filer->getNextChar();
-                if (($curChar == "\n") || ($curChar == null)) {
-                    break;
-                }
-                $params .= $curChar;
-            } while ($curChar !== null);
-            // Lexer preprocessing has already set the numbering, simply ignore this line
-            // return $lexer->setNumberingFrom($params, $filer);
-            $lexer->setStoreCurrentChar(false);
-            $lexer->setReadNextChar(false);
-            return true;
         }
     }
 }

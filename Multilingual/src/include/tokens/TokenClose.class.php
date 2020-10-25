@@ -45,14 +45,9 @@ namespace MultilingualMarkdown {
         }
         public function __toString()
         {
-            return '<directive> .))';
+            return "<close {$lexer->getCurLanguage()}>";
         }
-        // Store the token and  simulate language stacking (has no effect until outputs are actually done)
-        public function processInput(object $lexer, object $filer, array &$tokens): bool
-        {
-            parent::processInput($lexer, $filer, $tokens);
-            return true;
-        }
+
         // Closing directive will have Lexer processing all stored tokens if it empties the language stack.
         public function ouputNow(object $lexer): bool
         {

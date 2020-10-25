@@ -50,12 +50,7 @@ namespace MultilingualMarkdown {
         }
         public function __toString()
         {
-            return "<directive> .{$this->keyword}((";
-        }
-        public function processInput(object $lexer, object $filer, array &$tokens): bool
-        {
-            parent::processInput($lexer, $filer, $tokens);
-            return true;
+            return "<open {$this->keyword}>";
         }
         public function output(object $lexer, object $filer): bool
         {

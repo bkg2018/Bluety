@@ -36,8 +36,9 @@ namespace MultilingualMarkdown {
 
     /**
      * Streaming text directive token.
-     * These directive tokens can be an 'open' directive like .all(( or a 'close'
-     * directive likke '.))'. Identification is done the same way.
+     *
+     * The derived tokens are used for directives lying in the text flow, like the open or close
+     * language directives .<code>(( and .)).
      *
      * This class is not instanciated by itself but is base for actual directives tokens.
      */
@@ -51,14 +52,14 @@ namespace MultilingualMarkdown {
         {
             return '- FORBIDDEN: base TokenBaseInline class, check Lexer code -';
         }
+        /**
+         * Processing input: store in token list, skip over directive and go next character. 
+         */
         public function processInput(object $lexer, object $filer, array &$tokens): bool
         {
             $this->skipSelf($filer);
             $tokens[] = $this;
-            // replace current character by next one for next loop
             $lexer->setCurrentChar($filer->getCurrentChar());
-            $lexer->setStoreCurrentChar(false);
-            $lexer->setReadNextChar(false);
             return true;
         }
     }

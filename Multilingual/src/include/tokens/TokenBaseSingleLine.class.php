@@ -42,9 +42,9 @@ namespace MultilingualMarkdown {
      */
     class TokenBaseSingleLine extends TokenBaseKeyworded
     {
-        public function __construct(string $keyword, bool $ignoreCase)
+        public function __construct(int $tokenType, string $keyword, bool $ignoreCase)
         {
-            parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, $keyword, $ignoreCase);
+            parent::__construct($tokenType, $keyword, $ignoreCase);
         }
         public function __toString()
         {
@@ -52,6 +52,21 @@ namespace MultilingualMarkdown {
         }
         public function ouputNow(object $lexer): bool
         {
+            return true;
+        }
+       /**
+         * Process one-line directive.
+         * Simply ignore the line and go to next line start character.
+         *
+         * @param object $lexer  the Lexer object
+         * @param object $filer  the Filer object ready for input, positionned on the directive
+         * @param array  $tokens [IGNORED] ignored by this directive
+         */
+        public function processInput(object $lexer, object $filer, array &$tokens): bool
+        {
+            $tokens[] = $this;
+            $filer->gotoNextLine();
+            $lexer->setCurrentChar($filer->getNextChar());
             return true;
         }
     }

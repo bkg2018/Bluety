@@ -36,14 +36,21 @@ namespace MultilingualMarkdown {
     
     /**
      * Class for an escaper starting/ending.
+     * 
      * This class will store escaped text tokens by parsing until its closing marker.
      * This is why there are only opening escaper tokens and no closing ones.
+     * The content text will be output as is with no variable expansion and no
+     * directive interpretation.
+     * 
+     * Escaping can be done with multiple backtics as well as unique ones, so the identification
+     * must be checked by trying triple first, then double, then single bacticks in this order.
+     * This is the only place where identification order is significant.
      */
     class TokenBaseEscaper extends TokenBaseKeyworded
     {
         protected $content = '';/// the escaped text, including opening and closing escapers
         protected $length = 0;  /// character length of content
-        
+
         public function __construct(string $marker)
         {
             parent::__construct(TokenType::ESCAPER, $marker, true);
@@ -60,15 +67,16 @@ namespace MultilingualMarkdown {
             return parent::isType($type);
         }
         /**
-         * Process input: get text until we find another escape marker. 
+         * Process input: get text until we find the same escape marker. 
          * Update tokens array with the token itself. The escaped text is stored
          * by the token. 
          */
         public function processInput(object $lexer, object $filer, array &$allTokens): bool
         {
-            $this->content = $this->keyword;
+            $this->content = $this->keyword;    
             $this->skipSelf($filer);
             $currentChar = $filer->getCurrentChar();
+            $prevChars = '';
             if ($currentChar != null) {
                 do {
                     $this->content .= $currentChar;
@@ -77,12 +85,21 @@ namespace MultilingualMarkdown {
                 } while (($prevChars != $this->keyword) && ($currentChar != null));
             }
             $this->length = mb_strlen($this->content);
-            // replace current character by next one for next loop
-            $lexer->setCurrentChar($currentChar);
-            $lexer->setStoreCurrentChar(false);
-            $lexer->setReadNextChar(false);
-            // self store in token array
             $allTokens[] = $this;
+            $lexer->setCurrentChar($currentChar);
+            return true;
+        }
+
+        /**
+         * Output content to the Filer object or change its settings.
+         *
+         * The content is sent as is, with no variables expansion nor directive interpretation.
+         *
+         * @param object $filer the Filer instance object which receives outputs and settings
+         */
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->debugEcho("<escaped output>\n");
             return true;
         }
     }

@@ -80,7 +80,6 @@ namespace MultilingualMarkdown {
         private $curLanguage = 'all';       /// name of current language token (index in $knownTokens)
         private $ignoreLevel = 0;           /// number of opened 'ignore', do not output anything when this variable is not 0
         private $numberingScheme = '';      /// default numbering scheme from -numbering command line argument
-        private $readNextChar = true;       /// flag tokens can set to ignore next char reading
         private $currentChar = '';          /// current character, can be changed by token input processing
         private $currentText = '';          /// Current text flow, to be stored as a text token before next tokken
 
@@ -113,10 +112,32 @@ namespace MultilingualMarkdown {
             // these tokens can be instanciated more than once:
             //$this->knownTokens[] = new TokenOpenLanguage($language);
             //$this->knownTokens[] = new TokenText($content);
+        }
 
+        /**
+         * Clear all datas from Lexer.
+         */
+        public function reset(): void
+        {
+            unset($this->languageList);
             $this->languageList = new LanguageList();
-            $this->allNumberings = [];
+            \unsetArrayContent($this->allHeadingsArrays);
+            \unsetArrayContent($this->allNumberings);
+            \unsetArrayContent($this->allStartingLines);
+            \unsetArrayContent($this->languageStack);
+            $this->numberingScheme = '';
+            $this->initSet();
+        }
 
+        /**
+         * Init status for a ready set of files.
+         */
+        public function initSet(): void
+        {
+            $this->languageSet = false;
+            $this->waitLanguages = true;
+            $this->resetCurrentText();            
+            $this->ignoreLevel = 0;
         }
 
         /**
@@ -143,6 +164,27 @@ namespace MultilingualMarkdown {
         {
             $this->currentText = '';
             $this->emptyText = true;
+        }
+
+        /**
+         * Store current car in current text and go next char.
+         */
+        public function storeCurrentGoNext(object $filer): void
+        {
+            $this->currentText .= $this->currentChar;
+            $this->emptyText = false;
+            $this->currentChar = $filer->getNextChar();
+        }
+
+        /**
+         * Store current text as token if not empty, then reset.
+         */
+        public function storeTextToken(array &$allTokens): void
+        {
+            if (!$this->emptyText) {
+                $allTokens[] = new TokenText($this->currentText);
+                $this->resetCurrentText();
+            }
         }
 
         /**
@@ -230,12 +272,11 @@ namespace MultilingualMarkdown {
         {
             $relFilename = $filer->current();
             $this->currentChar = '';
-            $this->currentText = '';
-            $emptyText = true;
+            $this->resetCurrentText();
             $allTokens = [];
-            // skip right after languages directive
-            $this->languageSet = false;
-            if ($this->waitLanguages) {
+
+            // skip right after languages directive (only at first time)
+            if ($this->waitLanguages && !$this->languageSet) {
                 $curLineNumber = $this->allStartingLines[$relFilename];
                 do {
                     $this->currentChar = $filer->getNextChar();
@@ -243,85 +284,103 @@ namespace MultilingualMarkdown {
                 } while ($filer->getCurrentLineNumber() <= $curLineNumber);
                 $this->languageSet = true;
             }
+            $this->currentChar = $filer->getCurrentChar();
+
             // now interpret current character
+            // important functions are :
+            // - storeCurrentGoNext() : store current character into current text and go to next character
+            // - gotoNextLine() : skip over next characters until end of current line
+            // - fetchNextChars() : fetch more characters from input while not changing read position
+            // - fetchToken() : try to recognize a token starting at current character
+            // 'fetch' means that more characters will be taken from input if needed, but current read position will not change
             while ($this->currentChar != null) {
-                $token = null;
+                // just for information
                 $curLineNumber = $filer->getCurrentLineNumber();
+                // Identify token starting at this caracter, or store in current text
                 $token = null;
                 switch ($this->currentChar) {
                     case '.':
-                        // eliminate trivial case when followed by a space or EOL
-                        $nextChar = $filer->fetchNextChars(1);
+                        // ignore when followed by space or EOL
+                        $nextChar = $filer->fetchNextChars(1); // pre-read next character
                         if (($nextChar != ' ') && ($nextChar != "\n") && ($nextChar != "\t")) {
-                            // try to recognize a token starting now
                             $token = $this->fetchToken($filer);
-                            if ((!$this->languageSet) && ($token !== null) && (!$token->identifyInBuffer('.languages', 0))) {
+                            // special handling for '.languages' if needed
+                            if ((!$this->languageSet) && ($token !== null)) {
+                                if ($token->identifyInBuffer('.languages', 0)) {
+                                    // language are set by preprocessing, simply acknowledge the directive
+                                    $this->languageSet = true;
+                                    $filer->gotoNextLine();
+                                }
+                                // ignore 1) any token before .languages is set 2) .languages directive itself
                                 $token = null;
+                            } // keep token when after .languages
+                        }
+                        if ($token == null) {
+                            $this->storeCurrentGoNext($filer);
+                        }
+                        break;
+                    case '#':
+                        if ($this->languageSet) {
+                            // eliminate trivial case (not preceded by EOL)
+                            if ($filer->getPrevChar() == "\n") {
+                                // find maching heading from preprocessed
+                                $headingsArray = $this->allHeadingsArrays[$relFilename];
+                                $heading = $headingsArray->findByLine($filer->getCurrentLineNumber());
+                                if ($heading !== null) {
+                                    $token = new TokenHeading($heading);
+                                    break;
+                                }
+                            }
+                            if ($token == null) {
+                                $this->storeCurrentGoNext($filer);
                             }
                         }
-                        // no token?
-                        if ($token == null) {
-                            $this->currentText .= $this->currentChar;
-                            $emptyText = false;
-                            $this->currentChar = $filer->getNextChar();
-                            break;
-                        }
-
                         break;
                     case '`':
                     case '"':
                         if ($this->languageSet) {
-                            // start of escaped text
+                            // start of escaped text?
                             $token = $this->fetchToken($filer);
                             if ($token === null) {
                                 if ($trace) {
                                     $filer->error("unrecognized escape character [{$this->currentChar}] in text, should translate into a token", __FILE__, __LINE__);
                                 }
+                                $this->storeCurrentGoNext($filer);
                             }
                         } 
                         break;
-                    case '#':
-                        // eliminate trivial case (not preceded by EOL)
-                        $prevChar = $filer->getPrevChar();
-                        if ($prevChar != "\n") {
-                        } else {
-                            $headingsArray = $this->allHeadingsArrays[$relFilename];
-                            $heading = $headingsArray->findByLine($filer->getCurrentLineNumber());
-                            if ($heading !== null) {
-                                $token = new TokenHeading($heading);
+                    case ' ':
+                        if ($this->languageSet) {
+                            $token = $this->fetchToken($filer);
+                            if ($token == null) {
+                                $this->storeCurrentGoNext($filer);
                             }
-                        }
-                         break;
-                    case '':
+                        } 
                         break;
                     default:
+                        if ($this->languageSet) {
+                            $this->storeCurrentGoNext($filer);
+                        }
                         break;
                 }
-                // handle token if found one
                 if ($token) {
-                    // first, store current temporary text if any
-                    if (!$emptyText) {
-                        $allTokens[] = new TokenText($this->currentText);
-                        $this->currentText = '';
-                        $emptyText = true;
-                    }
-                    // let the token process further input if needed
-                    $token->processInput($this, $filer, $allTokens);
-                    // update output files at token request
-                    if ($token->ouputNow($this) && (count($allTokens) > 0)) {
+                    $this->storeTextToken($allTokens); // stack a text token when needed
+                    $token->processInput($this, $filer, $allTokens); // let token process any input
+                    if ($token->ouputNow($this) && (count($allTokens) > 0)) { // and do tokens output now if needed
                         $this->output($filer, $allTokens);
                     }
                 } 
             }
-            // finish with anything left
-            if (!$emptyText) {
-                $allTokens[] = new TokenText($this->currentText);
+            // finish anything left
+            $this->storeTextToken($allTokens);
+            if ($token) {
+                $token->processInput($this, $filer, $allTokens);
             }
             if (count($allTokens) > 0) {
                 $this->output($filer, $allTokens);
             }
             \unsetArrayContent($allTokens);
-            $this->currentText = '';
+            $this->resetCurrentText();
             return true;
         }
 
@@ -431,6 +490,8 @@ namespace MultilingualMarkdown {
             $languagesToken = $this->knownTokens['languages']; // shortcut
             $numberingToken = $this->knownTokens['numbering']; // shortcut
             Heading::init();// reset global headings numbering to 0
+            // remember if the .languages directive has been read
+            $languageSet = false;
             // Explore each input file ($filer is iterable and returns relative filenames and index)
             foreach ($filer as $index => $relFilename) {
                 $filename = $filer->getInputFile($index); // full file path
@@ -446,8 +507,6 @@ namespace MultilingualMarkdown {
                 $headingArray = new HeadingArray($relFilename);
                 // keep track of the line number for each heading
                 $curLineNumber = 0;
-                // remember if the .languages directive has been read
-                $languageSet = false;
                 // loop on each file line@
                 do {
                     $text = getNextLineTrimmed($file, $curLineNumber);
@@ -456,8 +515,9 @@ namespace MultilingualMarkdown {
                     }
                     // handle .languages directive before anything else
                     if ($languagesToken->identifyInBuffer($text, 0)) {
-                        $languageSet = trim(mb_substr($text, $languagesToken->getLength()));
-                        $this->setLanguagesFrom($languageSet, $filer);
+                        $languageParams = trim(mb_substr($text, $languagesToken->getLength()));
+                        $this->setLanguagesFrom($languageParams, $filer);
+                        $languageSet = true;
                         // remember line number for languages directive
                         $this->allStartingLines[$relFilename] = $curLineNumber;
                         continue;
@@ -471,24 +531,10 @@ namespace MultilingualMarkdown {
                         $numberingScheme = trim(mb_substr($text, $numberingToken->getLength()));
                         $this->allNumberings[$relFilename] = new Numbering($numberingScheme, $this);
                     }
-                    // skip escaped lines (code fences, double back-ticks)
-                    $pos = strpos($text, '```');
-                    if ($pos !== false) {
-                        // escaped by double backticks+space / space+double backticks?
-                        if (($pos <= 2) || (mb_substr($text, $pos - 3, 3) != '`` ') || (mb_substr($text, $pos + 3, 3) != ' ``')) {
-                            do {
-                                $text = getNextLineTrimmed($file, $curLineNumber);
-                                if (!$text) {
-                                    break;
-                                }
-                            } while (strpos($text, '```') === false);
-                        }
-                    } else {
-                        // store headings
-                        if (($text[0] ?? '') == '#') {
-                            $heading = new Heading($text, $curLineNumber, $this);
-                            $headingArray[] = $heading;
-                        }
+                    // store headings
+                    if (($text[0] ?? '') == '#') {
+                        $heading = new Heading($text, $curLineNumber, $this);
+                        $headingArray[] = $heading;
                     }
                 } while (!feof($file));
                 fclose($file);
@@ -529,6 +575,9 @@ namespace MultilingualMarkdown {
          */
         public function setLanguagesFrom(string $parameters, object $filer): bool
         {
+            if ($this->languageList == null) {
+                $this->languageList = new LanguageList();
+            }
             $result = $this->languageList->setFrom($parameters);
             if ($result) {
                 foreach ($this->languageList as $index => $language) {

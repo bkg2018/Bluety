@@ -11,11 +11,11 @@
  * Construction parameters depend on the Token: not all tokens need a keyword or a content.
  *
  * A Token is responsible for self-identification against a given buffer content and position, and for advancing
- * into the buffer if it has to process some content. These two functions are available on all Tokens and should at
- * least return false for identification or unchahged position for processing. Processing should not be
- * done without a prealable positive self identification: the token will not check for this. Some tokens
- * do no process a buffer but rather simply store an information: the function processInput() will then do nothing
- * and will not advance the position more than right after the token.
+ * into the buffer if it has to process some content or parameters. These two functions are available on all Tokens
+ * and should at least return false or true for identification and adjust position for processing.
+ * Processing should not be done without a prealable positive self identification: the token will not check
+ * for this. Some tokens do no process a buffer but rather simply store an information: the function processInput() 
+ * will then do nothing and will not advance the position more than right after the token.
  *
  * The Token also has an output() function which is called to possibly output some content to output files.
  * The outputs are done through the Filer class instance which is given to output(). Tokens whichh have nothing
@@ -52,7 +52,7 @@ namespace MultilingualMarkdown {
 
     /**
      * Token base class.
-     * Represents a type of template text part.
+     * Represents a directive or text part.
      */
     class Token
     {
@@ -74,7 +74,7 @@ namespace MultilingualMarkdown {
         /**
          * Let the token self-identify against an input handler Filer object.
          *
-         * @param object $filer the Filer object
+         * @param object $filer the Filer input handling object
          *
          * @return bool true if theh current token can be found at current Filer position and buffer content.
          */
@@ -86,8 +86,8 @@ namespace MultilingualMarkdown {
          /**
          * Let the token self-identify against an UTF-8 buffer and position.
          *
-         * @param string $buffer the buffer holding UTFF-8 content
-         * @param int    $pos    the position in buffer where to start identification.
+         * @param string $buffer a buffer holding UTF-8 content
+         * @param int    $pos    the position in $buffer where to start identification
          */
         public function identifyInBuffer(string $buffer, int $pos): bool
         {
@@ -137,28 +137,26 @@ namespace MultilingualMarkdown {
 
         /**
          * Process the input starting at the current position, assuming the token starts
-         * at this position.which should be right
-         * after the token identifier, and return an error code, null to keep the token as is,
-         * or an array of tokens if the token builds other tokens to store.
+         * at this position which should be right after the token identifier.
          *
          * If the current Token has to handle part of the following buffer content,
          * it must process it and update the buffer position to right after any character
-         * which it takes care of. The corresponding buffer part will not be available
+         * it takes care of. The corresponding buffer part will not be available
          * to further tokens so the current token must store the content if needed, or
          * withdraw it if it only has informational purposes.
          *
-         * The function may return an array of tokens including the original token itself
-         * if it has to create more tokens for its content and work.
+         * The function may update an array of tokens by including the token itself
+         * but also more tokens if it has to create them for its content and work.
          *
-         * Calling the process function with a wrong position can lead to wrong
+         * Calling the process function with a wrong position will lead to wrong
          * results: it must be called only after a positive self-identification.
          *
-         * Default behaviour is to store itself in the tokens array.
+         * Default behaviour is to store itself in the tokens array and do nothing more.
          *
          * @param object $lexer  the Lexer object, used e.g. by languages directive to add tokens.
-         * @param object $filer  the input file handling object, positionned on current character.
-         * @param array  $tokens [IN/OUT] array of tokens where to store the token and any created
-         *                       tokens during the processing.
+         * @param object $filer  the Filer input handling object, positionned on current character.
+         * @param array  $tokens [IN/OUT] array of tokens where to store the token and any other 
+         *                       tokens created during processing.
          *
          * @return int|null|array an error code > 0, or null to keep the token alone, or an array
          *                        of tokens starting with the token itself.
@@ -166,7 +164,6 @@ namespace MultilingualMarkdown {
         public function processInput(object $lexer, object $filer, array &$tokens): bool
         {
            $tokens[] = $this;
-           $lexer->setStoreCurrentChar(false);
            return true;
         }
  
@@ -176,11 +173,9 @@ namespace MultilingualMarkdown {
         protected function debugTextPart(string $text): string
         {
             $result = '';
-            if (isset($this->length) && isset($this->content)) {
-                for ($pos =  0 ; $pos < $this->length ; $pos += 1) {
-                    $c = mb_substr($text, $pos, 1);
-                    $result .= $c < ' ' ? '['.ord($c).']' : $c;
-                }
+            for ($pos =  0 ; $pos < mb_strlen($text) ; $pos += 1) {
+                $c = mb_substr($text, $pos, 1);
+                $result .= $c < ' ' ? '['.ord($c).']' : $c;
             }
             return $result;
         }
@@ -212,7 +207,9 @@ namespace MultilingualMarkdown {
          */
         public function output(object $lexer, object $filer): bool
         {
-            $lexer->debugEcho('<no output() for class ' . get_class($this) . ">\n");
+            $class = get_class($this);
+            $backslash = strrpos($class, '\\');
+            $lexer->debugEcho('<no output() for class ' . substr($class, $backslash + 1) . ">\n");
             return true;
         }
 

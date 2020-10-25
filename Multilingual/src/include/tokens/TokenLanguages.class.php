@@ -41,7 +41,7 @@ namespace MultilingualMarkdown {
     {
         public function __construct()
         {
-            parent::__construct('.languages', true);
+            parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, '.languages', true);
         }
         public function __toString()
         {
@@ -58,34 +58,5 @@ namespace MultilingualMarkdown {
             return parent::identifyInFiler($filer);
         }
 
-        /**
-         * Process .languages directive.
-         * Register each language code and ISO association, and main language.
-         * Indirectly create a TokenOpenLanguage token in Lexer for each code.
-         *
-         * @param object $lexer  the Lexer object, needed to add language open directives (e.g. '.en((')
-         * @param object $filer  the Filer object ready for input, positionned on the directive
-         * @param array  $tokens [IGNORED] ignored by this directive
-         */
-        public function processInput(object $lexer, object $filer, array &$tokens): bool
-        {
-            // skip the directive (no need to store)
-            $this->skipSelf($filer);
-            // store the parameters until end of line
-            $text = '';
-            do {
-                $curChar = $filer->getNextChar();
-                if (($curChar == "\n") || ($curChar == null)) {
-                    break;
-                }
-                $text .= $curChar;
-            } while ($curChar !== null);
-            $lexer->setCurrentChar($curChar);
-            $lexer->setStoreCurrentChar(false);
-            $lexer->setReadNextChar(false);
-            // set the language codes for output files and new language directive tokens in Lexer
-            return $lexer->setLanguagesFrom($text, $filer);
-        }
-        // no need for output() and outputNow()
     }
 }
