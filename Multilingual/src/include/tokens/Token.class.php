@@ -164,6 +164,7 @@ namespace MultilingualMarkdown {
         public function processInput(object $lexer, object $filer, array &$tokens): bool
         {
            $tokens[] = $this;
+           $lexer->setCurrentChar($filer->getNextChar());
            return true;
         }
  

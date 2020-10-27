@@ -72,9 +72,9 @@ namespace MultilingualMarkdown {
             // add the end of line character
             $this->content .= $filer->getCurrentChar();
             $this->length = mb_strlen($this->content);
+            $allTokens[] = $this;
             // go next character
             $lexer->setCurrentChar($filer->getNextChar());
-            $allTokens[] = $this;
             return true;
         }
 

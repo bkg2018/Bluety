@@ -98,7 +98,7 @@ namespace MultilingualMarkdown {
             $this->knownTokens['close']      = new TokenClose();                     ///  .))
 
             // other streamed directives
-            $this->knownTokens[]             = new TokenEmptyLine();                 ///  \n at beginning of line
+            $this->knownTokens['empty']      = new TokenEmptyLine();                 ///  \n at beginning of line
             $this->knownTokens['eol']        = new TokenEOL();                       ///  \n, must be checked later than TokenEmptyLine
 
             // escaped text streamed directives, derived from TokenBaseEscaper
@@ -190,7 +190,7 @@ namespace MultilingualMarkdown {
         /**
          * Set current character.
          */
-        public function setCurrentChar(string $char): void
+        public function setCurrentChar(?string $char): void
         {
             $this->currentChar = $char;
         }
@@ -350,6 +350,7 @@ namespace MultilingualMarkdown {
                         } 
                         break;
                     case ' ':
+                    case "\n":
                         if ($this->languageSet) {
                             $token = $this->fetchToken($filer);
                             if ($token == null) {
@@ -373,9 +374,6 @@ namespace MultilingualMarkdown {
             }
             // finish anything left
             $this->storeTextToken($allTokens);
-            if ($token) {
-                $token->processInput($this, $filer, $allTokens);
-            }
             if (count($allTokens) > 0) {
                 $this->output($filer, $allTokens);
             }
