@@ -33,6 +33,10 @@ namespace MultilingualMarkdown {
     require_once 'Lexer.class.php';
     use MultilingualMarkdown\Lexer;
         
+    /**
+     * Debugging version of Lexer class.
+     * Sends a separator to standard output after a set of tokens is output.
+     */
     class debugLexer extends Lexer
     {
         private $dashes;
@@ -42,16 +46,11 @@ namespace MultilingualMarkdown {
             $this->dashes  = str_repeat('-', 60);
         }
 
-        public function output(object &$filer, array &$allTokens)
+        public function output(object &$filer)
         {
-//            echo $this->dashes,"\nOUTPUT:\n",$this->dashes,"\n";
-            foreach ($allTokens as $token) {
-                if (!$token->output($this, $filer)) {
-                    return false;
-                }
-            }
-            unsetArrayContent($allTokens);
-            return true;
+            $result = parent::output($filer);
+            echo "$this->dashes\n";
+            return $result;
         }
     }
 }

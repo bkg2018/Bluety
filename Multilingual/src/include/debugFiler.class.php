@@ -34,7 +34,11 @@ namespace MultilingualMarkdown {
     use MultilingualMarkdown\Logger;
     use MultilingualMarkdown\languageList;
     use MultilingualMarkdown\Filer;
-        
+    
+    /**
+     * Debugging version of Filer class.
+     * Each character read is sent to standard output.
+     */
     class debugFiler extends Filer
     {
         private $currentDisplayed = false;

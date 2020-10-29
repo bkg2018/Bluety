@@ -28,7 +28,7 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    mb_internal_encoding('UTF-8');
+    require_once('Constants.php');
 
     require_once 'Logger.interface.php';
     require_once 'Heading.class.php';
@@ -48,8 +48,8 @@ namespace MultilingualMarkdown {
     {
         // Directives and handling function names
         private static $directives = [
-            '.all(('        => 'all',           /// push current section and open all languages section
-            '.ignore(('     => 'ignore',        /// push current section and open ignored section
+            '.all(('        => ALL,             /// push current section and open all languages section
+            '.ignore(('     => IGNORE,          /// push current section and open ignored section
             '.default(('    => 'default',       /// push current section and open default text section
             '.(('           => 'default',       /// same as .default((
             '.))'           => 'end',           /// close current section and pop previous section
@@ -59,8 +59,8 @@ namespace MultilingualMarkdown {
             '.{'            => 'escape'         /// start escaped text
         ];
         private static $openDirectives = [
-            '.all(('        => 'all',           /// push current section and open all languages section
-            '.ignore(('     => 'ignore',        /// push current section and open ignored section
+            '.all(('        => ALL,             /// push current section and open all languages section
+            '.ignore(('     => IGNORE,          /// push current section and open ignored section
             '.default(('    => 'default',       /// push current section and open default text section
             '.(('           => 'default',       /// same as .default((
         ];
@@ -70,7 +70,7 @@ namespace MultilingualMarkdown {
         private $curLine = 1;                   /// current line number in current input file
 
         // Directives status
-        private $curLanguage = 'ignore';        // current opened directive (all / <code> / ignore / default)
+        private $curLanguage = IGNORE;          // current opened directive (all / <code> / ignore / default)
         private $directiveStack = [];           // stack of previous directives
         private $languagesSet = false;          // ignore any input until '.languages' directive has been processed
         private $emptyOutput = true;            // ignore EOL until something else has been written to files
@@ -479,7 +479,7 @@ namespace MultilingualMarkdown {
         private function all(?string $dummy): void
         {
             array_push($this->directiveStack, $this->curLanguage);
-            $this->curLanguage = 'all';
+            $this->curLanguage = ALL;
             $this->resetParsing();
         }
 
@@ -493,7 +493,7 @@ namespace MultilingualMarkdown {
         private function ignore(?string $dummy): void
         {
             array_push($this->directiveStack, $this->curLanguage);
-            $this->curLanguage = 'ignore';
+            $this->curLanguage = IGNORE;
             $this->resetParsing();
         }
 
@@ -526,7 +526,7 @@ namespace MultilingualMarkdown {
             if (count($this->directiveStack) > 0) {
                 $this->curLanguage = array_pop($this->directiveStack);
             } else {
-                $this->curLanguage = 'all';
+                $this->curLanguage = aLL;
             }
             $this->resetParsing();
             // check if end of line
@@ -638,7 +638,7 @@ namespace MultilingualMarkdown {
             // set initial status
             $this->resetParsing();
             $this->prevChar = "\n";
-            $this->curLanguage = 'all';
+            $this->curLanguage = ALL;
             $this->languagesSet = true;
             array_push($this->directiveStack, $this->curLanguage);
         }
@@ -904,7 +904,7 @@ namespace MultilingualMarkdown {
             }
             /// output to array(s) for current language(s)
             switch ($this->curLanguage) {
-                case 'all': // output to all files
+                case ALL: // output to all files
                     foreach ($this->outFiles as $language => $outFile) {
                         //TODO: improve this, because it doesn't work if default is not declared first
                         if (!array_key_exists($language, $this->curOutputs)) {
@@ -930,10 +930,10 @@ namespace MultilingualMarkdown {
                     }
                     $this->curOutputs['default'] = '';
                     break;
-                case 'ignore': // no output
+                case IGNORE: // no output
                     break;
                 case '': // .))
-                    $this->curLanguage = 'all';
+                    $this->curLanguage = ALL;
                     break;
                 default:
                     // output to current language
@@ -975,7 +975,7 @@ namespace MultilingualMarkdown {
         {
             if (!empty($content)) {
                 switch ($out) {
-                    case 'ignore':
+                    case IGNORE:
                         break;
                     default:
                         if (array_key_exists($out, $outputs)) {
@@ -1102,7 +1102,7 @@ namespace MultilingualMarkdown {
             $tryDirective = false;
             $curword = '';
             $length = mb_strlen($content);
-            $curOutput = 'all';
+            $curOutput = ALL;
             $outputStack = [];
             $outputs = [];
             $trim = $keepSTART ? "rtrim" : "trim";
@@ -1139,7 +1139,7 @@ namespace MultilingualMarkdown {
                         if (array_key_exists($testWord, $this->directives)) {
                             $newOutput = mb_substr($testWord, 1, -2); // 'all', 'default', 'ignore', '<code>', '' / empty=)) or ((
                             // need a flush when switching from 'all' to anything else
-                            if ($newOutput != 'all' && $curOutput == 'all' && \array_key_exists('all', $outputs) && !empty($output['all'])) {
+                            if ($newOutput != ALL && $curOutput == ALL && \array_key_exists(ALL, $outputs) && !empty($output[ALL])) {
                                 $this->flushOutputArray($outputs, $basename, $endCR, $keepCR);
                             }
                             $tryDirective = false;
@@ -1155,7 +1155,7 @@ namespace MultilingualMarkdown {
                         }
                     } else {
                         // need a flush when storing in 'all' for the first time
-                        if ($curOutput == 'all' && (!\array_key_exists('all', $outputs) || empty($outputs['all']))) {
+                        if ($curOutput == ALL && (!\array_key_exists(ALL, $outputs) || empty($outputs['all']))) {
                             $this->flushOutputArray($outputs, $basename, false, $keepCR);
                         }
                         // or need a flush when storing into anything else when 'all' is not empty

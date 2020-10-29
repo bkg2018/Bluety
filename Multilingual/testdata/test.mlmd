@@ -9,7 +9,8 @@ Lines preceeding the `.languages` directive are ignored.
 
 Example of `single backtick` text.
 Example of ``double backtick`` text.
-Example of ```not a code fence```  but escaped text.
+Example of ```not a code fence``` but escaped text.
+Example of .{mlmd escaping .fr((this is also escaped.)).}
 
 ```code
 Code fenced text

@@ -155,15 +155,13 @@ namespace MultilingualMarkdown {
          *
          * @param object $lexer  the Lexer object, used e.g. by languages directive to add tokens.
          * @param object $filer  the Filer input handling object, positionned on current character.
-         * @param array  $tokens [IN/OUT] array of tokens where to store the token and any other 
-         *                       tokens created during processing.
          *
          * @return int|null|array an error code > 0, or null to keep the token alone, or an array
          *                        of tokens starting with the token itself.
          */
-        public function processInput(object $lexer, object $filer, array &$tokens): bool
+        public function processInput(object $lexer, object $filer): bool
         {
-           $tokens[] = $this;
+           $lexer->storeToken($this);
            $lexer->setCurrentChar($filer->getNextChar());
            return true;
         }

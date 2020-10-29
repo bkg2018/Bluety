@@ -70,14 +70,14 @@ namespace MultilingualMarkdown {
          * Processing input is only a matter of reading until end of line
          * and storing content. Actual output is done in output().
          */
-        public function processInput(object $lexer, object $filer, array &$allTokens): bool
+        public function processInput(object $lexer, object $filer): bool
         {
             // skip the directive (no need to store)
             $this->skipSelf($filer);
             // store the parameters until end of line
             $this->content = $filer->getEndOfLine();
             $this->length = mb_strlen($this->content);
-            $allTokens[] = $this;
+            $lexer->storeToken($this);
             $lexer->setCurrentChar($filer->getNextChar());
             return true;
         }

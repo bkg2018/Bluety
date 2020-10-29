@@ -76,11 +76,11 @@ namespace MultilingualMarkdown {
         /**
          * Processing input : goto next character
          */
-        public function processInput(object $lexer, object $filer, array &$tokens): bool
+        public function processInput(object $lexer, object $filer): bool
         {
-           $tokens[] = $this;
-           $lexer->setCurrentChar($filer->getNextChar());
-           return true;
+            $lexer->storeToken($this);
+            $lexer->setCurrentChar($filer->getNextChar());
+            return true;
         }
 
         /**

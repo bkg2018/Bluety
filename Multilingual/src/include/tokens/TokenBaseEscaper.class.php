@@ -67,11 +67,11 @@ namespace MultilingualMarkdown {
             return parent::isType($type);
         }
         /**
-         * Process input: get text until we find the same escape marker. 
+         * Process input: get text until we find the closing escape marker. 
          * Update tokens array with the token itself. The escaped text is stored
          * by the token. 
          */
-        public function processInput(object $lexer, object $filer, array &$allTokens): bool
+        public function processInput(object $lexer, object $filer): bool
         {
             $this->content = $this->keyword;    
             $this->skipSelf($filer);
@@ -85,7 +85,7 @@ namespace MultilingualMarkdown {
                 } while (($prevChars != $this->keyword) && ($currentChar != null));
             }
             $this->length = mb_strlen($this->content);
-            $allTokens[] = $this;
+            $lexer->storeToken($this);
             $lexer->setCurrentChar($currentChar);
             return true;
         }

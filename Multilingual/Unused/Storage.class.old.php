@@ -44,13 +44,7 @@ namespace MultilingualMarkdown {
         private $bufferPosition = 0;            /// current pos in line buffer (utf-8)
         private $bufferLength = 0;              /// current line size in characters (utf-8)
         private $curLine = 0;                   /// current line number from input file
-<<<<<<< HEAD
         private $currentChars = [];             /// array of last 3 characters: [0] = current, [1] = previous, [2] = pre-previous
-=======
-        private $currentChar = '';              /// current character in input
-        private $previousChar = null;           /// previous value of $currentChar
-        private $prePreviousChar = null;        /// previous previous value of $currentChar
->>>>>>> f92a1057c7b34f0ccead1d106d443cec207bb72f
 
         // Output files and writing status
         private $lastWritten = [];              /// last  character written to file

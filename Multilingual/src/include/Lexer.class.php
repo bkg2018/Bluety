@@ -30,7 +30,7 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    mb_internal_encoding('UTF-8');
+    require_once('Constants.php');
 
     // directives and static tokens
     require_once('tokens/TokenNumbering.class.php');
@@ -48,6 +48,7 @@ namespace MultilingualMarkdown {
     require_once('tokens/TokenEscaperFence.class.php');
     require_once('tokens/TokenEscaperDoubleQuote.class.php');
     require_once('tokens/TokenEscaperSpace.class.php');
+    require_once('tokens/TokenEscaperMLMD.class.php');
     // on demand directives
     require_once('tokens/TokenText.class.php');             // text outside/between directives
     require_once('tokens/TokenOpenLanguage.class.php');     // .fr((  .en((  etc created when applying .languages directive
@@ -60,12 +61,12 @@ namespace MultilingualMarkdown {
     class Lexer
     {
         // Tokens
-        private $knownTokens = [];          /// array of all predefined tokens and languages codes directives tokens added by .languages
+        private $mlmdTokens = [];           /// array of all predefined tokens and languages codes directives tokens added by .languages
 
         // Defined languages
         private $languageList = null;       /// LanguageList object handling all available languages codes
 
-        // Prepared datas
+        // Preprocessed datas
         private $allHeadingsArrays = [];    /// One HeadingArray for each input file
         private $allNumberings = [];        /// One numbering scheme for each input file
         private $allStartingLines = [];     /// Line numbers after languages directive in each file
@@ -77,41 +78,44 @@ namespace MultilingualMarkdown {
         private $languageSet = false;       /// true when at least one language has been set
         private $waitLanguages = true;      /// true to wait for .languages directive in each input file
         private $languageStack = [];        /// stack of tokens names for languages switching, including .all, .default and .ignore
-        private $curLanguage = 'all';       /// name of current language token (index in $knownTokens)
+        private $curLanguage = ALL;         /// name of current language token (index in $mlmdTokens)
         private $ignoreLevel = 0;           /// number of opened 'ignore', do not output anything when this variable is not 0
         private $numberingScheme = '';      /// default numbering scheme from -numbering command line argument
         private $currentChar = '';          /// current character, can be changed by token input processing
         private $currentText = '';          /// Current text flow, to be stored as a text token before next tokken
+        private $curTokens = [];            /// Current tokens file, will be regularly sent to output when languages stack is empty
 
         public function __construct()
         {
             // single line directives, derived from TokenBaseSingleLine
-            $this->knownTokens['numbering']  = new TokenNumbering();                 ///  .numbering
-            $this->knownTokens['languages']  = new TokenLanguages();                 ///  .languages
-            $this->knownTokens['toc']        = new TokenTOC();                       ///  .toc
+            $this->mlmdTokens['numbering']  = new TokenNumbering();                 ///  .numbering
+            $this->mlmdTokens['languages']  = new TokenLanguages();                 ///  .languages
+            $this->mlmdTokens['toc']        = new TokenTOC();                       ///  .toc
 
             // streamed language directives
-            $this->knownTokens['all']        = new TokenOpenAll();                   ///  .all((
-            $this->knownTokens['']           = new TokenOpenDefault('');             ///  .((
-            $this->knownTokens['default']    = new TokenOpenDefault('default');      ///  .default((, identical to .((
-            $this->knownTokens['ignore']     = new TokenOpenIgnore();                ///  .ignore((
-            $this->knownTokens['close']      = new TokenClose();                     ///  .))
+            $this->mlmdTokens[ALL]          = new TokenOpenAll();                   ///  .all((
+            $this->mlmdTokens['']           = new TokenOpenDefault('');             ///  .((
+            $this->mlmdTokens[DEFLT]        = new TokenOpenDefault(DEFLT);          ///  .default((, identical to .((
+            $this->mlmdTokens[IGNORE]       = new TokenOpenIgnore();                ///  .ignore((
+            $this->mlmdTokens['close']      = new TokenClose();                     ///  .))
 
             // other streamed directives
-            $this->knownTokens['empty']      = new TokenEmptyLine();                 ///  \n at beginning of line
-            $this->knownTokens['eol']        = new TokenEOL();                       ///  \n, must be checked later than TokenEmptyLine
+            $this->mlmdTokens['empty']      = new TokenEmptyLine();                 ///  \n at beginning of line
+            $this->mlmdTokens['eol']        = new TokenEOL();                       ///  \n, must be checked later than TokenEmptyLine
 
             // escaped text streamed directives, derived from TokenBaseEscaper
-            $this->knownTokens['"']          = new TokenEscaperDoubleQuote();               ///  "
-            $this->knownTokens['```c']       = new TokenEscaperFence();                     ///  ```
-            $this->knownTokens['```']        = new TokenEscaperTripleBacktick();            ///  ``` - must be checked later than TokenEscaperFence
-            $this->knownTokens['``']         = new TokenEscaperDoubleBacktick();            ///  `` - must be checked later than TokenEscaperTripleBacktick
-            $this->knownTokens['`']          = new TokenEscaperSingleBacktick();            ///  `  - must be checked later than TokenEscaperDoubleBacktick
-            $this->knownTokens['    ']       = new TokenEscaperSpace();               ///  4 spaces
+            $this->mlmdTokens['"']          = new TokenEscaperDoubleQuote();        ///  "   - MD double quote escaping
+            $this->mlmdTokens['```c']       = new TokenEscaperFence();              ///  ``` - MD code fence
+            $this->mlmdTokens['```']        = new TokenEscaperTripleBacktick();     ///  ``` - MD triple backtick escaping, must be checked later than TokenEscaperFence
+            $this->mlmdTokens['``']         = new TokenEscaperDoubleBacktick();     ///  ``  - MD double backtick escaping, must be checked later than TokenEscaperTripleBacktick
+            $this->mlmdTokens['`']          = new TokenEscaperSingleBacktick();     ///  `   - MD single backtick escaping, must be checked later than TokenEscaperDoubleBacktick
+            $this->mlmdTokens['    ']       = new TokenEscaperSpace();              ///      - MD 4 spaces escaping
+            $this->mlmdTokens['{}']         = new TokenEscaperMLMD();               ///  .{.}- MLMD escaping
+            
 
             // these tokens can be instanciated more than once:
-            //$this->knownTokens[] = new TokenOpenLanguage($language);
-            //$this->knownTokens[] = new TokenText($content);
+            //$this->mlmdTokens[] = new TokenOpenLanguage($language);
+            //$this->mlmdTokens[] = new TokenText($content);
         }
 
         /**
@@ -179,12 +183,20 @@ namespace MultilingualMarkdown {
         /**
          * Store current text as token if not empty, then reset.
          */
-        public function storeTextToken(array &$allTokens): void
+        public function storeTextToken(): void
         {
             if (!$this->emptyText) {
-                $allTokens[] = new TokenText($this->currentText);
+                $this->curTokens[] = new TokenText($this->currentText);
                 $this->resetCurrentText();
             }
+        }
+
+        /**
+         * Store a token in current tokens array.
+         */
+        public function storeToken(object &$token)
+        {
+            $this->curTokens[] = $token;
         }
 
         /**
@@ -209,7 +221,7 @@ namespace MultilingualMarkdown {
          */
         public function fetchToken(object $filer): ?Token
         {
-            foreach ($this->knownTokens as $token) {
+            foreach ($this->mlmdTokens as $token) {
                 if ($token->identifyInFiler($filer)) {
                     return $token;
                 }
@@ -232,22 +244,22 @@ namespace MultilingualMarkdown {
             return $filer->fetchNextChars($charsNumber);
         }
         /**
-         * Execute the effects of a sequence of tokens on outputs.
+         * Execute the effects of current sequence of tokens.
          *
          * @param object $filer     the Filer object which will receive outputs and settings
-         * @param array  $allTokens [IN/OUT] the sequence of tokens, will be emptied on output if no error
          *
          * @return bool true if all OK and token sequence is emptied, else an error occured
          */
-        public function output(object &$filer, array &$allTokens)
+        public function output(object &$filer)
         {
-            foreach ($allTokens as $token) {
+            $result = true;
+            foreach ($this->curTokens as $token) {
                 if (!$token->output($this, $filer)) {
-                    return false;
+                    $result = false;
                 }
             }
-            unsetArrayContent($allTokens);
-            return true;
+            unsetArrayContent($this->curTokens);
+            return $result;
         }
 
         /**
@@ -273,7 +285,7 @@ namespace MultilingualMarkdown {
             $relFilename = $filer->current();
             $this->currentChar = '';
             $this->resetCurrentText();
-            $allTokens = [];
+            $this->curTokens = [];
 
             // skip right after languages directive (only at first time)
             if ($this->waitLanguages && !$this->languageSet) {
@@ -365,26 +377,23 @@ namespace MultilingualMarkdown {
                         break;
                 }
                 if ($token) {
-                    $this->storeTextToken($allTokens); // stack a text token when needed
-                    $token->processInput($this, $filer, $allTokens); // let token process any input
-                    if ($token->ouputNow($this) && (count($allTokens) > 0)) { // and do tokens output now if needed
-                        $this->output($filer, $allTokens);
+                    $this->storeTextToken(); // stack a text token when needed
+                    $token->processInput($this, $filer); // let token process any input
+                    if ($token->ouputNow($this)) { // and do tokens output now if needed
+                        $this->output($filer);
                     }
                 } 
             }
             // finish anything left
-            $this->storeTextToken($allTokens);
-            if (count($allTokens) > 0) {
-                $this->output($filer, $allTokens);
-            }
-            \unsetArrayContent($allTokens);
+            $this->storeTextToken();
+            $this->output($filer);
             $this->resetCurrentText();
             return true;
         }
 
         /**
          * Pushes current language and set to given name.
-         * Name must be an index to $knownTokens: 'all', 'ignore', 'default' and each language code.
+         * Name must be an index to $mlmdTokens: 'all', 'ignore', 'default' and each language code.
          *
          * @param string $name the new language code to set as current
          *
@@ -394,13 +403,13 @@ namespace MultilingualMarkdown {
         {
             // name must exist as an index
             if (empty($name)) {
-                $name = 'default';
+                $name = DEFLT;
             }
-            if (\array_key_exists($name, $this->knownTokens)) {
+            if (\array_key_exists($name, $this->mlmdTokens)) {
                 array_push($this->languageStack, $this->curLanguage);
                 $this->curLanguage = $name;
                 // handle 'ignore'
-                if ($name == 'ignore') {
+                if ($name == IGNORE) {
                     $this->ignoreLevel += 1;
                     // update Filer status
                     $filer->setIgnoreLevel($this->ignoreLevel);
@@ -445,11 +454,11 @@ namespace MultilingualMarkdown {
                 if ($count == 1) {
                     $popped = array_pop($this->languageStack);
                 }
-                $this->curLanguage = 'all';
+                $this->curLanguage = ALL;
                 $this->ignoreLevel = 0;
             }
             // handle when popping 'ignore'
-            if ($popped == 'ignore') {
+            if ($popped == IGNORE) {
                 if ($this->ignoreLevel >= 1) {
                     $this->ignoreLevel -= 1;
                 }
@@ -485,8 +494,8 @@ namespace MultilingualMarkdown {
         {
             resetArray($this->allHeadingsArrays);
             resetArray($this->allNumberings);
-            $languagesToken = $this->knownTokens['languages']; // shortcut
-            $numberingToken = $this->knownTokens['numbering']; // shortcut
+            $languagesToken = $this->mlmdTokens['languages']; // shortcut
+            $numberingToken = $this->mlmdTokens['numbering']; // shortcut
             Heading::init();// reset global headings numbering to 0
             // remember if the .languages directive has been read
             $languageSet = false;
@@ -579,8 +588,8 @@ namespace MultilingualMarkdown {
             $result = $this->languageList->setFrom($parameters);
             if ($result) {
                 foreach ($this->languageList as $index => $language) {
-                    if (!\array_key_exists($language['code'], $this->knownTokens)) {
-                        $this->knownTokens[$language['code']] = new TokenOpenLanguage($language['code']);    
+                    if (!\array_key_exists($language['code'], $this->mlmdTokens)) {
+                        $this->mlmdTokens[$language['code']] = new TokenOpenLanguage($language['code']);    
                     }
                 }
                 $this->languageSet = isset($index);

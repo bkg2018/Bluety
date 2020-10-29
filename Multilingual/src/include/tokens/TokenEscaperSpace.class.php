@@ -66,13 +66,13 @@ namespace MultilingualMarkdown {
          * Update tokens array with the token itself. The escaped text is stored
          * by the token. 
          */
-        public function processInput(object $lexer, object $filer, array &$allTokens): bool
+        public function processInput(object $lexer, object $filer): bool
         {
             $this->content = $filer->getEndOfLine(); // include the 4 spaces prefix
             // add the end of line character
             $this->content .= $filer->getCurrentChar();
             $this->length = mb_strlen($this->content);
-            $allTokens[] = $this;
+            $lexer->storeToken($this);
             // go next character
             $lexer->setCurrentChar($filer->getNextChar());
             return true;

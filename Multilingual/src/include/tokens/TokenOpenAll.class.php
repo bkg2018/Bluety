@@ -41,7 +41,7 @@ namespace MultilingualMarkdown {
     {
         public function __construct()
         {
-            parent::__construct('all');
+            parent::__construct(ALL);
         }
         public function __toString()
         {
@@ -50,7 +50,7 @@ namespace MultilingualMarkdown {
         public function output(object $lexer, object $filer): bool
         {
             $lexer->debugEcho("<OPEN all>\n");
-            $lexer->pushLanguage('all', $filer);
+            $lexer->pushLanguage(ALL, $filer);
             return true;
         }
     }

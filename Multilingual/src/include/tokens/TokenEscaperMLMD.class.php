@@ -1,9 +1,12 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenBaseSingleLine class
+ * Multilingual Markdown generator - TokenEscaperMLMD class
  *
- * This class represents a token for a single line directive.
+ * This class represents a token for MLMD escaped text between '.{' and '.}'. This syntax allows MLMD content to use any special
+ * characters without bothering about vaationsriable exxpansion or directives interpreting. MLMD escaped text may contain normal
+ * MD escaping notations as well as MLMD directives or variables between accolades. This is used in MLMD documentation itself to avoid
+ * interpretation of directives when the desired effect is to have them written into the final output files.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +22,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_single_line_class
+ * @package   mlmd_token_escaper_mlmd_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -30,43 +33,43 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenTypes.class.php';
-    require_once 'TokenBaseKeyworded.class.php';
+    require_once 'TokenBaseEscaper.class.php';
 
-    use MultilingualMarkdown\TokenBaseKeyworded;
+    use MultilingualMarkdown\TokenBaseEscaper;
     
     /**
-     * Single line directive token.
-     *
-     * This class is not instanciated by itself but is base for actual directives tokens.
+     * Class for the MLMD escaper token.
+     * Starts with '.{' and runs until '.}' if ound. Start and end symbols are not put into the content.
      */
-    class TokenBaseSingleLine extends TokenBaseKeyworded
+    class TokenEscaperMLMD extends TokenBaseEscaper
     {
-        public function __construct(int $tokenType, string $keyword, bool $ignoreCase)
+        public function __construct()
         {
-            parent::__construct($tokenType, $keyword, $ignoreCase);
+            parent::__construct('.{');
         }
-        public function __toString()
+        public function output(object $lexer, object $filer): bool
         {
-            return '- FORBIDDEN: base TokenBaseSingleLine class, check Lexer code -';
-        }
-        public function ouputNow(object $lexer): bool
-        {
+            $lexer->debugEcho('<MLMD ESCAPE ' . $this->debugText() . ">\n");
             return true;
         }
-       /**
-         * Process one-line directive.
-         * Simply ignore the line and go to next line start character.
-         *
-         * @param object $lexer  the Lexer object
-         * @param object $filer  the Filer object ready for input, positionned on the directive
-         */
         public function processInput(object $lexer, object $filer): bool
         {
-            $filer->gotoNextLine();
+            $this->content = '';    
+            $this->skipSelf($filer);
+            $currentChar = $filer->getCurrentChar();
+            do {
+                if ($filer->isMatching('.}')) {
+                    $filer->getNextChar();// skip end marker
+                    break;
+                }
+                $this->content .= $currentChar;
+                $currentChar = $filer->getNextChar();
+            } while ($currentChar != null);
+            $this->length = mb_strlen($this->content);
             $lexer->storeToken($this);
             $lexer->setCurrentChar($filer->getNextChar());
             return true;
         }
     }
+
 }

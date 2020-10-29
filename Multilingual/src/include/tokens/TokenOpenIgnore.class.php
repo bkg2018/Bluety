@@ -41,7 +41,7 @@ namespace MultilingualMarkdown {
     {
         public function __construct()
         {
-            parent::__construct('ignore');
+            parent::__construct(IGNORE);
         }
         public function __toString()
         {
@@ -50,7 +50,7 @@ namespace MultilingualMarkdown {
         public function output(object $lexer, object $filer): bool
         {
             $lexer->debugEcho("<OPEN ignore>\n");
-            $lexer->pushLanguage('ignore', $filer);
+            $lexer->pushLanguage(IGNORE, $filer);
             return true;
         }
     }

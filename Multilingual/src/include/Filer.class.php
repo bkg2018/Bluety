@@ -32,11 +32,10 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    mb_internal_encoding('UTF-8');
+    require_once('Constants.php');
 
     require_once 'Utilities.php';
     require_once 'Logger.interface.php';
-    require_once 'File.class.php';
     require_once 'LanguageList.class.php';
     require_once 'Storage.class.php';
 
@@ -49,9 +48,6 @@ namespace MultilingualMarkdown {
         
     class Filer implements Logger, \Iterator
     {
-        //TODO: Array for all files
-        //private $allFiles = [];                 /// Array of File instances, one for each valid input file
-
         // Input filenames, files and reading status
         private $allInFilePathes = [];          /// Array of all the input files - relative to root dir
         private $relFilenames = [];             /// relative filenames for each filename
@@ -68,10 +64,11 @@ namespace MultilingualMarkdown {
         private $rootDirLength = 0;             /// root directory utf-8 length
 
         // Languages handling (LanguageList class)
-        private $curLanguage = 'all';           /// current destination language for outputs e.g. 'en', 'fr'
-                                                /// can also be 'all', 'ignore', 'default'
+        private $languageList = null;           /// list of languages, will be set by Lexer
         private $ignoreLevel = 0;               /// number of 'ignore' to close in language stack
                                                 /// don't send any output while this variable is not 0
+        private $curLanguage =  IGNORE;         /// current language code, or all, ignore, default
+        private $curOutputs = [];               /// buffers for each language code, 'all' and 'default'
 
         /**
          * Initialize string function names.
@@ -84,7 +81,9 @@ namespace MultilingualMarkdown {
                 $cmpFunction = 'strcasecmp';
             }
             $this->storage = new Storage();
-            $this->curLanguages = 'all';
+            $this->curLanguages = ALL;
+            $this->curOutputs[ALL] = '';
+            $this->curOutputs[DEFLT] = '';
         }
 
         /**
@@ -433,7 +432,7 @@ namespace MultilingualMarkdown {
             $extension = \isMLMDfile($filename);
             $this->outFilenameTemplate = mb_substr($filename, 0, -mb_strlen($extension));
             $this->inFilename = $filename;
-            $this->curLanguage = 'ignore';
+            $this->curLanguage = IGNORE;
             $this->closeOutput();
             // the output files will be opened by the .languages directive for
             // this opened input file based on $this->outFilenameTemplate and languages codes.
@@ -576,7 +575,9 @@ namespace MultilingualMarkdown {
                 if ($this->outFiles[$code] == false) {
                     $return &= $this->error("unable to open file {$this->outFilenames[$code]} for writing", __FILE__, __LINE__);
                 }
+                $this->curOutputs[$code] = '';
             }
+            $this->languageList = $languageList;
             return $return;
         }
 
@@ -723,6 +724,7 @@ namespace MultilingualMarkdown {
             }
             if ($languageList->existLanguage($language)) {
                 $this->curLanguage = $language;
+                $this->storage->setLangage($language);
                 return true;
             }
             return false;
@@ -740,6 +742,54 @@ namespace MultilingualMarkdown {
         public function setOutputMode(string $name, object $numbering): void
         {
             $this->storage->setOutputMode($name, $numbering, $this);
+        }
+
+        /**
+         * TODO:
+         * Output text as is, not expanding variables.
+         * Tokens for escaped text will use this function.
+         */
+        public function outputRaw(object &$lexer, string $text): bool
+        {
+            if ($this->ignoreLevel > 0) {
+                return false;
+            }
+            $result  =true;
+            switch ($this->curLanguage) {
+                case ALL:
+                break;
+                case DEFLT:
+                break;
+                default:
+                break;
+            }
+            return $result;
+        }
+
+        /**
+         * TODO:
+         * Append raw text as is to all current languages output buffers.
+         * Set status accordingly.
+         */
+        public function outputRawAll(object &$lexer, string $text): bool
+        {
+            return true;
+        }
+        /**
+         * TODO:
+         * Append raw text as is to default output buffers.
+         */
+        public function outputRawDefault(object &$lexer, string $text): bool
+        {
+            return true;
+        }
+        /**
+         * TODO:
+         * Append raw text as is to current language output buffers.
+         */
+        public function outputRawCurrent(object &$lexer, string $text): bool
+        {
+            return true;
         }
     }
 }

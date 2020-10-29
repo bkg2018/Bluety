@@ -34,6 +34,7 @@ declare(strict_types=1);
 namespace MultilingualMarkdown {
 
     \mb_internal_encoding('UTF-8');
+    require_once 'Constants.php';
 
     require_once 'Logger.interface.php';
     require_once 'Heading.class.php';
@@ -240,7 +241,7 @@ namespace MultilingualMarkdown {
          */
         public function processAllFiles(): bool
         {
-            $dashes = str_repeat('-', 60);
+            $dashes = str_repeat('=', 60);
             $this->preProcess();
             $this->lexer->initSet();
             foreach ($this->filer as $index => $relFilename) {

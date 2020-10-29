@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Static class for output modes names and constants.
+ * Static class for output modes names and Constants.
  * An output mode defines the style for heading anchor, heading spacing prefix, numbering and TOC links.
  * This file must be included in classes using an output mode.
  *

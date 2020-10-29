@@ -50,6 +50,7 @@ namespace MultilingualMarkdown {
         private $lastWritten = [];              /// last  character written to file
         private $curOutputs = [];               /// current output buffers for files
         private $outputMode = OutputModes::MD;  /// output html or md style for headings and links in toc
+        private $curLanguage = ALL;             /// current language for incoming outputs, can also be ALL, IGNORED or DEFLT
 
         public function __construct()
         {
@@ -211,7 +212,7 @@ namespace MultilingualMarkdown {
             }
             return mb_substr($this->buffer, $startPosition, $length);
         }
-        
+
         /**
          * Read a string with a number of characters starting with the current one.
          * Return null if already at end of file. The final current position is set
@@ -284,6 +285,17 @@ namespace MultilingualMarkdown {
                 return;
             }
             $this->outputMode = $mode;
+        }
+
+        /**
+         * Set the current output language, accepts 'all' or 'default' plus language codes.
+         *
+         * @param string $language     the language code to set as current
+         */
+        public function setLanguage(string $language): bool
+        {
+            $this->curLanguage = $language;
+            return true;
         }
     }
 }

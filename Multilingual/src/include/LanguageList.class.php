@@ -32,6 +32,8 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
+    require_once('Constants.php');
+
     class LanguageList implements \SeekableIterator, \ArrayAccess, \Countable
     {
         private $allLanguages = [];         // array of languages: [i => ['code' => code value, 'ISO' => iso value]]
@@ -112,7 +114,7 @@ namespace MultilingualMarkdown {
          */
         public function getLanguage(string $code): ?array
         {
-            if (\in_array($code, ['all', 'ignore', 'default'])) {
+            if (\in_array($code, [ALL, IGNORE, DEFLT])) {
                 return ['code' => $code];
             }
             foreach ($this->allLanguages as $index => $array) {
@@ -130,7 +132,7 @@ namespace MultilingualMarkdown {
          */
         public function existLanguage($language)
         {
-            if (\in_array($language, ['all', 'ignore', 'default'])) {
+            if (\in_array($language, [ALL, IGNORE, DEFLT])) {
                 return true;
             }
             foreach ($this->allLanguages as $array) {
