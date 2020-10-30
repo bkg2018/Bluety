@@ -40,7 +40,7 @@ namespace MultilingualMarkdown {
         private $number = 0;    /// unique number over all files and headings
         private $text = '';     /// heading text, including MLMD directives if needed
         private $level = 0;     /// heading level = number of '#'s
-        private $line = '';     /// line number in source file
+        private $line = 0;     /// line number in source file
         private $prefix = '';   /// heading prefix in TOC and text, computed
                                 /// from 'numbering' directive or toc parameter
 
@@ -129,7 +129,7 @@ namespace MultilingualMarkdown {
 
         /**
          * Prefix write accessor.
-         * The prefix will be set by Numbering scheme and used by generator.
+         * The prefix will be set by Numbering scheme in preprocessing and then used by Lexer main loop.
          */
         public function setPrefix(string $prefix): void
         {

@@ -47,11 +47,6 @@ namespace MultilingualMarkdown {
         {
             parent::__construct('.{');
         }
-        public function output(object $lexer, object $filer): bool
-        {
-            $lexer->debugEcho('<MLMD ESCAPE ' . $this->debugText() . ">\n");
-            return true;
-        }
         public function processInput(object $lexer, object $filer): bool
         {
             $this->content = '';    
@@ -66,8 +61,14 @@ namespace MultilingualMarkdown {
                 $currentChar = $filer->getNextChar();
             } while ($currentChar != null);
             $this->length = mb_strlen($this->content);
-            $lexer->storeToken($this);
+            $lexer->appendToken($this);
             $lexer->setCurrentChar($filer->getNextChar());
+            return true;
+        }
+        public function output(object $lexer, object $filer): bool
+        {
+            $lexer->debugEcho('<MLMD ESCAPE ' . $this->debugText() . ">\n");
+            $filer->outputRawCurrent($lexer, $this->content);
             return true;
         }
     }

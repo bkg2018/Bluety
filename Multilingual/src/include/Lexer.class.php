@@ -68,7 +68,6 @@ namespace MultilingualMarkdown {
 
         // Preprocessed datas
         private $allHeadingsArrays = [];    /// One HeadingArray for each input file
-        private $allNumberings = [];        /// One numbering scheme for each input file
         private $allStartingLines = [];     /// Line numbers after languages directive in each file
 
         // MD/HTML output modes for headings anchors and toc links
@@ -84,6 +83,7 @@ namespace MultilingualMarkdown {
         private $currentChar = '';          /// current character, can be changed by token input processing
         private $currentText = '';          /// Current text flow, to be stored as a text token before next tokken
         private $curTokens = [];            /// Current tokens file, will be regularly sent to output when languages stack is empty
+        private $trace = false;             /// flag for a few prints or warnings control
 
         public function __construct()
         {
@@ -110,12 +110,11 @@ namespace MultilingualMarkdown {
             $this->mlmdTokens['``']         = new TokenEscaperDoubleBacktick();     ///  ``  - MD double backtick escaping, must be checked later than TokenEscaperTripleBacktick
             $this->mlmdTokens['`']          = new TokenEscaperSingleBacktick();     ///  `   - MD single backtick escaping, must be checked later than TokenEscaperDoubleBacktick
             $this->mlmdTokens['    ']       = new TokenEscaperSpace();              ///      - MD 4 spaces escaping
-            $this->mlmdTokens['{}']         = new TokenEscaperMLMD();               ///  .{.}- MLMD escaping
-            
+            $this->mlmdTokens['{}']         = new TokenEscaperMLMD();               /// .{.} - MLMD escaping
 
-            // these tokens can be instanciated more than once:
-            //$this->mlmdTokens[] = new TokenOpenLanguage($language);
-            //$this->mlmdTokens[] = new TokenText($content);
+            // These tokens can be instanciated more than once:
+            // $this->mlmdTokens[] = new TokenOpenLanguage($language);
+            // $this->mlmdTokens[] = new TokenText($content);
         }
 
         /**
@@ -145,24 +144,7 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Store current character in current text flow.
-         */
-        public function storeCurrentChar(): void
-        {
-            $this->currentText .= $this->currentChar;
-            $this->emptyText = false;
-            $this->currentChar = '';
-        }
-        /**
-         * Read next character.
-         */
-        public function readNextChar(object $filer): void
-        {
-            $this->currentChar = $filer->getNextChar();
-        }
-
-        /**
-         * reset current text flow.
+         * Reset current text flow.
          */
         public function resetCurrentText(): void
         {
@@ -181,9 +163,9 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Store current text as token if not empty, then reset.
+         * Add current text as token if not empty, then reset.
          */
-        public function storeTextToken(): void
+        public function appendTextToken(): void
         {
             if (!$this->emptyText) {
                 $this->curTokens[] = new TokenText($this->currentText);
@@ -193,14 +175,17 @@ namespace MultilingualMarkdown {
 
         /**
          * Store a token in current tokens array.
+         * This is used by most tokens in their processInput() work to append themselves
+         * to the lexer current flow of tokens.
          */
-        public function storeToken(object &$token)
+        public function appendToken(object &$token): void
         {
             $this->curTokens[] = $token;
         }
 
         /**
          * Set current character.
+         * This can be used by tokens in their processInput() work.
          */
         public function setCurrentChar(?string $char): void
         {
@@ -209,9 +194,9 @@ namespace MultilingualMarkdown {
 
         /**
          * Check if current position in a buffer matches a registered token and return the token.
-         * The function doesn't advance position, it just checks if there
-         * is a known token at the starting position. It may read enough characters from input
-         * for checking depending on what's left in buffer.
+         * The function doesn't advance position, it just checks if there is a known token at the
+         * starting position. Notice that this may fetch characters from input if current buffers
+         * don't held enough characters.
          *
          * @param object $filer the input file handling object.
          *
@@ -228,13 +213,14 @@ namespace MultilingualMarkdown {
             }
             return null;
         }
+
         /**
          * Look at next character from input.
-         * This call doesn't advance input position but rather just send back the next character
+         * This call doesn't advance input position but send back the next character
          * from input file, or null at end of input file.
          *
-         * @param object $filer   the input file handling object.
-         * @param int $charsNumber the number of characters to fetch
+         * @param object $filer       the input file handling object.
+         * @param int    $charsNumber the number of characters to fetch
          *
          * @return null|string   the next character which will be read from input,
          *                       null if already at end of file.
@@ -243,10 +229,11 @@ namespace MultilingualMarkdown {
         {
             return $filer->fetchNextChars($charsNumber);
         }
+
         /**
          * Execute the effects of current sequence of tokens.
          *
-         * @param object $filer     the Filer object which will receive outputs and settings
+         * @param object $filer  the Filer object which will receive outputs and settings
          *
          * @return bool true if all OK and token sequence is emptied, else an error occured
          */
@@ -295,6 +282,7 @@ namespace MultilingualMarkdown {
                     if ($this->currentChar === null) return false;
                 } while ($filer->getCurrentLineNumber() <= $curLineNumber);
                 $this->languageSet = true;
+                $filer->setLanguage($this->languageList, ALL);
             }
             $this->currentChar = $filer->getCurrentChar();
 
@@ -321,6 +309,7 @@ namespace MultilingualMarkdown {
                                 if ($token->identifyInBuffer('.languages', 0)) {
                                     // language are set by preprocessing, simply acknowledge the directive
                                     $this->languageSet = true;
+                                    $filer->setLanguage($this->languageList, ALL);
                                     $filer->gotoNextLine();
                                 }
                                 // ignore 1) any token before .languages is set 2) .languages directive itself
@@ -354,7 +343,7 @@ namespace MultilingualMarkdown {
                             // start of escaped text?
                             $token = $this->fetchToken($filer);
                             if ($token === null) {
-                                if ($trace) {
+                                if ($this->trace) {
                                     $filer->error("unrecognized escape character [{$this->currentChar}] in text, should translate into a token", __FILE__, __LINE__);
                                 }
                                 $this->storeCurrentGoNext($filer);
@@ -377,7 +366,7 @@ namespace MultilingualMarkdown {
                         break;
                 }
                 if ($token) {
-                    $this->storeTextToken(); // stack a text token when needed
+                    $this->appendTextToken(); // stack a text token when needed
                     $token->processInput($this, $filer); // let token process any input
                     if ($token->ouputNow($this)) { // and do tokens output now if needed
                         $this->output($filer);
@@ -385,7 +374,7 @@ namespace MultilingualMarkdown {
                 } 
             }
             // finish anything left
-            $this->storeTextToken();
+            $this->appendTextToken();
             $this->output($filer);
             $this->resetCurrentText();
             return true;
@@ -507,7 +496,7 @@ namespace MultilingualMarkdown {
                 }
                 $file = fopen($filename, 'rb');
                 if ($file === false) {
-                    $this->error("could not open [$filename]", __FILE__, __LINE__);
+                    $filer->error("could not open [$filename]", __FILE__, __LINE__);
                     continue;
                 }
                 // create an array for headings of this file
@@ -535,8 +524,10 @@ namespace MultilingualMarkdown {
                     }
                     // handle .numbering directive
                     if ($numberingToken->identifyInBuffer($text,0)) {
-                        $numberingScheme = trim(mb_substr($text, $numberingToken->getLength()));
-                        $this->allNumberings[$relFilename] = new Numbering($numberingScheme, $this);
+                        if (!empty($this->numberingScheme)) {
+                            echo "WARNING: numbering scheme overloading\n";
+                        }
+                        $this->numberingScheme = trim(mb_substr($text, $numberingToken->getLength()));
                     }
                     // store headings
                     if (($text[0] ?? '') == '#') {
@@ -559,11 +550,20 @@ namespace MultilingualMarkdown {
                 $this->allHeadingsArrays[$relFilename] = $headingArray;
                 unset($headingArray);
             } // next file
-            // check every file gets a numbering if there is a default one
+            // // check every file gets a numbering if there is a default one
+            // if (!empty($this->numberingScheme)) {
+            //     foreach ($filer as $index => $relFilename) {
+            //         if (! \array_key_exists($relFilename, $this->allNumberings)) {
+            //             $this->allNumberings[$relFilename] = new Numbering($this->numberingScheme, $this);
+            //         }
+            //     }
+            // }
+            // Prepare each headings text
             if (!empty($this->numberingScheme)) {
+                $numbering = new Numbering($this->numberingScheme);
                 foreach ($filer as $index => $relFilename) {
-                    if (! \array_key_exists($relFilename, $this->allNumberings)) {
-                        $this->allNumberings[$relFilename] = new Numbering($this->numberingScheme, $this);
+                    $headingsArray = $this->allHeadingsArrays[$relFilename];
+                    foreach ($headingArray as $index => $heading) {
                     }
                 }
             }
@@ -610,24 +610,6 @@ namespace MultilingualMarkdown {
         public function setNumbering(string $scheme): void
         {
             $this->numberingScheme = $scheme;
-        }
-
-        /**
-         * Set numbering scheme from a parameter string (for current file.)
-         * The scheme parameters can be set from .numbering directive (file local) or from
-         * command-line parameters (global).
-         */
-        public function setNumberingFrom(string $parameters, object $filer): bool
-        {
-            // only if an iteration is currently running on $filer
-            if ($filer->valid()) {
-                $relFilename = $filer->current();
-                if (\array_key_exists($relFilename, $this->allNumberings)) {
-                    unset($this->allNumberings[$relFilename]);
-                }
-                $this->allNumberings[$relFilename] = new Numbering($parameters, $this);
-            }
-            return false;
         }
     }
 }

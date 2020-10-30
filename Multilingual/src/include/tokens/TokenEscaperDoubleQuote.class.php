@@ -48,6 +48,7 @@ namespace MultilingualMarkdown {
         public function output(object $lexer, object $filer): bool
         {
             $lexer->debugEcho('<DOUBLE QUOTE ' . $this->debugText() . ">\n");
+            $filer->outputRawCurrent($lexer, $this->content);
             return true;
         }
     }

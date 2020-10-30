@@ -1,22 +1,3 @@
-This MLMD template is MLMD documentation source.
-
-MLMD ignores the introductory lines preceeding the `.languages` directive.
-The empty lines before heading level 1 '#' are ignored as well.
-
-NOTES:
-
-- Any text before the .languages directive is NOT sent to any output files.
-
-- The .languages directive must be placed at the beginning of a line.
-
-- Having some content between the .languages directive and the heading level 1 is not
-  conforming to Markdown conventions, but MLMD only ignores empty lines and will write
-  any text before the heading level 1 into all generated files.
-
-- The optional .numbering directive must be placed between the .languages and the
-  level 1 '#' heading. It is ignored if a -numbering parameter is given
-  when calling MLMD.
-
 .languages fr,en main=en
 
 # .((Multilingual Markdown Generator.)).fr((Générateur de Markdown Multilingue.)) MLMD
@@ -295,11 +276,39 @@ Any level can use a prefix, but as noted above the prefix only apply to their le
 
 ## Writing templates files
 
-The file templates must be named with a `.base.md` or `.mlmd` extension. They are UTF-8 text files with Linux/macOS or Windows end of lines. MLMD is UTF-8 compliant so macOS and Windows encoding could have side effect, as any character between codes 128 and 255 would be invalid UTF-8. The template files must use UTF-8 for any characters other than ASCII.
+The file templates must be named with a `.base.md` or `.mlmd` extension. They are UTF-8 text files with Linux/macOS or Windows end of lines.
+MLMD is UTF-8 compliant so macOS and Windows encoding could have side effect, as any character between codes 128 and 255 would be invalid UTF-8.
+The template files must use UTF-8 for any characters other than ASCII.
 
-The user has total control over which languages he/she wants to put in the templates. Eachh language must be declared with one user choosen code. Using ISO standard codes like `en-US` or `fr-FR` allow to easily link standard Web APIs for nation flags or other international content, but more simple codes like `en` or `fr` are faster and easier to write.
+The user has total control over which languages he/she wants to put in the templates. Each language must be declared with one user choosen code.
+Using ISO standard codes like `en-US` or `fr-FR` allow to easily link standard Web APIs for nation flags or other international content, but more
+simple codes like `en` or `fr` are faster and easier to write.
 
 See [`.language` directive](#declaring-languages-languages-directive) for the syntax of languages declaration.
+
+### Templates beginning
+
+MLMD will not output anything into any file until it first meet a `.languages` directives setting the
+output language codes. This is a restriction over all the input files present in the input root directory
+and in subdirectories. The best practice is to put the `.languages` directive in the first lines of the
+main input file so MLMD has a defined set of language codes when it starts all the other input files. If
+the `.languages` directive appears late, any text before it will be ignored so if the output files
+look strange and miss large parts fo text, the first thing to check is the `.languages` directive position.
+
+A best practice can be to put the same `.languages` directive at the start of all template files so there is no
+ambiguous interpretation.
+
+- Any text before the `.languages` directive is ignored and not sent to any output file.
+
+- The `.languages` directive must be written on a separate line and at the beginning of the line.
+
+- Having some content before the heading level 1 is not conforming to Markdown conventions,
+  but MLMD will write any text before the heading level 1 into all generated files, provided it appears
+  after the .languages directive.
+
+- The optional .numbering directive must be placed between the .languages and the
+  level 1 '#' heading. It is ignored if a -numbering parameter is given
+  to the main MLMD script `mlmd.php`.
 
 ### Headings
 

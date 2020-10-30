@@ -266,7 +266,7 @@ namespace MultilingualMarkdown {
             // check file extension
             $extension = isMLMDfile($path);
             if ($extension === null) {
-                return $this->error("invalid file extension ($filename)", __FILE__, __LINE__);
+                return $this->error("invalid file extension ($path)", __FILE__, __LINE__);
             }
             // check if it is relative or absolute
             $absolutePath = normalizedPath(realpath($path));
@@ -307,7 +307,7 @@ namespace MultilingualMarkdown {
                 } else {
                     $rootPos = $posFunction($absolutePath, $this->rootDir, 0);
                     if ($rootPos === false) {
-                        return $this->error("file path ($filename) is not relative to root dir ({$this->rootDir}", __FILE__, __LINE__);
+                        return $this->error("file path ($absolutePath) is not relative to root dir ({$this->rootDir}", __FILE__, __LINE__);
                     }
                 }
             }
@@ -723,7 +723,7 @@ namespace MultilingualMarkdown {
             }
             if ($languageList->existLanguage($language)) {
                 $this->curLanguage = $language;
-                $this->storage->setLangage($language);
+                $this->storage->setLanguage($language);
                 return true;
             }
             return false;
@@ -776,7 +776,7 @@ namespace MultilingualMarkdown {
         {
             // 1) if there is a default text, send it to all ampty buffers
             if (!empty($this->curOutputs[DEFLT])) {
-                foreach ($languageList as $index => $array) {
+                foreach ($this->languageList as $index => $array) {
                     $code = $array['code'] ?? null;
                     if (empty($this->curOutputs[$code])) {
                         $this->curOutputs[$code] = $this->curOutputs[DEFLT];
@@ -785,7 +785,7 @@ namespace MultilingualMarkdown {
                 $this->curOutputs[DEFLT] = ''; 
             }
             // 2) send text to all buffers
-            foreach ($languageList as $index => $array) {
+            foreach ($this->languageList as $index => $array) {
                 $code = $array['code'] ?? null;
                 if (empty($this->curOutputs[$code])) {
                     $this->curOutputs[$code] .= $text;
@@ -801,7 +801,7 @@ namespace MultilingualMarkdown {
             // 1) add to default buffer
             $this->curOutputs[DEFLT] .= $text;
             // 2) warning for non empty buffers
-            foreach ($languageList as $index => $array) {
+            foreach ($this->languageList as $index => $array) {
                 $code = $array['code'] ?? null;
                 if (!empty($this->curOutputs[$code])) {
                     echo "WARNING: default text while text available for <$code>\n";
@@ -814,7 +814,19 @@ namespace MultilingualMarkdown {
          */
         public function outputRawCurrent(object &$lexer, string $text): bool
         {
-            $this->curOutputs[$this->curLanguage] .= $text;
+            switch ($this->curLanguage) {
+                case ALL:
+                    return $this->outputRawAll($lexer, $text);
+                    break;
+                case IGNORE:
+                    break;
+                case DEFLT:
+                    return $this->outputRawDefault($lexer, $text);
+                    break;
+                default:
+                    $this->curOutputs[$this->curLanguage] .= $text;
+                    break;
+            }
             return true;
         }
         /**
@@ -823,7 +835,7 @@ namespace MultilingualMarkdown {
         public function flushOutput(): bool
         {
             $result = true;
-            foreach ($languageList as $index => $array) {
+            foreach ($this->languageList as $index => $array) {
                 $code = $array['code'] ?? null;
                 // set default text if appropriate
                 if (empty($this->curOutputs[$code])) {

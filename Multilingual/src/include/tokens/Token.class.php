@@ -68,7 +68,7 @@ namespace MultilingualMarkdown {
         }
         public function __toString()
         {
-            return '- FORBIDDEN: base Token class, check Lexer code -';
+            return substr(get_class($this), 5); // skip 'Token' and return name
         }
 
         /**
@@ -161,7 +161,7 @@ namespace MultilingualMarkdown {
          */
         public function processInput(object $lexer, object $filer): bool
         {
-           $lexer->storeToken($this);
+           $lexer->appendToken($this);
            $lexer->setCurrentChar($filer->getNextChar());
            return true;
         }

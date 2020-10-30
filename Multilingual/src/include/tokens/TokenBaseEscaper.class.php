@@ -85,7 +85,7 @@ namespace MultilingualMarkdown {
                 } while (($prevChars != $this->keyword) && ($currentChar != null));
             }
             $this->length = mb_strlen($this->content);
-            $lexer->storeToken($this);
+            $lexer->appendToken($this);
             $lexer->setCurrentChar($currentChar);
             return true;
         }

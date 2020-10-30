@@ -83,6 +83,7 @@ namespace MultilingualMarkdown {
         public function output(object $lexer, object $filer): bool
         {
             $lexer->debugEcho('<CODE FENCE ' . $this->debugText() . ">\n");
+            $filer->outputRawCurrent($lexer, $this->content);
             return true;
         }
     }

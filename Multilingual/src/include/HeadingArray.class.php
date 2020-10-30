@@ -86,7 +86,7 @@ namespace MultilingualMarkdown {
         }
         public function seek($position)
         {
-            if (\array_key_exists($this->allHeadings, $position)) {
+            if (\array_key_exists($position, $this->allHeadings)) {
                 $this->curIndex = $position;
             } else {
                 \trigger_error("Invalid position $position in heading array", E_USER_ERROR);
@@ -341,7 +341,7 @@ namespace MultilingualMarkdown {
             }
             // impossible case
             if ($logger) {
-                $logger->error("impossible case in " . __function__);
+                $logger->error("impossible case in " . __FUNCTION__);
             }
             return null;
         }
@@ -465,7 +465,7 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Get full line for current or given heading.
+         * Get prefix for current or given heading.
          * This must be used sequentially on all headings of the array or numbering won't be consistent
          * regarding previous heading level. the whole sequence must be started with a Numbering and
          * current index reset.
@@ -480,9 +480,9 @@ namespace MultilingualMarkdown {
          * @param object $logger    the caller object with an error() function, can be null to ignore errors.
          * @see Logger interface
          *
-         * @return string the full heading line, or null if error.
+         * @return string the prefix before text for the heading line, or null if error.
          */
-        public function getHeadingLine(int $index, object &$numbering, ?object $logger = null): ?string
+        public function getHeadingPrefix(int $index, object &$numbering, ?object $logger = null): ?string
         {
             $index = $this->checkIndex($index, $logger);
             if ($index === null) {

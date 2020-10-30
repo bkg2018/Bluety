@@ -45,7 +45,7 @@ namespace MultilingualMarkdown {
         }
         public function __toString()
         {
-            return "<close {$lexer->getCurLanguage()}>";
+            return "<close>";
         }
 
         // Closing directive will have Lexer processing all stored tokens if it empties the language stack.

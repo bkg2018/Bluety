@@ -77,7 +77,7 @@ namespace MultilingualMarkdown {
             // store the parameters until end of line
             $this->content = $filer->getEndOfLine();
             $this->length = mb_strlen($this->content);
-            $lexer->storeToken($this);
+            $lexer->appendToken($this);
             $lexer->setCurrentChar($filer->getNextChar());
             return true;
         }

@@ -55,6 +55,7 @@ namespace MultilingualMarkdown {
         public function output(object $lexer, object $filer): bool
         {
             $lexer->debugEcho("<EOL>\n");
+            $filer->outputRawCurrent($lexer, "\n");
             return true;
         }
     }

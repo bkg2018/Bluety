@@ -72,19 +72,15 @@ namespace MultilingualMarkdown {
             // add the end of line character
             $this->content .= $filer->getCurrentChar();
             $this->length = mb_strlen($this->content);
-            $lexer->storeToken($this);
+            $lexer->appendToken($this);
             // go next character
             $lexer->setCurrentChar($filer->getNextChar());
             return true;
         }
-
-        public function ouputNow(object $lexer): bool
-        {
-            return ($lexer->getLanguageStackSize() <= 1);
-        }
         public function output(object $lexer, object $filer): bool
         {
             $lexer->debugEcho('<4-SPACES ' . $this->debugText() . ">\n");
+            $filer->outputRawCurrent($lexer, $this->content);
             return true;
         }
     }

@@ -58,7 +58,7 @@ namespace MultilingualMarkdown {
         public function processInput(object $lexer, object $filer): bool
         {
             $this->skipSelf($filer);
-            $lexer->storeToken($this);
+            $lexer->appendToken($this);
             $lexer->setCurrentChar($filer->getCurrentChar());
             return true;
         }
