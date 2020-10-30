@@ -58,6 +58,9 @@ namespace MultilingualMarkdown {
         {
             $lexer->debugEcho("<CLOSE {$lexer->getCurLanguage()}>\n");
             $lexer->popLanguage($filer);
+            if ($lexer->getLanguageStackSize() <= 1) {
+                $filer->flushOutput();
+            }
             return true;
         }
     }

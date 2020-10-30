@@ -89,6 +89,7 @@ namespace MultilingualMarkdown {
         public function output(object $lexer, object $filer): bool
         {
             $lexer->debugEcho("<EMPTYLINE>\n");
+            $filer->outputRawCurrent($lexer, "\n");
             return true;
         }
     }

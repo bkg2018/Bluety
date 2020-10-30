@@ -82,7 +82,6 @@ namespace MultilingualMarkdown {
             }
             $this->storage = new Storage();
             $this->curLanguages = ALL;
-            $this->curOutputs[ALL] = '';
             $this->curOutputs[DEFLT] = '';
         }
 
@@ -757,39 +756,92 @@ namespace MultilingualMarkdown {
             $result  =true;
             switch ($this->curLanguage) {
                 case ALL:
-                break;
+                    $result = $this->outputRawAll($lexer, $text);
+                    break;
                 case DEFLT:
-                break;
+                    $result = $this->outputRawDefault($lexer, $text);
+                    break;
                 default:
-                break;
+                    $result = $this->outputRawCurrent($lexer, $text);
+                    break;
             }
             return $result;
         }
 
         /**
-         * TODO:
          * Append raw text as is to all current languages output buffers.
          * Set status accordingly.
          */
         public function outputRawAll(object &$lexer, string $text): bool
         {
-            return true;
+            // 1) if there is a default text, send it to all ampty buffers
+            if (!empty($this->curOutputs[DEFLT])) {
+                foreach ($languageList as $index => $array) {
+                    $code = $array['code'] ?? null;
+                    if (empty($this->curOutputs[$code])) {
+                        $this->curOutputs[$code] = $this->curOutputs[DEFLT];
+                    }
+                }
+                $this->curOutputs[DEFLT] = ''; 
+            }
+            // 2) send text to all buffers
+            foreach ($languageList as $index => $array) {
+                $code = $array['code'] ?? null;
+                if (empty($this->curOutputs[$code])) {
+                    $this->curOutputs[$code] .= $text;
+                }
+            }
+        return true;
         }
         /**
-         * TODO:
          * Append raw text as is to default output buffers.
          */
         public function outputRawDefault(object &$lexer, string $text): bool
         {
+            // 1) add to default buffer
+            $this->curOutputs[DEFLT] .= $text;
+            // 2) warning for non empty buffers
+            foreach ($languageList as $index => $array) {
+                $code = $array['code'] ?? null;
+                if (!empty($this->curOutputs[$code])) {
+                    echo "WARNING: default text while text available for <$code>\n";
+                }
+            }
             return true;
         }
         /**
-         * TODO:
          * Append raw text as is to current language output buffers.
          */
         public function outputRawCurrent(object &$lexer, string $text): bool
         {
+            $this->curOutputs[$this->curLanguage] .= $text;
             return true;
+        }
+        /**
+         * Send all content to files.
+         */
+        public function flushOutput(): bool
+        {
+            $result = true;
+            foreach ($languageList as $index => $array) {
+                $code = $array['code'] ?? null;
+                // set default text if appropriate
+                if (empty($this->curOutputs[$code])) {
+                    if (!empty($this->curOutputs[DEFLT])) {
+                        $this->curOutputs[$code] = $this->curOutputs[DEFLT];
+                    }
+                }
+                // send to file
+                if (!isset($this->outFiles[$code])) {
+                    echo "ERROR: unavailable file for code <$code>\n";
+                    $result = false;
+                    continue;
+                }
+                fwrite($this->outFiles[$code], $this->curOutputs[$code]);
+                $this->curOutputs[$code] = '';
+            }
+            $this->curOutputs[DEFLT] = '';
+            return $result;
         }
     }
 }
