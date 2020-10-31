@@ -69,6 +69,8 @@ namespace MultilingualMarkdown {
         // Preprocessed datas
         private $allHeadingsArrays = [];    /// One HeadingArray for each input file
         private $allStartingLines = [];     /// Line numbers after languages directive in each file
+        private $allNumberingScheme = [];   /// Numbering scheme for each file, default is CLI parameter or main file directive
+        private $allNumberings = [];        /// Current numbering for each file
 
         // MD/HTML output modes for headings anchors and toc links
         private $outputMode = OutputModes::MD;
@@ -79,7 +81,6 @@ namespace MultilingualMarkdown {
         private $languageStack = [];        /// stack of tokens names for languages switching, including .all, .default and .ignore
         private $curLanguage = ALL;         /// name of current language token (index in $mlmdTokens)
         private $ignoreLevel = 0;           /// number of opened 'ignore', do not output anything when this variable is not 0
-        private $numberingScheme = '';      /// default numbering scheme from -numbering command line argument
         private $currentChar = '';          /// current character, can be changed by token input processing
         private $currentText = '';          /// Current text flow, to be stored as a text token before next tokken
         private $curTokens = [];            /// Current tokens file, will be regularly sent to output when languages stack is empty
@@ -128,7 +129,8 @@ namespace MultilingualMarkdown {
             \unsetArrayContent($this->allNumberings);
             \unsetArrayContent($this->allStartingLines);
             \unsetArrayContent($this->languageStack);
-            $this->numberingScheme = '';
+            \unsetArrayContent($this->allNumberings);
+            \unsetArrayContent($this->allNumberingScheme);
             $this->initSet();
         }
 
@@ -486,8 +488,8 @@ namespace MultilingualMarkdown {
             $languagesToken = $this->mlmdTokens['languages']; // shortcut
             $numberingToken = $this->mlmdTokens['numbering']; // shortcut
             Heading::init();// reset global headings numbering to 0
-            // remember if the .languages directive has been read
-            $languageSet = false;
+            $languageSet = false; // remember if the .languages directive has been read
+            $defaultNumberingScheme = null;
             // Explore each input file ($filer is iterable and returns relative filenames and index)
             foreach ($filer as $index => $relFilename) {
                 $filename = $filer->getInputFile($index); // full file path
@@ -499,9 +501,7 @@ namespace MultilingualMarkdown {
                     $filer->error("could not open [$filename]", __FILE__, __LINE__);
                     continue;
                 }
-                // create an array for headings of this file
-                $headingArray = new HeadingArray($relFilename);
-                // keep track of the line number for each heading
+                $headingsArray = new HeadingArray($relFilename);
                 $curLineNumber = 0;
                 // loop on each file line@
                 do {
@@ -524,15 +524,19 @@ namespace MultilingualMarkdown {
                     }
                     // handle .numbering directive
                     if ($numberingToken->identifyInBuffer($text,0)) {
-                        if (!empty($this->numberingScheme)) {
-                            echo "WARNING: numbering scheme overloading\n";
+                        if (!empty($this->allNumberingScheme[$relFilename])) {
+                            echo "WARNING: numbering scheme overloading for $relFilename\n";
                         }
-                        $this->numberingScheme = trim(mb_substr($text, $numberingToken->getLength()));
+                        $this->allNumberingScheme[$relFilename] = trim(mb_substr($text, $numberingToken->getLength()));
+                        $this->allNumberings[$relFilename] = new Numbering($this->allNumberingScheme[$relFilename]);
+                        if ($defaultNumberingScheme == null) {
+                            $defaultNumberingScheme = $this->allNumberingScheme[$relFilename];
+                        }
                     }
                     // store headings
                     if (($text[0] ?? '') == '#') {
                         $heading = new Heading($text, $curLineNumber, $this);
-                        $headingArray[] = $heading;
+                        $headingsArray[] = $heading;
                     }
                 } while (!feof($file));
                 fclose($file);
@@ -543,28 +547,28 @@ namespace MultilingualMarkdown {
                 }
 
                 // force a level 1 object if no headings
-                if (count($headingArray) == 0) {
+                if (count($headingsArray) == 0) {
                     $heading = new Heading('# ' . $relFilename, 1, $this);
-                    $headingArray[] = $heading;
+                    $headingsArray[] = $heading;
                 }
-                $this->allHeadingsArrays[$relFilename] = $headingArray;
-                unset($headingArray);
+                $this->allHeadingsArrays[$relFilename] = $headingsArray;
+                unset($headingsArray);
             } // next file
-            // // check every file gets a numbering if there is a default one
-            // if (!empty($this->numberingScheme)) {
-            //     foreach ($filer as $index => $relFilename) {
-            //         if (! \array_key_exists($relFilename, $this->allNumberings)) {
-            //             $this->allNumberings[$relFilename] = new Numbering($this->numberingScheme, $this);
-            //         }
-            //     }
-            // }
-            // Prepare each headings text
-            if (!empty($this->numberingScheme)) {
-                $numbering = new Numbering($this->numberingScheme);
+            // check every file gets a numbering if there is a default one
+            if ($defaultNumberingScheme != null) {
                 foreach ($filer as $index => $relFilename) {
-                    $headingsArray = $this->allHeadingsArrays[$relFilename];
-                    foreach ($headingArray as $index => $heading) {
+                    if (! \array_key_exists($relFilename, $this->allNumberings)) {
+                        $this->allNumberingScheme[$relFilename] = $defaultNumberingScheme;
+                        $this->allNumberings[$relFilename] = new Numbering($defaultNumberingScheme, $this);
                     }
+                }
+            }
+            // Prepare each headings text
+            foreach ($filer as $index => $relFilename) {
+                $headingsArray = $this->allHeadingsArrays[$relFilename];
+                foreach ($headingsArray as $index => $heading) {
+                    $numberingText = $headingsArray->getNumberingText($index, $this->allNumberings[$relFilename], false, $filer);
+                    $headingPrefix = $headingsArray->getHeadingPrefix($index, $this->allNumberings[$relFilename], $filer);
                 }
             }
         }
