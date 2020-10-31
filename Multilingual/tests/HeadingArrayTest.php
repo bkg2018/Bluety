@@ -35,7 +35,7 @@ require_once '../src/include/HeadingArray.class.php';
 class HeadingArrayTest extends TestCase
 {
     // build a test case
-    public function getTestData()
+    public function getTestData(): HeadingArray
     {
         $a = new HeadingArray('main.mlmd');
         $a[] = new Heading('# heading 1', 1, null);               // 0
@@ -53,7 +53,7 @@ class HeadingArrayTest extends TestCase
     }
 
     // heading lines data for scheme with roman numbers
-    public function getHeadingDataRoman()
+    public function getHeadingDataRoman(): array
     {
         return ['.((Chapter.)).fr((Chapitre.)) I) heading 1<A id="a1"></A>',
         'I-1) heading 1.1<A id="a2"></A>',
@@ -69,7 +69,7 @@ class HeadingArrayTest extends TestCase
     }
 
     // TOC lines data for scheme with roman numbers
-    public function getTOCDataRoman()
+    public function getTOCDataRoman(): array
     {
         return ['- .((Chapter.)).fr((Chapitre.)) I) heading 1<A id="a1"></A>',
         '- I-1) heading 1.1<A id="a2"></A>',
@@ -216,7 +216,7 @@ class HeadingArrayTest extends TestCase
         $h = $this->getHeadingDataRoman();
         $numbering = new Numbering('1:.((Chapter.)).fr((Chapitre.)):&I:-,2::1:.,3::a:.,4::1:');
         $numbering->setLevelLimits(1, 3);
-        $numbering->resetNumbering();
+        $numbering->resetSubNumbering();
         echo "\n\n";
         for ($i = 0; $i <= $a->getLastIndex(); $i += 1) {
             $test = $a->getHeadingLine($i, $numbering);

@@ -74,6 +74,8 @@ namespace MultilingualMarkdown {
         public function output(object $lexer, object $filer): bool
         {
             $lexer->debugEcho("<HEADING {$this->heading}>\n");
+            $text = $lexer->getHeadingText($filer, $this->heading);
+            $filer->outputRawCurrent($lexer, $text);
             return true;
         }
     }

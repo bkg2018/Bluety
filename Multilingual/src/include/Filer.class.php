@@ -769,12 +769,37 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * TODO:
+         * Output text, expanding variables and interpreting directives.
+         * Tokens for normal text, toc, headings will use this function.
+         */
+        public function output(object &$lexer, string $text): bool
+        {
+            if ($this->ignoreLevel > 0) {
+                return false;
+            }
+            $result  =true;
+            switch ($this->curLanguage) {
+                case ALL:
+                    $result = $this->outputAll($lexer, $text);
+                    break;
+                case DEFLT:
+                    $result = $this->outputDefault($lexer, $text);
+                    break;
+                default:
+                    $result = $this->outputCurrent($lexer, $text);
+                    break;
+            }
+            return $result;
+        }
+
+        /**
          * Append raw text as is to all current languages output buffers.
          * Set status accordingly.
          */
         public function outputRawAll(object &$lexer, string $text): bool
         {
-            // 1) if there is a default text, send it to all ampty buffers
+            // 1) if there is a default text, send it to all empty buffers
             if (!empty($this->curOutputs[DEFLT])) {
                 foreach ($this->languageList as $index => $array) {
                     $code = $array['code'] ?? null;
@@ -791,7 +816,35 @@ namespace MultilingualMarkdown {
                     $this->curOutputs[$code] .= $text;
                 }
             }
-        return true;
+            return true;
+        }
+
+        /**
+         * Append expanded text to all current languages output buffers.
+         * Expanded text changes the variables into their values and takes care
+         * of language change directives.
+         * Set status accordingly.
+         */
+        public function outputAll(object &$lexer, string $text): bool
+        {
+            // 1) if there is a default text, send it to all empty buffers
+            if (!empty($this->curOutputs[DEFLT])) {
+                foreach ($this->languageList as $index => $array) {
+                    $code = $array['code'] ?? null;
+                    if (empty($this->curOutputs[$code])) {
+                        $this->curOutputs[$code] = $lexer->expandText($this->curOutputs[DEFLT], $this);
+                    }
+                }
+                $this->curOutputs[DEFLT] = ''; 
+            }
+            // 2) send text to all buffers
+            foreach ($this->languageList as $index => $array) {
+                $code = $array['code'] ?? null;
+                if (empty($this->curOutputs[$code])) {
+                    $this->curOutputs[$code] .= $lexer->expandText($text, $this);
+                }
+            }
+            return true;
         }
         /**
          * Append raw text as is to default output buffers.

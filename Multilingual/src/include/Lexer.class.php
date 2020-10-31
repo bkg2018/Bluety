@@ -34,6 +34,7 @@ namespace MultilingualMarkdown {
 
     // directives and static tokens
     require_once('tokens/TokenNumbering.class.php');
+    require_once('tokens/TokenTopNumber.class.php');
     require_once('tokens/TokenLanguages.class.php');
     require_once('tokens/TokenTOC.class.php');
     require_once('tokens/TokenOpenAll.class.php');
@@ -61,35 +62,38 @@ namespace MultilingualMarkdown {
     class Lexer
     {
         // Tokens
-        private $mlmdTokens = [];           /// array of all predefined tokens and languages codes directives tokens added by .languages
+        private $mlmdTokens = [];               /// array of all predefined tokens and languages codes directives tokens added by .languages
 
         // Defined languages
-        private $languageList = null;       /// LanguageList object handling all available languages codes
+        private $languageList = null;           /// LanguageList object handling all available languages codes
 
         // Preprocessed datas
-        private $allHeadingsArrays = [];    /// One HeadingArray for each input file
-        private $allStartingLines = [];     /// Line numbers after languages directive in each file
-        private $allNumberingScheme = [];   /// Numbering scheme for each file, default is CLI parameter or main file directive
-        private $allNumberings = [];        /// Current numbering for each file
+        private $allHeadingsArrays = [];        /// One HeadingArray for each input file
+        private $allStartingLines = [];         /// Line numbers after languages directive in each file
+        private $allNumberingScheme = [];       /// Numbering scheme for each file, default is CLI parameter or main file directive
+        private $allNumberings = [];            /// Current numbering for each file
+        private $allTopNumbers = [];            /// Starting number for level 1 headings for each file (default to 0 = first number in scheme)
 
         // MD/HTML output modes for headings anchors and toc links
         private $outputMode = OutputModes::MD;
 
         // Status and settings
-        private $languageSet = false;       /// true when at least one language has been set
-        private $waitLanguages = true;      /// true to wait for .languages directive in each input file
-        private $languageStack = [];        /// stack of tokens names for languages switching, including .all, .default and .ignore
-        private $curLanguage = ALL;         /// name of current language token (index in $mlmdTokens)
-        private $ignoreLevel = 0;           /// number of opened 'ignore', do not output anything when this variable is not 0
-        private $currentChar = '';          /// current character, can be changed by token input processing
-        private $currentText = '';          /// Current text flow, to be stored as a text token before next tokken
-        private $curTokens = [];            /// Current tokens file, will be regularly sent to output when languages stack is empty
-        private $trace = false;             /// flag for a few prints or warnings control
+        private $languageSet = false;           /// true when at least one language has been set
+        private $waitLanguages = true;          /// true to wait for .languages directive in each input file
+        private $languageStack = [];            /// stack of tokens names for languages switching, including .all, .default and .ignore
+        private $curLanguage = ALL;             /// name of current language token (index in $mlmdTokens)
+        private $ignoreLevel = 0;               /// number of opened 'ignore', do not output anything when this variable is not 0
+        private $currentChar = '';              /// current character, can be changed by token input processing
+        private $currentText = '';              /// Current text flow, to be stored as a text token before next tokken
+        private $curTokens = [];                /// Current tokens file, will be regularly sent to output when languages stack is empty
+        private $trace = false;                 /// flag for a few prints or warnings control
+        private $defaultNumberingScheme = '';   /// default numbering scheme, set by '-numbering' CLI parameter
 
         public function __construct()
         {
             // single line directives, derived from TokenBaseSingleLine
             $this->mlmdTokens['numbering']  = new TokenNumbering();                 ///  .numbering
+            $this->mlmdTokens['topnumber']  = new TokenTopNumber();                 ///  .topnumber
             $this->mlmdTokens['languages']  = new TokenLanguages();                 ///  .languages
             $this->mlmdTokens['toc']        = new TokenTOC();                       ///  .toc
 
@@ -113,9 +117,8 @@ namespace MultilingualMarkdown {
             $this->mlmdTokens['    ']       = new TokenEscaperSpace();              ///      - MD 4 spaces escaping
             $this->mlmdTokens['{}']         = new TokenEscaperMLMD();               /// .{.} - MLMD escaping
 
-            // These tokens can be instanciated more than once:
-            // $this->mlmdTokens[] = new TokenOpenLanguage($language);
-            // $this->mlmdTokens[] = new TokenText($content);
+            // NB: TokenOpenLanguage will be instanciated by the .languages directive for each declared language <code>, stored in $this->mlmdTokens['code']
+            // NB: TokenText will be instanciated by Lexer for each normal text part, stored in the tokens flow $this->curTokens
         }
 
         /**
@@ -126,7 +129,6 @@ namespace MultilingualMarkdown {
             unset($this->languageList);
             $this->languageList = new LanguageList();
             \unsetArrayContent($this->allHeadingsArrays);
-            \unsetArrayContent($this->allNumberings);
             \unsetArrayContent($this->allStartingLines);
             \unsetArrayContent($this->languageStack);
             \unsetArrayContent($this->allNumberings);
@@ -485,12 +487,13 @@ namespace MultilingualMarkdown {
         {
             resetArray($this->allHeadingsArrays);
             resetArray($this->allNumberings);
-            $languagesToken = $this->mlmdTokens['languages']; // shortcut
-            $numberingToken = $this->mlmdTokens['numbering']; // shortcut
+            $languagesToken = &$this->mlmdTokens['languages']; // shortcut
+            $numberingToken = &$this->mlmdTokens['numbering']; // shortcut
+            $topnumberToken = &$this->mlmdTokens['topnumber']; // shortcut
             Heading::init();// reset global headings numbering to 0
             $languageSet = false; // remember if the .languages directive has been read
-            $defaultNumberingScheme = null;
-            // Explore each input file ($filer is iterable and returns relative filenames and index)
+            $defaultNumberingScheme = $this->defaultNumberingScheme; // start with CLI parameter scheme if any
+            // explore each input file ($filer is iterable and returns relative filenames and index)
             foreach ($filer as $index => $relFilename) {
                 $filename = $filer->getInputFile($index); // full file path
                 if ($filename == null) {
@@ -503,6 +506,7 @@ namespace MultilingualMarkdown {
                 }
                 $headingsArray = new HeadingArray($relFilename);
                 $curLineNumber = 0;
+                $this->allTopNumbers[$relFilename] = 0;
                 // loop on each file line@
                 do {
                     $text = getNextLineTrimmed($file, $curLineNumber);
@@ -522,8 +526,12 @@ namespace MultilingualMarkdown {
                     if ($languageSet === false) {
                         continue;
                     }
+                    // handle .topnumber directive
+                    if ($topnumberToken->identifyInBuffer($text, 0)) {
+                        $this->allTopNumbers[$relFilename] = (int)(mb_substr($text, $topnumberToken->getLength()));
+                    }
                     // handle .numbering directive
-                    if ($numberingToken->identifyInBuffer($text,0)) {
+                    if ($numberingToken->identifyInBuffer($text, 0)) {
                         if (!empty($this->allNumberingScheme[$relFilename])) {
                             echo "WARNING: numbering scheme overloading for $relFilename\n";
                         }
@@ -554,21 +562,22 @@ namespace MultilingualMarkdown {
                 $this->allHeadingsArrays[$relFilename] = $headingsArray;
                 unset($headingsArray);
             } // next file
+
             // check every file gets a numbering if there is a default one
             if ($defaultNumberingScheme != null) {
-                foreach ($filer as $index => $relFilename) {
+                foreach ($filer as $relFilename) {
                     if (! \array_key_exists($relFilename, $this->allNumberings)) {
                         $this->allNumberingScheme[$relFilename] = $defaultNumberingScheme;
                         $this->allNumberings[$relFilename] = new Numbering($defaultNumberingScheme, $this);
+                        $this->allNumberings[$relFilename]->setLevelNumber(1, $this->allTopNumbers[$relFilename]);
                     }
                 }
             }
-            // Prepare each headings text
-            foreach ($filer as $index => $relFilename) {
+            // prepare headings index cross reference
+            foreach ($filer as $relFilename) {
                 $headingsArray = $this->allHeadingsArrays[$relFilename];
                 foreach ($headingsArray as $index => $heading) {
-                    $numberingText = $headingsArray->getNumberingText($index, $this->allNumberings[$relFilename], false, $filer);
-                    $headingPrefix = $headingsArray->getHeadingPrefix($index, $this->allNumberings[$relFilename], $filer);
+                    $heading->setIndex($index);
                 }
             }
         }
@@ -613,7 +622,18 @@ namespace MultilingualMarkdown {
          */
         public function setNumbering(string $scheme): void
         {
-            $this->numberingScheme = $scheme;
+            $this->defaultNumberingScheme = $scheme;
+        }
+
+        /**
+         * Return the full text line for a given heading in current file.
+         * Handle numbering scheme and current numbering progress.
+         */
+        public function getHeadingText(Filer &$filer, Heading &$heading): ?string
+        {
+            $relFilename = $filer->current();
+            $headingText = $this->allHeadingsArrays[$relFilename]->getHeadingText($heading->getIndex(), $this->allNumberings[$relFilename], $filer);
+            return str_repeat('#', $heading->getLevel()) . ' ' . $headingText;
         }
     }
 }

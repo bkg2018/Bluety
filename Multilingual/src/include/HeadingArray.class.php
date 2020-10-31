@@ -67,11 +67,7 @@ namespace MultilingualMarkdown {
         }
         public function next()
         {
-            if ($this->curIndex + 1 < count($this->allHeadings)) {
-                $this->curIndex += 1;
-            } else {
-                \trigger_error("No more next heading in array", E_USER_ERROR);
-            }
+            $this->curIndex += 1;
         }
         public function rewind()
         {
@@ -143,7 +139,7 @@ namespace MultilingualMarkdown {
             $this->outputMode = OutputModes::getFromName($name);
             if ($numbering !== null) {
                 $numbering->setOutputMode($name);
-                $numbering->resetNumbering();
+                $numbering->resetSubNumbering();
             }
         }
 
@@ -450,9 +446,9 @@ namespace MultilingualMarkdown {
                 if ($index === null) {
                     return null;
                 }
-                $numbering->resetNumbering();
+                $numbering->resetSubNumbering();
                 for ($i = 0; $i < $index; $i += 1) {
-                    $numbering->next($this->allHeadings[$i]->getLevel());
+                    $numbering->nextNumber($this->allHeadings[$i]->getLevel());
                 }
             } else {
                 $index = $this->curIndex;
@@ -465,7 +461,7 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Get prefix for current or given heading.
+         * Get text for current or given heading.
          * This must be used sequentially on all headings of the array or numbering won't be consistent
          * regarding previous heading level. the whole sequence must be started with a Numbering and
          * current index reset.
@@ -480,9 +476,9 @@ namespace MultilingualMarkdown {
          * @param object $logger    the caller object with an error() function, can be null to ignore errors.
          * @see Logger interface
          *
-         * @return string the prefix before text for the heading line, or null if error.
+         * @return string the text for the heading line, or null if error.
          */
-        public function getHeadingPrefix(int $index, object &$numbering, ?object $logger = null): ?string
+        public function getHeadingText(int $index, object &$numbering, ?object $logger = null): ?string
         {
             $index = $this->checkIndex($index, $logger);
             if ($index === null) {

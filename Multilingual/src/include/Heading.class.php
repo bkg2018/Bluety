@@ -41,8 +41,7 @@ namespace MultilingualMarkdown {
         private $text = '';     /// heading text, including MLMD directives if needed
         private $level = 0;     /// heading level = number of '#'s
         private $line = 0;     /// line number in source file
-        private $prefix = '';   /// heading prefix in TOC and text, computed
-                                /// from 'numbering' directive or toc parameter
+        private $index = 0;     /// index in host HeadingArray
 
         private static $curNumber = 0;  /// current value for next $number
         private static $prevLevel = 0;  /// minimalistic security check - assumes headings are created following the text order
@@ -128,20 +127,19 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Prefix write accessor.
-         * The prefix will be set by Numbering scheme in preprocessing and then used by Lexer main loop.
+         * Index in host HeadingArray modifier.
          */
-        public function setPrefix(string $prefix): void
+        public function setIndex(int $index): void
         {
-            $this->prefix = $prefix;
+            $this->index = $index;
         }
 
         /**
-         * Prefix read accessor.
+         * Index in host HeadingArray accessor.
          */
-        public function getPrefix(): string
+        public function getIndex(): int
         {
-            return $this->prefix;
+            return $this->index;
         }
 
         /**

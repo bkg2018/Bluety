@@ -40,8 +40,8 @@ namespace MultilingualMarkdown {
     {
         // settings
         private $outputMode = OutputModes::MD;       // output mode
-        private $start = 10;            // starting level, do not number levels below
-        private $end = 0;               // ending level, do not number levels above
+        private $startLevel = 10;       // starting level, do not number levels below
+        private $endLevel = 0;          // ending level, do not number levels above
         private $levelsPrefix = [];     // level => prefix for this level alone, should only be used for level 1
         private $levelsNumbering = [];  // level => starting symbol ('a'..'z', 'A'..'Z', '1'..'9, '&I', '&i')
         private $levelsRoman = [];      // level => boolean for Roman numbers
@@ -203,6 +203,8 @@ namespace MultilingualMarkdown {
             // get all definitions and interpret each one
             $defs = explode(',', $scheme);
             $level = 0;
+            $minLevel = 10;
+            $maxLevel = 0;
             foreach ($defs as $def) {
                 $parts = explode($this->definitionSeparator, $def);
                 /*if (count($parts) < 3) {
@@ -213,6 +215,8 @@ namespace MultilingualMarkdown {
                 }*/
                 $prevLevel = $level;
                 $level = $parts[0] ?? ($prevLevel + 1);
+                if ((int)$level < $this->startLevel) $this->startLevel = $level;
+                if ((int)$level > $this->endLevel)   $this->endLevel = $level;
                 $prefix = $parts[1] ?? '';
                 $symbol = $parts[2] ?? '1';
                 $separator = $parts[3] ?? '';
@@ -266,10 +270,10 @@ namespace MultilingualMarkdown {
          * @param int $start first elvel to number between 1 and 9, 0 to disable
          * @param int $end   last level to number between start and 9, 0 to disable
          */
-        public function setLevelLimits(int $start = 0, int $end = 0): void
+        public function setLevelLimits(int $startLevel = 0, int $endLevel = 0): void
         {
-            $this->start = $start;
-            $this->end = $end;
+            $this->startLevel = $startLevel;
+            $this->endLevel = $endLevel;
         }
 
         /**
@@ -277,25 +281,37 @@ namespace MultilingualMarkdown {
          */
         public function getStart()
         {
-            return $this->start;
+            return $this->startLevel;
         }
         /**
          * Ending TOC heading level accessor.
          */
         public function getEnd()
         {
-            return $this->end;
+            return $this->endLevel;
         }
 
         /**
-         * Resets all numbers on all levels.
+         * Reset all numbers on all levels except top level
          */
-        public function resetNumbering(): void
+        public function resetSubNumbering(): void
         {
-            foreach ($this->curNumbering as &$curNumbering) {
-                $curNumbering = 0;
+            foreach ($this->curNumbering as $index => &$curNumbering) {
+                if ($index != 1) {
+                    $curNumbering = 0;
+                }
             }
             $this->prevLevel = 0;
+        }
+
+        /** Set the number of one level.
+         *
+         * @param int $level  the level to modify: 1 for '#' headings, 2 for '##' etc
+         * @param int $number the starting number to set : 1 for first value in the level scheme, 2 for second value etc
+         */
+        public function setLevelNumber(int $level, int $number): void
+        {
+            $this->curNumbering[$level] = $number - 1;
         }
 
         
@@ -321,7 +337,7 @@ namespace MultilingualMarkdown {
          * @param int  $level   the level
          * @param bool $addDash true to add a dash prefix in MDNUM or non numbered modes
          *
-         * @return string the nmbering string to use on headings and TOC lines
+         * @return string the numbering string to use on headings and TOC lines
          */
         public function getText(int $level, bool $addDash): string
         {
@@ -329,12 +345,12 @@ namespace MultilingualMarkdown {
             if ($addDash && in_array($this->outputMode, [OutputModes::MDNUM,OutputModes::MD,OutputModes::HTML,OutputModes::HTMLOLD])) {
                 $sequence = '- ';
             }
-            if (($this->start == 0 && $this->end == 0) || (count($this->levelsNumbering) == 0)) {
+            if (($this->startLevel == 0 && $this->endLevel == 0) || (count($this->levelsNumbering) == 0)) {
                 return $sequence;
             }
 
             // adjust number for this level
-            $this->next($level);
+            $this->nextNumber($level);
 
             // MD pure output mode : all numberings can be '1.' followed by a single space, and Markdown
             // viewers will figure out actual numbering.
@@ -346,12 +362,12 @@ namespace MultilingualMarkdown {
             }
 
             // Only level 1 headings may be prefixed (Chapter I, etc)
-            if (($level == 1) && isset($this->levelsPrefix[1]) && ($this->start <= 1)) {
-                $sequence .= $this->levelsPrefix[1] . ' ';
+            if (($level == 1) && isset($this->levelsPrefix[1]) && ($this->startLevel <= 1)) {
+                $sequence .= $this->levelsPrefix[1];
             }
 
             // build <symbol><separator>... string
-            for ($i = $this->start; $i <= $level; $i += 1) {
+            for ($i = $this->startLevel; $i <= $level; $i += 1) {
                 // set <symbol><separator>
                 $numbering = $this->levelsNumbering[$i] ?? '1';
                 if (is_numeric($numbering)) {
@@ -382,16 +398,20 @@ namespace MultilingualMarkdown {
          * The number depends on current numbers at each level and
          * getting the numbering will update the number for the relevant levels:
          *
-         * - if previous level was above (level > previous), new level starts at 0.
+         * - if level is 1 ('#' heading) the number doesn't change - it is uniquely set for each file
+         * - if previous level was above (level > previous), new level starts at number 0.
          * - else the number for the level is incremented
          *
-         * @param int  $level   the level
+         * @param int  $level   the level, starting at 1 for top '#' heading
          *
          * @return nothing
          */
-        public function next(int $level): void
+        public function nextNumber(int $level): void
         {
-            if ($this->start == 0 && $this->end == 0) {
+            if ($this->startLevel == 0 && $this->endLevel == 0) {
+                return;
+            }
+            if ($level == 1) {
                 return;
             }
             // adjust number for this level
