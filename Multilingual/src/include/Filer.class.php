@@ -744,11 +744,16 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * TODO:
-         * Output text as is, not expanding variables.
-         * Tokens for escaped text will use this function.
+         * Output text to current output language and mode.
+         *
+         * @param Lexer  $lexer     the lexer
+         * @param string $text      the text to send
+         * @param bool   $expand    true if variables must be expanded (headings and text)
+         *                          false if the don't (escaped text)
+         * @param bool   $interpret true if directives must be interpreted in text (headings)
+        *                           false if they don't (text and escaped text)
          */
-        public function outputRaw(object &$lexer, string $text): bool
+        public function output(object &$lexer, string $text, bool $expand, bool $interpret): bool
         {
             if ($this->ignoreLevel > 0) {
                 return false;
@@ -756,48 +761,23 @@ namespace MultilingualMarkdown {
             $result  =true;
             switch ($this->curLanguage) {
                 case ALL:
-                    $result = $this->outputRawAll($lexer, $text);
+                    $result = $this->outputAll($lexer, $text, $expand, $interpret);
                     break;
                 case DEFLT:
-                    $result = $this->outputRawDefault($lexer, $text);
+                    $result = $this->outputDefault($lexer, $text, $expand, $interpret);
                     break;
                 default:
-                    $result = $this->outputRawCurrent($lexer, $text);
+                    $result = $this->outputCurrent($lexer, $text, $expand, $interpret);
                     break;
             }
             return $result;
         }
 
         /**
-         * TODO:
-         * Output text, expanding variables and interpreting directives.
-         * Tokens for normal text, toc, headings will use this function.
-         */
-        public function output(object &$lexer, string $text): bool
-        {
-            if ($this->ignoreLevel > 0) {
-                return false;
-            }
-            $result  =true;
-            switch ($this->curLanguage) {
-                case ALL:
-                    $result = $this->outputAll($lexer, $text);
-                    break;
-                case DEFLT:
-                    $result = $this->outputDefault($lexer, $text);
-                    break;
-                default:
-                    $result = $this->outputCurrent($lexer, $text);
-                    break;
-            }
-            return $result;
-        }
-
-        /**
-         * Append raw text as is to all current languages output buffers.
+         * Append text to all current languages output buffers.
          * Set status accordingly.
          */
-        public function outputRawAll(object &$lexer, string $text): bool
+        public function outputAll(object &$lexer, string $text, bool $expand, bool $interpret): bool
         {
             // 1) if there is a default text, send it to all empty buffers
             if (!empty($this->curOutputs[DEFLT])) {
@@ -820,36 +800,9 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Append expanded text to all current languages output buffers.
-         * Expanded text changes the variables into their values and takes care
-         * of language change directives.
-         * Set status accordingly.
+         * Append text to default output buffers.
          */
-        public function outputAll(object &$lexer, string $text): bool
-        {
-            // 1) if there is a default text, send it to all empty buffers
-            if (!empty($this->curOutputs[DEFLT])) {
-                foreach ($this->languageList as $index => $array) {
-                    $code = $array['code'] ?? null;
-                    if (empty($this->curOutputs[$code])) {
-                        $this->curOutputs[$code] = $lexer->expandText($this->curOutputs[DEFLT], $this);
-                    }
-                }
-                $this->curOutputs[DEFLT] = ''; 
-            }
-            // 2) send text to all buffers
-            foreach ($this->languageList as $index => $array) {
-                $code = $array['code'] ?? null;
-                if (empty($this->curOutputs[$code])) {
-                    $this->curOutputs[$code] .= $lexer->expandText($text, $this);
-                }
-            }
-            return true;
-        }
-        /**
-         * Append raw text as is to default output buffers.
-         */
-        public function outputRawDefault(object &$lexer, string $text): bool
+        public function outputDefault(object &$lexer, string $text, bool $expand, bool $interpret): bool
         {
             // 1) add to default buffer
             $this->curOutputs[DEFLT] .= $text;
@@ -863,25 +816,14 @@ namespace MultilingualMarkdown {
             return true;
         }
         /**
-         * Append raw text as is to current language output buffers.
+         * Append text to current language output buffers.
          */
-        public function outputRawCurrent(object &$lexer, string $text): bool
+        public function outputCurrent(object &$lexer, string $text, bool $expand, bool $interpret): bool
         {
-            switch ($this->curLanguage) {
-                case ALL:
-                    return $this->outputRawAll($lexer, $text);
-                    break;
-                case IGNORE:
-                    break;
-                case DEFLT:
-                    return $this->outputRawDefault($lexer, $text);
-                    break;
-                default:
-                    $this->curOutputs[$this->curLanguage] .= $text;
-                    break;
-            }
+            $this->curOutputs[$this->curLanguage] .= $text;
             return true;
         }
+        
         /**
          * Send all content to files.
          */

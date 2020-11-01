@@ -614,7 +614,7 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Set the numbering scheme.
+         * Set the default numbering scheme before preprocessing.
          *
          * @param string $scheme a string containing numbering scheme.
          *
@@ -628,12 +628,24 @@ namespace MultilingualMarkdown {
         /**
          * Return the full text line for a given heading in current file.
          * Handle numbering scheme and current numbering progress.
+         * 
+         * @see HeadingArray class
          */
         public function getHeadingText(Filer &$filer, Heading &$heading): ?string
         {
             $relFilename = $filer->current();
             $headingText = $this->allHeadingsArrays[$relFilename]->getHeadingText($heading->getIndex(), $this->allNumberings[$relFilename], $filer);
             return str_repeat('#', $heading->getLevel()) . ' ' . $headingText;
+        }
+
+        /**
+         * Expand variables and directives in a text.
+         */
+        public function expandText(string $text, Filer &$filer): ?string
+        {
+            $expanded = '';
+
+            return $expanded;
         }
     }
 }
