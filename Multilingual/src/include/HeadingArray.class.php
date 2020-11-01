@@ -251,14 +251,14 @@ namespace MultilingualMarkdown {
          * Find the first heading in the array for a level after a given line number.
          *
          * @param int       $level    the heading level to look for
-         * @param int       $line     the line number where to start search
+         * @param int       $lineNum  the line number where to start search
          *
          * @return int -1 if no heading found, else the index of Heading object
          */
-        public function findIndex(int $level = 1, int $line = 0): ?int
+        public function findIndex(int $level = 1, int $lineNum = 0): ?int
         {
             foreach ($this->allHeadings as $index => $object) {
-                if ($object->getLine() >= $line) {
+                if ($object->getLineNum() >= $lineNum) {
                     if ($object->getLevel() == $level) {
                         return $index;
                     }
@@ -270,10 +270,10 @@ namespace MultilingualMarkdown {
         /** Find a heading with given line number.
          * Return null if not found.
          */
-        public function &findByLine(int $line): ?Heading
+        public function &findByLine(int $lineNum): ?Heading
         {
             foreach ($this->allHeadings as &$heading) {
-                if ($heading->getLine() >= $line) {
+                if ($heading->getLineNum() >= $lineNum) {
                     return $heading;
                 }
             }
@@ -485,9 +485,6 @@ namespace MultilingualMarkdown {
                 return null;
             }
             $heading = $this->allHeadings[$index];
-            if (!$heading->isLevelWithin($numbering)) {
-                return null;
-            }
             $anchor = $this->getAnchor($index, $logger);
             $numberingText = $this->getNumberingText($index, $numbering, false, $logger);
             $text = $heading->getText();

@@ -71,23 +71,22 @@ namespace MultilingualMarkdown {
          * Update tokens array with the token itself. The escaped text is stored
          * by the token. 
          */
-        public function processInput(object $lexer, object $filer): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->content = $this->keyword;    
-            $this->skipSelf($filer);
-            $currentChar = $filer->getCurrentChar();
+            $this->skipSelf($input);
+            $currentChar = $input->getCurrentChar();
             $prevChars = '';
             if ($currentChar != null) {
                 do {
                     $this->content .= $currentChar;
-                    $currentChar = $filer->getNextChar();
-                    $prevChars = $filer->fetchPreviousChars($this->keywordLength);
+                    $currentChar = $input->getNextChar();
+                    $prevChars = $input->fetchPreviousChars($this->keywordLength);
                 } while (($prevChars != $this->keyword) && ($currentChar != null));
             }
             $this->length = mb_strlen($this->content);
             $lexer->appendToken($this);
             $lexer->setCurrentChar($currentChar);
-            return true;
         }
 
         /**
@@ -97,9 +96,10 @@ namespace MultilingualMarkdown {
          *
          * @param object $filer the Filer instance object which receives outputs and settings
          */
-        public function output(object $lexer, object $filer): bool
+        public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho("<escaped output>\n");
+            $filer->output($lexer, $this->content, false);
             return true;
         }
     }

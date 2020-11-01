@@ -99,7 +99,7 @@ class HeadingArrayTest extends TestCase
         $h = $a->getNext();
         $h = $a->getNext();
         $h = $a->getNext();
-        $this->assertEquals(11, $h->getLine());
+        $this->assertEquals(11, $h->getLineNum());
 
         $this->assertFalse($a->isHeadingLastBetween(-1, 1, 3));
         $h = $a->getNext();

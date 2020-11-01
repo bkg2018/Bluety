@@ -38,6 +38,7 @@ namespace MultilingualMarkdown {
     require_once 'Logger.interface.php';
     require_once 'LanguageList.class.php';
     require_once 'Storage.class.php';
+    require_once 'OutputPart.class.php';
 
     use MultilingualMarkdown\Logger;
     use MultilingualMarkdown\languageList;
@@ -68,7 +69,9 @@ namespace MultilingualMarkdown {
         private $ignoreLevel = 0;               /// number of 'ignore' to close in language stack
                                                 /// don't send any output while this variable is not 0
         private $curLanguage =  IGNORE;         /// current language code, or all, ignore, default
-        private $curOutputs = [];               /// buffers for each language code, 'all' and 'default'
+        private $curOutput = [];                /// array of (array of OutputPart), one for each language code
+        private $curDefault = [];               /// array of OutputPart for default text
+        private $languageFunction = [];         /// language codes will be added by setLanguage
 
         /**
          * Initialize string function names.
@@ -82,7 +85,6 @@ namespace MultilingualMarkdown {
             }
             $this->storage = new Storage();
             $this->curLanguages = ALL;
-            $this->curOutputs[DEFLT] = '';
         }
 
         /**
@@ -424,7 +426,7 @@ namespace MultilingualMarkdown {
                 return $this->error("cannot open file $filename", __FILE__, __LINE__);
             }
 
-            // prapare storage object
+            // prepare storage object
             $this->storage->setInputFile($this->inFile);
 
             // retain base name with full path but no extension as template and reset line number
@@ -562,6 +564,7 @@ namespace MultilingualMarkdown {
                 return $this->error("output file template not set", __FILE__, __LINE__);
             }
             $return = true;
+            $this->languageFunction = [ALL=>'outputAll',IGNORE=>'outputIgnore',DEFLT=>'outputDefault'];
             foreach ($languageList as $index => $array) {
                 $code = $array['code'] ?? null;
                 $this->outFiles[$code] = null;
@@ -574,8 +577,10 @@ namespace MultilingualMarkdown {
                 if ($this->outFiles[$code] == false) {
                     $return &= $this->error("unable to open file {$this->outFilenames[$code]} for writing", __FILE__, __LINE__);
                 }
-                $this->curOutputs[$code] = '';
+                $this->curOutput[$code] = []; // each [$code] is an array where each [i] is an OutputPart
+                $this->languageFunction[$code] = 'outputCurrent';
             }
+            $this->curDefault = []; // each [i] is an OuputPart
             $this->languageList = $languageList;
             return $return;
         }
@@ -629,10 +634,27 @@ namespace MultilingualMarkdown {
          */
         public function gotoNextLine(): ?string
         {
-            do {
+            return $this->storage->gotoNextLine();
+        }
+
+        /**
+         * Read and return the current line including the EOL character.
+         */
+        public function getLine(): ?string
+        {
+            $text = '';
+            $char = $this->getCurrentChar();
+            while ($char != "\n" && $char !== null) {
+                $text .= $char;
                 $char = $this->getNextChar();
-            } while (($char !== null) && ($char != "\n"));
-            return $char;
+            }
+            if ($char == null) {
+                return null;
+            }
+            if ($char == "\n") {
+                $text .= $char;
+            }
+            return $text;
         }
 
         /**
@@ -641,16 +663,7 @@ namespace MultilingualMarkdown {
          */
         public function getEndOfLine(): ?string
         {
-            $text = $this->getCurrentChar();
-            $continue = true;
-            do {
-                $c = $this->getNextChar();
-                $continue = (($c != "\n") && ($c !=  null));
-                if ($continue) {
-                    $text .= $c;
-                }
-            } while ($continue);
-            return $text;
+            return $this->storage->getEndOfLine();
         }
 
         /**
@@ -750,104 +763,140 @@ namespace MultilingualMarkdown {
          * @param string $text      the text to send
          * @param bool   $expand    true if variables must be expanded (headings and text)
          *                          false if the don't (escaped text)
-         * @param bool   $interpret true if directives must be interpreted in text (headings)
-        *                           false if they don't (text and escaped text)
          */
-        public function output(object &$lexer, string $text, bool $expand, bool $interpret): bool
+        public function output(object &$lexer, string $text, bool $expand): bool
         {
             if ($this->ignoreLevel > 0) {
                 return false;
             }
-            $result  =true;
-            switch ($this->curLanguage) {
-                case ALL:
-                    $result = $this->outputAll($lexer, $text, $expand, $interpret);
-                    break;
-                case DEFLT:
-                    $result = $this->outputDefault($lexer, $text, $expand, $interpret);
-                    break;
-                default:
-                    $result = $this->outputCurrent($lexer, $text, $expand, $interpret);
-                    break;
+            if (\array_key_exists($this->curLanguage, $this->languageFunction)) {
+                $functionName = $this->languageFunction[$this->curLanguage];
+            } else {
+                echo "ERROR: unknown language function for $this->curLanguage\n";
+                $functionName = 'outputIgnore';
             }
-            return $result;
+            return $this->$functionName($lexer, $text, $expand);
+        }
+
+        /**
+         * Append default parts to empty language outputs.
+         */
+        private function fillEmptyOutputs(): void
+        {
+            if (count($this->curDefault) > 0) {
+                foreach ($this->languageList as $index => $array) {
+                    $code = $array['code'] ?? null;
+                    // no output for this code yet?
+                    if (count($this->curOutput[$code]) == 0) {
+                        // add the default text parts
+                        foreach ($this->curDefault as $part) {
+                            $this->curOutput[$code][] = $part;
+                        }
+                    }
+                }
+            }
         }
 
         /**
          * Append text to all current languages output buffers.
          * Set status accordingly.
          */
-        public function outputAll(object &$lexer, string $text, bool $expand, bool $interpret): bool
+        public function outputAll(object &$lexer, string $text, bool $expand): bool
         {
-            // 1) if there is a default text, send it to all empty buffers
-            if (!empty($this->curOutputs[DEFLT])) {
-                foreach ($this->languageList as $index => $array) {
-                    $code = $array['code'] ?? null;
-                    if (empty($this->curOutputs[$code])) {
-                        $this->curOutputs[$code] = $this->curOutputs[DEFLT];
-                    }
-                }
-                $this->curOutputs[DEFLT] = ''; 
-            }
-            // 2) send text to all buffers
+            // 1) Send default text to empty language buffers
+            $this->fillEmptyOutputs();
+            // clear the default text now
+            unsetArrayContent($this->curDefault);
+
+            // 2) append text part to all languages
             foreach ($this->languageList as $index => $array) {
                 $code = $array['code'] ?? null;
-                if (empty($this->curOutputs[$code])) {
-                    $this->curOutputs[$code] .= $text;
-                }
+                $this->curOutput[$code][] = new OutputPart($text, $expand);
             }
             return true;
         }
 
         /**
-         * Append text to default output buffers.
+         * Append text part to default output.
+         * First flush current outputs if there is any content.
          */
-        public function outputDefault(object &$lexer, string $text, bool $expand, bool $interpret): bool
+        public function outputDefault(object &$lexer, string $text, bool $expand): bool
         {
-            // 1) add to default buffer
-            $this->curOutputs[DEFLT] .= $text;
-            // 2) warning for non empty buffers
+            // 1) check for non empty output
+            $empty = true;
             foreach ($this->languageList as $index => $array) {
                 $code = $array['code'] ?? null;
-                if (!empty($this->curOutputs[$code])) {
-                    echo "WARNING: default text while text available for <$code>\n";
+                if (count($this->curOutput[$code]) > 0) {
+                    $empty = false;
+                    break;
                 }
             }
+            if (!$empty) {
+                $this->flushOutput();
+            }
+            // 2) add to default buffer
+            $this->curDefault[] = new OutputPart($text, $expand);
             return true;
         }
+
         /**
-         * Append text to current language output buffers.
+         * Ignore text output.
          */
-        public function outputCurrent(object &$lexer, string $text, bool $expand, bool $interpret): bool
+        public function outputIgnore(object &$lexer, string $text, bool $expand): bool
         {
-            $this->curOutputs[$this->curLanguage] .= $text;
+            echo "WARNING: ignored text ($text)\n";
             return true;
         }
         
         /**
-         * Send all content to files.
+         * Append text to current language output.
+         */
+        public function outputCurrent(object &$lexer, string $text, bool $expand): bool
+        {
+            $this->curOutput[$this->curLanguage][] = new OutputPart($text, $expand);
+            return true;
+        }
+
+        /**
+         * Send all output to files.
          */
         public function flushOutput(): bool
         {
             $result = true;
+            // 1) Send default text to empty language buffers
+            $this->fillEmptyOutputs();
+            unsetArrayContent($this->curDefault);
+            // 2) send to files
             foreach ($this->languageList as $index => $array) {
                 $code = $array['code'] ?? null;
-                // set default text if appropriate
-                if (empty($this->curOutputs[$code])) {
-                    if (!empty($this->curOutputs[DEFLT])) {
-                        $this->curOutputs[$code] = $this->curOutputs[DEFLT];
-                    }
-                }
-                // send to file
                 if (!isset($this->outFiles[$code])) {
                     echo "ERROR: unavailable file for code <$code>\n";
                     $result = false;
                     continue;
                 }
-                fwrite($this->outFiles[$code], $this->curOutputs[$code]);
-                $this->curOutputs[$code] = '';
+                foreach ($this->curOutput[$code] as $part) {
+                    $text = $part->expand ? $this->expand($part->text, $code) : $part->text;
+                    fwrite($this->outFiles[$code], $text);
+                }
+                unsetArrayContent($this->curOutput[$code]);
+                $this->curOutput[$code] = [];
             }
-            $this->curOutputs[DEFLT] = '';
+            return $result;
+        }
+
+        /**
+         * Expand variables in a text.
+         */
+        public function expand(string $text, string $language): string
+        {
+            $relFilename = $this->current();
+            $basename = pathinfo($relFilename, PATHINFO_FILENAME);
+            $extension = $this->languageList->isMain($language) ? '.md' : ".{$language}.md";
+            $result = str_replace('{file}', $basename . $extension, $text);
+            if ($this->mainFilename !== null) {
+                $result = str_replace('{main}', $this->mainFilename . '.md', $result);
+            }
+            $result = str_replace('{language}', $language, $result);
             return $result;
         }
     }

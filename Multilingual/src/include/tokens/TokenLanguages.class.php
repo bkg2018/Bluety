@@ -47,15 +47,15 @@ namespace MultilingualMarkdown {
         {
             return '<directive> .languages((';
         }
-        public function identifyInFiler(object $filer): bool
+        public function identify(object $input): bool
         {
             // must be preceded by an end of line or nothing (possible if first line in file)
-            $prevChar = $filer->getPrevChar();
+            $prevChar = $input->getPrevChar();
             if (($prevChar != null) && ($prevChar != "\n")) {
                 return false;
             }
             // normal keyword token identification
-            return parent::identifyInFiler($filer);
+            return parent::identify($input);
         }
 
     }

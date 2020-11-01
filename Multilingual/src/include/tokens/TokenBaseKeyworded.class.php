@@ -91,9 +91,9 @@ namespace MultilingualMarkdown {
          *
          * @return bool true if theh current token can be found at current Filer position and buffer content.
          */
-        public function identifyInFiler(object $filer): bool
+        public function identify(object $input): bool
         {
-            return $filer->isMatching($this->keyword);
+            return $input->isMatching($this->keyword);
         }
         /**
             * Return the length of the token identifier.

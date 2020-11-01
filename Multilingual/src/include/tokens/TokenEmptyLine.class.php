@@ -64,32 +64,34 @@ namespace MultilingualMarkdown {
         }
         /**
          * Check beginning of line before checking the key marker.
+         *
+         * @param object $input the Filer or Storage object
          */
-        public function identifyInFiler(object $filer): bool
+        public function identify(object $input): bool
         {
-            $prevChar = $filer->getPrevChar();
+            $prevChar = $input->getPrevChar();
             if ($prevChar != "\n") {
                 return false;
             }
-            return parent::identifyInFiler($filer);
+            return parent::identify($input);
         }
         /**
          * Processing input : goto next character
          */
-        public function processInput(object $lexer, object $filer): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
+            $input->gotoNextLine();
             $lexer->appendToken($this);
-            $lexer->setCurrentChar($filer->getNextChar());
-            return true;
+            $lexer->setCurrentChar($input->getNextChar());
         }
 
         /**
          * Output an empty line.
          */
-        public function output(object $lexer, object $filer): bool
+        public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho("<EMPTYLINE>\n");
-            $filer->outputRawCurrent($lexer, "\n");
+            $filer->output($lexer, "\n", false);
             return true;
         }
     }

@@ -49,12 +49,12 @@ namespace MultilingualMarkdown {
         }
 
         // Closing directive will have Lexer processing all stored tokens if it empties the language stack.
-        public function ouputNow(object $lexer): bool
+        public function ouputNow(Lexer $lexer): bool
         {
             return ($lexer->getLanguageStackSize() <= 1);
         }
         // Output: have Lexer updating the current output language
-        public function output(object $lexer, object $filer): bool
+        public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho("<CLOSE {$lexer->getCurLanguage()}>\n");
             $lexer->popLanguage($filer);

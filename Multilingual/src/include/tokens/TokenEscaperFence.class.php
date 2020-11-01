@@ -63,27 +63,27 @@ namespace MultilingualMarkdown {
             return parent::identifyInBuffer($buffer, $pos);
         }
         /**
-         * Let the token self-identify against an input handler Filer object.
+         * Let the token self-identify against an input Filer or Storage object.
          *
-         * @param object $filer the Filer object
+         * @param object $input the Filer or Storage object
          *
          * @return bool true if theh current token can be found at current Filer position and buffer content.
          */
-        public function identifyInFiler(object $filer): bool
+        public function identify(object $input): bool
         {
-            if ($filer->getPrevChar() != "\n") {
+            if ($input->getPrevChar() != "\n") {
                 return false;
             }
-            return parent::identifyInFiler($filer);
+            return parent::identify($input);
         }
-        public function ouputNow(object $lexer): bool
+        public function ouputNow(Lexer $lexer): bool
         {
             return ($lexer->getLanguageStackSize() <= 1);
         }
-        public function output(object $lexer, object $filer): bool
+        public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho('<CODE FENCE ' . $this->debugText() . ">\n");
-            $filer->outputRawCurrent($lexer, $this->content);
+            $filer->output($lexer, $this->content, false);
             return true;
         }
     }

@@ -52,7 +52,7 @@ namespace MultilingualMarkdown {
         {
             return "<open {$this->keyword}>";
         }
-        public function output(object $lexer, object $filer): bool
+        public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho("<OPEN {$this->language}>\n");
             $lexer->pushLanguage($this->language, $filer);

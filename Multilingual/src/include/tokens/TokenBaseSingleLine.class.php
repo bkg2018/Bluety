@@ -50,7 +50,7 @@ namespace MultilingualMarkdown {
         {
             return '- FORBIDDEN: base TokenBaseSingleLine class, check Lexer code -';
         }
-        public function ouputNow(object $lexer): bool
+        public function ouputNow(Lexer $lexer): bool
         {
             return true;
         }
@@ -58,15 +58,14 @@ namespace MultilingualMarkdown {
          * Process one-line directive.
          * Simply ignore the line and go to next line start character.
          *
-         * @param object $lexer  the Lexer object
-         * @param object $filer  the Filer object ready for input, positionned on the directive
+         * @param Lexer $lexer   the Lexer object
+         * @param object $input  the Filer or Storage object ready for input, positionned on the directive
          */
-        public function processInput(object $lexer, object $filer): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
-            $filer->gotoNextLine();
+            $input->gotoNextLine();
             $lexer->appendToken($this);
-            $lexer->setCurrentChar($filer->getNextChar());
-            return true;
+            $lexer->setCurrentChar($input->getNextChar());
         }
     }
 }

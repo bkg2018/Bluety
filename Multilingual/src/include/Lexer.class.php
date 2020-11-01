@@ -159,11 +159,11 @@ namespace MultilingualMarkdown {
         /**
          * Store current car in current text and go next char.
          */
-        public function storeCurrentGoNext(object $filer): void
+        public function storeCurrentGoNext(object $input): void
         {
             $this->currentText .= $this->currentChar;
             $this->emptyText = false;
-            $this->currentChar = $filer->getNextChar();
+            $this->currentChar = $input->getNextChar();
         }
 
         /**
@@ -199,19 +199,19 @@ namespace MultilingualMarkdown {
         /**
          * Check if current position in a buffer matches a registered token and return the token.
          * The function doesn't advance position, it just checks if there is a known token at the
-         * starting position. Notice that this may fetch characters from input if current buffers
-         * don't held enough characters.
+         * starting position. Notice that this may fetch characters from input if current buffer
+         * doesn't hold enough characters.
          *
-         * @param object $filer the input file handling object.
+         * @param object $input  the input Filer or Storage object
          *
          * @return null|object   the recognized token or null if none, which means
          *                       caller Lexer will have to decide what to do with content
          *                       (e.g. creating text tokens)
          */
-        public function fetchToken(object $filer): ?Token
+        public function fetchToken(object $input): ?Token
         {
             foreach ($this->mlmdTokens as $token) {
-                if ($token->identifyInFiler($filer)) {
+                if ($token->identify($input)) {
                     return $token;
                 }
             }
@@ -223,20 +223,21 @@ namespace MultilingualMarkdown {
          * This call doesn't advance input position but send back the next character
          * from input file, or null at end of input file.
          *
-         * @param object $filer       the input file handling object.
+         * @param object $input       the input Filer or Storage object
          * @param int    $charsNumber the number of characters to fetch
          *
          * @return null|string   the next character which will be read from input,
          *                       null if already at end of file.
          */
-        public function fetchNextChars(object $filer, int $charsNumber): ?string
+        public function fetchNextChars(object $input, int $charsNumber): ?string
         {
-            return $filer->fetchNextChars($charsNumber);
+            return $input->fetchNextChars($charsNumber);
         }
 
         /**
          * Execute the effects of current sequence of tokens.
          *
+         * @param object $input       the input Filer or Storage object
          * @param object $filer  the Filer object which will receive outputs and settings
          *
          * @return bool true if all OK and token sequence is emptied, else an error occured
@@ -267,11 +268,117 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Append the token sequence corresponding to a text content to current tokens list.
+         * Adjust current, future and previous characters lists.
+         * Adjust position in a reference Filer when needed (most probably going to next line)
+         * 
+         * Assumes:
+         * - language list has been preprocessed ($languageList ready)
+         * - $filer is positionned on the content beginning
+         * 
+         */
+        public function tokenize(string $text, Filer &$filer): void
+        {
+            $storage = new Storage();
+            $storage->setInputBuffer($text);
+            $this->currentChar = $storage->getCurrentChar();
+
+            // now interpret current character
+            // important functions are :
+            // - storeCurrentGoNext() : store current character into current text and go to next character
+            // - gotoNextLine() : skip over next characters until end of current line
+            // - fetchNextChars() : fetch more characters from input while not changing read position
+            // - fetchToken() : try to recognize a token starting at current character
+            // 'fetch' means that more characters will be taken from input if needed, but current read position will not change
+            while ($this->currentChar != null) {
+                // Identify token starting at this character, or store in current text
+                $token = null;
+                switch ($this->currentChar) {
+                    case '.':
+                        // ignore when followed by space or EOL
+                        $nextChar = $storage->fetchNextChars(1); // pre-read next character
+                        if (($nextChar != ' ') && ($nextChar != "\n") && ($nextChar != "\t")) {
+                            $token = $this->fetchToken($storage);
+                            // special handling for '.languages' if needed
+                            if ((!$this->languageSet) && ($token !== null)) {
+                                if ($token->identifyInBuffer('.languages', 0)) {
+                                    // language are set by preprocessing, simply acknowledge the directive
+                                    $this->languageSet = true;
+                                    $filer->setLanguage($this->languageList, ALL);
+                                    $filer->gotoNextLine();
+                                    $storage->gotoNextLine();
+                                }
+                                // ignore 1) any token before .languages is set 2) .languages directive itself
+                                $token = null;
+                            } // keep token when after .languages
+                        }
+                        if ($token == null) {
+                            $this->storeCurrentGoNext($storage);
+                        }
+                        break;
+                    case '#':
+                        if ($this->languageSet) {
+                            // eliminate trivial case (not preceded by EOL)
+                            if ($storage->getPrevChar() == "\n") {
+                                // find maching heading from preprocessed
+                                $headingsArray = $this->allHeadingsArrays[$filer->current()];
+                                $heading = $headingsArray->findByLine($filer->getCurrentLineNumber());
+                                if ($heading !== null) {
+                                    $token = new TokenHeading($heading);
+                                    break;
+                                }
+                            }
+                            if ($token == null) {
+                                $this->storeCurrentGoNext($storage);
+                            }
+                        }
+                        break;
+                    case '`':
+                    case '"':
+                        if ($this->languageSet) {
+                            // start of escaped text?
+                            $token = $this->fetchToken($storage);
+                            if ($token === null) {
+                                if ($this->trace) {
+                                    $filer->error("unrecognized escape character [{$this->currentChar}] in text, should translate into a token", __FILE__, __LINE__);
+                                }
+                                $this->storeCurrentGoNext($storage);
+                            }
+                        } 
+                        break;
+                    case ' ':
+                    case "\n":
+                        if ($this->languageSet) {
+                            $token = $this->fetchToken($storage);
+                            if ($token == null) {
+                                $this->storeCurrentGoNext($storage);
+                            }
+                        } 
+                        break;
+                    default:
+                        if ($this->languageSet) {
+                            $this->storeCurrentGoNext($storage);
+                        }
+                        break;
+                }
+                if ($token) {
+                    $this->appendTextToken(); // stack a text token when needed
+                    $token->processInput($this, $storage, $filer); // let token process any input
+                    if ($token->ouputNow($this)) { // and do tokens output now if needed
+                        $this->output($filer);
+                    }
+                    unset($token);
+                } 
+            }
+            unset($storage);
+        }
+
+        /**
          * Process an opened filer, input and output files ready.
          * Builds sequences of tokens while reading input character by character,
          * and periodically updates outputs when meeting some directives.
          */
-        public function process(object $filer): bool
+        public function process(Filer $filer): bool
         {
             $relFilename = $filer->current();
             $this->currentChar = '';
@@ -286,98 +393,19 @@ namespace MultilingualMarkdown {
                     if ($this->currentChar === null) return false;
                 } while ($filer->getCurrentLineNumber() <= $curLineNumber);
                 $this->languageSet = true;
-                $filer->setLanguage($this->languageList, ALL);
             }
-            $this->currentChar = $filer->getCurrentChar();
+            $filer->setLanguage($this->languageList, ALL);
 
-            // now interpret current character
-            // important functions are :
-            // - storeCurrentGoNext() : store current character into current text and go to next character
-            // - gotoNextLine() : skip over next characters until end of current line
-            // - fetchNextChars() : fetch more characters from input while not changing read position
-            // - fetchToken() : try to recognize a token starting at current character
-            // 'fetch' means that more characters will be taken from input if needed, but current read position will not change
-            while ($this->currentChar != null) {
-                // just for information
+            // read first line and character
+            $lineContent = $filer->getLine();
+            while ($lineContent !== null) {
                 $curLineNumber = $filer->getCurrentLineNumber();
-                // Identify token starting at this caracter, or store in current text
-                $token = null;
-                switch ($this->currentChar) {
-                    case '.':
-                        // ignore when followed by space or EOL
-                        $nextChar = $filer->fetchNextChars(1); // pre-read next character
-                        if (($nextChar != ' ') && ($nextChar != "\n") && ($nextChar != "\t")) {
-                            $token = $this->fetchToken($filer);
-                            // special handling for '.languages' if needed
-                            if ((!$this->languageSet) && ($token !== null)) {
-                                if ($token->identifyInBuffer('.languages', 0)) {
-                                    // language are set by preprocessing, simply acknowledge the directive
-                                    $this->languageSet = true;
-                                    $filer->setLanguage($this->languageList, ALL);
-                                    $filer->gotoNextLine();
-                                }
-                                // ignore 1) any token before .languages is set 2) .languages directive itself
-                                $token = null;
-                            } // keep token when after .languages
-                        }
-                        if ($token == null) {
-                            $this->storeCurrentGoNext($filer);
-                        }
-                        break;
-                    case '#':
-                        if ($this->languageSet) {
-                            // eliminate trivial case (not preceded by EOL)
-                            if ($filer->getPrevChar() == "\n") {
-                                // find maching heading from preprocessed
-                                $headingsArray = $this->allHeadingsArrays[$relFilename];
-                                $heading = $headingsArray->findByLine($filer->getCurrentLineNumber());
-                                if ($heading !== null) {
-                                    $token = new TokenHeading($heading);
-                                    break;
-                                }
-                            }
-                            if ($token == null) {
-                                $this->storeCurrentGoNext($filer);
-                            }
-                        }
-                        break;
-                    case '`':
-                    case '"':
-                        if ($this->languageSet) {
-                            // start of escaped text?
-                            $token = $this->fetchToken($filer);
-                            if ($token === null) {
-                                if ($this->trace) {
-                                    $filer->error("unrecognized escape character [{$this->currentChar}] in text, should translate into a token", __FILE__, __LINE__);
-                                }
-                                $this->storeCurrentGoNext($filer);
-                            }
-                        } 
-                        break;
-                    case ' ':
-                    case "\n":
-                        if ($this->languageSet) {
-                            $token = $this->fetchToken($filer);
-                            if ($token == null) {
-                                $this->storeCurrentGoNext($filer);
-                            }
-                        } 
-                        break;
-                    default:
-                        if ($this->languageSet) {
-                            $this->storeCurrentGoNext($filer);
-                        }
-                        break;
-                }
-                if ($token) {
-                    $this->appendTextToken(); // stack a text token when needed
-                    $token->processInput($this, $filer); // let token process any input
-                    if ($token->ouputNow($this)) { // and do tokens output now if needed
-                        $this->output($filer);
-                    }
-                } 
+                $this->tokenize($lineContent, $filer);
+                // set current character to the next line
+                $filer->getNextChar();
+                $lineContent = $filer->getLine();
             }
-            // finish anything left
+            // process anything left
             $this->appendTextToken();
             $this->output($filer);
             $this->resetCurrentText();
@@ -626,7 +654,7 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Return the full text line for a given heading in current file.
+         * Return the text line for a given heading in current file, without the '#' prefixes
          * Handle numbering scheme and current numbering progress.
          * 
          * @see HeadingArray class
@@ -634,18 +662,8 @@ namespace MultilingualMarkdown {
         public function getHeadingText(Filer &$filer, Heading &$heading): ?string
         {
             $relFilename = $filer->current();
-            $headingText = $this->allHeadingsArrays[$relFilename]->getHeadingText($heading->getIndex(), $this->allNumberings[$relFilename], $filer);
-            return str_repeat('#', $heading->getLevel()) . ' ' . $headingText;
+            return $this->allHeadingsArrays[$relFilename]->getHeadingText($heading->getIndex(), $this->allNumberings[$relFilename], $filer);
         }
 
-        /**
-         * Expand variables and directives in a text.
-         */
-        public function expandText(string $text, Filer &$filer): ?string
-        {
-            $expanded = '';
-
-            return $expanded;
-        }
     }
 }

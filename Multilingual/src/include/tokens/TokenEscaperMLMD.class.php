@@ -47,28 +47,27 @@ namespace MultilingualMarkdown {
         {
             parent::__construct('.{');
         }
-        public function processInput(object $lexer, object $filer): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->content = '';    
-            $this->skipSelf($filer);
-            $currentChar = $filer->getCurrentChar();
+            $this->skipSelf($input);
+            $currentChar = $input->getCurrentChar();
             do {
-                if ($filer->isMatching('.}')) {
-                    $filer->getNextChar();// skip end marker
+                if ($input->isMatching('.}')) {
+                    $input->getNextChar();// skip end marker
                     break;
                 }
                 $this->content .= $currentChar;
-                $currentChar = $filer->getNextChar();
+                $currentChar = $input->getNextChar();
             } while ($currentChar != null);
             $this->length = mb_strlen($this->content);
             $lexer->appendToken($this);
-            $lexer->setCurrentChar($filer->getNextChar());
-            return true;
+            $lexer->setCurrentChar($input->getNextChar());
         }
-        public function output(object $lexer, object $filer): bool
+        public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho('<MLMD ESCAPE ' . $this->debugText() . ">\n");
-            $filer->outputRawCurrent($lexer, $this->content);
+            $filer->output($lexer, $this->content, false);
             return true;
         }
     }

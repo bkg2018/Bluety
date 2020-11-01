@@ -86,7 +86,43 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Read characters from input and append to current buffer until
+         * Close input file and empty buffer.
+         */
+        public function close(): void
+        {
+            if (\is_resource($this->inFile)) {
+                unset($this->inFile);
+                $this->inFile = null;
+            }
+            if (isset($this->buffer)) {
+                unset($this->buffer);
+                $this->buffer = '';
+                $this->bufferLength = 0;
+                $this->bufferPosition = 0;
+            };
+        }
+
+        /**
+         * Set the buffer content and length. 
+         * Ignores any opened file and totally replace the buffer content.
+         */
+        public function setInputBuffer(?string $content): void
+        {
+            if (isset($this->buffer)) {
+                unset($this->buffer);
+            }
+            $this->buffer = $content;
+            $this->bufferLength = mb_strlen($content);
+            $this->bufferPosition = 0;
+            if ($this->bufferLength > 0) {
+                $this->previousChars[1] = "\n";// assume a fake previous EOL
+                $this->previousChars[0] = mb_substr($this->buffer, $this->bufferPosition, 1);
+            }
+
+        }
+
+        /**
+         * Read characters from input file and append to current buffer until
          * at least $length characters are available or end of file is reached.
          * Content is read line by line until wanted length is reached.
          * Windows CR are deleted from input and ending line number is adjusted.
@@ -96,8 +132,9 @@ namespace MultilingualMarkdown {
          */
         public function fetchCharacters(int $length): void
         {
-            do {
-                if ($this->bufferPosition + $length >= $this->bufferLength) {
+            if (isset($this->inFile))
+            {
+                while ($this->bufferPosition + $length >= $this->bufferLength) {
                     $line = fgets($this->inFile);
                     if ($line !== false) {
                         $line = rtrim($line, "\n\r") . "\n"; // end of line forced to \n
@@ -115,7 +152,7 @@ namespace MultilingualMarkdown {
                         break;
                     }
                 }
-            } while ($this->bufferLength - $this->bufferPosition < $length);
+            }
         }
 
         /**
@@ -191,6 +228,39 @@ namespace MultilingualMarkdown {
             }
             return $this->previousChars[0];
         }
+
+        /**
+         * Read and return the text until the end of line. Do not include
+         * the end of line character in the returned text. 
+         */
+        public function getEndOfLine(): ?string
+        {
+            $text = $this->getCurrentChar();
+            $continue = true;
+            do {
+                $c = $this->getNextChar();
+                $continue = (($c != "\n") && ($c !=  null));
+                if ($continue) {
+                    $text .= $c;
+                }
+            } while ($continue);
+            return $text;
+        }
+
+        /**
+         * Skip every character starting at next one until next line starts. Do not read the first character on new line,
+         * so at exit the current character is the current line EOL.
+         * 
+         * @return null|string EOL or null at end of file
+         */
+        public function gotoNextLine(): ?string
+        {
+            do {
+                $char = $this->getNextChar();
+            } while (($char !== null) && ($char != "\n"));
+            return $char;
+        }
+
         /**
          * Look at previous UTF-8 characters.
          * Cannot read more than further the beginning of file or the beginning

@@ -55,27 +55,40 @@ namespace MultilingualMarkdown {
         {
             return "Heading .{$this->heading}((";
         }
-        public function identifyInFiler(object $filer): bool
+        public function identify(object $input): bool
         {
             // must be preceded by an end of line or nothing (possible if first line in file)
-            $prevChar = $filer->getPrevChar();
+            $prevChar = $input->getPrevChar();
             if (($prevChar != null) && ($prevChar != "\n")) {
                 return false;
             }
-            return true;
+            return parent::identify($input);
         }
-        public function ouputNow(object $lexer): bool
+
+        /**
+         * Processing input : tokenize the heading text (will go to end of input line)
+         */
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
+        {
+            $text = $lexer->getHeadingText($filer, $this->heading);
+            // build a sequence of tokens for each heading parts
+            // start with a text token for the '#' prefix
+            $token = new TokenText(str_repeat('#', $this->heading->getLevel()) . ' ');
+            $lexer->appendToken($token);
+            // then add tokens for the rest (excluding '#' to avoid infinite recursion in topkenize())
+            $lexer->tokenize($text, $filer);
+            // do NOT append this TokenHeading to Lexer
+        }
+        public function ouputNow(Lexer $lexer): bool
         {
             return ($lexer->getLanguageStackSize() <= 1);
         }
         /**
-         * TODO: actual output
+         * output: nothing to do, output will be handled by the tokens prepared by processInput
          */
-        public function output(object $lexer, object $filer): bool
+        public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho("<HEADING {$this->heading}>\n");
-            $text = $lexer->getHeadingText($filer, $this->heading);
-            $filer->outputRawCurrent($lexer, $text);
             return true;
         }
     }

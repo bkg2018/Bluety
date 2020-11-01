@@ -64,14 +64,14 @@ namespace MultilingualMarkdown {
          */
         public function addChar(string $c): void
         {
-            $content .= $c;
+            $this->content .= $c;
             $this->length = mb_strlen($this->content);
         }
 
         /**
          * Return the content.
          */
-        public function getText(): Streaming
+        public function getText(): string
         {
             return $this->content;
         }
@@ -84,9 +84,10 @@ namespace MultilingualMarkdown {
             return $this->length;
         }
 
-        public function output(object $lexer, object $filer): bool
+        public function output(Lexer $lexer, object $filer): bool
         {
             $lexer->debugEcho("<TEXT: {$this->debugText()}>\n");
+            $filer->output($lexer, $this->content, true);
             return true;
         }
     }

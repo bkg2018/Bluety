@@ -36,7 +36,7 @@ namespace MultilingualMarkdown {
     require_once 'Numbering.class.php';
     require_once 'Utilities.php';
     require_once 'Lexer.class.php';
-
+    require_once 'OutputPart.class.php';
 
     //MARK: Generator class
 

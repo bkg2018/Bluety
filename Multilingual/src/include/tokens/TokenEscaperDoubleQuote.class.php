@@ -45,10 +45,10 @@ namespace MultilingualMarkdown {
         {
             parent::__construct('"');
         }
-        public function output(object $lexer, object $filer): bool
+        public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho('<DOUBLE QUOTE ' . $this->debugText() . ">\n");
-            $filer->outputRawCurrent($lexer, $this->content);
+            $filer->output($lexer, $this->content, false);
             return true;
         }
     }

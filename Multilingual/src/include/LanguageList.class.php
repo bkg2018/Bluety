@@ -71,7 +71,7 @@ namespace MultilingualMarkdown {
         }
         public function seek($position)
         {
-            if (\array_key_exists($this->allLanguages, $position)) {
+            if (\array_key_exists($position, $this->allLanguages)) {
                 $this->curIndex = $position;
             } else {
                 \trigger_error("Invalid position $position in language list", E_USER_ERROR);

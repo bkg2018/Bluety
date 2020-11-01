@@ -72,13 +72,13 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Let the token self-identify against an input handler Filer object.
+         * Let the token self-identify against a Filer or Storage object.
          *
-         * @param object $filer the Filer input handling object
+         * @param object $input the Filer or Storage object
          *
-         * @return bool true if theh current token can be found at current Filer position and buffer content.
+         * @return bool true if theh current token can be found at current position and buffer content.
          */
-        public function identifyInFiler(object $filer): bool
+        public function identify(object $input): bool
         {
             return false;
         }
@@ -153,17 +153,17 @@ namespace MultilingualMarkdown {
          *
          * Default behaviour is to store itself in the tokens array and do nothing more.
          *
-         * @param object $lexer  the Lexer object, used e.g. by languages directive to add tokens.
-         * @param object $filer  the Filer input handling object, positionned on current character.
+         * @param Lexer  $lexer  the Lexer object, used e.g. by languages directive to add tokens.
+         * @param object $input  the Filer or Storage input handling object, positionned on current character.
+         * @param Filer  $filer  the Filer input object, for any needed file informations (see TokenHeading)
          *
          * @return int|null|array an error code > 0, or null to keep the token alone, or an array
          *                        of tokens starting with the token itself.
          */
-        public function processInput(object $lexer, object $filer): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
            $lexer->appendToken($this);
-           $lexer->setCurrentChar($filer->getNextChar());
-           return true;
+           $lexer->setCurrentChar($input->getNextChar());
         }
  
          /**
@@ -204,7 +204,7 @@ namespace MultilingualMarkdown {
          *
          * @param object $filer the Filer instance object which receives outputs and settings
          */
-        public function output(object $lexer, object $filer): bool
+        public function output(Lexer $lexer, Filer $filer): bool
         {
             $class = get_class($this);
             $backslash = strrpos($class, '\\');
@@ -216,7 +216,7 @@ namespace MultilingualMarkdown {
          * Tell if a token must process output immediately after being stored.
          * This is mainly for one-line directives and the .)) ending directive.
          */
-        public function ouputNow(object $lexer): bool
+        public function ouputNow(Lexer $lexer): bool
         {
             return false;
         }

@@ -47,7 +47,7 @@ namespace MultilingualMarkdown {
         {
             return '<directive> .ignore((';
         }
-        public function output(object $lexer, object $filer): bool
+        public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho("<OPEN ignore>\n");
             $lexer->pushLanguage(IGNORE, $filer);

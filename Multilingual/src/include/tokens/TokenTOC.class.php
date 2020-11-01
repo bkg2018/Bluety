@@ -58,9 +58,10 @@ namespace MultilingualMarkdown {
          * text part, unless the expected effect is to restrain a toc to
          * a specific language.
          */
-        public function output(object $lexer, object $filer): bool
+        public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho("<TOC - TODO: output toc content>\n");
+            $filer->output($lexer, "<TOC (todo)>", false);
             return true;
         }
 
@@ -70,16 +71,15 @@ namespace MultilingualMarkdown {
          * Processing input is only a matter of reading until end of line
          * and storing content. Actual output is done in output().
          */
-        public function processInput(object $lexer, object $filer): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             // skip the directive (no need to store)
-            $this->skipSelf($filer);
+            $this->skipSelf($input);
             // store the parameters until end of line
-            $this->content = $filer->getEndOfLine();
+            $this->content = $input->getEndOfLine();
             $this->length = mb_strlen($this->content);
             $lexer->appendToken($this);
-            $lexer->setCurrentChar($filer->getNextChar());
-            return true;
+            $lexer->setCurrentChar($input->getNextChar());
         }
     }
 
