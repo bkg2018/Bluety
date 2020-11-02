@@ -5,6 +5,7 @@
 		}
 	],
 	"launch": {
+        "php.executablePath": "/usr/local/opt/php/bin/php",
 		"version": "0.2.0",
 		"configurations": [
 
