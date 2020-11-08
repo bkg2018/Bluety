@@ -88,6 +88,7 @@ namespace MultilingualMarkdown {
         private $curTokens = [];                /// Current tokens file, will be regularly sent to output when languages stack is empty
         private $trace = false;                 /// flag for a few prints or warnings control
         private $defaultNumberingScheme = '';   /// default numbering scheme, set by '-numbering' CLI parameter
+        private $eolCount = 0;                  /// number of previous successives EOL tokens
 
         public function __construct()
         {
@@ -172,19 +173,49 @@ namespace MultilingualMarkdown {
         public function appendTextToken(): void
         {
             if (!$this->emptyText) {
-                $this->curTokens[] = new TokenText($this->currentText);
+                $text = new TokenText($this->currentText);
+                $this->appendToken($text);
+                unset($text);// free this reference
                 $this->resetCurrentText();
             }
         }
 
         /**
+         * Make sure there is an EOL token at the end
+         */
+        public function ensureEndingEOL(): void
+        {
+            if ($this->eolCount == 0) {
+                $this->appendTokenEOL();
+            }
+        }
+
+        /**
          * Store a token in current tokens array.
-         * This is used by most tokens in their processInput() work to append themselves
-         * to the lexer current flow of tokens.
+         * Do not append more than two successive EOL tokens.
+         * This is used by tokens in their processInput() work to append themselves
+         * or other tokens to the lexer current flow of tokens.
          */
         public function appendToken(object &$token): void
         {
+            // limit successives EOLS
+            if ($token->identifyInBuffer("\n",0)) {
+                if ($this->eolCount >= 2) {
+                    return;
+                }
+                $this->eolCount += 1;
+            } else {
+                $this->eolCount = 0;
+            }
             $this->curTokens[] = $token;
+        }
+
+        /**
+         * Store and end-of-line token (EOL).
+         */
+        public function  appendTokenEOL(): void
+        {
+            $this->appendToken($this->mlmdTokens['eol']);
         }
 
         /**
@@ -237,17 +268,24 @@ namespace MultilingualMarkdown {
         /**
          * Execute the effects of current sequence of tokens.
          *
-         * @param object $input       the input Filer or Storage object
+         * @param object $input  the input Filer or Storage object
          * @param object $filer  the Filer object which will receive outputs and settings
          *
          * @return bool true if all OK and token sequence is emptied, else an error occured
          */
-        public function output(object &$filer)
+        public function output(Filer &$filer)
         {
             $result = true;
+            $eolCount = 0;
             foreach ($this->curTokens as $token) {
                 if (!$token->output($this, $filer)) {
                     $result = false;
+                }
+                $eolCount = ($token->identifyInBuffer("\n",0) ? $eolCount + 1 : 0);
+                if ($eolCount >= 2) {
+                    if (count($this->languageStack) <= 1) {
+                        $filer->flushOutput();
+                    }
                 }
             }
             unsetArrayContent($this->curTokens);
@@ -275,9 +313,13 @@ namespace MultilingualMarkdown {
          * Assumes:
          * - language list has been preprocessed ($languageList ready)
          * - $filer is positionned on the content beginning
-         * 
+         *
+         * @param string $text        t he text to tokenize, preferably a single line but not necessary
+         * @param Filer  $filer       the Filer for any file reference in variable expansion
+         * @param bool   $allowOutput flag to allow output in tokenization,
+         *                            should be disabled in recursive tokenization (e.g. TokenHeading::processInput)
          */
-        public function tokenize(string $text, Filer &$filer): void
+        public function tokenize(string $text, Filer &$filer, bool $allowOutput): void
         {
             $storage = new Storage();
             $storage->setInputBuffer($text);
@@ -362,14 +404,18 @@ namespace MultilingualMarkdown {
                         break;
                 }
                 if ($token) {
-                    $this->appendTextToken(); // stack a text token when needed
-                    $token->processInput($this, $storage, $filer); // let token process any input
-                    if ($token->ouputNow($this)) { // and do tokens output now if needed
+                    // save current text in a tokken, then let new token process input 
+                    $this->appendTextToken();
+                    $token->processInput($this, $storage, $filer);
+                    // if appropriate, output the tokens stack
+                    if ($allowOutput && $token->ouputNow($this)) {
                         $this->output($filer);
                     }
                     unset($token);
-                } 
+                }
             }
+            // process anything left
+            $this->appendTextToken();
             unset($storage);
         }
 
@@ -387,27 +433,30 @@ namespace MultilingualMarkdown {
 
             // skip right after languages directive (only at first time)
             if ($this->waitLanguages && !$this->languageSet) {
-                $curLineNumber = $this->allStartingLines[$relFilename];
+                $startLineNumber = $this->allStartingLines[$relFilename];
                 do {
-                    $this->currentChar = $filer->getNextChar();
+                    $filer->getLine(); // read until eol and increment line number
                     if ($this->currentChar === null) return false;
-                } while ($filer->getCurrentLineNumber() <= $curLineNumber);
+                } while ($filer->getCurrentLineNumber() < $startLineNumber);
                 $this->languageSet = true;
             }
             $filer->setLanguage($this->languageList, ALL);
 
-            // read first line and character
+            // read first line (including eol)
             $lineContent = $filer->getLine();
             while ($lineContent !== null) {
-                $curLineNumber = $filer->getCurrentLineNumber();
-                $this->tokenize($lineContent, $filer);
-                // set current character to the next line
-                $filer->getNextChar();
+                $curLineNumber = $filer->getCurrentLineNumber(); // just for debug checks
+                $this->tokenize($lineContent, $filer, true); // tokenize line, allow output on empty lines with empty language stack
+                // read eol
+                $this->appendTokenEOL();
+                // go next line
                 $lineContent = $filer->getLine();
             }
             // process anything left
             $this->appendTextToken();
+            $this->ensureEndingEOL();
             $this->output($filer);
+            $filer->flushOutput();
             $this->resetCurrentText();
             return true;
         }

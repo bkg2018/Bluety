@@ -596,15 +596,7 @@ namespace MultilingualMarkdown {
         {
             return $this->storage->getPrevChar();
         }
-        /**
-         * Return the previous previous UTF-8 character .
-         *
-         * @return null|string previous character ('\n' for EOL).
-         */
-        public function prePrevChar(): ?string
-        {
-            return $this->storage->prePrevChar();
-        }
+
         /**
          * Return the current UTF-8 character from current paragraph.
          * Load next paragraph if no paragraph is loaded yet.
@@ -637,33 +629,14 @@ namespace MultilingualMarkdown {
             return $this->storage->gotoNextLine();
         }
 
-        /**
-         * Read and return the current line including the EOL character.
-         */
-        public function getLine(): ?string
-        {
-            $text = '';
-            $char = $this->getCurrentChar();
-            while ($char != "\n" && $char !== null) {
-                $text .= $char;
-                $char = $this->getNextChar();
-            }
-            if ($char == null) {
-                return null;
-            }
-            if ($char == "\n") {
-                $text .= $char;
-            }
-            return $text;
-        }
 
         /**
          * Read and return the text until the end of line. Do not include
-         * the end of line character in the returned text. 
+         * the end of line character in the returned text.
          */
-        public function getEndOfLine(): ?string
+        public function getLine(): ?string
         {
-            return $this->storage->getEndOfLine();
+            return $this->storage->getLine();
         }
 
         /**

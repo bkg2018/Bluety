@@ -76,7 +76,7 @@ namespace MultilingualMarkdown {
             // skip the directive (no need to store)
             $this->skipSelf($input);
             // store the parameters until end of line
-            $this->content = $input->getEndOfLine();
+            $this->content = $input->getLine();
             $this->length = mb_strlen($this->content);
             $lexer->appendToken($this);
             $lexer->setCurrentChar($input->getNextChar());

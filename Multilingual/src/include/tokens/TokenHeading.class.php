@@ -75,16 +75,14 @@ namespace MultilingualMarkdown {
             // start with a text token for the '#' prefix
             $token = new TokenText(str_repeat('#', $this->heading->getLevel()) . ' ');
             $lexer->appendToken($token);
-            // then add tokens for the rest (excluding '#' to avoid infinite recursion in topkenize())
-            $lexer->tokenize($text, $filer);
-            // do NOT append this TokenHeading to Lexer
+            // then add tokens for the rest (excluding '#' avoids infinite recursion in tokenize())
+            $lexer->tokenize($text, $filer, false); // don't output during this call
+            // do NOT append this TokenHeading to Lexer, all the heading line has been
+            // cut and stacked as a sequence of other tokens
         }
-        public function ouputNow(Lexer $lexer): bool
-        {
-            return ($lexer->getLanguageStackSize() <= 1);
-        }
+
         /**
-         * output: nothing to do, output will be handled by the tokens prepared by processInput
+         * output: nothing to do, output will be handled by the tokens prepared in processInput
          */
         public function output(Lexer $lexer, Filer $filer): bool
         {

@@ -76,22 +76,32 @@ namespace MultilingualMarkdown {
             return parent::identify($input);
         }
         /**
-         * Processing input : goto next character
+         * Processing input: append 2 EOL tokens then goto next character
          */
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $input->gotoNextLine();
-            $lexer->appendToken($this);
+            $eol = new TokenEOL();
+            $lexer->appendToken($eol);
+            $lexer->appendToken($eol);
             $lexer->setCurrentChar($input->getNextChar());
         }
 
+        // Closing directive will have Lexer processing all stored tokens if it empties the language stack.
+        public function ouputNow(Lexer $lexer): bool
+        {
+            return ($lexer->getLanguageStackSize() <= 1);
+        }
         /**
          * Output an empty line.
          */
         public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho("<EMPTYLINE>\n");
-            $filer->output($lexer, "\n", false);
+            $filer->output($lexer, "\n\n", false);
+            if ($lexer->getLanguageStackSize() <= 1) {
+                $filer->flushOutput();
+            }
             return true;
         }
     }

@@ -221,15 +221,6 @@ namespace MultilingualMarkdown {
             return $this->currentChars[1] ?? null;
         }
         /**
-         * Return the previous previous UTF-8 character .
-         *
-         * @return null|string previous character ('\n' for EOL).
-         */
-        public function prePrevChar(): ?string
-        {
-            return $this->currentChars[2] ?? null;
-        }
-        /**
          * Return the next UTF-8 character from current buffer, return null if end of file.
          *
          * @return null|string new current character ('\n' for EOL),  null when file and buffer are finished.

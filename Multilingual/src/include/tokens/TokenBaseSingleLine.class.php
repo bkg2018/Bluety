@@ -50,10 +50,7 @@ namespace MultilingualMarkdown {
         {
             return '- FORBIDDEN: base TokenBaseSingleLine class, check Lexer code -';
         }
-        public function ouputNow(Lexer $lexer): bool
-        {
-            return true;
-        }
+
        /**
          * Process one-line directive.
          * Simply ignore the line and go to next line start character.

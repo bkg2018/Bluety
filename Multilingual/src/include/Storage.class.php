@@ -35,22 +35,15 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'OutputModes.class.php';
-
     class Storage
     {
         // Input file and reading status
         private $buffer = '';                   /// current line content
         private $bufferPosition = 0;            /// current pos in line buffer (utf-8)
         private $bufferLength = 0;              /// current line size in characters (utf-8)
-        private $curLine = 1;                   /// current line number from input file
-        private $previousChars = [];             /// array of last 3 characters: [0] = current, [1] = previous, [2] = pre-previous
-
-        // Output files and writing status
-        private $lastWritten = [];              /// last  character written to file
-        private $curOutputs = [];               /// current output buffers for files
-        private $outputMode = OutputModes::MD;  /// output html or md style for headings and links in toc
-        private $curLanguage = ALL;             /// current language for incoming outputs, can also be ALL, IGNORED or DEFLT
+        private $curLine = 0;                   /// current line number from input file
+        private $lastLine = 0;                  /// current last line number stored in buffer on or after current position
+        private $previousChars = [];            /// array of last 3 characters: [0] = current, [1] = previous, [2] = pre-previous
 
         public function __construct()
         {
@@ -79,7 +72,10 @@ namespace MultilingualMarkdown {
                 unset($this->buffer);
                 $this->buffer = '';
             };
-            $this->bufferLength = 0;
+            // initialize on first line
+            $this->buffer = $this->loadLine();
+            $this->bufferLength += mb_strlen($this->buffer);
+            $this->previousChars[0] = mb_substr($this->buffer,0,1);
             $this->bufferPosition = 0;
             $this->curLine = 1;
             return true;
@@ -115,43 +111,50 @@ namespace MultilingualMarkdown {
             $this->bufferLength = mb_strlen($content);
             $this->bufferPosition = 0;
             if ($this->bufferLength > 0) {
-                $this->previousChars[1] = "\n";// assume a fake previous EOL
-                $this->previousChars[0] = mb_substr($this->buffer, $this->bufferPosition, 1);
+                $this->previousChars = [mb_substr($this->buffer, 0, 1)];
             }
-
         }
 
         /**
-         * Read characters from input file and append to current buffer until
-         * at least $length characters are available or end of file is reached.
+         * Read a line from current file and delete ending EOL character then return
+         * resulting string. Return null when already at end of file.
+         */
+        public function loadLine(): ?string
+        {
+            if (!isset($this->inFile)) { return null; }
+            $line = fgets($this->inFile);
+            if ($line === false) { return null; }
+            return rtrim($line, "\n\r");
+        }
+
+        /**
+         * Ensure a number of characters are available in buffer from input file.
          * Content is read line by line until wanted length is reached.
-         * Windows CR are deleted from input and ending line number is adjusted.
-         * Current char and position do not change.
+         * Windows CR are deleted from input, and the EOL character is moved
+         * to the starting of line. Current char and position do not change.
+         * The function just ensure that enough characters are present in buffer
+         * and does not return any string.
          *
          * @param int $length number of character to make available in buffer
          */
         public function fetchCharacters(int $length): void
         {
-            if (isset($this->inFile))
-            {
-                while ($this->bufferPosition + $length >= $this->bufferLength) {
-                    $line = fgets($this->inFile);
-                    if ($line !== false) {
-                        $line = rtrim($line, "\n\r") . "\n"; // end of line forced to \n
-                        $this->buffer .= $line;
-                        $this->bufferLength += mb_strlen($line);
-                        if ($this->bufferLength > 4096 && $this->bufferPosition > 1024) {
-                            $this->buffer = mb_substr($this->buffer, 1024);
-                            $this->bufferPosition -= 1024;
-                            $this->bufferLength = mb_strlen($this->buffer);
-                        }
-                        if ($this->curLine == 0) {
-                            $this->curLine = 1;
-                        }
-                    } else {
-                        break;
-                    }
-                }
+            if ($this->bufferPosition + $length < $this->bufferLength) {
+                return ;
+            }
+            // get next line cleaned of EOL
+            $line = $this->loadLine();
+            if ($line === null) {
+                return;
+            }
+            // add to buffer with an EOL prefix
+            $this->buffer .= "\n" . $line;
+            $this->bufferLength += (1 + mb_strlen($line));
+            // keep buffer size at about 4KB when position is above 1KB
+            if ($this->bufferLength > 4096 && $this->bufferPosition > 1024) {
+                $this->buffer = mb_substr($this->buffer, 1024);
+                $this->bufferPosition -= 1024;
+                $this->bufferLength = mb_strlen($this->buffer);
             }
         }
 
@@ -193,15 +196,7 @@ namespace MultilingualMarkdown {
         {
             return $this->previousChars[1] ?? null;
         }
-        /**
-         * Return the previous previous UTF-8 character .
-         *
-         * @return null|string previous character ('\n' for EOL).
-         */
-        public function prePrevChar(): ?string
-        {
-            return $this->previousChars[2] ?? null;
-        }
+
         /**
          * Return the next UTF-8 character from current buffer, return null if end of file.
          *
@@ -209,6 +204,7 @@ namespace MultilingualMarkdown {
          */
         public function getNextChar(): ?string
         {
+            // ensure next character
             $this->fetchCharacters(1);
             // EOF?
             if ($this->bufferPosition >= $this->bufferLength - 1) {
@@ -217,33 +213,41 @@ namespace MultilingualMarkdown {
                 $this->bufferPosition += 1;
                 $c = mb_substr($this->buffer, $this->bufferPosition, 1);
             }
-            // adjust previous characters array
+            // adjust current line number?
+            if ($c == "\n") {
+                $this->curLine += 1;
+            }
+            // adjust previous characters array (0 = current, 1 = previous, 2 = pre-previous)
             if (count($this->previousChars) > 2) {
                 array_pop($this->previousChars);        // unset [2]
             }
-            array_unshift($this->previousChars, $c);    // insert [0], pushes 0/1 to 1/2
-            // update line number if prev char was EOL
-            if (($this->previousChars[1] ?? '') == "\n") {
-                $this->curLine += 1;
-            }
+            array_unshift($this->previousChars, $c);    // insert [0], pushes 0=>1 to 1=>2
+            // return new current character
             return $this->previousChars[0];
         }
 
         /**
-         * Read and return the text until the end of line. Do not include
-         * the end of line character in the returned text. 
+         * Read and return the text from starting  position and until end of line. Do not include
+         * the end of line character in the returned text.
+         *
+         * - if already at eof, returns null.
+         * - if an empty line, return empty string
+         * - else return the line content until the next EOL (which is the next line start)
+         *
+         * If there is an eol character it is read but not returned by the function. The caller
+         * must assume that an end of line character is present for any non null return.
          */
-        public function getEndOfLine(): ?string
+        public function getLine(): ?string
         {
-            $text = $this->getCurrentChar();
-            $continue = true;
+            $text = null;
             do {
-                $c = $this->getNextChar();
-                $continue = (($c != "\n") && ($c !=  null));
-                if ($continue) {
-                    $text .= $c;
-                }
-            } while ($continue);
+                $char = $this->fetchNextChars(1);    // have a look at next character
+                if ($char == null) break;           // exit with current $text if EOF
+                if ($text == null) $text = '';      // next character is not EOF: ensure at least an empty line
+                $this->getNextChar();               // read that character now
+                if ($char == "\n") break;           // return now if empty line
+                $text .= $char;
+            } while (1);
             return $text;
         }
 
@@ -251,14 +255,39 @@ namespace MultilingualMarkdown {
          * Skip every character starting at next one until next line starts. Do not read the first character on new line,
          * so at exit the current character is the current line EOL.
          * 
-         * @return null|string EOL or null at end of file
+         * @return null|string EOL when line has been read, null at end of file
          */
         public function gotoNextLine(): ?string
         {
-            do {
+            // check for end of file now
+            $char = $this->getNextChar();
+            if ($char == null) {
+                return null;
+            }
+            // read until the next EOL
+            while (($char !== null) && ($char != "\n")) {
                 $char = $this->getNextChar();
-            } while (($char !== null) && ($char != "\n"));
+            }
+            // return null when EOF reached, else return EOL
             return $char;
+        }
+
+        /**
+         * Read a string with a number of characters starting with the current one.
+         * Return null if already at end of file. The final current position is set
+         * on the first character past the string.
+         */
+        public function getString(int $charsNumber): ?string
+        {
+            // read char[0]
+            $result = $this->previousChars[0] ?? '';
+            $c = $this->getNextChar();
+            // append chars [1..N-1]
+            for ($i = 1; ($i < $charsNumber) && ($c != null); $i += 1) {
+                $result .= $c;
+                $c = $this->getNextChar();
+            }
+            return $result;
         }
 
         /**
@@ -284,23 +313,6 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Read a string with a number of characters starting with the current one.
-         * Return null if already at end of file. The final current position is set
-         * on the first character past the string.
-         */
-        public function getString(int $charsNumber): ?string
-        {
-            // read char[0]
-            $result = $this->previousChars[0] ?? '';
-            $c = $this->getNextChar();
-            // append chars [1..N-1]
-            for ($i = 1; ($i < $charsNumber) && ($c != null); $i += 1) {
-                $result .= $c;
-                $c = $this->getNextChar();
-            }
-            return $result;
-        }
-        /**
          * Return next UTF-8 characters from current buffer, return null if end of file.
          * Do not advance reading position, just send back future characters to read.
          * If the requested number of characters is not available, return what's left.
@@ -310,10 +322,10 @@ namespace MultilingualMarkdown {
          */
         public function fetchNextChars(int $charsNumber): ?string
         {
-            $nextPosition = $this->bufferPosition + 1;
             $this->fetchCharacters($charsNumber);
+            $nextPosition = $this->bufferPosition + 1;
             if ($nextPosition >= $this->bufferLength) {
-                return null;
+                return null; // end of buffer/file already reached
             }
             return mb_substr($this->buffer, $nextPosition, $charsNumber);
         }
@@ -329,43 +341,8 @@ namespace MultilingualMarkdown {
          */
         public function isMatching(string $marker): bool
         {
-            $markerLen = mb_strlen($marker);
-            $this->fetchCharacters($markerLen);
-            $content = mb_substr($this->buffer, $this->bufferPosition, $markerLen);
-            return strcmp($content, $marker) == 0;
-        }
-
-        /**
-         * Set output mode.
-         * If numbering scheme has been set, the output mode will use a numbered format.
-         * If not, it will use a non-numbered format.
-         * Setting a numbering scheme after setting the output mode will adjust the mode.
-         *
-         * @param string $name     the output mode name 'md', 'mdpure', 'html' or 'htmlold'
-         * param object $numbering the numbering scheme object
-         * @param object $logger   the caller object with an error() function
-         */
-        public function setOutputMode(string $name, object $numbering, ?object $logger = null): void
-        {
-            $mode = OutputModes::getFromName($name, $numbering);
-            if ($mode == OutputModes::INVALID) {
-                if ($logger) {
-                    $logger->error("invalid output mode name '$name'");
-                }
-                return;
-            }
-            $this->outputMode = $mode;
-        }
-
-        /**
-         * Set the current output language, accepts 'all' or 'default' plus language codes.
-         *
-         * @param string $language     the language code to set as current
-         */
-        public function setLanguage(string $language): bool
-        {
-            $this->curLanguage = $language;
-            return true;
+            $content  = $this->fetchNextChars(mb_strlen($marker));
+            return mb_strcmp($content, $marker) == 0;
         }
     }
 }

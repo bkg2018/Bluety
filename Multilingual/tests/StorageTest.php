@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use MultilingualMarkdown\Filer;
 use MultilingualMarkdown\Storage;
 
-require_once '../src/include/Storage.class.php';
+require_once __DIR__ . '/../src/include/Storage.class.php';
 
 /** Copyright 2020 Francis Piérot
  *
@@ -30,24 +30,48 @@ require_once '../src/include/Storage.class.php';
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  * @link      TODO
  */
+
+ /**
+  * Must be tested:
+  *
+  * Function            Change      Update              Return                  Update
+  *                     buffer      buffer              buffer                  line
+  *                     position    content             content                 number
+  *
+  * setInputFile        -           yes (1 character)   -                       -
+  * close               -           yes (empty)         -
+  * setInputBuffer      yes (->0)   yes (replace)       -
+  * loadLine            -           yes (\n+content)    -
+  * getCurrentChar      -           -                   yes (1 cur char)
+  * getPrevChar         -           -                   yes (1 prev char)
+  * getNextChar         yes (+1)    yes                 yes (1 new cur char)    yes
+  * getLine             yes (+n)    yes                 yes (line with no EOL)  yes
+  * gotoNextLine        yes (+n)    yes                 yes (null or \n)        yes
+  * getString           yes         yes                 yes (N characters)      yes
+  * fetchPreviousChars  -           -                   yes (previous chars)
+  * fetchNextChars      -           yes                 yes (N characters)
+  * isMatching          -           yes                 -
+  * 
+  * 
+  * getCurrentLineNumber
+  */
 class StorageTest extends TestCase
 {
     public function testGetChar()
     {
         $storage = new Storage();
-        $file = fopen('test.mlmd', 'rt');
+        $file = fopen(__DIR__ . '/../testdata/test.mlmd', 'rt');
         $this->assertNotFalse($file);
         $storage->setInputFile($file);
         $c = $storage->getCurrentChar();
         //echo str_repeat('=', 120), "\n";
         $charNumber = 0;
         while ($c !== null) {
-            //echo $c;
             $charNumber += 1;
             $c = $storage->getNextChar();
         }
-        // the test file is 431 bytes but holds 4 times the french 2-bytes UTF-8 character 'ç' so there are 427 characters
-        $this->assertEquals(427, $charNumber);
+        // the test file is 959 characters (some UTF-8 characters are more than 1-byte)
+        $this->assertEquals(959, $charNumber);
         fclose($file);
     }
 }

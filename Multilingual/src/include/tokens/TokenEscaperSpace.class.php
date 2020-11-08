@@ -68,13 +68,23 @@ namespace MultilingualMarkdown {
          */
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
-            $this->content = $input->getEndOfLine(); // include the 4 spaces prefix
-            // add the end of line character
+            $this->content = $input->getLine(); // include the 4 spaces prefix
             $this->content .= $input->getCurrentChar();
             $this->length = mb_strlen($this->content);
+            // replace the last EOLs by one EOL token?
+            $length = mb_strlen($this->content);
+            $addEOL = false;
+            if (mb_substr($this->content, $length-1, 1) == "\n") {
+                $this->content = rtrim($this->content, "\n");
+                $length = mb_strlen($this->content);
+                $addEOL = true;// add after the fence token
+            }
+            $this->length = $length;
             $lexer->appendToken($this);
-            // go next character
-            $lexer->setCurrentChar($input->getNextChar());
+            if ($addEOL) {
+                $lexer->appendTokenEOL();
+            }
+            $lexer->setCurrentChar($filer->getCurrentChar());
         }
         public function output(Lexer $lexer, Filer $filer): bool
         {

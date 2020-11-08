@@ -21,7 +21,8 @@
 				"type": "php",
 				"request": "launch",
 				"program": "${file}",
-				"cwd": "${fileDirname}",
+				"cwd": "${workspaceFolder}",
+				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1"},
 				"port": 9000
 			},
 			{

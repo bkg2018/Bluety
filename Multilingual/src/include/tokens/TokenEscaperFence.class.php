@@ -53,12 +53,11 @@ namespace MultilingualMarkdown {
          */
         public function identifyInBuffer(string $buffer, int $pos): bool
         {
-            if ($pos <= 0) {
-                return true;
-            }
-            $lf = mb_substr($buffer, $pos - 1, 1);
-            if ($lf != "\n") {
-                return false;
+            if ($pos > 0) {
+                $lf = mb_substr($buffer, $pos - 1, 1);
+                if ($lf != "\n") {
+                    return false;
+                }
             }
             return parent::identifyInBuffer($buffer, $pos);
         }
@@ -67,7 +66,7 @@ namespace MultilingualMarkdown {
          *
          * @param object $input the Filer or Storage object
          *
-         * @return bool true if theh current token can be found at current Filer position and buffer content.
+         * @return bool true if the current token can be found at current Filer position and buffer content.
          */
         public function identify(object $input): bool
         {
@@ -76,10 +75,45 @@ namespace MultilingualMarkdown {
             }
             return parent::identify($input);
         }
-        public function ouputNow(Lexer $lexer): bool
+
+        /**
+         * Process input: get text until we find the closing escape marker. 
+         * Code fenced text can cross many lines so don't stop at end of input if
+         * it's a Storage and read next lines from filer into input.
+         * Update tokens array with the token itself. The escaped text is stored
+         * by the token. 
+         */
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
-            return ($lexer->getLanguageStackSize() <= 1);
+            $this->content = $input->getLine();// <```code> starting marker 
+            do {
+                $thisLine = $filer->getLine();
+                if ($thisLine != null) {
+                    $this->content .= "\n" . $thisLine;
+                }
+            } while (!$this->identifyInBuffer($thisLine,0));
+            // In the lines below I take care to modify $this->content before
+            // appending $this to lexer, but it may be possible to add the token first
+            // and then modify its content. As PHP is not clear about about object 
+            // copies I prefer to do as if $this could be copied in the append
+            // and not stored by reference.
+
+            // replace the last EOLs by one EOL token?
+            $length = mb_strlen($this->content);
+            $addEOL = false;
+            if (mb_substr($this->content, $length-1, 1) == "\n") {
+                $this->content = rtrim($this->content, "\n");
+                $length = mb_strlen($this->content);
+                $addEOL = true;// add after the fence token
+            }
+            $this->length = $length;
+            $lexer->appendToken($this);
+            if ($addEOL) {
+                $lexer->appendTokenEOL();
+            }
+            $lexer->setCurrentChar($filer->getCurrentChar());
         }
+
         public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho('<CODE FENCE ' . $this->debugText() . ">\n");

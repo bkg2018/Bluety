@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-echo getenv('PATH');
-
-echo phpinfo();
+//echo getenv('PATH');
+//echo phpinfo();
 
 require_once 'include/Generator.class.php';
 use MultilingualMarkdown\Generator;
