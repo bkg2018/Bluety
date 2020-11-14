@@ -50,7 +50,7 @@ namespace MultilingualMarkdown {
         protected $keywordLength = 0;   /// number of UTF-8 characters
         protected $ignoreCase = true;   /// ignore case difference for identification
 
-        public function __construct(int $tokenType, string $keyword, bool $ignoreCase)
+        public function __construct(int $tokenType, string $keyword, bool $ignoreCase = true)
         {
             parent::__construct($tokenType);
             if ($ignoreCase) {
@@ -103,12 +103,11 @@ namespace MultilingualMarkdown {
             return $this->keywordLength;
         }
         /**
-         * Skip over the keyword itself in the Filer input.
-         * The filer object stays on 
+         * Skip over the keyword itself in the input.
          */
-        protected function skipSelf(object $filer): ?string
+        protected function skipSelf(object $input): void
         {
-            return $filer->getString($this->keywordLength);
+            $input->getString($this->keywordLength);
         }
     }
 }

@@ -32,7 +32,7 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once('Constants.php');
+    require_once 'Constants.php';
 
     class LanguageList implements \SeekableIterator, \ArrayAccess, \Countable
     {

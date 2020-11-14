@@ -26,6 +26,10 @@ Code fenced text
 the text..)).fr((texte en français avec
 un EOL dedans..))
 
+Text with variable main: {main}
+Text with variable file: {file}
+Text with variable language: {language}
+
 .toc title=.((Default toc title.)).fr((Table des matières.)) level=1-3
 
 .((Inlined default text 2..)).fr((Texte Français en ligne 2..))

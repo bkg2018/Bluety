@@ -48,7 +48,7 @@ namespace MultilingualMarkdown {
         private $levelsSeparator = [];  // level => separator string after symbol for each level
 
         // status
-        private $curNumbering = [];     // current increment for each level
+        private $curLevelNumbering = [];     // current increment for each level
         private $prevLevel = 0;         // previous level processed by getTOCline()
 
         // Roman numbers arrays
@@ -185,7 +185,7 @@ namespace MultilingualMarkdown {
             $this->levelsNumbering = [];
             $this->levelsRoman = [];
             $this->levelsSeparator = [];
-            $this->curNumbering = [];
+            $this->curLevelNumbering = [];
             $this->definitionSeparator = ':';
             $schemeLen = mb_strlen($scheme);
             if ($schemeLen == 0) {
@@ -249,14 +249,14 @@ namespace MultilingualMarkdown {
                     $this->levelsNumbering[$level] = $symbol;
                 }
                 $this->levelsSeparator[$level] = $separator;
-                $this->curNumbering[$level] = 0;
+                $this->curLevelNumbering[$level] = 0;
             }
             // sort all by level so foreach() can track levels in growing order
             ksort($this->levelsPrefix, SORT_NUMERIC);
             ksort($this->levelsNumbering, SORT_NUMERIC);
             ksort($this->levelsRoman, SORT_NUMERIC);
             ksort($this->levelsSeparator, SORT_NUMERIC);
-            ksort($this->curNumbering, SORT_NUMERIC);
+            ksort($this->curLevelNumbering, SORT_NUMERIC);
             // default output mode = markdown with number
             $this->setOutputMode('md');
         }
@@ -296,7 +296,7 @@ namespace MultilingualMarkdown {
          */
         public function resetSubNumbering(): void
         {
-            foreach ($this->curNumbering as $index => &$curNumbering) {
+            foreach ($this->curLevelNumbering as $index => &$curNumbering) {
                 if ($index != 1) {
                     $curNumbering = 0;
                 }
@@ -311,7 +311,7 @@ namespace MultilingualMarkdown {
          */
         public function setLevelNumber(int $level, int $number): void
         {
-            $this->curNumbering[$level] = $number - 1;
+            $this->curLevelNumbering[$level] = $number - 1;
         }
 
         
@@ -356,7 +356,7 @@ namespace MultilingualMarkdown {
             // viewers will figure out actual numbering.
             // MLMD give the actual level number (1. 2. 3. etc) , although not necessary.
             if ($this->outputMode == OutputModes::MDPURE) {
-                $number = $this->curNumbering[$level] + 1; // 0 becomes '1.', 1 becomes '2.' etc
+                $number = $this->curLevelNumbering[$level] + 1; // 0 becomes '1.', 1 becomes '2.' etc
                 $sequence = "{$number}. ";
                 return $sequence;
             }
@@ -371,16 +371,16 @@ namespace MultilingualMarkdown {
                 // set <symbol><separator>
                 $numbering = $this->levelsNumbering[$i] ?? '1';
                 if (is_numeric($numbering)) {
-                    $sequence .= $numbering + $this->curNumbering[$i];
+                    $sequence .= $numbering + $this->curLevelNumbering[$i];
                 } else {
                     if ($this->levelsRoman[$i]) {
-                        $roman = self::getRoman($this->curNumbering[$i] + 1);// I for number 0
+                        $roman = self::getRoman($this->curLevelNumbering[$i] + 1);// I for number 0
                         if ($this->levelsNumbering[$i] == "&i") {
                             $roman = \strtolower($roman);
                         }
                         $sequence .= $roman;
                     } else {
-                        $sequence .= chr(ord($numbering) + $this->curNumbering[$i]);
+                        $sequence .= chr(ord($numbering) + $this->curLevelNumbering[$i]);
                     }
                 }
                 // add separator if not last level, else ') '
@@ -416,9 +416,9 @@ namespace MultilingualMarkdown {
             }
             // adjust number for this level
             if ($level <= $this->prevLevel) {
-                $this->curNumbering[$level] += 1;
+                $this->curLevelNumbering[$level] += 1;
             } else {
-                $this->curNumbering[$level] = 0;
+                $this->curLevelNumbering[$level] = 0;
             }
             $this->prevLevel = $level;
         }

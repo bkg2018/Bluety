@@ -57,6 +57,8 @@ namespace MultilingualMarkdown {
 
         /**
          * Tell if the token is empty of significant text content.
+         *
+         * @return bool true if the token has *no* text content.
          */
         public function isEmpty(): bool
         {

@@ -16,6 +16,10 @@ default text 1 with ignored EOL between directives.
 default text with an EOL inside
 the text.
 
+Text with variable main: test.md
+Text with variable file: test.md
+Text with variable language: en
+
 <TOC (todo)>
 
 Inlined default text 2.

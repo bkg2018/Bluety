@@ -3,7 +3,10 @@
 /**
  * Multilingual Markdown generator - TokenBaseEscaper class
  *
- * This class represents a token for sequence of characters surrounding escaped text.
+ * This class is base for all the tokens holding an escaped text. All escaper tokens
+ * have a text content and an identifier which starts and ends the escape sequence.
+ * Only the text content will be output to files, with no variables or directive
+ * interpretation.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -55,10 +58,14 @@ namespace MultilingualMarkdown {
         {
             parent::__construct(TokenType::ESCAPER, $marker, true);
         }
-        public function __toString()
-        {
-            return $this->debugText();
-        }
+
+        /**
+         * Return true when asked for TokenType::ESCAPER.
+         * Accepts an array of token types or a single one.
+         *
+         * @param array|TokenType $type the token type to test, or an array of token types
+         * @return true if the token type(s) is ESCAPER.
+         */
         public function isType($type): bool
         {
             if ((\is_array($type) && \in_array(TokenType::ESCAPER, $type)) || ($type == 'TokenType::ESCAPER')) {
@@ -69,6 +76,8 @@ namespace MultilingualMarkdown {
 
         /**
          * Tell if the token is empty of significant text content.
+         *
+         * @return bool true if the token has *no* text content.
          */
         public function isEmpty(): bool
         {

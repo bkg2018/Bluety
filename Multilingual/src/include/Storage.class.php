@@ -50,6 +50,7 @@ namespace MultilingualMarkdown {
         private $curLine = 0;                   /// current line number from input file
         private $lastLine = 0;                  /// current last line number stored in buffer on or after current position
         private $previousChars = [];            /// array of last 3 characters: [0] = current, [1] = previous, [2] = pre-previous
+        private $inFile = null;                 /// file opened for reading (setInputFile) or null
 
         public function __construct()
         {

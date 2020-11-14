@@ -30,7 +30,7 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once('Constants.php');
+    require_once 'Constants.php';
 
     // directives and static tokens
     require_once('tokens/TokenNumbering.class.php');

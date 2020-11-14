@@ -32,7 +32,7 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once('Constants.php');
+    require_once 'Constants.php';
 
     require_once 'Utilities.php';
     require_once 'Logger.interface.php';
@@ -427,6 +427,9 @@ namespace MultilingualMarkdown {
             }
 
             // prepare storage object
+            if (!isset($this->storage) || ($this->storage == null)) {
+                $this->storage = new Storage();
+            }
             $this->storage->setInputFile($this->inFile);
 
             // retain base name with full path but no extension as template and reset line number
@@ -459,6 +462,10 @@ namespace MultilingualMarkdown {
             if (isset($this->outFilenameTemplate)) {
                 unset($this->outFilenameTemplate);
                 $this->outFilenameTemplate = null;
+            }
+            if (isset($this->storage)) {
+                $this->storage->close();
+                unset ($this->storage);
             }
             return false;
         }

@@ -16,6 +16,10 @@ texte en Français 1 avec EOL ignorée entre les directives.
 texte en français avec
 un EOL dedans.
 
+Text with variable main: test.md
+Text with variable file: test.fr.md
+Text with variable language: fr
+
 <TOC (todo)>
 
 Texte Français en ligne 2.
