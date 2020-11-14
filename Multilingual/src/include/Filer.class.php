@@ -63,6 +63,7 @@ namespace MultilingualMarkdown {
         private $mainFilename = null;           /// -main parameter
         private $rootDir = null;                /// root directory, or main file directory
         private $rootDirLength = 0;             /// root directory utf-8 length
+        private $lastToken = null;              /// last written token type
 
         // Languages handling (LanguageList class)
         private $languageList = null;           /// list of languages, will be set by Lexer
@@ -84,7 +85,6 @@ namespace MultilingualMarkdown {
                 $cmpFunction = 'strcasecmp';
             }
             $this->storage = new Storage();
-            $this->curLanguages = ALL;
         }
 
         /**
@@ -582,7 +582,16 @@ namespace MultilingualMarkdown {
             }
             $this->curDefault = []; // each [i] is an OuputPart
             $this->languageList = $languageList;
+            $this->lastToken = TokenType::FIRST;
             return $return;
+        }
+
+        /**
+         * Tells if output has been writtent something significant.
+         */
+        public function outputStarted(): bool
+        {
+            return $this->lastToken != TokenType::FIRST;
         }
 
         //MARK: Relays to storage
@@ -640,19 +649,14 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Look at next UTF-8 characters.
-         * This call doesn't advance input position but rather just send back the next characters
-         * from input file, or null at end of input file.
-         *
-         * @param int $charsNumber the number of characters to fetch
-         *
-         * @return null|string     the next characters which will be read from input,
-         *                         null if already at end of file.
+         * Adjust line number and read position if current character is EOL.
+         * Return true if line adjusted, false if nothing done.
          */
-        public function fetchNextChars(int $charsNumber): ?string
+        public function adjustNextLine(): bool
         {
-            return $this->storage->fetchNextChars($charsNumber);
+            return $this->storage->adjustNextLine();
         }
+
         /**
          * Look at previous UTF-8 characters.
          * Cannot read more than further the beginning of file or the beginning
@@ -709,7 +713,6 @@ namespace MultilingualMarkdown {
             }
             if ($languageList->existLanguage($language)) {
                 $this->curLanguage = $language;
-                $this->storage->setLanguage($language);
                 return true;
             }
             return false;
@@ -736,8 +739,9 @@ namespace MultilingualMarkdown {
          * @param string $text      the text to send
          * @param bool   $expand    true if variables must be expanded (headings and text)
          *                          false if the don't (escaped text)
+         * @param int    $tokenType the type of token sending this output
          */
-        public function output(object &$lexer, string $text, bool $expand): bool
+        public function output(object &$lexer, string $text, bool $expand, int $tokenType): bool
         {
             if ($this->ignoreLevel > 0) {
                 return false;
@@ -747,6 +751,9 @@ namespace MultilingualMarkdown {
             } else {
                 echo "ERROR: unknown language function for $this->curLanguage\n";
                 $functionName = 'outputIgnore';
+            }
+            if (\in_array($tokenType, [TokenType::TEXT, TokenType::ESCAPED_TEXT])) {
+                $this->lastToken = $tokenType;
             }
             return $this->$functionName($lexer, $text, $expand);
         }

@@ -10,6 +10,12 @@
  *
  * See the Filer class for file names handling and files opening.
  *
+ * Ends of lines are normalized the the \n character alone.
+ *
+ * NOTATION:
+ *      - EOL means end of line and/or the end-of-line control character (\n)
+ *      - EOF means end of file.
+ *
  * Copyright 2020 Francis Piérot
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
@@ -72,12 +78,12 @@ namespace MultilingualMarkdown {
                 unset($this->buffer);
                 $this->buffer = '';
             };
-            // initialize on first line
-            $this->buffer = $this->loadLine();
-            $this->bufferLength += mb_strlen($this->buffer);
-            $this->previousChars[0] = mb_substr($this->buffer,0,1);
+            $this->bufferLength = 0;
             $this->bufferPosition = 0;
+            // initialize on first line
             $this->curLine = 1;
+            $this->fetchCharacters(1);
+            $this->previousChars[0] = mb_substr($this->buffer,0,1);
             return true;
         }
 
@@ -111,7 +117,8 @@ namespace MultilingualMarkdown {
             $this->bufferLength = mb_strlen($content);
             $this->bufferPosition = 0;
             if ($this->bufferLength > 0) {
-                $this->previousChars = [mb_substr($this->buffer, 0, 1)];
+                // remember first character and simulate a previous EOL
+                $this->previousChars = [mb_substr($this->buffer, 0, 1), "\n"];
             }
         }
 
@@ -139,6 +146,7 @@ namespace MultilingualMarkdown {
          */
         public function fetchCharacters(int $length): void
         {
+            // are there enough characters?
             if ($this->bufferPosition + $length < $this->bufferLength) {
                 return ;
             }
@@ -147,8 +155,8 @@ namespace MultilingualMarkdown {
             if ($line === null) {
                 return;
             }
-            // add to buffer with an EOL prefix
-            $this->buffer .= "\n" . $line;
+            // add to buffer with an EOL
+            $this->buffer .= $line . "\n";
             $this->bufferLength += (1 + mb_strlen($line));
             // keep buffer size at about 4KB when position is above 1KB
             if ($this->bufferLength > 4096 && $this->bufferPosition > 1024) {
@@ -180,6 +188,7 @@ namespace MultilingualMarkdown {
             }
             // need to append at least 1 char from input
             $this->fetchCharacters(1);
+            // check again, length didn't change if we're at EOF
             if ($this->bufferPosition < $this->bufferLength) {
                 $this->previousChars[0] = mb_substr($this->buffer, $this->bufferPosition, 1);
                 return $this->previousChars[0];
@@ -206,16 +215,13 @@ namespace MultilingualMarkdown {
         {
             // ensure next character
             $this->fetchCharacters(1);
+            $this->bufferPosition += 1;
             // EOF?
-            if ($this->bufferPosition >= $this->bufferLength - 1) {
+            if ($this->bufferPosition >= $this->bufferLength) {
                 $c = null;
+                $this->bufferPosition = $this->bufferLength;
             } else {
-                $this->bufferPosition += 1;
                 $c = mb_substr($this->buffer, $this->bufferPosition, 1);
-            }
-            // adjust current line number?
-            if ($c == "\n") {
-                $this->curLine += 1;
             }
             // adjust previous characters array (0 = current, 1 = previous, 2 = pre-previous)
             if (count($this->previousChars) > 2) {
@@ -239,15 +245,16 @@ namespace MultilingualMarkdown {
          */
         public function getLine(): ?string
         {
-            $text = null;
-            do {
-                $char = $this->fetchNextChars(1);    // have a look at next character
-                if ($char == null) break;           // exit with current $text if EOF
-                if ($text == null) $text = '';      // next character is not EOF: ensure at least an empty line
-                $this->getNextChar();               // read that character now
-                if ($char == "\n") break;           // return now if empty line
+            $text = '';
+            $this->adjustNextLine();
+            $char = $this->getCurrentChar();
+            if ($char === null) {
+                return null;
+            }
+            while (($char != "\n") && ($char !== null)) {
                 $text .= $char;
-            } while (1);
+                $char = $this->getNextChar();
+            }
             return $text;
         }
 
@@ -259,7 +266,9 @@ namespace MultilingualMarkdown {
          */
         public function gotoNextLine(): ?string
         {
-            // check for end of file now
+            // adjust line number and read position if current character is EOL.
+            $this->adjustNextLine();
+            // check for end of file
             $char = $this->getNextChar();
             if ($char == null) {
                 return null;
@@ -268,8 +277,22 @@ namespace MultilingualMarkdown {
             while (($char !== null) && ($char != "\n")) {
                 $char = $this->getNextChar();
             }
-            // return null when EOF reached, else return EOL
+            // return null for EOF, else EOL
             return $char;
+        }
+
+        /**
+         * Go next line and adjust line number if current character is EOL.
+         * Return true if line has been adjusted, false if nothing done.
+         */
+        public function adjustNextLine(): bool
+        {
+            if ($this->getCurrentChar() == "\n") {
+                $this->curLine += 1;
+                $this->getNextChar();
+                return true;
+            }
+            return false;
         }
 
         /**
@@ -279,13 +302,18 @@ namespace MultilingualMarkdown {
          */
         public function getString(int $charsNumber): ?string
         {
-            // read char[0]
-            $result = $this->previousChars[0] ?? '';
-            $c = $this->getNextChar();
+            // skip current end of line if appropriate
+            $this->adjustNextLine();
+            $result = $this->getCurrentChar();
+            $char = $this->getNextChar();
             // append chars [1..N-1]
-            for ($i = 1; ($i < $charsNumber) && ($c != null); $i += 1) {
-                $result .= $c;
-                $c = $this->getNextChar();
+            for ($i = 1; ($i < $charsNumber) && ($char != null); $i += 1) {
+                $result .= $char;
+                if ($this->adjustNextLine()) {
+                    $char = $this->getCurrentChar();
+                } else {
+                    $char = $this->getNextChar();
+                }
             }
             return $result;
         }
@@ -322,6 +350,9 @@ namespace MultilingualMarkdown {
          */
         public function fetchNextChars(int $charsNumber): ?string
         {
+            if ($this->bufferPosition >= $this->bufferLength) {
+                return null;
+            }
             $this->fetchCharacters($charsNumber);
             $nextPosition = $this->bufferPosition + 1;
             if ($nextPosition >= $this->bufferLength) {
@@ -341,8 +372,20 @@ namespace MultilingualMarkdown {
          */
         public function isMatching(string $marker): bool
         {
-            $content  = $this->fetchNextChars(mb_strlen($marker));
+            $nextCharsLength = mb_strlen($marker) - 1;
+            $content  = $this->previousChars[0] . $this->fetchNextChars($nextCharsLength);
             return mb_strcmp($content, $marker) == 0;
         }
     }
+
+    /*// little test
+    $storage = new Storage();
+    $file = fopen('testdata/test.mlmd', 'rt');
+    $storage->setInputFile($file);
+    do {
+        $line = $storage->getLine();
+        if ($line === null) break;
+        echo $storage->getCurrentLineNumber(), ':', $line, "\n";
+    } while (1);
+    \fclose($file);*/
 }

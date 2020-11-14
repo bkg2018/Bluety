@@ -52,19 +52,18 @@ namespace MultilingualMarkdown {
         {
             return "<EOL>\n";
         }
-        /**
-         * Processing input : goto next character
-         */
+        
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $input->gotoNextLine();
-            $lexer->appendTokenEOL();
-            $lexer->setCurrentChar($input->getNextChar());
+            $lexer->appendTokenEOL($filer);
         }
         public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho("<EOL>\n");
-            $filer->output($lexer, "\n", false);
+            if ($filer->outputStarted()) {
+                $filer->output($lexer, "\n", false, $this->type);
+            }
             return true;
         }
     }

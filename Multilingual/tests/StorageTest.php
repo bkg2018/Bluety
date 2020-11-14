@@ -74,4 +74,17 @@ class StorageTest extends TestCase
         $this->assertEquals(959, $charNumber);
         fclose($file);
     }
+
+    public function testGetLine()
+    {
+        $storage = new Storage();
+        $file = fopen(__DIR__ . '/../testdata/test.mlmd', 'rt');
+        $this->assertNotFalse($file);
+        $storage->setInputFile($file);
+        do {
+            $line = $storage->getLine();
+            echo $storage->getCurrentLineNumber(), ':', $line, "\n";
+        } while ($line != null);
+        \fclose($file);
+    }
 }

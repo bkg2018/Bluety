@@ -51,23 +51,25 @@ namespace MultilingualMarkdown {
         {
             $this->content = '';    
             $this->skipSelf($input);
-            $currentChar = $input->getCurrentChar();
             do {
                 if ($input->isMatching('.}')) {
                     $input->getNextChar();// skip end marker
+                    $input->getNextChar();// skip end marker
                     break;
                 }
-                $this->content .= $currentChar;
+                if ($input->adjustNextLine()) {
+                    $this->content .= "\n";
+                }
+                $this->content .= $input->getCurrentChar();
                 $currentChar = $input->getNextChar();
             } while ($currentChar != null);
             $this->length = mb_strlen($this->content);
-            $lexer->appendToken($this);
-            $lexer->setCurrentChar($input->getNextChar());
+            $lexer->appendToken($this, $filer);
         }
         public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho('<MLMD ESCAPE ' . $this->debugText() . ">\n");
-            $filer->output($lexer, $this->content, false);
+            $filer->output($lexer, $this->content, false, $this->type);
             return true;
         }
     }

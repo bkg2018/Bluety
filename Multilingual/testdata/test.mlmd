@@ -22,11 +22,15 @@ Code fenced text
 .((default text 1 with ignored EOL between directives..))
 .fr((texte en Français 1 avec EOL ignorée entre les directives..))
 
+.((default text with an EOL inside
+the text..)).fr((texte en français avec
+un EOL dedans..))
+
 .toc title=.((Default toc title.)).fr((Table des matières.)) level=1-3
 
 .((Inlined default text 2..)).fr((Texte Français en ligne 2..))
 
-## .((Default title 2.1.)).fr((Titre Français 2.1))
+## .((Default title 2.1.)).fr((Titre Français 2.1.))
 
 Text for ALL.
 

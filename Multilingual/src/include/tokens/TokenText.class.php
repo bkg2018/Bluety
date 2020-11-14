@@ -55,8 +55,14 @@ namespace MultilingualMarkdown {
             return $this->debugText();
         }
 
-
-
+        /**
+         * Tell if the token is empty of significant text content.
+         */
+        public function isEmpty(): bool
+        {
+            return ($this->length <= 0);
+        }
+        
         /**
          * Add a character or string to content.
          *
@@ -84,12 +90,34 @@ namespace MultilingualMarkdown {
             return $this->length;
         }
 
+        /**
+         * Check if content is uniquely composed of spacing characters.
+         * NB this doesn't handle UTF-8 spacing.
+         */
+        public function isSpacing(): bool
+        {
+            return \ctype_space($this->content);
+            /*
+            // false on any spacing character
+            foreach ($this->content as $char) {
+                if (($char != ' ') && ($char != "\t") && ($char != "\n")) {
+                    return false;
+                }
+            }
+            return true;
+            */
+        }
+
+        /**
+         * Output the content with variables expanding.
+         */
         public function output(Lexer $lexer, object $filer): bool
         {
             $lexer->debugEcho("<TEXT: {$this->debugText()}>\n");
-            $filer->output($lexer, $this->content, true);
+            $filer->output($lexer, $this->content, true, $this->type);
             return true;
         }
+
     }
 
 }

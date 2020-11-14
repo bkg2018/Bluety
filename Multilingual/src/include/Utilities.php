@@ -55,6 +55,7 @@ function unsetArrayContent(array & $array)
         unset($array[$key]);
         $key = array_key_last($array);
     }
+    reset($array);
 }
 /**
  * Unset all content from an array and reset the array itself to an empty array.
@@ -138,12 +139,30 @@ function exploreDirectory(string $dirName): array
  * If the file is finished, returns false.
  * Update file position and line number.
  */
-function getNextLineTrimmed($file, int &$lineNumber)
+function getNextLineTrimmed($file, int &$lineNumber): ?string
 {
     $newLine = fgets($file);
-    if ($newLine) {
-        $newLine = rtrim($newLine, " \t\n\r") . "\n";
-        $lineNumber += 1;
-    }
+    if ($newLine === false) null;
+    $newLine = rtrim($newLine, " \t\n\r") . "\n";
+    $lineNumber += 1;
     return $newLine;
+}
+
+/**
+ * Compare two mbstring utf-8 strings.
+ */
+function mb_strcmp(string $s1, string $s2): int
+{
+    $length1 = mb_strlen($s1);
+    $length2 = mb_strlen($s2);
+    $length = min($length1, $length2);
+    for ($i = 0 ; $i < $length ; $i++) {
+        $c1 = mb_ord(mb_substr($s1, $i, 1));
+        $c2 = mb_ord(mb_substr($s2, $i, 1));
+        if ($c1 < $c2) return -1;
+        if ($c1 > $c2) return  1;
+    }
+    if ($length1 < $length2) return -1;
+    if ($length1 > $length2) return  1;
+    return 0;
 }

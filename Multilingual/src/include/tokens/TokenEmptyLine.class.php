@@ -81,10 +81,8 @@ namespace MultilingualMarkdown {
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $input->gotoNextLine();
-            $eol = new TokenEOL();
-            $lexer->appendToken($eol);
-            $lexer->appendToken($eol);
-            $lexer->setCurrentChar($input->getNextChar());
+            $lexer->appendTokenEOL($filer);
+            $lexer->appendTokenEOL($filer);
         }
 
         // Closing directive will have Lexer processing all stored tokens if it empties the language stack.
@@ -98,7 +96,9 @@ namespace MultilingualMarkdown {
         public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho("<EMPTYLINE>\n");
-            $filer->output($lexer, "\n\n", false);
+            if ($filer->outputStarted()) {
+                $filer->output($lexer, "\n\n", false, $this->type);
+            }
             if ($lexer->getLanguageStackSize() <= 1) {
                 $filer->flushOutput();
             }

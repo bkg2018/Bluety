@@ -52,17 +52,11 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Do the actual TOC output into filer.
-         * The output will be done in tyhe current output context so care
-         * should be taken not to put .TOC directive in a language specific
-         * text part, unless the expected effect is to restrain a toc to
-         * a specific language.
+         * Tell if the token is empty of significant text content.
          */
-        public function output(Lexer $lexer, Filer $filer): bool
+        public function isEmpty(): bool
         {
-            $lexer->debugEcho("<TOC - TODO: output toc content>\n");
-            $filer->output($lexer, "<TOC (todo)>", false);
-            return true;
+            return false;
         }
 
         /**
@@ -78,9 +72,23 @@ namespace MultilingualMarkdown {
             // store the parameters until end of line
             $this->content = $input->getLine();
             $this->length = mb_strlen($this->content);
-            $lexer->appendToken($this);
-            $lexer->setCurrentChar($input->getNextChar());
+            $lexer->appendToken($this, $filer);
         }
-    }
 
+        
+        /**
+         * Do the actual TOC output into filer.
+         * The output will be done in tyhe current output context so care
+         * should be taken not to put .TOC directive in a language specific
+         * text part, unless the expected effect is to restrain a toc to
+         * a specific language.
+         */
+        public function output(Lexer $lexer, Filer $filer): bool
+        {
+            $lexer->debugEcho("<TOC - TODO: output toc content>\n");
+            $filer->output($lexer, "<TOC (todo)>", false, $this->type);
+            return true;
+        }
+
+    }
 }

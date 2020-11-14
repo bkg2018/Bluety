@@ -48,7 +48,7 @@ namespace MultilingualMarkdown {
         public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho('<SINGLE BACKTICK ' . $this->debugText() . ">\n");
-            $filer->output($lexer, $this->content, false);
+            $filer->output($lexer, $this->content, false, $this->type);
             return true;
         }
 

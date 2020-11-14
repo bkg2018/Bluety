@@ -66,15 +66,25 @@ namespace MultilingualMarkdown {
             }
             return parent::isType($type);
         }
+
+        /**
+         * Tell if the token is empty of significant text content.
+         */
+        public function isEmpty(): bool
+        {
+            return ($this->length <= 0);
+        }
+        
         /**
          * Process input: get text until we find the closing escape marker. 
          * Update tokens array with the token itself. The escaped text is stored
-         * by the token. 
+         * by the token.
          */
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->content = $this->keyword;    
             $this->skipSelf($input);
+            $input->adjustNextLine();
             $currentChar = $input->getCurrentChar();
             $prevChars = '';
             if ($currentChar != null) {
@@ -85,7 +95,7 @@ namespace MultilingualMarkdown {
                 } while (($prevChars != $this->keyword) && ($currentChar != null));
             }
             $this->length = mb_strlen($this->content);
-            $lexer->appendToken($this);
+            $lexer->appendToken($this, $filer);
             $lexer->setCurrentChar($currentChar);
         }
 
@@ -99,7 +109,7 @@ namespace MultilingualMarkdown {
         public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho("<escaped output>\n");
-            $filer->output($lexer, $this->content, false);
+            $filer->output($lexer, $this->content, false, $this->type);
             return true;
         }
     }

@@ -7,7 +7,7 @@ namespace MultilingualMarkdown {
     use PHPUnit\Framework\TestCase;
     use MultilingualMarkdown\Filer;
 
-    require_once '../src/include/Filer.class.php';
+    require_once 'src/include/Filer.class.php';
 
     /** Copyright 2020 Francis Piérot
      *
@@ -34,15 +34,15 @@ namespace MultilingualMarkdown {
         public function testInitialization()
         {
             $filer = new Filer();
-            $filer->addInputFile('data/test.mlmd');
+            $filer->addInputFile('testdata/test.mlmd');
             $filer->setMainFilename("test.mlmd");
-            $filer->addInputFile('data/subdata/secondary.mlmd');
-            $filer->addInputFile('data/subdata/tertiary.mlmd');
+            $filer->addInputFile('testdata/subdata/secondary.mlmd');
+            $filer->addInputFile('testdata/subdata/tertiary.mlmd');
             $filer->readyInputs();
 
             // check various things
             $rootDir = $filer->getRootDir();
-            $this->assertEquals('/Users/bkg2018/RETROCOMP/Bluety/Multilingual/tests/data', $rootDir);
+            $this->assertEquals('/Users/bkg2018/RETROCOMP/Bluety/Multilingual/testdata', $rootDir);
             $this->assertEquals(2, $filer->getInputFilesMaxIndex());
 
             // act as if file 0 was processed
@@ -63,7 +63,7 @@ namespace MultilingualMarkdown {
 
             unset($filer);
             $filer = new Filer();
-            $filer->exploreDirectory('data');
+            $filer->exploreDirectory('testdata');
             $filer->readyInputs();
             $name = $filer->getRelativeInputFile(0);
             $this->assertEquals('test.mlmd', $name);

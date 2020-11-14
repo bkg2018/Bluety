@@ -70,26 +70,15 @@ namespace MultilingualMarkdown {
         {
             $this->content = $input->getLine(); // include the 4 spaces prefix
             $this->content .= $input->getCurrentChar();
+            $this->content = rtrim($this->content, "\n");// replace the last EOLs by one EOL token?
             $this->length = mb_strlen($this->content);
-            // replace the last EOLs by one EOL token?
-            $length = mb_strlen($this->content);
-            $addEOL = false;
-            if (mb_substr($this->content, $length-1, 1) == "\n") {
-                $this->content = rtrim($this->content, "\n");
-                $length = mb_strlen($this->content);
-                $addEOL = true;// add after the fence token
-            }
-            $this->length = $length;
-            $lexer->appendToken($this);
-            if ($addEOL) {
-                $lexer->appendTokenEOL();
-            }
-            $lexer->setCurrentChar($filer->getCurrentChar());
+            $lexer->appendToken($this, $filer);
+            $lexer->appendTokenEOL($filer);
         }
         public function output(Lexer $lexer, Filer $filer): bool
         {
             $lexer->debugEcho('<4-SPACES ' . $this->debugText() . ">\n");
-            $filer->output($lexer, $this->content, false);
+            $filer->output($lexer, $this->content, false, $this->type);
             return true;
         }
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once '../src/include/Generator.class.php';
+    require_once 'src/include/Generator.class.php';
 
     use PHPUnit\Framework\TestCase;
     use MultilingualMarkdown\Generator;

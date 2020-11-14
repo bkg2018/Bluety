@@ -83,6 +83,14 @@ namespace MultilingualMarkdown {
             return false;
         }
 
+        /**
+         * Type accessor.
+         */
+        public function getType(): int
+        {
+            return $this->type;
+        }
+
          /**
          * Let the token self-identify against an UTF-8 buffer and position.
          *
@@ -120,11 +128,11 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Type accessor.
+         * Tell if the token is empty of significant text content.
          */
-        public function getType(): int
+        public function isEmpty(): bool
         {
-            return $this->type;
+            return true;
         }
 
         /**
@@ -162,8 +170,7 @@ namespace MultilingualMarkdown {
          */
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
-           $lexer->appendToken($this);
-           $lexer->setCurrentChar($input->getNextChar());
+           $lexer->appendToken($this, $filer);
         }
  
          /**
