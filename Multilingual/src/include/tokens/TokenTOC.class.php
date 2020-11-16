@@ -165,23 +165,5 @@ namespace MultilingualMarkdown {
                 }
             }
         }
-
-        
-        /**
-         * Do the actual TOC output into filer.
-         * The output will be done in tyhe current output context so care
-         * should be taken not to put .TOC directive in a language specific
-         * text part, unless the expected effect is to restrain a toc to
-         * a specific language.
-         */
-        public function output(Lexer &$lexer, Filer &$filer): bool
-        {
-//            $lexer->outputTOC($filer);
-            // output toc title with heading level 2
-            $filer->output($lexer, $title, true, $this->type);
-            
-            return true;
-        }
-
     }
 }

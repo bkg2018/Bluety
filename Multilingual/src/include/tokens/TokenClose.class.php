@@ -47,7 +47,6 @@ namespace MultilingualMarkdown {
         // Output: have Lexer updating the current output language
         public function output(Lexer &$lexer, Filer &$filer): bool
         {
-            $lexer->debugEcho("<CLOSE {$lexer->getCurLanguage()}>\n");
             $lexer->popLanguage($filer);
             return true;
         }

@@ -53,7 +53,8 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Processing input : tokenize the heading text (will go to end of input line)
+         * Processing input :the heading is not stored as a single token
+         * but rather as tokenized text and elements.
          */
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
@@ -67,15 +68,6 @@ namespace MultilingualMarkdown {
             // do NOT append this TokenHeading to Lexer, all the heading line has been
             // cut and stacked as a sequence of other tokens
             $input->gotoNextLine();
-        }
-
-        /**
-         * output: nothing to do, output will be handled by the tokens prepared in processInput
-         */
-        public function output(Lexer &$lexer, Filer &$filer): bool
-        {
-            $lexer->debugEcho("<HEADING {$this->heading}>\n");
-            return true;
         }
     }
 }

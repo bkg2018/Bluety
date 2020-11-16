@@ -4,7 +4,8 @@
  * Multilingual Markdown generator - base Token class
  *
  * The Lexer::tokenize() function transforms an UTF-8 text buffer into an array of successive
- * parts of different types. The Token class is the base for each of these possible parts.
+ * parts of different types like text, escaped text, language directives, end of lines etc.
+ * The Token class is the base for each of these possible parts.
  * Some token types are only found when a previous is interpreted. For example, escaped text
  * is only known after the opening escaper token is found. Most tokens can not happen inside
  * escaped text except the ones closing the escaped sequence.
@@ -26,8 +27,8 @@
  * The Token output() function is called to possibly output some content to output files.
  * The outputs are done through the Filer class instance which is given to output(). 
  * Tokens which have nothing to output will simply do nothing in the function, other will 
- * rather act on Lexer. Both Filer and Lexer instances are given as parameter to output()
- * so it can work on them.
+ * rather act on Lexer to update the generation context. Both Filer and Lexer instances
+ * are given as parameter to output() so it can work on them.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -89,16 +90,6 @@ namespace MultilingualMarkdown {
         public function identify(object $input): bool
         {
             return false;
-        }
-
-        /**
-         * Type accessor.
-         *
-         * @return TokenType the token type.
-         */
-        public function getType(): int
-        {
-            return $this->type;
         }
 
          /**

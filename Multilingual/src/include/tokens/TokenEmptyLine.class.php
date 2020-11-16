@@ -82,24 +82,12 @@ namespace MultilingualMarkdown {
             $lexer->appendTokenEOL($filer);
         }
 
-        // Closing directive will have Lexer processing all stored tokens if it empties the language stack.
+        /**
+         * Output now: empty line will make Lexer processi all current tokens if the language stack is empty
+         */
         public function ouputNow(Lexer $lexer): bool
         {
             return ($lexer->getLanguageStackSize() <= 1);
-        }
-        /**
-         * Output an empty line.
-         */
-        public function output(Lexer &$lexer, Filer &$filer): bool
-        {
-            $lexer->debugEcho("<EMPTYLINE>\n");
-            if ($filer->outputStarted()) {
-                $filer->output($lexer, "\n\n", false, $this->type);
-            }
-            if ($lexer->getLanguageStackSize() <= 1) {
-                $filer->flushOutput();
-            }
-            return true;
         }
     }
 }

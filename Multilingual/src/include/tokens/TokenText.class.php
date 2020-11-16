@@ -95,7 +95,7 @@ namespace MultilingualMarkdown {
         public function isSpacing(): bool
         {
             return \ctype_space($this->content);
-            /*
+            /* abandonned for ctype_space(), have to test this throughly
             // false on any spacing character
             foreach ($this->content as $char) {
                 if (($char != ' ') && ($char != "\t") && ($char != "\n")) {
@@ -111,7 +111,6 @@ namespace MultilingualMarkdown {
          */
         public function output(Lexer &$lexer, Filer &$filer): bool
         {
-            $lexer->debugEcho("<TEXT: {$this->debugText()}>\n");
             $filer->output($lexer, $this->content, true, $this->type);
             return true;
         }

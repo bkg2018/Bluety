@@ -6,3 +6,4 @@ PCB_Front*.pdf
 PCB_I_O *.pdf
 Multilingual/vendor/
 Multilingual/composer.lock
+*.log

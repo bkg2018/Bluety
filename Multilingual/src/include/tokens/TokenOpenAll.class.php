@@ -46,7 +46,6 @@ namespace MultilingualMarkdown {
 
         public function output(Lexer &$lexer, Filer &$filer): bool
         {
-            $lexer->debugEcho("<OPEN all>\n");
             $lexer->pushLanguage(ALL, $filer);
             return true;
         }

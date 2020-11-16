@@ -108,18 +108,5 @@ namespace MultilingualMarkdown {
             $lexer->setCurrentChar($currentChar);
         }
 
-        /**
-         * Output content to the Filer object or change its settings.
-         *
-         * The content is sent as is, with no variables expansion nor directive interpretation.
-         *
-         * @param object $filer the Filer instance object which receives outputs and settings
-         */
-        public function output(Lexer &$lexer, Filer &$filer): bool
-        {
-            $lexer->debugEcho("<escaped output>\n");
-            $filer->output($lexer, $this->content, false, $this->type);
-            return true;
-        }
     }
 }
