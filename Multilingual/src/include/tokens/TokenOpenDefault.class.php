@@ -43,11 +43,8 @@ namespace MultilingualMarkdown {
         {
             parent::__construct($keyword);
         }
-        public function __toString()
-        {
-            return '<directive> .((';
-        }
-        public function output(Lexer $lexer, Filer $filer): bool
+
+        public function output(Lexer &$lexer, Filer &$filer): bool
         {
             $lexer->debugEcho("<OPEN default>\n");
             $lexer->pushLanguage(DEFLT, $filer);

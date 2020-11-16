@@ -51,19 +51,6 @@ namespace MultilingualMarkdown {
             $this->heading = $heading;
             parent::__construct(TokenType::HEADING, '#', true);
         }
-        public function __toString()
-        {
-            return "Heading .{$this->heading}((";
-        }
-        public function identify(object $input): bool
-        {
-            // must be preceded by an end of line or nothing (possible if first line in file)
-            $prevChar = $input->getPrevChar();
-            if (($prevChar != null) && ($prevChar != "\n")) {
-                return false;
-            }
-            return parent::identify($input);
-        }
 
         /**
          * Processing input : tokenize the heading text (will go to end of input line)
@@ -85,7 +72,7 @@ namespace MultilingualMarkdown {
         /**
          * output: nothing to do, output will be handled by the tokens prepared in processInput
          */
-        public function output(Lexer $lexer, Filer $filer): bool
+        public function output(Lexer &$lexer, Filer &$filer): bool
         {
             $lexer->debugEcho("<HEADING {$this->heading}>\n");
             return true;

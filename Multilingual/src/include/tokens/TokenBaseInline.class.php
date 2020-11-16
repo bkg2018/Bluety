@@ -48,10 +48,7 @@ namespace MultilingualMarkdown {
         {
             parent::__construct($type, $keyword, $ignoreCase);
         }
-        public function __toString()
-        {
-            return '- FORBIDDEN: base TokenBaseInline class, check Lexer code -';
-        }
+
         /**
          * Processing input: store in token list, skip over directive and go next character. 
          */

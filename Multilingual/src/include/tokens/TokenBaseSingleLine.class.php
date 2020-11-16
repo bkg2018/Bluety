@@ -46,9 +46,23 @@ namespace MultilingualMarkdown {
         {
             parent::__construct($tokenType, $keyword, $ignoreCase);
         }
-        public function __toString()
+
+        /**
+         * Let the token self-identify against an input Filer or Storage object.
+         *
+         * @param object $input the Filer or Storage object
+         *
+         * @return bool true if the current token can be found at current Filer position and buffer content.
+         */
+        public function identify(object $input): bool
         {
-            return '- FORBIDDEN: base TokenBaseSingleLine class, check Lexer code -';
+            // must be preceded by an end of line or nothing (possible if first line in file)
+            $prevChar = $input->getPrevChar();
+            if (($prevChar != null) && ($prevChar != "\n")) {
+                return false;
+            }
+            // normal keyword token identification
+            return parent::identify($input);
         }
 
        /**

@@ -46,7 +46,7 @@ namespace MultilingualMarkdown {
             $this->dashes  = str_repeat('-', 60);
         }
 
-        public function output(object &$filer)
+        public function output(Filer &$filer)
         {
             $result = parent::output($filer);
             echo "$this->dashes\n";

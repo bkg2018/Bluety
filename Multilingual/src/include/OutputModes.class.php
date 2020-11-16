@@ -105,5 +105,25 @@ namespace MultilingualMarkdown {
             }
             return null;
         }
+
+        /**
+         * Return a named anchor or null if unknown.
+         */
+        public static function getAnchor(int $mode, string $name): ?string
+        {
+            if (\is_numeric($name)) {
+                $name = "a$name";
+            }
+            switch ($mode) {
+                case OutputModes::MDPURE:
+                    return "{#$name}";
+                case OutputModes::HTMLOLD:
+                case OutputModes::HTMLOLDNUM:
+                    return "<A name=\"$name\"></A>";
+                default:
+                    return "<A id=\"$name\"></A>";
+            }
+            return null;
+        }
     }
 }

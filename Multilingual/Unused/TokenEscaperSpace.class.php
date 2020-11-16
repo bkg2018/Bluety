@@ -75,7 +75,7 @@ namespace MultilingualMarkdown {
             $lexer->appendToken($this, $filer);
             $lexer->appendTokenEOL($filer);
         }
-        public function output(Lexer $lexer, Filer $filer): bool
+        public function output(Lexer &$lexer, Filer &$filer): bool
         {
             $lexer->debugEcho('<4-SPACES ' . $this->debugText() . ">\n");
             $filer->output($lexer, $this->content, false, $this->type);

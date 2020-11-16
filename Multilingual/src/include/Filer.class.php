@@ -73,6 +73,7 @@ namespace MultilingualMarkdown {
         private $curOutput = [];                /// array of (array of OutputPart), one for each language code
         private $curDefault = [];               /// array of OutputPart for default text
         private $languageFunction = [];         /// language codes will be added by setLanguage
+        private $outputMode = OutputModes::MD;  /// output mode for anchors and links (mdpure etc)
 
         /**
          * Initialize string function names.
@@ -84,7 +85,7 @@ namespace MultilingualMarkdown {
                 $posFunction = 'mb_stripos' ;
                 $cmpFunction = 'strcasecmp';
             }
-            $this->storage = new Storage();
+            $this->storage = new Storage(null);
         }
 
         /**
@@ -246,6 +247,15 @@ namespace MultilingualMarkdown {
                 $this->mainFilename = $basename;
             }
             return true;
+        }
+
+        /**
+         * Check if a file name is the main file.
+         */
+        public function isMainFilename(string $filename): bool
+        {
+            $basename = \pathinfo($filename, PATHINFO_FILENAME);
+            return ($this->mainFilename == $basename);
         }
 
         /**
@@ -428,9 +438,8 @@ namespace MultilingualMarkdown {
 
             // prepare storage object
             if (!isset($this->storage) || ($this->storage == null)) {
-                $this->storage = new Storage();
+                $this->storage = new Storage($this->inFile);
             }
-            $this->storage->setInputFile($this->inFile);
 
             // retain base name with full path but no extension as template and reset line number
             $extension = \isMLMDfile($filename);
@@ -686,13 +695,13 @@ namespace MultilingualMarkdown {
          * This will fetch more characters from input file if needed but won't advance the
          * current reading position.
          *
-         * @param string $marker the string to match, starting at current character
+         * @param array|string $test the string or array of strings to match
          *
-         * @return bool true if marker has been found at current place
+         * @return int 0 or index if marker has been found at current place, -1 if not
          */
-        public function isMatching(string $marker): bool
+        public function isMatching($test): int
         {
-            return $this->storage->isMatching($marker);
+            return $this->storage->isMatching($test);
         }
 
         /**
@@ -732,11 +741,22 @@ namespace MultilingualMarkdown {
          * Setting a numbering scheme after setting the output mode will adjust the mode.
          *
          * @param string $name      the output mode name 'md', 'mdpure', 'html' or 'htmlold'
-         * @param object $numbering the numbering scheme object
+         * @param object $numbering the numbering scheme object or null
          */
-        public function setOutputMode(string $name, object $numbering): void
+        public function setOutputMode(string $name, ?object $numbering): void
         {
-            $this->storage->setOutputMode($name, $numbering, $this);
+            $this->outputMode = OutputModes::getFromName($name);
+            if ($numbering !== null) {
+                $numbering->setOutputMode($name, $this);
+            }
+        }
+
+        /**
+         * Output mode accessor.
+         */
+        public function getOutputMode(): int
+        {
+            return $this->outputMode;
         }
 
         /**

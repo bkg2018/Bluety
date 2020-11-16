@@ -47,10 +47,7 @@ namespace MultilingualMarkdown {
         {
             parent::__construct(TokenType::EMPTY_LINE, "\n", true);
         }
-        public function __toString()
-        {
-            return '<empty line>';
-        }
+
         /**
          * Check beginning of line before checking the key marker.
          */
@@ -93,7 +90,7 @@ namespace MultilingualMarkdown {
         /**
          * Output an empty line.
          */
-        public function output(Lexer $lexer, Filer $filer): bool
+        public function output(Lexer &$lexer, Filer &$filer): bool
         {
             $lexer->debugEcho("<EMPTYLINE>\n");
             if ($filer->outputStarted()) {

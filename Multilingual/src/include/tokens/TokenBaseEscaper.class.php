@@ -115,7 +115,7 @@ namespace MultilingualMarkdown {
          *
          * @param object $filer the Filer instance object which receives outputs and settings
          */
-        public function output(Lexer $lexer, Filer $filer): bool
+        public function output(Lexer &$lexer, Filer &$filer): bool
         {
             $lexer->debugEcho("<escaped output>\n");
             $filer->output($lexer, $this->content, false, $this->type);

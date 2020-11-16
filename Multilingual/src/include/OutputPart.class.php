@@ -31,8 +31,8 @@ namespace MultilingualMarkdown {
 
     class OutputPart
     {
-        public string $text;
-        public bool   $expand;
+        public $text;
+        public $expand;
 
         public function __construct(string $text, bool $expand)
         {

@@ -50,10 +50,6 @@ namespace MultilingualMarkdown {
             $this->content = $content;
             $this->length = mb_strlen($content);
         }
-        public function __toString()
-        {
-            return $this->debugText();
-        }
 
         /**
          * Tell if the token is empty of significant text content.
@@ -113,7 +109,7 @@ namespace MultilingualMarkdown {
         /**
          * Output the content with variables expanding.
          */
-        public function output(Lexer $lexer, object $filer): bool
+        public function output(Lexer &$lexer, Filer &$filer): bool
         {
             $lexer->debugEcho("<TEXT: {$this->debugText()}>\n");
             $filer->output($lexer, $this->content, true, $this->type);

@@ -80,14 +80,6 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Simple debugging help to cast a token into a string.
-         */
-        public function __toString()
-        {
-            return substr(get_class($this), 5); // skip 'Token' and return name
-        }
-
-        /**
          * Let the token self-identify against a Filer or Storage object.
          *
          * @param object $input the Filer or Storage object
@@ -241,7 +233,7 @@ namespace MultilingualMarkdown {
          *
          * @return bool false if output met some error, true if all worked fine.
          */
-        public function output(Lexer $lexer, Filer $filer): bool
+        public function output(Lexer &$lexer, Filer &$filer): bool
         {
             $class = get_class($this);
             $backslash = strrpos($class, '\\');

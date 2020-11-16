@@ -380,7 +380,7 @@ namespace MultilingualMarkdown {
         /**
          * Parser Tool: check if current and next characters match a string in current line buffer.
          *
-         * @param string $marker the string to match, starting at current character
+         * @param array|string $test the string to match, starting at current character
          *
          * @return bool true if marker has been found at current place
          */

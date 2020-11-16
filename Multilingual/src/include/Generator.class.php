@@ -223,6 +223,7 @@ namespace MultilingualMarkdown {
         public function preProcess(): bool
         {
             $this->filer->readyInputs();
+            $this->filer->setOutputMode($this->outputModeName, null);
             $this->lexer->preProcess($this->filer);
             return true;
         }

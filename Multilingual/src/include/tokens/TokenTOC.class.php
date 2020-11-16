@@ -42,13 +42,13 @@ namespace MultilingualMarkdown {
      */
     class TokenTOC extends TokenBaseSingleLine
     {
+        private $title = '.((Table of Contents.))';    /// title parameter
+        private $start = 1;     /// starting level
+        private $end = 3;       /// ending level
+        
         public function __construct()
         {
             parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, '.toc', true);
-        }
-        public function __toString()
-        {
-            return '<directive> .toc';
         }
 
         /**
@@ -63,18 +63,107 @@ namespace MultilingualMarkdown {
 
         /**
          * TOC directive input processing.
-         *
-         * Processing input is only a matter of reading until end of line
-         * and storing content. Actual output is done in output().
          */
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             // skip the directive (no need to store)
             $this->skipSelf($input);
             // store the parameters until end of line
-            $this->content = $input->getLine();
+            $this->content = trim($input->getLine());
             $this->length = mb_strlen($this->content);
-            $lexer->appendToken($this, $filer);
+            // scan parameters, syntax is:
+            // .toc title=<xxxxxxxxxx> level=<start>-<end>
+            $storage = new Storage($this->content);
+            $char = $storage->getCurrentChar();
+            $paramKeys=['title=', 'level='];
+            while ($char != null) {
+                $keyIndex = $storage->isMatching($paramKeys);
+                if ($keyIndex >= 0) {
+                    $storage->getString(strlen($paramKeys[$keyIndex]));// skip key
+                }
+                // title?
+                switch ($keyIndex) {
+                    case 0:
+                        $this->title = '';
+                        $char = $storage->getCurrentChar();
+                        while (($char != null) && ($storage->isMatching($paramKeys) < 0)) {
+                            $this->title .= $char;
+                            $char = $storage->getNextChar();
+                        }
+                        $this->title = trim($this->title);
+                        break;
+                    case 1:
+                        $levels = '';
+                        $char = $storage->getCurrentChar();
+                        while (($char != null) && ($storage->isMatching($paramKeys) < 0)) {
+                            $levels .= $char;
+                            $char = $storage->getNextChar();
+                        }
+                        $levels = trim($levels);
+                        $separatorPos = strpos($levels, '-');
+                        if ($separatorPos === false) {
+                            // level=N
+                            $this->start = (int)$levels;
+                            $this->end = $this->start;
+                        } else if ($separatorPos == 0) {
+                            // level=-N
+                            $this->start = 1;
+                            $this->end = (int)substr($levels, 1);
+                        } else if ($separatorPos == strlen($levels) - 1) {
+                            // level=N-
+                            $this->start = (int)substr($levels, 0, strlen($levels)-1);
+                            $this->end = 9;
+                        } else {
+                            // level=N-N
+                            $this->start = (int)substr($levels, 0, $separatorPos);
+                            $this->end = (int)substr($levels, $separatorPos + 1);
+                        }
+                        break;
+                    default:
+                        $char = $storage->getNextChar();
+                        break;
+                }
+            }
+
+            // Send tokens for the title
+            $token = new TokenText('## ');
+            $lexer->appendToken($token, $filer);
+            unset($token);
+            $title = $this->title . OutputModes::getAnchor($filer->getOutputMode(), 'toc');
+            $lexer->tokenize($title, $filer, false);
+            $lexer->appendTokenEOL($filer);
+            $lexer->appendTokenEOL($filer);
+            $allFiles = [];
+            $allHeadingsArrays = $lexer->getAllHeadingsArrays();
+            if ($this->start == 1) {
+                // if level start at 1, must build toc parts for each file
+                // sort by level 1 numbering to ensure correct toc order
+                $allFiles = [];
+                foreach ($allHeadingsArrays as $relFilename => $headingsArray) {
+                    $numbering = $lexer->getNumbering($relFilename);
+                    $topNumber = $numbering->getLevelNumbering(1); 
+                    $allFiles[$topNumber] = $relFilename;
+                }
+                ksort($allFiles);
+            } else  {
+                $allFiles = [$filer->current()];
+            }
+            // output each file in correct order
+            foreach ($allFiles as $relFilename) {
+                // output each heading if level between start and end
+                $numbering = $lexer->getNumbering($relFilename);
+                $headingsArray = $allHeadingsArrays[$relFilename];
+                foreach ($headingsArray as $index => $heading) {
+                    $level = $heading->getLevel();
+                    if ($level >= $this->start && $level <= $this->end) {
+                        $text = $headingsArray->getTOCLine($index, $numbering, $filer);
+                        $lexer->tokenize($text, $filer, false);
+                        $lexer->appendTokenEOL($filer);
+                        $lexer->output($filer);
+                        $filer->flushOutput();
+                    }
+                }
+            }
         }
 
         
@@ -85,10 +174,12 @@ namespace MultilingualMarkdown {
          * text part, unless the expected effect is to restrain a toc to
          * a specific language.
          */
-        public function output(Lexer $lexer, Filer $filer): bool
+        public function output(Lexer &$lexer, Filer &$filer): bool
         {
-            $lexer->debugEcho("<TOC - TODO: output toc content>\n");
-            $filer->output($lexer, "<TOC (todo)>", false, $this->type);
+//            $lexer->outputTOC($filer);
+            // output toc title with heading level 2
+            $filer->output($lexer, $title, true, $this->type);
+            
             return true;
         }
 

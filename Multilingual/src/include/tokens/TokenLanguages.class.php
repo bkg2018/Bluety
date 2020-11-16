@@ -39,24 +39,11 @@ namespace MultilingualMarkdown {
      */
     class TokenLanguages extends TokenBaseSingleLine
     {
+        private $params; /// content of line after token
+
         public function __construct()
         {
             parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, '.languages', true);
         }
-        public function __toString()
-        {
-            return '<directive> .languages((';
-        }
-        public function identify(object $input): bool
-        {
-            // must be preceded by an end of line or nothing (possible if first line in file)
-            $prevChar = $input->getPrevChar();
-            if (($prevChar != null) && ($prevChar != "\n")) {
-                return false;
-            }
-            // normal keyword token identification
-            return parent::identify($input);
-        }
-
     }
 }

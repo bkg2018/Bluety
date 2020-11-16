@@ -59,10 +59,9 @@ class StorageTest extends TestCase
 {
     public function testGetChar()
     {
-        $storage = new Storage();
         $file = fopen(__DIR__ . '/../testdata/test.mlmd', 'rt');
         $this->assertNotFalse($file);
-        $storage->setInputFile($file);
+        $storage = new Storage($file);
         $c = $storage->getCurrentChar();
         //echo str_repeat('=', 120), "\n";
         $charNumber = 0;
@@ -77,10 +76,9 @@ class StorageTest extends TestCase
 
     public function testGetLine()
     {
-        $storage = new Storage();
         $file = fopen(__DIR__ . '/../testdata/test.mlmd', 'rt');
         $this->assertNotFalse($file);
-        $storage->setInputFile($file);
+        $storage = new Storage($file);
         do {
             $line = $storage->getLine();
             echo $storage->getCurrentLineNumber(), ':', $line, "\n";

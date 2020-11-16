@@ -43,11 +43,8 @@ namespace MultilingualMarkdown {
         {
             parent::__construct(IGNORE);
         }
-        public function __toString()
-        {
-            return '<directive> .ignore((';
-        }
-        public function output(Lexer $lexer, Filer $filer): bool
+
+        public function output(Lexer &$lexer, Filer &$filer): bool
         {
             $lexer->debugEcho("<OPEN ignore>\n");
             $lexer->pushLanguage(IGNORE, $filer);

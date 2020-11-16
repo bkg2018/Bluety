@@ -1,5 +1,11 @@
 # Chapitre I) Titre de fichier Français MLMD<A id="a1"></A>
 
+## Table des matières<A id="toc"></A>
+
+  - I-1) [Titre Français 2.1](test.md#a2)
+    - I-1.1) [Title 3.1.1](test.md#a3)
+  - I-2) [Title 2.2](test.md#a6)
+
 Example of `single backtick` text.
 Example of ``double backtick`` text.
 Example of ```not a code fence``` but escaped text.
@@ -19,8 +25,6 @@ un EOL dedans.
 Text with variable main: test.md
 Text with variable file: test.fr.md
 Text with variable language: fr
-
-<TOC (todo)>
 
 Texte Français en ligne 2.
 

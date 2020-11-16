@@ -52,7 +52,7 @@ namespace MultilingualMarkdown {
             $this->content = '';    
             $this->skipSelf($input);
             do {
-                if ($input->isMatching('.}')) {
+                if ($input->isMatching(['.}'])==0) {
                     $input->getNextChar();// skip end marker
                     $input->getNextChar();// skip end marker
                     break;
@@ -66,7 +66,7 @@ namespace MultilingualMarkdown {
             $this->length = mb_strlen($this->content);
             $lexer->appendToken($this, $filer);
         }
-        public function output(Lexer $lexer, Filer $filer): bool
+        public function output(Lexer &$lexer, Filer &$filer): bool
         {
             $lexer->debugEcho('<MLMD ESCAPE ' . $this->debugText() . ">\n");
             $filer->output($lexer, $this->content, false, $this->type);

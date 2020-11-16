@@ -134,7 +134,15 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Check if there is an ative scheme.
+         * Get output mode.
+         */
+        public function getOutputMode(): int
+        {
+            return $this->outputMode;
+        }
+
+        /**
+         * Check if there is an active numbering scheme.
          *
          * @return bool true if a Numbering scheme is active, false if it is empty.
          */
@@ -257,8 +265,6 @@ namespace MultilingualMarkdown {
             ksort($this->levelsRoman, SORT_NUMERIC);
             ksort($this->levelsSeparator, SORT_NUMERIC);
             ksort($this->curLevelNumbering, SORT_NUMERIC);
-            // default output mode = markdown with number
-            $this->setOutputMode('md');
         }
 
         /**
@@ -289,6 +295,14 @@ namespace MultilingualMarkdown {
         public function getEnd()
         {
             return $this->endLevel;
+        }
+
+        /**
+         * Level current number accessor.
+         */
+        public function getLevelNumbering(int $level): int
+        {
+            return $this->curLevelNumbering[$level];
         }
 
         /**

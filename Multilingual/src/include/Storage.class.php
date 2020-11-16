@@ -52,9 +52,14 @@ namespace MultilingualMarkdown {
         private $previousChars = [];            /// array of last 3 characters: [0] = current, [1] = previous, [2] = pre-previous
         private $inFile = null;                 /// file opened for reading (setInputFile) or null
 
-        public function __construct()
+        public function __construct($source)
         {
             mb_internal_encoding('UTF-8');
+            if (\is_resource($source)) {
+                $this->setInputFile($source);
+            } elseif (is_string($source)) {
+                $this->setInputBuffer($source);
+            }
         }
 
         /**
@@ -367,15 +372,26 @@ namespace MultilingualMarkdown {
          * This test fetch necessary characters if the buffer has less than needed
          * left to read.
          *
-         * @param string $marker the string to match, starting at current character
+         * @param array|string $test the string or an array of strings to match, starting at current character
          *
-         * @return bool true if marker has been found at current place
+         * @return int 0 or the index in array if marker has been found, -1 if not found
          */
-        public function isMatching(string $marker): bool
+        public function isMatching($test): int
         {
-            $nextCharsLength = mb_strlen($marker) - 1;
-            $content  = $this->previousChars[0] . $this->fetchNextChars($nextCharsLength);
-            return mb_strcmp($content, $marker) == 0;
+            $allMarkers = [];
+            if (\is_array($test)) {
+                $allMarkers = $test;
+            } else {
+                $allMarkers = [$test];
+            }
+            foreach ($allMarkers as $index => $marker) {
+                $nextCharsLength = mb_strlen($marker) - 1;
+                $content  = $this->previousChars[0] . $this->fetchNextChars($nextCharsLength);
+                if (mb_strcmp($content, $marker) == 0) {
+                    return $index;
+                }
+            }
+            return -1;
         }
     }
 

@@ -3,7 +3,12 @@
 /**
  * Multilingual Markdown generator - Lexer class.
  *
- * The Lexer transforms an UTF-8 buffer into a sequence of tokens.
+ * The Lexer is responsible for transforming an UTF-8 content into a sequence of tokens
+ * and send them to output through a Filer. It also sentralizes most of the generation
+ * parameters like TOC parameters, heading numbering scheme, output mode. It preprocesses
+ * the list of files to recognize the languages list, the available headings in each file
+ * and other things like the first significant text line of each file or the current
+ * language stack.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -48,7 +53,6 @@ namespace MultilingualMarkdown {
     require_once('tokens/TokenEscaperTripleBacktick.class.php');
     require_once('tokens/TokenEscaperFence.class.php');
     require_once('tokens/TokenEscaperDoubleQuote.class.php');
-    require_once('tokens/TokenEscaperSpace.class.php');
     require_once('tokens/TokenEscaperMLMD.class.php');
     // on demand directives
     require_once('tokens/TokenText.class.php');             // text outside/between directives
@@ -58,7 +62,6 @@ namespace MultilingualMarkdown {
     require_once('Numbering.class.php');
     // HTML/MD various output modes (set in Lexer and in Numbering)
     require_once('OutputModes.class.php');
-
 
     class Lexer
     {
@@ -117,7 +120,6 @@ namespace MultilingualMarkdown {
             $this->mlmdTokens['```']        = new TokenEscaperTripleBacktick();     ///  ``` - MD triple backtick escaping, must be checked later than TokenEscaperFence
             $this->mlmdTokens['``']         = new TokenEscaperDoubleBacktick();     ///  ``  - MD double backtick escaping, must be checked later than TokenEscaperTripleBacktick
             $this->mlmdTokens['`']          = new TokenEscaperSingleBacktick();     ///  `   - MD single backtick escaping, must be checked later than TokenEscaperDoubleBacktick
-            $this->mlmdTokens['    ']       = new TokenEscaperSpace();              ///      - MD 4 spaces escaping
             $this->mlmdTokens['{}']         = new TokenEscaperMLMD();               /// .{.} - MLMD escaping
 
             // NB: TokenOpenLanguage will be instanciated by the .languages directive for each declared language <code>, stored in $this->mlmdTokens['code']
@@ -374,8 +376,7 @@ namespace MultilingualMarkdown {
          */
         public function tokenize(string $text, Filer &$filer, bool $allowOutput): void
         {
-            $storage = new Storage();
-            $storage->setInputBuffer($text);
+            $storage = new Storage($text);
             $this->currentChar = $storage->getCurrentChar();
 
             // now interpret current character
@@ -645,7 +646,7 @@ namespace MultilingualMarkdown {
                 $headingsArray = new HeadingArray($relFilename);
                 $curLineNumber = 0;
                 $this->allTopNumbers[$relFilename] = 0;
-                // loop on each file line@
+                // loop on each line
                 do {
                     $text = getNextLineTrimmed($file, $curLineNumber);
                     if (!$text) {
@@ -773,6 +774,38 @@ namespace MultilingualMarkdown {
         {
             $relFilename = $filer->current();
             return $this->allHeadingsArrays[$relFilename]->getHeadingText($heading->getIndex(), $this->allNumberings[$relFilename], $filer);
+        }
+
+        /**
+         * Return all headings arrays.
+         */
+        public function getAllHeadingsArrays(): array
+        {
+            return $this->allHeadingsArrays;
+        }
+
+        /**
+         * Return headings array for a given file.
+         * The index is the relative file name vs main file directory.
+         */
+        public function getCurrentHeadingsArray(string $filename): ?array
+        {
+            if (\array_key_exists($filename, $this->allHeadingsArrays)) {
+                return $this->allHeadingsArrays[$filename];
+            }
+            return null;
+        }
+
+        /**
+         * return numbering object for a given file.
+         * The index is the relative file name vs main file directory.
+         */
+        public function getNumbering(string $filename): ?object
+        {
+            if (\array_key_exists($filename, $this->allNumberings)) {
+                return $this->allNumberings[$filename];
+            }
+            return null;
         }
 
     }

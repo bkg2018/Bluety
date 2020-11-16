@@ -8,6 +8,10 @@ Lines preceeding the `.languages` directive are ignored.
 
 # .((English File Title.)).fr((Titre de fichier Français.)) MLMD
 
+.toc title=.((Default toc title.)).fr((Table des matières.)) level=2-3
+
+
+
 Example of `single backtick` text.
 Example of ``double backtick`` text.
 Example of ```not a code fence``` but escaped text.
@@ -29,8 +33,6 @@ un EOL dedans..))
 Text with variable main: {main}
 Text with variable file: {file}
 Text with variable language: {language}
-
-.toc title=.((Default toc title.)).fr((Table des matières.)) level=1-3
 
 .((Inlined default text 2..)).fr((Texte Français en ligne 2..))
 

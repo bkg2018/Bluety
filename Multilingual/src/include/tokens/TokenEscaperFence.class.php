@@ -105,7 +105,7 @@ namespace MultilingualMarkdown {
             $lexer->appendTokenEOL($filer);
         }
 
-        public function output(Lexer $lexer, Filer $filer): bool
+        public function output(Lexer &$lexer, Filer &$filer): bool
         {
             $lexer->debugEcho('<CODE FENCE ' . $this->debugText() . ">\n");
             $filer->output($lexer, $this->content, false, $this->type);

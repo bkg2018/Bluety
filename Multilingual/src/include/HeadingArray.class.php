@@ -359,20 +359,12 @@ namespace MultilingualMarkdown {
          */
         public function getAnchor(int $index, ?object $logger = null): string
         {
-            $id = $this->allHeadings[$index]->getNumber();
-            switch ($this->outputMode) {
-                case OutputModes::MDPURE:
-                    return "{#a$id}";
-                case OutputModes::HTMLOLD:
-                case OutputModes::HTMLOLDNUM:
-                    return "<A name=\"a$id\"></A>";
-                default:
-                    return "<A id=\"a$id\"></A>";
-            }
-            if ($logger) {
+            $id = (string)($this->allHeadings[$index]->getNumber());
+            $result = OutputModes::getAnchor($this->outputMode, $id);
+            if ($result === null && $logger !== null) {
                 $logger->error("invalid output mode {$this->outputMode}");
             }
-            return null;
+            return $result;
         }
 
         /**
@@ -507,15 +499,15 @@ namespace MultilingualMarkdown {
          *
          * @param int    $index     index of the heading, -1 to use current exploration index.
          * @param object $numbering the Numbering object in charge of current file numbering scheme.
-         * @param object $logger    the caller object with an error() function, can be null to ignore errors.
+         * @param Filer  $filer    the caller object with an error() function, can be null to ignore errors.
          * @see Logger interface
          *
          * @return string the full heading line, or null if error or level not within
          *                numbering scheme limits.
          */
-        public function getTOCLine(int $index, object &$numbering, ?object $logger = null): ?string
+        public function getTOCLine(int $index, object &$numbering, ?Filer $filer = null): ?string
         {
-            $index = $this->checkIndex($index, $logger);
+            $index = $this->checkIndex($index, $filer);
             if ($index === null) {
                 return null;
             }
@@ -523,9 +515,13 @@ namespace MultilingualMarkdown {
             if (!$heading->isLevelWithin($numbering)) {
                 return null;
             }
-            $spacing = $this->getSpacing($index, $logger);
-            $numberingText = $this->getNumberingText($index, $numbering, true, $logger);
-            $text = $this->getTOCLink('{file}', $index, $numbering->getStart(), $numbering->getEnd(), $logger);
+            $spacing = $this->getSpacing($index, $filer);
+            $numberingText = $this->getNumberingText($index, $numbering, true, $filer);
+            $extension = pathinfo($this->file, PATHINFO_EXTENSION);
+            // surround filename with MLMD escaping so it doesn't merge the ending '.' with '{language}'
+            // and form a wrong MLMD escaping.
+            $filename = '.{' . mb_substr($this->file, 0, mb_strlen($this->file) - mb_strlen($extension)) . '.}';
+            $text = $this->getTOCLink($filename . ($filer->isMainFilename($this->file) ? 'md' : '{language}.md'), $index, (int)$numbering->getStart(), (int)$numbering->getEnd(), $filer);
             return $spacing . $numberingText . $text;
         }
     }

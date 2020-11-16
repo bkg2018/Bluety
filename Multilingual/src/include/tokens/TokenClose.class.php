@@ -43,13 +43,9 @@ namespace MultilingualMarkdown {
         {
             parent::__construct(TokenType::CLOSE_DIRECTIVE, '.))', true);
         }
-        public function __toString()
-        {
-            return "<close>";
-        }
 
         // Output: have Lexer updating the current output language
-        public function output(Lexer $lexer, Filer $filer): bool
+        public function output(Lexer &$lexer, Filer &$filer): bool
         {
             $lexer->debugEcho("<CLOSE {$lexer->getCurLanguage()}>\n");
             $lexer->popLanguage($filer);

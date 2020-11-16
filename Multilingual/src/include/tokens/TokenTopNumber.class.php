@@ -44,9 +44,5 @@ namespace MultilingualMarkdown {
         {
             parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, '.topnumber', true);
         }
-        public function __toString()
-        {
-            return '<directive> .topnumber';
-        }
     }
 }

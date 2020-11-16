@@ -43,9 +43,5 @@ namespace MultilingualMarkdown {
         {
             parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, '.numbering', true);
         }
-        public function __toString()
-        {
-            return '<directive> .numbering((';
-        }
     }
 }

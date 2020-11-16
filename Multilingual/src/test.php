@@ -10,6 +10,7 @@ mb_internal_encoding('UTF-8');
 xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
 
 $generator = new Generator();
+$generator->setOutputMode('html');
 $generator->setNumbering('1::&I:-,2::1:-,3::1');
 $generator->addInputFile('testdata/test.mlmd');
 $generator->setMainFilename("test.mlmd");
