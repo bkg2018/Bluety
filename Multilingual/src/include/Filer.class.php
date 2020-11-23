@@ -231,9 +231,16 @@ namespace MultilingualMarkdown {
         {
             global $posFunction;
             // try to find this file name in registered files
+            $mainExtension = \isMLMDfile($name);
+            if ($mainExtension === null) {
+                return false;
+            }
+            $wantedPath = mb_substr($name, 0, - mb_strlen($mainExtension));
+            $wantedName = \basename($wantedPath) . '.';
+
             $mainPath = '';
             foreach ($this->allInFilePathes as $filePath) {
-                $posName = $posFunction($filePath, $name, 0);
+                $posName = $posFunction($filePath, $wantedName, 0);
                 if ($posName > 0) {
                     // found, now set root directory to this file base dir
                     $this->setRootDir(mb_substr($filePath, 0, $posName), false);

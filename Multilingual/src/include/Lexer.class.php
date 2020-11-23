@@ -660,6 +660,8 @@ namespace MultilingualMarkdown {
                     if ($this->currentChar === null) return false;
                 } while ($filer->getCurrentLineNumber() < $startLineNumber);
                 $this->languageSet = true;
+            } else {
+                $lineContent = $filer->getLine();
             }
             $filer->setLanguage($this->languageList, DEFLT);
 

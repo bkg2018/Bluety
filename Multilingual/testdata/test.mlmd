@@ -8,7 +8,7 @@ Lines preceeding the `.languages` directive are ignored.
 
 # .((English File Title.)).fr((Titre de fichier Français.)) MLMD
 
-.toc title=.((Default toc title.)).fr((Table des matières.)) level=2-3
+.toc title=.((Default toc title.)).fr((Table des matières.)) level=1-3
 
 
 

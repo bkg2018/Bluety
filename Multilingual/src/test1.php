@@ -5,7 +5,7 @@ require_once 'include/Generator.class.php';
 use MultilingualMarkdown\Generator;
 mb_internal_encoding('UTF-8');
 
-xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
+//xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
 
 $generator = new Generator();
 $generator->setOutputMode('html');
@@ -16,6 +16,8 @@ $generator->addInputFile('testdata/subdata/secondary.mlmd');
 $generator->addInputFile('testdata/subdata/tertiary.mlmd');
 $generator->setOutputDirectory(realpath('.') . '/testdata/out');
 $generator->processAllFiles();
+
+exit(0);
 
 $allCoverage = xdebug_get_code_coverage();
 echo "Coveraging...\n";
