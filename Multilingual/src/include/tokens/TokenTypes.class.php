@@ -42,11 +42,10 @@ namespace MultilingualMarkdown {
         public const ESCAPED_TEXT           = self::FIRST + 5;
         public const EOL                    = self::FIRST + 6;
         public const EMPTY_LINE             = self::FIRST + 7;
-        public const ESCAPER                = self::FIRST + 8;
-        public const SPACE                  = self::FIRST + 9;
-        public const END_FILE               = self::FIRST + 10;
-        public const HEADING                = self::FIRST + 11;
+        public const SPACE                  = self::FIRST + 8;
+        public const END_FILE               = self::FIRST + 9;
+        public const HEADING                = self::FIRST + 10;
 
-        public const LAST                   = self::FIRST + 11; // keep identical to last line above
+        public const LAST                   = self::FIRST + 10; // keep identical to last line above
     }
 }

@@ -71,7 +71,7 @@ namespace MultilingualMarkdown {
 
             } 
             $this->filer = /*(getenv("debug") != 0) ? new debugFiler() : */ new Filer();
-            $this->lexer = (getenv("debug") != 0) ? new debugLexer() : new Lexer();
+            $this->lexer = /*(getenv("debug") != 0) ? new debugLexer() : */new Lexer();
             $this->outputModeName = 'md'; 
         }
 
@@ -146,6 +146,14 @@ namespace MultilingualMarkdown {
         public function setMainFilename(string $name = 'README.mlmd'): bool
         {
             return $this->filer->setMainFilename($name);
+        }
+
+        /**
+         * Set the root output directory, default is same as main input file directory.
+         */
+        public function setOutputDirectory(string $dir): bool
+        {
+            return $this->filer->setOutputDirectory($dir);
         }
 
         /**
@@ -242,11 +250,14 @@ namespace MultilingualMarkdown {
          */
         public function processAllFiles(): bool
         {
+            if ($this->filer->getInputFilesMaxIndex() < 0) {
+                $this->filer->exploreDirectory(getcwd());
+            }
             $dashes = str_repeat('=', 60);
             $this->preProcess();
             $this->lexer->initSet();
             foreach ($this->filer as $index => $relFilename) {
-                echo "$dashes\nPROCESSING FILE: $relFilename\n$dashes\n";
+                echo "$dashes\nPROCESSING FILE: $relFilename\n";
                 if (!$this->process($index)) {
                     return false;
                 }

@@ -132,7 +132,6 @@ namespace MultilingualMarkdown {
             $title = $this->title . OutputModes::getAnchor($filer->getOutputMode(), 'toc');
             $lexer->tokenize($title, $filer, false);
             $lexer->appendTokenEOL($filer);
-            $lexer->appendTokenEOL($filer);
             $allFiles = [];
             $allHeadingsArrays = $lexer->getAllHeadingsArrays();
             if ($this->start == 1) {
@@ -153,12 +152,19 @@ namespace MultilingualMarkdown {
                 // output each heading if level between start and end
                 $numbering = $lexer->getNumbering($relFilename);
                 $headingsArray = $allHeadingsArrays[$relFilename];
+                if ($numbering->getStart() > $this->end || $numbering->getEnd() < $this->start) {
+                    $filer->error("Inconsistent levels in TOC directive or missing numbering scheme", $relFilename, $filer->getCurrentLineNumber());
+                    continue;
+                }
                 foreach ($headingsArray as $index => $heading) {
                     $level = $heading->getLevel();
                     if ($level >= $this->start && $level <= $this->end) {
                         $text = $headingsArray->getTOCLine($index, $numbering, $filer);
-                        $lexer->tokenize($text, $filer, false);
+                        if ($text === null) {
+                            $text = $headingsArray->getTOCLine($index, $numbering, $filer);
+                        }
                         $lexer->appendTokenEOL($filer);
+                        $lexer->tokenize($text, $filer, false);
                         $lexer->output($filer);
                         $filer->flushOutput();
                     }

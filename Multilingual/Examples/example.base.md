@@ -12,7 +12,7 @@ Flag: http://www.geognos.com/api/en/countries/flag/{language}.png
 
 Entête du fichier.
 
-.TOC level=1-4 title=2,".fr((Table des matières.)).en((Table Of Contents.))"
+.toc level=1-4 title=2,".fr((Table des matières.)).en((Table Of Contents.))"
 
 ## .default((First Title.)) .fr((Premier titre.))
 

@@ -49,12 +49,18 @@ namespace MultilingualMarkdown {
             parent::__construct(TokenType::OPEN_DIRECTIVE, ".$language((", true);
         }
 
+        public function getLanguage(): string
+        {
+            return $this->language;
+        }
+
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             // check if previous token is EOL, and pre-previous token is close.
             // EOL between close and open must be ignored and deleted from token stack
             $lexer->adjustCloseOpenSequence();
             parent::processInput($lexer, $input, $filer);
+            $lexer->pushLanguage($this->language, $filer);
         }
         public function output(Lexer &$lexer, Filer &$filer): bool
         {

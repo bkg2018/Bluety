@@ -44,6 +44,11 @@ namespace MultilingualMarkdown {
             parent::__construct(TokenType::CLOSE_DIRECTIVE, '.))', true);
         }
 
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
+        {
+            parent::processInput($lexer, $input, $filer);
+            $lexer->popLanguage($filer);
+        }
         // Output: have Lexer updating the current output language
         public function output(Lexer &$lexer, Filer &$filer): bool
         {

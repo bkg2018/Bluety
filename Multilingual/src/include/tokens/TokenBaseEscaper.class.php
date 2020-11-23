@@ -56,19 +56,43 @@ namespace MultilingualMarkdown {
 
         public function __construct(string $marker)
         {
-            parent::__construct(TokenType::ESCAPER, $marker, true);
+            parent::__construct(TokenType::ESCAPED_TEXT, $marker, true);
+        }
+        /**
+         * Tells if a token has a content and should be instanciated.
+         */
+        public function hasContent(): bool
+        {
+            return true;
+        }
+                /**
+         * Check if content is uniquely composed of spacing characters.
+         * NB this doesn't handle UTF-8 spacing.
+         */
+        public function isSpacing(): bool
+        {
+            return \ctype_space($this->content);
+        }
+        
+        /**
+         * Return a new instance of same class with same keyword
+         */
+        public function newInstance(): object
+        {
+            $class = \get_class($this);
+            return new $class($this->keyword);
         }
 
         /**
-         * Return true when asked for TokenType::ESCAPER.
+         * Return true when asked for TokenType::ESCAPED_TEXT.
          * Accepts an array of token types or a single one.
          *
          * @param array|TokenType $type the token type to test, or an array of token types
-         * @return true if the token type(s) is ESCAPER.
+         * @return true if the token type(s) is ESCAPED_TEXT.
          */
         public function isType($type): bool
         {
-            if ((\is_array($type) && \in_array(TokenType::ESCAPER, $type)) || ($type == 'TokenType::ESCAPER')) {
+            if ((\is_array($type) && \in_array(TokenType::ESCAPED_TEXT, $type)) || ($type == 'TokenType::ESCAPED_TEXT')) {
                 return true;
             }
             return parent::isType($type);

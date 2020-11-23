@@ -23,73 +23,7 @@
  * @link      TODO
  */
 
-function displayHelp()
-{
-    echo "
-Multilingual Markdown generator - Main script
-
-Parameters:
-
--h  display this help.
-
-[-i] <filepath.mlmd|filepath.base.md>
-    add a file to input files. MLMD will generate one <filepath.xx.md> 
-    file for each languages 'xx' declared in the '.languages' directive.
-    If -i is not used the script assumes the parameter is an input file path.
-
--out html|md
-    choose HTML or MD for links and anchors for Table Of Contents
-
--main <mainFilename[.mlmd|.base.md]>
-    add a main file (supposedly the one with a global TOC including levels 1-n)
-    and indirectly set the root directory for all other files
-
--numbering <def>[,...]
-    declare at least one heading numbering definition, where <def> is: 
-        [<level>]:<symbol><separator>
-        where :
-            <level> is 1 to 9 (default = 1 or next level after level of previous def)
-            <symbol> is from 'A'..'Z', 'a'..'z', '1'..'9'
-            <separator> is a single character e.g. '.' or '-'
-
-If no '-i' and '-main' parameter is given, MLMD explores current and sub directories
-for '*.base.md' and '*.mlmd' template files and generates files for each template found.
-By default, main file will be README.mlmd or README.base.md if such a file is found 
-in current directory.
- 
-The '-main' option sets the base file name referenced by the {main} variable (see below) and
-sets the root directory for all links in all files. Preferably, all the other template files
-should be in this root directory or in subdirectories.
-
-Template files must be named with .base.md or .mlmd extension, other extensions are ignored.
-
-Directives in templates control the languages specifics files generation.
-
-Global directives on one line:
-- .languages    declares languages codes (global)
-- .numbering    sets the heading numbering schemes (global, also available
-                as script argument and .toc parameter)
-- .toc          generates a table of contents using headings levels
-
-Directives anywhere in the text and in headings:
-- .all((        starts a section for all languages
-- .ignore((     starts an ignored section
-- .default((    starts a section for languages which don't have a specific section
-- .<language>(( starts a section specific to <language>
-- .))           ends a section
-- .{ .}         encloses escaped text (no variable expansion)
-
-Text can also be escaped between back-ticks '`', double back_ticks '``', 
-code fences '```' and double quotes '\"'. Escaped text neutralizes directives and variables.
-
-The following variables are expanded in the generated files except in escaped text:
-
-{file} expands to the current file name, localised for the language (file.xx.md for language xx)
-{main} expands to the '-main' file name, localised for the language (main.xx.md for language xx)
-{language} expands to the language code as declared in the '.languages' directive. (xx for language xx)
-\n";
-}
-
+require_once 'include/displayHelp.php';
 require_once 'include/Generator.class.php';
 
 //MARK: CLI launch
@@ -98,25 +32,40 @@ require_once 'include/Generator.class.php';
 mb_internal_encoding('UTF-8');
 $generator = new \MultilingualMarkdown\Generator();
 
-/// Array of parameters: 'name' => [(public) function to call on the value, 'type' of value]
-/// if function starts with a ':', call global function, else call Generator member function.
-$params = [
-    '-i'            => ['addInputFile',     'file'],    // set one input file
-    '-main'         => ['setMainFilename',  'file'],    // set a main filename
-    '-out'          => ['setOutputMode',    'string'],  // set Markdown output mode
-    '-numbering'    => ['setNumbering',     'string'],  // set the headings numbering scheme for headings and TOC
-    '-h'            => [':displayHelp',     '-']        // (global function) display help
+/**
+ * Array of parameters.
+ * Each parameter is defined by its name as index, and value is an array [function to call on value, 'type' of value]
+ *  - function starts with a ':'       -> global function
+ *  - function does not start with ':' -> Generator member function
+ *  - type 'file'   : value must be an existing file
+ *  - type 'string' : value is used as is
+ *  - type 'number' : value must be a number
+ *  - type '-'      : there is no following value for this parameter
+ */
+
+$allParams = [
+    '-i'            => ['function'=>'addInputFile',         'type'=>'file'],    // set one input file
+    '-main'         => ['function'=>'setMainFilename',      'type'=>'file'],    // set a main filename
+    '-out'          => ['function'=>'setOutputMode',        'type'=>'string'],  // set Markdown output mode
+    '-numbering'    => ['function'=>'setNumbering',         'type'=>'string'],  // set the headings numbering scheme for headings and TOC
+    '-od'           => ['function'=>'setOutputDirectory',   'type'=>'string'],  // set the root output directory (else files go into input directory)
+    '-h'            => ['function'=>':displayHelp',         'type'=>'-'],       // (global function) display help
+    '-v'            => ['function'=>':displayVersion',      'type'=>'-']        // display MLMD translator version
 ];
 $arg = 1;
 while ($arg < $argc) {
     $done = false;
-    foreach ($params as $param => $def) {
-        $function = $def[0];
-        $type = $def[1];
-        $ok = (mb_strtolower($argv[$arg]) == $param);
+    $key = $argv[$arg];
+    if (!array_key_exists($key, $allParams)) {
+        echo "WARNING: Unknown parameter $key has been ignored\n";
+    } else {
+        $def = $allParams[$key];
+        $function = $def['function'];
+        $type = $def['type'];
+        $ok = (mb_strtolower($argv[$arg]) == $key);
         if ($ok) {
             if ($arg > $argc - 1) {
-                echo "WARNING: Missing value for parameter $param\n";
+                echo "WARNING: Missing value for parameter $key\n";
                 $value = '';
             } else {
                 $arg += 1;
@@ -131,7 +80,13 @@ while ($arg < $argc) {
                     break;
                 case 'string':
                     if (empty($value)) {
-                        echo "ERROR: empty value for parameter $param\n";
+                        echo "ERROR: empty value for parameter $key\n";
+                        $ok = false;
+                    }
+                    break;
+                case 'number':
+                    if (empty($value) || !is_numeric($value)) {
+                        echo "ERROR: empty or non-numeric value for parameter $key\n";
                         $ok = false;
                     }
                     break;
@@ -152,7 +107,6 @@ while ($arg < $argc) {
                 }
             }
             $done = true;
-            break;
         }
     }
     if (!$done) {
@@ -165,7 +119,4 @@ while ($arg < $argc) {
     }
     $arg += 1;
 }
-
-// do the job
 $generator->processAllFiles();
-echo "OK\n";

@@ -30,7 +30,7 @@
 				"stopOnEntry": false,
 				"type": "php",
 				"request": "launch",
-				"program": "${workspaceFolder}/src/test.php",
+				"program": "${workspaceFolder}/src/test1.php",
 				"cwd": "${workspaceFolder}",
 				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1"},
 				"port": 9000

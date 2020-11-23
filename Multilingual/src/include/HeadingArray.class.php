@@ -399,12 +399,12 @@ namespace MultilingualMarkdown {
                 case OutputModes::MDPURE:
                 case OutputModes::MD:
                 case OutputModes::MDNUM:
-                    return "[{$text}]({$path}#a{$id})";
+                    return ".all(([.)){$text}.all((]({$path}#a{$id}).))";
                 default:
                     if ($this->isHeadingLastBetween($index, $start, $end)) {
-                        return "<A href=\"{$path}#a{$id}\">{$text}</A>";
+                        return ".all((<A href=\"{$path}#a{$id}\">{$text}</A>.))";
                     }
-                    return "<A href=\"{$path}#a{$id}\">{$text}</A><BR>";
+                    return ".all((<A href=\"{$path}#a{$id}\">{$text}</A><BR>.))";
             }
             if ($logger) {
                 $logger->error("invalid output mode {$this->outputMode}");
@@ -430,8 +430,11 @@ namespace MultilingualMarkdown {
          *
          * @return string the numbering string, or null if error.
         */
-        public function getNumberingText(int $index, object &$numbering, bool $addDash, ?object $logger = null): string
+        public function getNumberingText(int $index, ?object $numbering, bool $addDash, ?object $logger = null): ?string
         {
+            if ($numbering == null) {
+                return null;
+            }
             if ($index >= 0) {
                 // jump to the idnex while updating the numbering
                 $index = $this->checkIndex($index, $logger);
@@ -445,9 +448,7 @@ namespace MultilingualMarkdown {
             } else {
                 $index = $this->curIndex;
             }
-            if ($numbering == null) {
-                return null;
-            }
+
             $this->curIndex = $index;
             return $numbering->getText($this->allHeadings[$index]->getLevel(), $addDash);
         }
@@ -455,13 +456,13 @@ namespace MultilingualMarkdown {
         /**
          * Get text for current or given heading.
          * This must be used sequentially on all headings of the array or numbering won't be consistent
-         * regarding previous heading level. the whole sequence must be started with a Numbering and
-         * current index reset.
+         * regarding previous heading level. The whole sequence must be started with a Numbering and
+         * current index reset. Both anchor and numbering parts must be written for all languages.
          *
          * Components for heading line :
          *
-         * HTML all variants:  <anchor>\n<numbering> <text>\n\n
-         * MD all variants:    <numbering> <text><anchor>\n\n
+         * HTML all variants:  .all((<anchor><numbering> .))<text>\n\n
+         * MD all variants:    .all((<numbering> .))<text>.all((<anchor>.))\n\n
          *
          * @param int    $index     index of the heading, -1 to use current exploration index.
          * @param object $numbering the Numbering object in charge of current file numbering scheme.
@@ -470,7 +471,7 @@ namespace MultilingualMarkdown {
          *
          * @return string the text for the heading line, or null if error.
          */
-        public function getHeadingText(int $index, object &$numbering, ?object $logger = null): ?string
+        public function getHeadingText(int $index, ?object $numbering = null, ?object $logger = null): ?string
         {
             $index = $this->checkIndex($index, $logger);
             if ($index === null) {
@@ -481,9 +482,9 @@ namespace MultilingualMarkdown {
             $numberingText = $this->getNumberingText($index, $numbering, false, $logger);
             $text = $heading->getText();
             if (\in_array($this->outputMode, [OutputModes::MD, OutputModes::MDNUM, OutputModes::MDPURE])) {
-                return $numberingText . $text . $anchor;
+                return ($numberingText ? '.all((' . $numberingText . '.))' : '') . $text . '.all((' . $anchor . '.))';
             }
-            return $anchor . $numberingText . $text;
+            return '.all((' . $anchor . ($numberingText ?? '') . '.))' . $text;
         }
 
         /**
@@ -518,11 +519,9 @@ namespace MultilingualMarkdown {
             $spacing = $this->getSpacing($index, $filer);
             $numberingText = $this->getNumberingText($index, $numbering, true, $filer);
             $extension = pathinfo($this->file, PATHINFO_EXTENSION);
-            // surround filename with MLMD escaping so it doesn't merge the ending '.' with '{language}'
-            // and form a wrong MLMD escaping.
-            $filename = '.{' . mb_substr($this->file, 0, mb_strlen($this->file) - mb_strlen($extension)) . '.}';
-            $text = $this->getTOCLink($filename . ($filer->isMainFilename($this->file) ? 'md' : '{language}.md'), $index, (int)$numbering->getStart(), (int)$numbering->getEnd(), $filer);
-            return $spacing . $numberingText . $text;
+            $filename = mb_substr($this->file, 0, - (mb_strlen($extension) + 1));
+            $text = $this->getTOCLink($filename . '{extension}', $index, (int)$numbering->getStart(), (int)$numbering->getEnd(), $filer);
+            return '.all((' . $spacing . $numberingText . '.))' . $text;
         }
     }
 }

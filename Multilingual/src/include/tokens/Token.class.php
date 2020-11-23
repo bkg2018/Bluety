@@ -81,6 +81,15 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Return the token type as a string, derived from class name.
+         */
+        public function getTypeName(): string
+        {
+            $class = \get_class($this);
+            return \str_replace("MultilingualMarkdown\\Token", '', $class);
+        }
+
+        /**
          * Let the token self-identify against a Filer or Storage object.
          *
          * @param object $input the Filer or Storage object
@@ -102,6 +111,14 @@ namespace MultilingualMarkdown {
          *              given buffer.
          */
         public function identifyInBuffer(string $buffer, int $pos): bool
+        {
+            return false;
+        }
+
+        /**
+         * Tells if a token has a content and should be instanciated.
+         */
+        public function hasContent(): bool
         {
             return false;
         }

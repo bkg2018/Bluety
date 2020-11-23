@@ -257,7 +257,7 @@ namespace MultilingualMarkdown {
                     $this->levelsNumbering[$level] = $symbol;
                 }
                 $this->levelsSeparator[$level] = $separator;
-                $this->curLevelNumbering[$level] = 0;
+                $this->curLevelNumbering[$level] = 0; // equ to setLevelNumber($level,1))
             }
             // sort all by level so foreach() can track levels in growing order
             ksort($this->levelsPrefix, SORT_NUMERIC);

@@ -142,7 +142,7 @@ function exploreDirectory(string $dirName): array
 function getNextLineTrimmed($file, int &$lineNumber): ?string
 {
     $newLine = fgets($file);
-    if ($newLine === false) null;
+    if ($newLine === false) return null;
     $newLine = rtrim($newLine, " \t\n\r") . "\n";
     $lineNumber += 1;
     return $newLine;

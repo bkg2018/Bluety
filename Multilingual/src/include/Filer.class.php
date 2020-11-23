@@ -64,6 +64,8 @@ namespace MultilingualMarkdown {
         private $rootDir = null;                /// root directory, or main file directory
         private $rootDirLength = 0;             /// root directory utf-8 length
         private $lastToken = null;              /// last written token type
+        private $outRootDir = null;             /// -od parameter (root directory for output files)
+        private $previousEols = [];             /// last previous successive EOLs for each output file
 
         // Languages handling (LanguageList class)
         private $languageList = null;           /// list of languages, will be set by Lexer
@@ -101,13 +103,17 @@ namespace MultilingualMarkdown {
         private function log(string $type, string $msg, ?string $source = null, $line = false): bool
         {
             if ($this->inFilename) {
-                if ($source) {
-                    error_log("$source($line): MLMD {$type} in {$this->inFilename}(" . $this->storage->getCurrentLineNumber() . "): $msg");
+                if ($source && $line !== false) {
+                    error_log("$source:$line MLMD {$type}: $msg in {$this->inFilename}:" . $this->storage->getCurrentLineNumber());
                 } else {
-                    error_log("{$this->inFilename}(" . $this->storage->getCurrentLineNumber() . "): MLMD {$type}: $msg");
+                    error_log("MLMD {$type}: $msg in {$this->inFilename}:" . $this->storage->getCurrentLineNumber());
                 }
             } else {
-                error_log("arguments: MLMD {$type}: $msg");
+                if ($source && $line !== false) {
+                    error_log("$source:$line MLMD {$type}: $msg");
+                } else {
+                    error_log("arguments: MLMD {$type}: $msg");
+                }
             }
             return false;
         }
@@ -182,18 +188,20 @@ namespace MultilingualMarkdown {
          * Set root directory for relative filenames.
          * Resets all registered input files relative to the new root directory.
          *
-         * @param string $rootDir the root directory, preferably an absolute path.
+         * @param string $rootDir     the root directory, preferably an absolute path.
+         * @param bool   $resetInputs true to update the input file pathes and names
          *
          * @return bool false if the directory doesn't exist.
          */
-        public function setRootDir(string $rootDir): bool
+        public function setRootDir(string $rootDir, bool $resetInputs = true): bool
         {
             if (\file_exists($rootDir) && \is_dir($rootDir)) {
                 $absoluteRoot = normalizedPath(realpath($rootDir));
                 $this->rootDir = rtrim($absoluteRoot, "/\\");
                 $this->rootDirLength = mb_strlen($this->rootDir);
-                // reset relative filenames if needed
-                $this->readyInputs();
+                if ($resetInputs) {
+                    $this->readyInputs();
+                }
                 return true;
             }
             return $this->error("invalid root directory ($rootDir)", __FILE__, __LINE__);
@@ -219,16 +227,16 @@ namespace MultilingualMarkdown {
          *
          * @return bool false if file doesn't exist
          */
-        public function setMainFilename(string $name = 'README.mlmd'): bool
+        public function setMainFilename(string $name = 'README.mlmd', bool $resetInputs = true): bool
         {
             global $posFunction;
             // try to find this file name in registered files
             $mainPath = '';
             foreach ($this->allInFilePathes as $filePath) {
                 $posName = $posFunction($filePath, $name, 0);
-                if ($posName >= 0) {
+                if ($posName > 0) {
                     // found, now set root directory to this file base dir
-                    $this->setRootDir(mb_substr($filePath, 0, $posName));
+                    $this->setRootDir(mb_substr($filePath, 0, $posName), false);
                     $mainPath = $filePath;
                     break;
                 }
@@ -239,13 +247,14 @@ namespace MultilingualMarkdown {
                 if ($mainPath === false) {
                     return $this->error("main file cannot be found ($name)", __FILE__, __LINE__);
                 }
-                $this->setRootDir(dirname($mainPath));
+                $this->setRootDir(dirname($mainPath), false);
             }
             // get the base name relative to root dir
             $basename = $this->getBasename($mainPath);
             if ($basename !== false) {
                 $this->mainFilename = $basename;
             }
+            $this->readyInputs();
             return true;
         }
 
@@ -256,6 +265,32 @@ namespace MultilingualMarkdown {
         {
             $basename = \pathinfo($filename, PATHINFO_FILENAME);
             return ($this->mainFilename == $basename);
+        }
+
+        /**
+         * Set the root output directory for all written files.
+         * If this parameter is left to null, the files will be written at the same
+         * place as their corresponding input files.
+         * If $dir starts with a slash, it is considered an absolute path and will be
+         * used as is. If not, it is considered a relative path and will be relative
+         * to the starting current directory (cwd).
+         */
+        public function setOutputDirectory(string $dir): bool
+        {
+            if (substr($dir, 0, 1) == '/') {
+                $test = $dir;
+            } else {
+                $test = getcwd();
+                if (mb_substr($dir, -1, 1) != '/') {
+                    $test .= '/';
+                }
+                $test .= $dir;
+            }
+            if (!file_exists($test)) {
+                mkdir($test, 0755, true);
+            }
+            $this->outRootDir = $test ;
+            return true;
         }
 
         /**
@@ -443,7 +478,16 @@ namespace MultilingualMarkdown {
 
             // retain base name with full path but no extension as template and reset line number
             $extension = \isMLMDfile($filename);
-            $this->outFilenameTemplate = mb_substr($filename, 0, -mb_strlen($extension));
+            if ($this->outRootDir == null) {
+                $this->outFilenameTemplate = mb_substr($filename, 0, -mb_strlen($extension));
+            } else {
+                $outFilePath = $this->outRootDir . '/' . $this->relFilenames[$index];
+                $outRootDir = pathinfo($outFilePath, PATHINFO_DIRNAME);
+                if (!file_exists($outRootDir)) {
+                    mkdir($outRootDir, 0755, true);
+                }
+                $this->outFilenameTemplate = mb_substr($outFilePath, 0, -mb_strlen($extension));
+            }
             $this->inFilename = $filename;
             $this->curLanguage = IGNORE;
             $this->closeOutput();
@@ -500,7 +544,7 @@ namespace MultilingualMarkdown {
          * Reset the list of input files to the content of a directory and subdirectories.
          * The directory becomes the root directory.
          *
-         * @param string $rootDir the new root directory where to look for input files
+         * @param string $rootDir the root directory where to look for input files
          *
          * @return bool true if directory correctly explored, false for any problem
          */
@@ -521,11 +565,17 @@ namespace MultilingualMarkdown {
          */
         public function readyInputs(): void
         {
+            if ($this->mainFilename == null) {
+                if (count($this->allInFilePathes) > 0) {
+                    $this->setMainFilename($this->allInFilePathes[0]);
+                }
+            }
             if (empty($this->rootDir ?? '')) {
                 $this->setRootDir(getcwd());
             }
             unset($this->relFilenames);
             $this->relFilenames = [];
+
             foreach ($this->allInFilePathes as $index => $filename) {
                 // get relative filename, ignore if not the right root
                 $rootLen = mb_strlen($this->rootDir);
@@ -537,6 +587,7 @@ namespace MultilingualMarkdown {
                 // relative filename is the index for the work arrays
                 $this->relFilenames[$index] = mb_substr($filename, $rootLen + 1);
             }
+
         }
 
 
@@ -595,6 +646,7 @@ namespace MultilingualMarkdown {
                 }
                 $this->curOutput[$code] = []; // each [$code] is an array where each [i] is an OutputPart
                 $this->languageFunction[$code] = 'outputCurrent';
+                $this->previousEols[$code] = 0;
             }
             $this->curDefault = []; // each [i] is an OuputPart
             $this->languageList = $languageList;
@@ -865,6 +917,69 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Limit the number of successive EOLs to given number depending on previous write. Reformat the input
+         * text so it doesn't lead to more than the given number of EOLs either at the beginning of text
+         * following previous EOLs, either at the end of given text.
+         * 
+         * EOLs at the beginning of normal text are *not* handled. Unless all the text is only
+         * made of EOLs, this can lead to more EOLs than expected between previous and new text.
+         *
+         * previous     new             start       ending      previousEols    resulting   new
+         * text         text            pos         eols                        text        previousEols
+         * ----------------------------------------------------------------------------------------------
+         * x x x        x x x           >= 0        0           0               ok              0
+         * x x x        x x eol         >= 0        1           0               ok              1
+         * x x x        x eol(...)      >= 0        >= 2        0               limit 2 eols    2
+         * 
+         * x x x        eol             -1          1           0               ok              1
+         * x x x        eol(...)        -1          >= 2        0               "\n\n"          2
+         * x x eol      eol(...)        -1          >= 1        1               "\n"            2
+         * x eol eol    eol(...)        -1          >= 1        2               ''              2
+         *
+         * @param string $text the text to output
+         * @param string $code the current language code
+         * @param int $maxEols the maximum number of successive EOLs in actual output
+         * @return bool|array false if output must not be done, or ['text'=>text, 'eols'=>new value for previousEols]
+         */
+        private function limitSuccessiveEols(string $text, string $code, int $maxEols)
+        {
+            // count number of ending eols in text
+            $endingEols = 0;
+            $length = mb_strlen($text);
+            $startPos = $length - 1;
+            while ($startPos >= 0) {
+                if (mb_substr($text, $startPos, 1) == "\n") {
+                    $endingEols += 1;
+                    $startPos -= 1;
+                } else break;
+            }
+            // is there any non eol character at the beginning of text?
+            if ($startPos >= 0) {
+                // keep text, but limit ending EOLs to 2
+                if ($endingEols > $maxEols) {
+                    $text = mb_substr($text, 0, $length - $endingEols + $maxEols);
+                    $endingEols = $maxEols;
+                }
+                return ['text' => $text, 'eols' => $endingEols];
+            }
+            // only eols, adjust depending on previous EOLs
+            if ($endingEols + $this->previousEols[$code] > $maxEols) {
+                if ($this->previousEols[$code] == 0) {
+                    $endingEols = 2;
+                } else if ($this->previousEols[$code] == 1) {
+                    $endingEols = 1;
+                } else {
+                    $endingEols = max($maxEols, $endingEols);
+                }
+            }
+            $text = \str_repeat("\n", $endingEols);
+            if (empty($text)) {
+                return false;
+            }
+            return ['text' => $text, 'eols' => $endingEols + $this->previousEols[$code]];
+        }
+
+        /**
          * Send all output to files.
          */
         public function flushOutput(): bool
@@ -883,7 +998,11 @@ namespace MultilingualMarkdown {
                 }
                 foreach ($this->curOutput[$code] as $part) {
                     $text = $part->expand ? $this->expand($part->text, $code) : $part->text;
-                    fwrite($this->outFiles[$code], $text);
+                    $limit = $this->limitSuccessiveEols($text, $code, 2); // return ['text'=>text, 'eols'=>new value for previousEols] or false
+                    if ($limit !== false) {            
+                        fwrite($this->outFiles[$code], $limit['text']);
+                        $this->previousEols[$code] = $limit['eols'];
+                    }
                 }
                 unsetArrayContent($this->curOutput[$code]);
                 $this->curOutput[$code] = [];
@@ -897,11 +1016,13 @@ namespace MultilingualMarkdown {
         public function expand(string $text, string $language): string
         {
             $relFilename = $this->current();
-            $basename = pathinfo($relFilename, PATHINFO_FILENAME);
+            $baseExtension = \isMLMDfile($relFilename);
+            $basename = mb_substr($relFilename, 0, - mb_strlen($baseExtension));
             $extension = $this->languageList->isMain($language) ? '.md' : ".{$language}.md";
             $result = str_replace('{file}', $basename . $extension, $text);
+            $result = str_replace('{extension}', $extension, $result);
             if ($this->mainFilename !== null) {
-                $result = str_replace('{main}', $this->mainFilename . '.md', $result);
+                $result = str_replace('{main}', $this->mainFilename . $extension, $result);
             }
             $result = str_replace('{language}', $language, $result);
             return $result;

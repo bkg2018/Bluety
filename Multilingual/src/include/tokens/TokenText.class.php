@@ -50,7 +50,14 @@ namespace MultilingualMarkdown {
             $this->content = $content;
             $this->length = mb_strlen($content);
         }
-
+        /**
+         * Tells if a token has a content and should be instanciated.
+         */
+        public function hasContent(): bool
+        {
+            return true;
+        }
+        
         /**
          * Tell if the token is empty of significant text content.
          *
@@ -111,8 +118,7 @@ namespace MultilingualMarkdown {
          */
         public function output(Lexer &$lexer, Filer &$filer): bool
         {
-            $filer->output($lexer, $this->content, true, $this->type);
-            return true;
+            return $filer->output($lexer, $this->content, true, $this->type);
         }
 
     }
