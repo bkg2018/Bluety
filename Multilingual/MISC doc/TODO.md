@@ -2,6 +2,7 @@
 
 ## TODO at 2020-11-14
 
+- review full code coverage
 - .. in relative filenames for {main} expansion while in subfiles
 - rework and fullfill unit tests and code coverage
 - polish comments in code

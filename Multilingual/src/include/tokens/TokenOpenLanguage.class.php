@@ -54,13 +54,16 @@ namespace MultilingualMarkdown {
             return $this->language;
         }
 
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
         {
-            // check if previous token is EOL, and pre-previous token is close.
-            // EOL between close and open must be ignored and deleted from token stack
-            $lexer->adjustCloseOpenSequence();
-            parent::processInput($lexer, $input, $filer);
-            $lexer->pushLanguage($this->language, $filer);
+            $this->skipSelf($input);
+            if ($lexer->pushLanguage($this->language, $filer)) {
+                $lexer->adjustCloseOpenSequence();
+                $lexer->appendToken($this, $filer);
+            }
+            $currentChar = $input->getCurrentChar();
+            $lexer->setCurrentChar($currentChar);
+            return ($currentChar == null || $currentChar == "\n");
         }
         public function output(Lexer &$lexer, Filer &$filer): bool
         {

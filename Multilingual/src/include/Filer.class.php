@@ -65,7 +65,8 @@ namespace MultilingualMarkdown {
         private $rootDirLength = 0;             /// root directory utf-8 length
         private $lastToken = null;              /// last written token type
         private $outRootDir = null;             /// -od parameter (root directory for output files)
-        private $previousEols = [];             /// last previous successive EOLs for each output file
+        private $pendingEols = [];              /// successive EOLs waiting to be written into each output file
+        private $previousEols = [];             /// last successive EOLs written into each output file
 
         // Languages handling (LanguageList class)
         private $languageList = null;           /// list of languages, will be set by Lexer
@@ -102,18 +103,12 @@ namespace MultilingualMarkdown {
          */
         private function log(string $type, string $msg, ?string $source = null, $line = false): bool
         {
-            if ($this->inFilename) {
-                if ($source && $line !== false) {
-                    error_log("$source:$line MLMD {$type}: $msg in {$this->inFilename}:" . $this->storage->getCurrentLineNumber());
-                } else {
-                    error_log("MLMD {$type}: $msg in {$this->inFilename}:" . $this->storage->getCurrentLineNumber());
-                }
+            if ($source && $line !== false) {
+                error_log("$source:$line MLMD {$type}: $msg");
+            } elseif ($this->inFilename) {
+                error_log("MLMD {$type}: $msg in {$this->inFilename}:" . $this->storage->getCurrentLineNumber());
             } else {
-                if ($source && $line !== false) {
-                    error_log("$source:$line MLMD {$type}: $msg");
-                } else {
-                    error_log("arguments: MLMD {$type}: $msg");
-                }
+                error_log("arguments: MLMD {$type}: $msg");
             }
             return false;
         }
@@ -653,7 +648,7 @@ namespace MultilingualMarkdown {
                 }
                 $this->curOutput[$code] = []; // each [$code] is an array where each [i] is an OutputPart
                 $this->languageFunction[$code] = 'outputCurrent';
-                $this->previousEols[$code] = 0;
+                $this->pendingEols[$code] = 0;
             }
             $this->curDefault = []; // each [i] is an OuputPart
             $this->languageList = $languageList;
@@ -819,15 +814,62 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Append text to given language output.
+         */
+        public function outputLanguage(string $text, string $language, bool $expand): bool
+        {
+            if (empty($text)) {
+                return false;
+            }
+            // EOLs are stored in waiting queue and written only when non EOL text comes up
+            // so they don't get incorrectly written at the end of file. No more than 2 EOLS
+            // can be stored to respect Markdown conventions which allow only one empty line
+            // at a time. The first EOL ends the current line of text, the second one
+            // creates an empty line, after which any EOL will be rejected until a non EOL text
+            // is output.
+            if ($text == "\n") {
+                if ($this->pendingEols[$language] >= 2) {
+                    return true;
+                }
+                $this->pendingEols[$language] += 1;
+                return true;
+            }
+            // send pending EOLs, reset them and then append new text
+            $this->curOutput[$language][] = new OutputPart(\str_repeat("\n", $this->pendingEols[$language]), false);
+            $this->pendingEols[$language] = 0;
+            $this->curOutput[$language][] = new OutputPart($text, $expand);
+            return true;
+        }
+        /**
+         * Append default parts to empty language outputs.
+         */
+        private function fillEmptyOutputs(): void
+        {
+            if (count($this->curDefault) > 0) {
+                foreach ($this->languageList as $index => $array) {
+                    $code = $array['code'] ?? null;
+                    // no output for this code yet?
+                    if ((count($this->curOutput[$code]) == 0) /*&& ($this->pendingEols[$code] == 0)*/) {
+                        // copy the default text
+                        foreach ($this->curDefault as $part) {
+                            $this->outputLanguage($part->text, $code, $part->expand);
+                        }
+                    }
+                }
+                // clear the default text now
+                unsetArrayContent($this->curDefault);
+            }
+        }
+
+        /**
          * Output text to current output language and mode.
          *
-         * @param Lexer  $lexer     the lexer
          * @param string $text      the text to send
          * @param bool   $expand    true if variables must be expanded (headings and text)
          *                          false if the don't (escaped text)
          * @param int    $tokenType the type of token sending this output
          */
-        public function output(object &$lexer, string $text, bool $expand, int $tokenType): bool
+        public function output(string $text, bool $expand, int $tokenType): bool
         {
             if ($this->ignoreLevel > 0) {
                 return false;
@@ -841,43 +883,24 @@ namespace MultilingualMarkdown {
             if (\in_array($tokenType, [TokenType::TEXT, TokenType::ESCAPED_TEXT])) {
                 $this->lastToken = $tokenType;
             }
-            return $this->$functionName($lexer, $text, $expand);
+            return $this->$functionName($text, $expand);
         }
 
-        /**
-         * Append default parts to empty language outputs.
-         */
-        private function fillEmptyOutputs(): void
-        {
-            if (count($this->curDefault) > 0) {
-                foreach ($this->languageList as $index => $array) {
-                    $code = $array['code'] ?? null;
-                    // no output for this code yet?
-                    if (count($this->curOutput[$code]) == 0) {
-                        // add the default text parts
-                        foreach ($this->curDefault as $part) {
-                            $this->curOutput[$code][] = $part;
-                        }
-                    }
-                }
-            }
-        }
+
 
         /**
          * Append text to all current languages output buffers.
          * Set status accordingly.
          */
-        public function outputAll(object &$lexer, string $text, bool $expand): bool
+        public function outputAll(string $text, bool $expand): bool
         {
             // 1) Send default text to empty language buffers
             $this->fillEmptyOutputs();
-            // clear the default text now
-            unsetArrayContent($this->curDefault);
 
             // 2) append text part to all languages
             foreach ($this->languageList as $index => $array) {
                 $code = $array['code'] ?? null;
-                $this->curOutput[$code][] = new OutputPart($text, $expand);
+                $this->outputLanguage($text, $code, $expand);
             }
             return true;
         }
@@ -886,9 +909,9 @@ namespace MultilingualMarkdown {
          * Append text part to default output.
          * First flush current outputs if there is any content.
          */
-        public function outputDefault(object &$lexer, string $text, bool $expand): bool
+        public function outputDefault(string $text, bool $expand): bool
         {
-            // 1) check for non empty output
+            // 1) flush if any non empty outputs
             $empty = true;
             foreach ($this->languageList as $index => $array) {
                 $code = $array['code'] ?? null;
@@ -902,25 +925,24 @@ namespace MultilingualMarkdown {
             }
             // 2) add to default buffer
             $this->curDefault[] = new OutputPart($text, $expand);
+            array_values($this->curDefault);
             return true;
         }
 
         /**
          * Ignore text output.
          */
-        public function outputIgnore(object &$lexer, string $text, bool $expand): bool
+        public function outputIgnore(string $text, bool $expand): bool
         {
-            echo "WARNING: ignored text ($text)\n";
             return true;
         }
         
         /**
          * Append text to current language output.
          */
-        public function outputCurrent(object &$lexer, string $text, bool $expand): bool
+        public function outputCurrent(string $text, bool $expand): bool
         {
-            $this->curOutput[$this->curLanguage][] = new OutputPart($text, $expand);
-            return true;
+            return $this->outputLanguage($text, $this->curLanguage, $expand);
         }
 
         /**
@@ -947,7 +969,7 @@ namespace MultilingualMarkdown {
          * @param string $code the current language code
          * @param int $maxEols the maximum number of successive EOLs in actual output
          * @return bool|array false if output must not be done, or ['text'=>text, 'eols'=>new value for previousEols]
-         */
+         *
         private function limitSuccessiveEols(string $text, string $code, int $maxEols)
         {
             // count number of ending eols in text
@@ -984,6 +1006,18 @@ namespace MultilingualMarkdown {
                 return false;
             }
             return ['text' => $text, 'eols' => $endingEols + $this->previousEols[$code]];
+        }*/
+
+        /**
+         * Append a last EOL if needed.
+         * Markdown files must end on an end of line character so they can be assembled.
+         */
+        public function appendLastEOL(): void
+        {
+            foreach ($this->languageList as $index => $array) {
+                $code = $array['code'] ?? null;
+                $this->output("\n", false, TokenType::EOL);
+            }
         }
 
         /**
@@ -992,9 +1026,10 @@ namespace MultilingualMarkdown {
         public function flushOutput(): bool
         {
             $result = true;
-            // 1) Send default text to empty language buffers
+
+            // 1) send default text to empty language buffers
             $this->fillEmptyOutputs();
-            unsetArrayContent($this->curDefault);
+
             // 2) send to files
             foreach ($this->languageList as $index => $array) {
                 $code = $array['code'] ?? null;
@@ -1003,18 +1038,44 @@ namespace MultilingualMarkdown {
                     $result = false;
                     continue;
                 }
+                $this->previousEols[$code] = 0;
                 foreach ($this->curOutput[$code] as $part) {
+                    // expand variables if needed
                     $text = $part->expand ? $this->expand($part->text, $code) : $part->text;
-                    $limit = $this->limitSuccessiveEols($text, $code, 2); // return ['text'=>text, 'eols'=>new value for previousEols] or false
-                    if ($limit !== false) {            
-                        fwrite($this->outFiles[$code], $limit['text']);
-                        $this->previousEols[$code] = $limit['eols'];
+                    // write to file
+                    if (empty($text)) {
+                        continue; // ignore this loop
+                    } 
+                    fwrite($this->outFiles[$code], $text); 
+                    // reset EOL count on any non eol starting text
+                    if ($text[0] != "\n") {
+                        $this->previousEols[$code] = 0;
+                    }
+                    // count ending EOLs
+                    $pos = mb_strlen($text) - 1; 
+                    while ($pos >= 0 && mb_substr($text, $pos, 1) == "\n") {
+                        $this->previousEols[$code] += 1;
+                        $pos -= 1;
                     }
                 }
                 unsetArrayContent($this->curOutput[$code]);
                 $this->curOutput[$code] = [];
             }
             return $result;
+        }
+
+        /**
+         * Send all output to files and make sure they finish on an EOL.
+         */
+        public function endOutput(): void
+        {
+            $this->flushOutput();
+            foreach ($this->languageList as $index => $array) {
+                $code = $array['code'] ?? null;
+                if ($this->previousEols[$code] < 1) {
+                    fwrite($this->outFiles[$code], str_repeat("\n", 1 - $this->previousEols[$code])); 
+                }
+            }
         }
 
         /**

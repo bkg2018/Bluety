@@ -1,0 +1,66 @@
+============================================================
+PROCESSING FILE: test4.mlmd
+[2] .numbering 1:.((Chapter .)).fr((Chapitre .)):&I:-,2::1:.,3::1
+<TOKEN: MultilingualMarkdown\TokenNumbering>
+[3]
+[4] # titre
+<TOKEN: MultilingualMarkdown\TokenOpenAll>
+<TOKEN: MultilingualMarkdown\TokenText>
+<TOKEN: MultilingualMarkdown\TokenClose>
+<TOKEN: MultilingualMarkdown\TokenOpenAll>
+<TOKEN: MultilingualMarkdown\TokenOpenDefault>
+<TOKEN: MultilingualMarkdown\TokenText>
+<TOKEN: MultilingualMarkdown\TokenClose>
+<TOKEN: MultilingualMarkdown\TokenOpenLanguage>
+<TOKEN: MultilingualMarkdown\TokenText>
+<TOKEN: MultilingualMarkdown\TokenClose>
+<TOKEN: MultilingualMarkdown\TokenText>
+<TOKEN: MultilingualMarkdown\TokenClose>
+<TOKEN: MultilingualMarkdown\TokenText>
+<TOKEN: MultilingualMarkdown\TokenOpenAll>
+<TOKEN: MultilingualMarkdown\TokenText>
+<TOKEN: MultilingualMarkdown\TokenEscaperDoubleQuote>
+<TOKEN: MultilingualMarkdown\TokenText>
+<TOKEN: MultilingualMarkdown\TokenClose>
+<TOKEN: MultilingualMarkdown\TokenEOL>
+[5]
+<DELETETOKEN EOL>
+<TOKEN: MultilingualMarkdown\TokenOpenAll>
+<TOKEN: MultilingualMarkdown\TokenEOL>
+<TOKEN: MultilingualMarkdown\TokenEOL>
+<TOKEN: MultilingualMarkdown\TokenClose>
+[6]
+[7] .((syntax:.))
+<TOKEN: MultilingualMarkdown\TokenOpenDefault>
+<TOKEN: MultilingualMarkdown\TokenText>
+<TOKEN: MultilingualMarkdown\TokenClose>
+<TOKEN: MultilingualMarkdown\TokenEOL>
+[8] .fr((syntaxe :.))
+<DELETETOKEN EOL>
+<TOKEN: MultilingualMarkdown\TokenOpenLanguage>
+<TOKEN: MultilingualMarkdown\TokenText>
+<TOKEN: MultilingualMarkdown\TokenClose>
+<TOKEN: MultilingualMarkdown\TokenEOL>
+[9]
+<DELETETOKEN EOL>
+<TOKEN: MultilingualMarkdown\TokenOpenAll>
+<TOKEN: MultilingualMarkdown\TokenEOL>
+<TOKEN: MultilingualMarkdown\TokenEOL>
+<TOKEN: MultilingualMarkdown\TokenClose>
+[10] .((
+<TOKEN: MultilingualMarkdown\TokenOpenDefault>
+<TOKEN: MultilingualMarkdown\TokenEOL>
+[11] ```code
+<TOKEN: MultilingualMarkdown\TokenEscaperFence>
+<TOKEN: MultilingualMarkdown\TokenEOL>
+[20] .)).fr((
+<TOKEN: MultilingualMarkdown\TokenClose>
+<TOKEN: MultilingualMarkdown\TokenOpenLanguage>
+<TOKEN: MultilingualMarkdown\TokenEOL>
+[21] ```code
+<TOKEN: MultilingualMarkdown\TokenEscaperFence>
+<TOKEN: MultilingualMarkdown\TokenEOL>
+[30] .))
+<TOKEN: MultilingualMarkdown\TokenClose>
+<TOKEN: MultilingualMarkdown\TokenEOL>
+WARNING: no output() for class TokenNumbering

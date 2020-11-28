@@ -73,13 +73,13 @@ namespace MultilingualMarkdown {
             return parent::identify($input);
         }
         /**
-         * Processing input: append 2 EOL tokens then goto next character
+         * Processing input: append 2 EOL tokens, goto next line
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
         {
             $input->gotoNextLine();
             $lexer->appendTokenEOL($filer);
-            $lexer->appendTokenEOL($filer);
+            return true;
         }
 
         /**

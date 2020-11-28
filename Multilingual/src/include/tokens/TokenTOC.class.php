@@ -64,7 +64,7 @@ namespace MultilingualMarkdown {
         /**
          * TOC directive input processing.
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
         {
             // skip the directive (no need to store)
             $this->skipSelf($input);
@@ -126,9 +126,11 @@ namespace MultilingualMarkdown {
             }
 
             // Send tokens for the title
+            $lexer->tokenize('.all((', $filer, false);
             $token = new TokenText('## ');
             $lexer->appendToken($token, $filer);
             unset($token);
+            $lexer->tokenize('.))', $filer, false);
             $title = $this->title . OutputModes::getAnchor($filer->getOutputMode(), 'toc');
             $lexer->tokenize($title, $filer, false);
             $lexer->appendTokenEOL($filer);
@@ -161,7 +163,9 @@ namespace MultilingualMarkdown {
                     if ($level >= $this->start && $level <= $this->end) {
                         $text = $headingsArray->getTOCLine($index, $numbering, $filer);
                         if ($text === null) {
-                            $text = $headingsArray->getTOCLine($index, $numbering, $filer);
+                            $filer->error("Inconsistent levels in TOC directive or missing numbering scheme", $relFilename, $filer->getCurrentLineNumber());
+                            continue;
+//                            $text = $headingsArray->getTOCLine($index, $numbering, $filer);
                         }
                         $lexer->appendTokenEOL($filer);
                         $lexer->tokenize($text, $filer, false);
@@ -170,6 +174,7 @@ namespace MultilingualMarkdown {
                     }
                 }
             }
+            return true;
         }
     }
 }

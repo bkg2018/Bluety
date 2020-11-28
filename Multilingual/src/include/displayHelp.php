@@ -77,6 +77,8 @@ Global directives on one line:
                 as script argument and .toc parameter)
 - .toc          generates a table of contents using headings levels
 - .topnumber    set the level 1 heading (single '#') logical number
+- .end          end the source file
+- .stop         help to put a debugging brezkpoing in mlmd script
 
 Directives anywhere in the text and in headings:
 - .all((        starts a section for all languages

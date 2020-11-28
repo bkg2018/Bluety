@@ -14,7 +14,11 @@
 
 .)) doit laisser le statut 'all' empilé.
 
-.fr((français.)).en((english.))
+.fr((
+français
+.)).en((
+english
+.))
 default text.fr((texte français..))
 
 Some variables uses:

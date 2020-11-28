@@ -56,7 +56,7 @@ namespace MultilingualMarkdown {
          * Processing input :the heading is not stored as a single token
          * but rather as tokenized text and elements.
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
         {
             // build a sequence of tokens for each heading parts
             // first put tokens for the '#' prefix, as tokenize() on '#' would infinitely recurse
@@ -76,6 +76,7 @@ namespace MultilingualMarkdown {
             unset($text);
             unset($prefixText);
             unset($token);
+            return true;
         }
     }
 }

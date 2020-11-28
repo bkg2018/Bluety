@@ -47,29 +47,35 @@ namespace MultilingualMarkdown {
         {
             parent::__construct('.{');
         }
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
         {
             $this->content = '';    
             $this->skipSelf($input);
+            $fromStorage = \get_class($input) == 'MultilingualMarkdown\\Storage';
             do {
                 if ($input->isMatching(['.}'])==0) {
                     $input->getNextChar();// skip end marker
                     $input->getNextChar();// skip end marker
+                    $currentChar = $input->getCurrentChar();
                     break;
                 }
                 if ($input->adjustNextLine()) {
                     $this->content .= "\n";
+                    $currentChar = $input->getCurrentChar();
+                } else {
+                    $this->content .= $input->getCurrentChar();
+                    $currentChar = $input->getNextChar();
                 }
-                $this->content .= $input->getCurrentChar();
-                $currentChar = $input->getNextChar();
+                // on $input end (end of line), switch to next line from $filer
+                if ($currentChar == null && $fromStorage) {
+                    $line = $filer->getLine();
+                    $input->setInputBuffer($line);
+                    $currentChar = $input->getCurrentChar();
+                }
             } while ($currentChar != null);
             $this->length = mb_strlen($this->content);
             $lexer->appendToken($this, $filer);
-        }
-        public function output(Lexer &$lexer, Filer &$filer): bool
-        {
-            $filer->output($lexer, $this->content, false, $this->type);
-            return true;
+            return ($currentChar == null);
         }
     }
 

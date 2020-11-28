@@ -113,7 +113,7 @@ namespace MultilingualMarkdown {
          * Update tokens array with the token itself. The escaped text is stored
          * by the token.
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
         {
             $this->content = $this->keyword;    
             $this->skipSelf($input);
@@ -130,7 +130,11 @@ namespace MultilingualMarkdown {
             $this->length = mb_strlen($this->content);
             $lexer->appendToken($this, $filer);
             $lexer->setCurrentChar($currentChar);
+            return ($currentChar == null || $currentChar == "\n");
         }
-
+        public function output(Lexer &$lexer, Filer &$filer): bool
+        {
+            return $filer->output($this->content, false, $this->type);
+        }
     }
 }

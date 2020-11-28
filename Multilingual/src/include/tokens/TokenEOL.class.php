@@ -48,16 +48,17 @@ namespace MultilingualMarkdown {
         {
             parent::__construct(TokenType::EOL, "\n", true);
         }
-        
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
+
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
         {
             $input->gotoNextLine();
-            $lexer->appendTokenEOL($filer);
+            $lexer->adjustEolCloseEolSequence($filer);
+            return true;
         }
         public function output(Lexer &$lexer, Filer &$filer): bool
         {
             if ($filer->outputStarted()) {
-                $filer->output($lexer, "\n", false, $this->type);
+                $filer->output("\n", false, $this->type);
             }
             return true;
         }

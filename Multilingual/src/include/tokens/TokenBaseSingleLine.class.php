@@ -72,10 +72,11 @@ namespace MultilingualMarkdown {
          * @param Lexer $lexer   the Lexer object
          * @param object $input  the Filer or Storage object ready for input, positionned on the directive
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
         {
             $input->gotoNextLine();
             $lexer->appendToken($this, $filer);
+            return true;
         }
     }
 }

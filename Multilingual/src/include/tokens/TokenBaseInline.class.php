@@ -52,11 +52,13 @@ namespace MultilingualMarkdown {
         /**
          * Processing input: store in token list, skip over directive and go next character. 
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
         {
             $this->skipSelf($input);
             $lexer->appendToken($this, $filer);
-            $lexer->setCurrentChar($input->getCurrentChar());
+            $currentChar = $input->getCurrentChar();
+            $lexer->setCurrentChar($currentChar);
+            return ($currentChar == null || $currentChar == "\n");
         }
     }
 }

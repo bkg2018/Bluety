@@ -45,11 +45,6 @@ namespace MultilingualMarkdown {
         {
             parent::__construct('"');
         }
-        public function output(Lexer &$lexer, Filer &$filer): bool
-        {
-            $filer->output($lexer, $this->content, false, $this->type);
-            return true;
-        }
     }
 
 }

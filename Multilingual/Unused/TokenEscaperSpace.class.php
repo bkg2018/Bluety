@@ -66,19 +66,14 @@ namespace MultilingualMarkdown {
          * Update tokens array with the token itself. The escaped text is stored
          * by the token. 
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
         {
             $this->content = $input->getLine(); // include the 4 spaces prefix
             $this->content .= $input->getCurrentChar();
             $this->content = rtrim($this->content, "\n");// replace the last EOLs by one EOL token?
             $this->length = mb_strlen($this->content);
             $lexer->appendToken($this, $filer);
-            $lexer->appendTokenEOL($filer);
-        }
-        public function output(Lexer &$lexer, Filer &$filer): bool
-        {
-            $lexer->debugEcho('<4-SPACES ' . $this->debugText() . ">\n");
-            $filer->output($lexer, $this->content, false, $this->type);
+            //$lexer->appendTokenEOL($filer);
             return true;
         }
     }

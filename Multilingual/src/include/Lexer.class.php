@@ -42,6 +42,8 @@ namespace MultilingualMarkdown {
     require_once('tokens/TokenTopNumber.class.php');
     require_once('tokens/TokenLanguages.class.php');
     require_once('tokens/TokenTOC.class.php');
+    require_once('tokens/TokenEnd.class.php');
+    require_once('tokens/TokenStop.class.php');
     require_once('tokens/TokenOpenAll.class.php');
     require_once('tokens/TokenOpenDefault.class.php');
     require_once('tokens/TokenOpenIgnore.class.php');
@@ -84,7 +86,7 @@ namespace MultilingualMarkdown {
         // Status and settings
         private $languageSet = false;           /// true when at least one language has been set
         private $waitLanguages = true;          /// true to wait for .languages directive in each input file
-        private $languageStack = [];            /// stack of tokens names for languages switching, including .all, .default and .ignore
+        private $languageStack = [['code'=>DEFLT, 'line'=>0]];  /// stack of tokens names for languages switching, including .all, .default and .ignore
         private $curLanguage = DEFLT;           /// name of current language token (index in $mlmdTokens)
         private $ignoreLevel = 0;               /// number of opened 'ignore', do not output anything when this variable is not 0
         private $currentChar = '';              /// current character, can be changed by token input processing
@@ -103,6 +105,8 @@ namespace MultilingualMarkdown {
             $this->mlmdTokens['topnumber']  = new TokenTopNumber();                 ///  .topnumber
             $this->mlmdTokens['languages']  = new TokenLanguages();                 ///  .languages
             $this->mlmdTokens['toc']        = new TokenTOC();                       ///  .toc
+            $this->mlmdTokens['end']        = new TokenEnd();                       ///  .end
+            $this->mlmdTokens['stop']       = new TokenStop();                      ///  .stop
 
             // streamed language directives
             $this->mlmdTokens[ALL]          = new TokenOpenAll();                   ///  .all((
@@ -125,6 +129,11 @@ namespace MultilingualMarkdown {
 
             // NB: TokenOpenLanguage will be instanciated by the .languages directive for each declared language <code>, stored in $this->mlmdTokens['code']
             // NB: TokenText will be instanciated by Lexer for each normal text part, stored in the tokens flow $this->curTokens
+        }
+
+        public function setTrace(bool $yes)
+        {
+            $this->trace = $yes;
         }
 
         /**
@@ -177,7 +186,7 @@ namespace MultilingualMarkdown {
         /**
          * Add current text as token if not empty, then reset.
          */
-        public function appendTextToken(Filer $filer): void
+        public function appendTextToken(Filer &$filer): void
         {
             if (!$this->emptyText) {
                 $text = new TokenText($this->currentText);
@@ -204,9 +213,10 @@ namespace MultilingualMarkdown {
                     return false;
                 }
             }
-            if (getenv('debug')) {
-                echo '<DELETETOKEN ' . ($msg ?? $prevToken->getTypeName()) . ">\n";
-            }
+            // if ($this->trace) {
+            //     echo '<DELETETOKEN ' . ($msg ?? $prevToken->getTypeName()) . ">\n";
+            // }
+
             // update language stack count
             if ($prevToken->isType(TokenType::CLOSE_DIRECTIVE)) {
                 $this->openLanguage();// assume a close matches a previous open 
@@ -223,25 +233,6 @@ namespace MultilingualMarkdown {
             }
             unset($prevToken);
             return true;
-        }
-
-        /**
-         * Make sure there is a single EOL token at the end
-         */
-        public function ensureEndingEOL($filer): void
-        {
-            $lastEolIndex = -1;
-            for ($index = count($this->curTokens) - 1 ; $index >= 0 ; $index -= 1) {
-                if ($this->curTokens[$index]->isType(TokenType::EOL)) {
-                    if ($lastEolIndex > $index) {
-                        $this->deleteLastToken();
-                    }
-                    $lastEolIndex = $index;
-                } else break;
-            }
-            if ($lastEolIndex < 0) {
-                $this->appendTokenEOL($filer);
-            }
         }
 
         /**
@@ -333,7 +324,7 @@ namespace MultilingualMarkdown {
          * This is used by tokens in their processInput() work to append themselves
          * or other tokens to the lexer current flow of tokens.
          */
-        public function appendToken(object &$token, Filer $filer): void
+        public function appendToken(object &$token, Filer &$filer): void
         {
             $nullToken      = new Token(TokenType::UNKNOWN);
             $count          = count($this->curTokens);
@@ -364,29 +355,11 @@ namespace MultilingualMarkdown {
                 if ($this->eolCount >= 2) {
                     return; // already an empty line
                 }
-/*                 // <EOL><close> ?
-                if ($prevPrevToken->isType(TokenType::EOL) && $prevToken->isType([TokenType::CLOSE_DIRECTIVE])) {
-                    $this->deleteLastToken('CLOSE');
-                    $this->deleteLastToken('EOL');
-                    $this->appendToken($this->mlmdTokens['close'], $filer);
-                    $this->eolCount = 0;
-                    // fall through
-                } */
                 $this->eolCount += 1; // will add EOL
             } else {
                 $this->eolCount = 0; // will add not an EOL
             }
-/*             if ($token->isType(TokenType::OPEN_DIRECTIVE) && ($prevToken !== null) && ($prevToken->isType(TokenType::EOL) && ($prevPrevToken !== null))) {
-                // OPEN LANGUAGE candidate
-                // <text><eol> or <close><eol> and trying <open language> : delete the <eol>
-                $prevPrevToken = $this->curTokens[$count - 2];
-                if ($prevPrevToken->isType([TokenType::TEXT, TokenType::ESCAPED_TEXT, TokenType::CLOSE_DIRECTIVE])) {
-                    $this->deleteLastToken('EOL');
-                    $this->recalculatePreviousEols();
-                    $this->appendToken($token, $filer);
-                    return;
-                }
-            } */
+
             // check if some text has been written
             if (!$token->isEmpty()) {
                 $this->emptyContent = false;
@@ -397,24 +370,17 @@ namespace MultilingualMarkdown {
             } elseif ($token->isType(TokenType::OPEN_DIRECTIVE)) {
                 $this->openLanguage();
                 $this->recalculatePreviousEols();
-            } /* elseif ($token->isType([TokenType::TEXT, TokenType::ESCAPED_TEXT])) {
-                if (($this->languageCount == 0) && ($this->curLanguage !== DEFLT)) {
-                    $this->appendToken($this->mlmdTokens[DEFLT], $filer);
-                    $this->appendToken($token, $filer);
-                    $this->appendToken($this->mlmdTokens['close'], $filer);
-                    return;
-                }
-            } */
-            $this->curTokens[] = $token;
-            if (getenv('debug')) {
-                echo '<TOKEN: ' . \get_class($token) . ">\n";
             }
+            $this->curTokens[] = $token;
+            // if ($this->trace) {
+            //     echo '<TOKEN: ' . \get_class($token) . ">\n";
+            // }
         }
 
         /**
          * Store and end-of-line token (EOL).
          */
-        public function  appendTokenEOL(Filer $filer): void
+        public function  appendTokenEOL(Filer &$filer): void
         {
             if (!$this->emptyContent) {
                 $this->appendToken($this->mlmdTokens['eol'], $filer);
@@ -423,12 +389,13 @@ namespace MultilingualMarkdown {
 
         /**
          * Check if token stack must be simplified before appending an open language token.
+         *
          * If an 'open' token immediately follows a single EOL after a 'close' or a text, then the
          * EOL can be deleted :
          *
          * INPUT stack:  <close> <eol> <<future open>>
          * OUTPUT stack: <close> <<future open>>
-         * 
+         *
          * INPUT stack:  <text> <eol> <<future open>>
          * OUTPUT stack: <text> <<future open>>
          */
@@ -442,6 +409,32 @@ namespace MultilingualMarkdown {
                     $prevToken = $this->curTokens[$count - 2];
                     if ($prevToken->isType([TokenType::CLOSE_DIRECTIVE, TokenType::TEXT, TokenType::ESCAPED_TEXT])) {
 -                        $this->deleteLastToken();
+                    }
+                }
+            }
+        }
+
+        /**
+         * Check if token stack must be simplified before appending an EOL token.
+         *
+         * If an EOL token immediately follows a 'close' after an EOL, then the enclosed
+         * EOL can be deleted :
+         *
+         * INPUT stack:  <noneol> <eol> <close> <<future eol>>
+         * OUTPUT stack: <noneol> <close> <<future eol>>
+         */
+        public function adjustEolCloseEolSequence(Filer &$filer): void
+        {
+            $count = count($this->curTokens);
+            if ($count >= 3) {
+                $prevToken = $this->curTokens[$count - 1];
+                if ($prevToken->isType([TokenType::CLOSE_DIRECTIVE])) {
+                    $prevToken = $this->curTokens[$count - 2];
+                    $prevPrevToken = $this->curTokens[$count - 3];
+                    if ($prevToken->isType([TokenType::EOL]) && !$prevPrevToken->isType(TokenType::EOL)) {
+                        $this->deleteLastToken();// delete close
+                        $this->deleteLastToken();// delete eol
+                        $this->appendToken($this->mlmdTokens['close'], $filer); // re-append close
                     }
                 }
             }
@@ -497,12 +490,6 @@ namespace MultilingualMarkdown {
                 if (!$token->output($this, $filer)) {
                     $result = false;
                 }
-                $eolCount = ($token->isType(TokenType::EOL) && $filer->outputStarted()) ? $eolCount + 1 : 0;
-                if ($eolCount >= 2) {
-                    if (count($this->languageStack) <= 1) {
-                        //$filer->flushOutput();
-                    }
-                }
             }
             unsetArrayContent($this->curTokens);
             unset($this->curTokens);
@@ -518,7 +505,7 @@ namespace MultilingualMarkdown {
          */
         public function debugEcho(string $char): void
         {
-            if (getenv("debug") == "1") {
+            if ($this->trace) {
                 echo $char;
             }
         }
@@ -526,18 +513,21 @@ namespace MultilingualMarkdown {
         /**
          * Append the token sequence corresponding to a text content to current tokens list.
          * Adjust current, future and previous characters lists.
-         * Adjust position in a reference Filer when needed (most probably going to next line)
+         * Adjust position in a reference Filer when needed (most probably going to next line).
+         * Return a boolean telling if the caller must end current line (append EOL token).
          * 
          * Assumes:
          * - language list has been preprocessed ($languageList ready)
          * - $filer is positionned on the content beginning
          *
-         * @param string $text        t he text to tokenize, preferably a single line but not necessary
+         * @param string $text        the text to tokenize, preferably a single line but not necessarily
          * @param Filer  $filer       the Filer for any file reference in variable expansion
          * @param bool   $allowOutput flag to allow output in tokenization,
          *                            should be disabled in recursive tokenization (e.g. TokenHeading::processInput)
+         * 
+         * @return bool true if current line ends, false if it continues from curren state in Filer.
          */
-        public function tokenize(string $text, Filer &$filer, bool $allowOutput): void
+        public function tokenize(string $text, Filer &$filer, bool $allowOutput): bool
         {
             $storage = new Storage($text);
             $this->currentChar = $storage->getCurrentChar();
@@ -549,6 +539,7 @@ namespace MultilingualMarkdown {
             // - fetchNextChars() : fetch more characters from input while not changing read position
             // - fetchToken() : try to recognize a token starting at current character
             // 'fetch' means that more characters will be taken from input if needed, but current read position will not change
+            $return = true;
             do {
                 // Identify token starting at this character, or store in current text
                 $token = null;
@@ -626,7 +617,7 @@ namespace MultilingualMarkdown {
                 if ($token) {
                     // save current text in a token, then let new token process input 
                     $this->appendTextToken($filer);
-                    $token->processInput($this, $storage, $filer);
+                    $return = $token->processInput($this, $storage, $filer);
                     $this->setCurrentChar($storage->getCurrentChar());
                     // if appropriate, output the tokens stack
                     if ($allowOutput && $token->ouputNow($this)) {
@@ -638,6 +629,7 @@ namespace MultilingualMarkdown {
             // process anything left
             $this->appendTextToken($filer);
             unset($storage);
+            return true;
         }
 
         /**
@@ -645,18 +637,26 @@ namespace MultilingualMarkdown {
          * Builds sequences of tokens while reading input character by character,
          * and periodically updates outputs when meeting some directives.
          */
-        public function process(Filer $filer): bool
+        public function process(Filer &$filer): bool
         {
             $relFilename = $filer->current();
             $this->currentChar = '';
             $this->resetCurrentText();
             $this->curTokens = [];
+            $endToken = $this->mlmdTokens['end'];
+            $stopToken = $this->mlmdTokens['stop'];
 
             // skip right after languages directive (only at first time)
             if ($this->waitLanguages && !$this->languageSet) {
                 $startLineNumber = $this->allStartingLines[$relFilename];
                 do {
                     $lineContent = $filer->getLine(); // read until eol and increment line number
+                    if ($endToken->identifyInBuffer($lineContent, 0)) {
+                        break;
+                    }
+                    if ($stopToken->identifyInBuffer($lineContent, 0)) {
+                        $stop = $filer->getCurrentLineNumber();//for debug purposes put a bkpkt here
+                    }
                     if ($this->currentChar === null) return false;
                 } while ($filer->getCurrentLineNumber() < $startLineNumber);
                 $this->languageSet = true;
@@ -666,12 +666,20 @@ namespace MultilingualMarkdown {
             $filer->setLanguage($this->languageList, DEFLT);
 
             while ($lineContent !== null) {
-                $curLineNumber = $filer->getCurrentLineNumber(); // just for debugging checks
-                if (getenv("debug")) {
+                if ($endToken->identifyInBuffer($lineContent, 0)) {
+                    $filer->warning(".end directive found");
+                    break;
+                }
+                if ($stopToken->identifyInBuffer($lineContent, 0)) {
+                    $filer->warning(".stop directive found");//for debug purposes put a bkpkt here
+                }
+                $curLineNumber = $filer->getCurrentLineNumber();
+                if ($this->trace) {
                     echo "[$curLineNumber] $lineContent\n";
                 }
-                $this->tokenize($lineContent, $filer, true);
-                $this->appendTokenEOL($filer);
+                if ($this->tokenize($lineContent, $filer, true)) {
+                    $this->appendTokenEOL($filer);
+                }
                 // empty line is a good place to send tokens to output
                 if ((count($this->languageStack) == 0) && ($this->eolCount == 2)) {
                     //$this->output($filer);
@@ -681,16 +689,27 @@ namespace MultilingualMarkdown {
             }
             // process anything left
             $this->appendTextToken($filer);
-            $this->ensureEndingEOL($filer);
+            // check language stack
+            if (count($this->languageStack) > 1) {
+                for ($i = 1 ; $i < count($this->languageStack) ; $i += 1) {
+                    $filer->warning("a .{$this->languageStack[$i]['code']}(( language opening directive has not been closed",
+                                     $filer->getInFilename(), $this->languageStack[$i]['line']);
+                }
+                while (count($this->languageStack) > 1) {
+                    $this->popLanguage($filer);
+                }
+            }
+            // terminate outputs
             $this->output($filer);
-            $filer->flushOutput();
+            $filer->endOutput();  // will add final EOL if needed
             $this->resetCurrentText();
             return true;
         }
 
         /**
-         * Pushes current language and set to given name.
-         * Name must be an index to $mlmdTokens: 'all', 'ignore', 'default' and each language code.
+         * Pushes language and line number on language stack.
+         * Name must be an index to $mlmdTokens: 'all', 'ignore', 'default' and each declared anguage code.
+         * Do not push DEFLT if stack is already at root DEFLT
          *
          * @param string $name the new language code to set as current
          *
@@ -702,20 +721,30 @@ namespace MultilingualMarkdown {
             if (empty($name)) {
                 $name = DEFLT;
             }
-            if (\array_key_exists($name, $this->mlmdTokens)) {
-                array_push($this->languageStack, $this->curLanguage);
-                $this->curLanguage = $name;
-                // handle 'ignore'
-                if ($name == IGNORE) {
-                    $this->ignoreLevel += 1;
-                    // update Filer status
-                    $filer->setIgnoreLevel($this->ignoreLevel);
-                }
-                // update Filer status (will be ignored if ignore level > 0)
-                return $filer->setLanguage($this->languageList, $name);
+            if (!\array_key_exists($name, $this->mlmdTokens)) {
+                $filer->error("unknown language '$name'");
+                return false;
             }
-            $filer->error("unknown language '$name'");
-            return false;
+            // don't duplicate root (deflt)
+            $stackIt = true;
+            if (count($this->languageStack) == 1) {
+                if ($name == $this->languageStack[0]['code']) {
+                    return false;
+                }
+            }
+            // push new language
+            array_push($this->languageStack, ['code' => $name, 'line' => $filer->getCurrentLineNumber()]);
+            $this->curLanguage = $name;
+
+            // handle 'ignore'
+            if ($name == IGNORE) {
+                $this->ignoreLevel += 1;
+                // update Filer status
+                $filer->setIgnoreLevel($this->ignoreLevel);
+            }
+            // update Filer status (will be ignored if ignore level > 0)
+            $filer->setLanguage($this->languageList, $name);
+            return true;
         }
 
         /**
@@ -737,22 +766,24 @@ namespace MultilingualMarkdown {
          * If nothing was in stack, this function returns null and 'all' should be assumed
          * by caller so text will go to all output files when out of languages directives.
          *
-         * @return string|null null when stack is empty, else returns the last pushed language name
+         * @return bool false when stack is not popped or empty and language is DEFLT
          */
-        public function popLanguage(object $filer): ?string
+        public function popLanguage(object $filer): bool
         {
             // pop a level from stack and get new current language
             $popped = null;
             $count = count($this->languageStack);
             if ($count > 1) {
                 $popped = array_pop($this->languageStack);
-                $this->curLanguage = $popped;
+                $count -= 1;
+                $unstacked = true;
+                $this->curLanguage = $this->languageStack[$count - 1]['code'];
             } else {
-                if ($count == 1) {
-                    $popped = array_pop($this->languageStack);
-                }
-                $this->curLanguage = DEFLT;
+                // never pop last language on stack
+                $this->curLanguage = $this->languageStack[0]['code'];
                 $this->ignoreLevel = 0;
+                $unstacked = false;
+                $popped = null;
             }
             // handle when popping 'ignore'
             if ($popped == IGNORE) {
@@ -764,7 +795,7 @@ namespace MultilingualMarkdown {
             }
             // update Filer output language
             $filer->setLanguage($this->languageList, $this->curLanguage);
-            return $this->curLanguage;
+            return $unstacked;
         }
 
         /**
@@ -795,6 +826,8 @@ namespace MultilingualMarkdown {
             $numberingToken = &$this->mlmdTokens['numbering']; // shortcut
             $topnumberToken = &$this->mlmdTokens['topnumber']; // shortcut
             $fenceToken     = &$this->mlmdTokens['fence']; // shortcut
+            $endToken       = &$this->mlmdTokens['end']; // shortcut
+            $stopToken       = &$this->mlmdTokens['stop']; // shortcut
             Heading::init();// reset global headings numbering to 0
             $languageSet = false; // remember if the .languages directive has been read
             $defaultNumberingScheme = $this->defaultNumberingScheme; // start with CLI parameter scheme if any
@@ -817,6 +850,13 @@ namespace MultilingualMarkdown {
                     $text = getNextLineTrimmed($file, $curLineNumber);
                     if (!$text) {
                         break;
+                    }
+                    // handle .end and .stop directive first
+                    if ($endToken->identifyInBuffer($text, 0)) {
+                        break;
+                    }
+                    if ($stopToken->identifyInBuffer($text, 0)) {
+                        echo "STOP directive found in Lexer::preProcess loop\n";;
                     }
                     // handle .languages directive before anything else
                     if ($languagesToken->identifyInBuffer($text, 0)) {

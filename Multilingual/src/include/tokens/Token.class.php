@@ -191,9 +191,10 @@ namespace MultilingualMarkdown {
          * @param object $input  the Filer or Storage input handling object, positionned on the token start
          * @param Filer  $filer  the Filer input object, for any needed file informations (see TokenHeading)
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
         {
            $lexer->appendToken($this, $filer);
+           return false;
         }
  
         /**

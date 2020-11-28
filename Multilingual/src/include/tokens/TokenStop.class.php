@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenClose class
+ * Multilingual Markdown generator - TokenStop class
  *
- * This class represents a token for the .)) ending directive which closes the streamed .xxxx(( directives.
+ * This class represents a token for the .stop directive which is just a debug helper for MLMD loop.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +19,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_end_directive_class
+ * @package   mlmd_token_stop_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -30,35 +30,18 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenBaseInline.class.php';
-
-    use MultilingualMarkdown\TokenBaseInline;
+    require_once 'TokenBaseSingleLine.class.php';
+    
+    use MultilingualMarkdown\TokenBaseSingleLine;
     
     /**
-     * .)) directive token.
+     * .NUMBERING directive token.
      */
-    class TokenClose extends TokenBaseInline
+    class TokenStop extends TokenBaseSingleLine
     {
         public function __construct()
         {
-            parent::__construct(TokenType::CLOSE_DIRECTIVE, '.))', true);
-        }
-
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
-        {
-            $this->skipSelf($input);
-            if ($lexer->popLanguage($filer)) {
-                $lexer->appendToken($this, $filer);
-            }
-            $currentChar = $input->getCurrentChar();
-            $lexer->setCurrentChar($currentChar);
-            return ($currentChar == null || $currentChar == "\n");
-        }
-        // Output: have Lexer updating the current output language
-        public function output(Lexer &$lexer, Filer &$filer): bool
-        {
-            $lexer->popLanguage($filer);
-            return true;
+            parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, '.stop', true);
         }
     }
 }

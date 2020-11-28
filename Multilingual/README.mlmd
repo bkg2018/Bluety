@@ -1,4 +1,5 @@
 .languages fr,en main=en
+.numbering 1:.((Chapter .)).fr((Chapitre .)):&I:-,2::1:.,3::1
 
 # Multilingual Markdown Generator .fr((Générateur de Markdown Multilingue .)).all((MLMD.))
 
@@ -30,7 +31,9 @@ headings numbering scheme.
 .fr((L'utilisateur peut contrôler les langues, la génération des tables des matières et le schéma
 de numérotation des titres..))
 
+.{supprimé pour tests plus rapide, à remettre
 .toc title=.((Table Of Contents.)).fr((Sommaire.)) level=2-3
+.}
 
 ## Installation
 
@@ -76,10 +79,12 @@ standards de PHP 7..))
 The PHP script and its dependencies must be put in a directory with easy user access, e.g.:
 .fr((Le script et ses dépendances doivent se situer dans un répertoire accessible à l'utilisateur, par exemple :.))
 
-- `~/phpscripts` .((on)).fr((sur.)) macOS/Linux
+.all((
+- `~/phpscripts` .((on.)).fr((sur.)) macOS/Linux
 - `%HOMEDRIVE%%HOMEPATH%\phpscripts` .((on.)).fr((sur.)) Windows
+.))
 
-.((Parameters that can be passed to the script are described in [How To Use MLMD](#how-to-use-mlmd).))
+Parameters that can be passed to the script are described in [How To Use MLMD](#how-to-use-mlmd)
 .fr((Les paramètres du script sont décrits dans la partie [Utilisation de MLMD](#utilisation-de-mlmd).))
 
 ### .((Using an alias to launch MLMD.)).fr((Utilisation d'un alias pour lancer MLMD.))
@@ -273,6 +278,7 @@ qui recouvre tous les fichiers. Voir la directive `.toc` pour plus de détails..
 
 ### .((Output mode html/htmlold/md/mdpure: `-out` argument.)).fr((Mode de sortie html/htmlolf/md/mdpure : paramètre `-out`.))
 
+
 .((The `-out` parameter selects the HTML or Markdown links style in the Table Of Contents..))
 .fr((Le paramètre `-out` choisit entre les syntaxes HTML et Markdown pour les liens générés dans la table des matières..))
 
@@ -312,6 +318,7 @@ table of contents links and in file headings. This is done using the `-out` para
 .fr((Ceci étant dit, MLMD peut générer un sommaire avec la directive `.toc` et va insérer des liens vers les
 titres des fichiers placés dans le sommaire. Pour respecter les conventions choisies, MLMD propose le choix entre
 différents styles de liens et d'ancres dans les sommaires et les titres, à l'aide du paramètre `-out`..))
+
 
 .((| Parameter        | Headings anchors      | TOC links                  |.))
 .fr((| Paramètre      | Ancre des titres      | Liens sommaire             |.))
@@ -401,7 +408,7 @@ les ancres des titres dans les fichiers générés pour pouvoir les référencer
 .((The `-numbering` parameter sets a numbering scheme for headings levels over all the generated files and in the
 tables of contents. For example, a third level heading could be numbered `A.2.5) Using objects`. The numbering
 can be set in two ways:.))
-.fr(())
+
 
 * globally for all generated files, using the `-numbering` script argument
 * file by file using the `.numbering` directive.
