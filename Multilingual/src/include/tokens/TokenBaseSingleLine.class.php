@@ -3,7 +3,7 @@
 /**
  * Multilingual Markdown generator - TokenBaseSingleLine class
  *
- * This class represents a token for a single line directive.
+ * This base class represents a directive which stands alone on a single line.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +19,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_single_line_class
+ * @package   mlmd_token_base_single_line_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -72,11 +72,10 @@ namespace MultilingualMarkdown {
          * @param Lexer $lexer   the Lexer object
          * @param object $input  the Filer or Storage object ready for input, positionned on the directive
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $input->gotoNextLine();
             $lexer->appendToken($this, $filer);
-            return true;
         }
     }
 }

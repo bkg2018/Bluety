@@ -3,8 +3,12 @@
 /**
  * Multilingual Markdown generator - TokenHeading class
  *
- * This class represents a token for a heading in files. A heading is a line starting with at least one '#' character.
- * The token is created by Lexer when meeting such condition. 
+ * This class represents a token for one heading in files.
+ * A heading is a line starting with at least one '#' character.
+ * The token is instanciated by Lexer specifically for each heading.
+ * The token do ont append itself to Lexer list of tokkens, rather it
+ * creates tokens for each part of the generated headings depending
+ * on the output mode (mdpure, html etc) and numbering scheme.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -56,7 +60,7 @@ namespace MultilingualMarkdown {
          * Processing input :the heading is not stored as a single token
          * but rather as tokenized text and elements.
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             // build a sequence of tokens for each heading parts
             // first put tokens for the '#' prefix, as tokenize() on '#' would infinitely recurse
@@ -76,7 +80,6 @@ namespace MultilingualMarkdown {
             unset($text);
             unset($prefixText);
             unset($token);
-            return true;
         }
     }
 }

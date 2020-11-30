@@ -16,12 +16,15 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_heading_class
+ * @package   mlmd_main_script
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  * @link      TODO
  */
+
+$MLMD_VERSION = "1.0.0";
+$MLMD_DATE    = strftime ("%F (%X)", filemtime(__FILE__));
 
 require_once 'include/displayHelp.php';
 require_once 'include/Generator.class.php';
@@ -31,6 +34,15 @@ require_once 'include/Generator.class.php';
 /// Create the generator instance
 mb_internal_encoding('UTF-8');
 $generator = new \MultilingualMarkdown\Generator();
+
+/**
+ * Current version of MLMD.
+ */
+function displayVersion()
+{
+    global $MLMD_VERSION, $MLMD_DATE;
+    echo "MLMD MultiMingual MarkDown Generator\nVersion $MLMD_VERSION - $MLMD_DATE\n";
+}
 
 /**
  * Array of parameters.

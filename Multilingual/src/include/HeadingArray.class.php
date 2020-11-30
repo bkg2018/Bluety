@@ -2,9 +2,8 @@
 
 /**
  * Multilingual Markdown generator - Heading Array class
- * The array contains an object for each heading from one file. The object
- * has a level (the number of prefix '#'), a unique number (unique above all
- * processed files),
+ * This class maintains an array which contains one Heading object for each heading 
+ * from one file. It can find a heading in this array from its line number.
  *
  * Copyright 2020 Francis Piérot
  *

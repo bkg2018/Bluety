@@ -5,26 +5,37 @@
  *
  * The Lexer::tokenize() function transforms an UTF-8 text buffer into an array of successive
  * parts of different types like text, escaped text, language directives, end of lines etc.
- * The Token class is the base for each of these possible parts.
- * Some token types are only found when a previous is interpreted. For example, escaped text
- * is only known after the opening escaper token is found. Most tokens can not happen inside
- * escaped text except the ones closing the escaped sequence.
+ * The Token class is the base class for each of these possible parts.
+ *
+ * Some token types are only recognized when another one is interpreted. For example, 
+ * escaped text is only found when the opening escaper token is found. Most tokens can
+ * not happen inside escaped text except the ones closing the escaped sequence. The opening
+ * token interprets the text flow and detects both the escaped text and the closing escape
+ * sequence while Lexer only finds the opning token.
  *
  * Construction parameters depend on the Token: not all tokens need a keyword or a content.
+ * Some tokens are unique in the whole system and never change, while some have a content
+ * and need to be instanciated for each content.
  *
  * A Token is responsible for a few tasks:
  *
- * - self-identification against a given buffer content and position
- * - do any processing with input buffer, as well as advancing current position where appropriate
+ * - self-identification against a given input or buffer content and position
+ * - do any processing with input, advancing current position where appropriate
  * - tell Lexer if it should process outputs after this token
- * - send output when asked for
+ * - send output to a Filer when asked for
+ * - tell Lexer to append it to the token flow when needed
  *
  * Input processing should be done only after a positive self identification: the token will not
  * check for this. Some tokens do no process a buffer but rather simply store an information: 
- * the processInput() function will then do nothing and will advance the position only right
- * after the token.
+ * then processInput() will do nothing and will advance the position only right after the token.
  *
- * The Token output() function is called to possibly output some content to output files.
+ * During processInput(), the token can use Lexer::appendToken() to append itself to the tokens
+ * or add other tokens depending on its needs. TokenHeading for example doesn't append itself
+ * but rather appends a sequence of tokens to compose the whole heading content including
+ * the '#' prefix, the optional numbering and the needed anchors for table of content links.
+ * See TokenHeading class for more details.
+ *
+ * The Token::output() function is called by Lexer to output some content to output files.
  * The outputs are done through the Filer class instance which is given to output(). 
  * Tokens which have nothing to output will simply do nothing in the function, other will 
  * rather act on Lexer to update the generation context. Both Filer and Lexer instances
@@ -191,10 +202,9 @@ namespace MultilingualMarkdown {
          * @param object $input  the Filer or Storage input handling object, positionned on the token start
          * @param Filer  $filer  the Filer input object, for any needed file informations (see TokenHeading)
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
            $lexer->appendToken($this, $filer);
-           return false;
         }
  
         /**
@@ -262,7 +272,7 @@ namespace MultilingualMarkdown {
          * @return bool true to make caller call all current tokens output() function and
          *              empty the current tokens stack.
          */
-        public function ouputNow(Lexer $lexer): bool
+        public function outputNow(Lexer $lexer): bool
         {
             return false;
         }

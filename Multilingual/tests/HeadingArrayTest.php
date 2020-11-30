@@ -55,42 +55,47 @@ class HeadingArrayTest extends TestCase
     // heading lines data for scheme with roman numbers
     public function getHeadingDataRoman(): array
     {
-        return ['.((Chapter.)).fr((Chapitre.)) I) heading 1<A id="a1"></A>',
-        'I-1) heading 1.1<A id="a2"></A>',
-        '.((Chapter.)).fr((Chapitre.)) II) heading 2<A id="a3"></A>',
-        'II-1) heading 2.1<A id="a4"></A>',
-        'II-2) heading 2.2<A id="a5"></A>',
-        'II-2.a) heading 2.2.1<A id="a6"></A>',
-        'II-2.b) heading 2.2.2<A id="a7"></A>',
-        'II-2.c) heading 2.2.3<A id="a8"></A>',
-        'II-3) heading 2.3<A id="a9"></A>',
-        'II-3.a) heading 2.3.1<A id="a10"></A>',
-        'II-3.a.1) heading 2.3.1.1<A id="a11"></A>'];
+        return [
+            '.all((.((Chapter .)).fr((Chapitre .))I) .))heading 1.all((<A id="a1"></A>.))',
+            '.all((I-1) .))heading 1.1.all((<A id="a2"></A>.))',
+            '.all((.((Chapter .)).fr((Chapitre .))II) .))heading 2.all((<A id="a3"></A>.))',
+            '.all((II-1) .))heading 2.1.all((<A id="a4"></A>.))',
+            '.all((II-2) .))heading 2.2.all((<A id="a5"></A>.))',
+            '.all((II-2.a) .))heading 2.2.1.all((<A id="a6"></A>.))',
+            '.all((II-2.b) .))heading 2.2.2.all((<A id="a7"></A>.))',
+            '.all((II-2.c) .))heading 2.2.3.all((<A id="a8"></A>.))',
+            '.all((II-3) .))heading 2.3.all((<A id="a9"></A>.))',
+            '.all((II-3.a) .))heading 2.3.1.all((<A id="a10"></A>.))',
+            '.all((II-3.a.1) .))heading 2.3.1.1.all((<A id="a11"></A>.))'
+        ];
     }
 
     // TOC lines data for scheme with roman numbers
     public function getTOCDataRoman(): array
     {
-        return ['- .((Chapter.)).fr((Chapitre.)) I) heading 1<A id="a1"></A>',
-        '- I-1) heading 1.1<A id="a2"></A>',
-        '- .((Chapter.)).fr((Chapitre.)) II) heading 2<A id="a3"></A>',
-        '- II-1) heading 2.1<A id="a4"></A>',
-        '- II-2) heading 2.2<A id="a5"></A>',
-        '- II-2.a) heading 2.2.1<A id="a6"></A>',
-        '- II-2.b) heading 2.2.2<A id="a7"></A>',
-        '- II-2.c) heading 2.2.3<A id="a8"></A>',
-        '- II-3) heading 2.3<A id="a9"></A>',
-        '- II-3.a) heading 2.3.1<A id="a10"></A>',
-        '- II-3.a.1) heading 2.3.1.1<A id="a11"></A>'];
+        return [
+            '- .((Chapter.)).fr((Chapitre.)) I) heading 1<A id="a1"></A>',
+            '- I-1) heading 1.1<A id="a2"></A>',
+            '- .((Chapter.)).fr((Chapitre.)) II) heading 2<A id="a3"></A>',
+            '- II-1) heading 2.1<A id="a4"></A>',
+            '- II-2) heading 2.2<A id="a5"></A>',
+            '- II-2.a) heading 2.2.1<A id="a6"></A>',
+            '- II-2.b) heading 2.2.2<A id="a7"></A>',
+            '- II-2.c) heading 2.2.3<A id="a8"></A>',
+            '- II-3) heading 2.3<A id="a9"></A>',
+            '- II-3.a) heading 2.3.1<A id="a10"></A>',
+            '- II-3.a.1) heading 2.3.1.1<A id="a11"></A>'
+        ];
     }
 
     public function testMisc()
     {
         Heading::init(); //: reset global numbers
         $a = $this->getTestData();
+        print_r($a);
 
         $index = $a->findIndex(2, 6);
-        $this->assertEquals(3, $index);
+        $this->assertEquals(4, $index);
 
         $a->resetCurrent();
         $h = $a->getNext();
@@ -156,27 +161,27 @@ class HeadingArrayTest extends TestCase
 
         $a->setOutputMode('htmlold');
         $test = $a->getTOCLink('dummyfile.md', 0, 1, 3);
-        $this->assertEquals('<A href="dummyfile.md#a1">heading 1</A><BR>', $test);
+        $this->assertEquals('.all((<A href="dummyfile.md#a1">heading 1</A><BR>.))', $test);
         $test = $a->getTOCLink('dummyfile.md', 6, 1, 3);
-        $this->assertEquals('<A href="dummyfile.md#a7">heading 2.2.2</A><BR>', $test);
+        $this->assertEquals('.all((<A href="dummyfile.md#a7">heading 1.2.2</A><BR>.))', $test);
 
         $a->setOutputMode('html');
         $test = $a->getTOCLink('dummyfile.md', 0, 1, 3);
-        $this->assertEquals('<A href="dummyfile.md#a1">heading 1</A><BR>', $test);
+        $this->assertEquals('.all((<A href="dummyfile.md#a1">heading 1</A><BR>.))', $test);
         $test = $a->getTOCLink('dummyfile.md', 6, 1, 3);
-        $this->assertEquals('<A href="dummyfile.md#a7">heading 2.2.2</A><BR>', $test);
+        $this->assertEquals('.all((<A href="dummyfile.md#a7">heading 1.2.2</A><BR>.))', $test);
 
         $a->setOutputMode('md');
         $test = $a->getTOCLink('dummyfile.md', 0, 1, 3);
-        $this->assertEquals('[heading 1](dummyfile.md#a1)', $test);
+        $this->assertEquals('.all(([.))heading 1.all((](dummyfile.md#a1).))', $test);
         $test = $a->getTOCLink('dummyfile.md', 6, 1, 3);
-        $this->assertEquals('[heading 2.2.2](dummyfile.md#a7)', $test);
+        $this->assertEquals('.all(([.))heading 1.2.2.all((](dummyfile.md#a7).))', $test);
 
         $a->setOutputMode('mdpure');
         $test = $a->getTOCLink('dummyfile.md', 0, 1, 3);
-        $this->assertEquals('[heading 1](dummyfile.md#a1)', $test);
+        $this->assertEquals('.all(([.))heading 1.all((](dummyfile.md#a1).))', $test);
         $test = $a->getTOCLink('dummyfile.md', 6, 1, 3);
-        $this->assertEquals('[heading 2.2.2](dummyfile.md#a7)', $test);
+        $this->assertEquals('.all(([.))heading 1.2.2.all((](dummyfile.md#a7).))', $test);
     }
 
     public function testNumbering()
@@ -189,7 +194,7 @@ class HeadingArrayTest extends TestCase
         $test = $a->getNumberingText(0, $numbering, true);
         $this->assertEquals('- Chapter A) ', $test);
         $test = $a->getNumberingText(6, $numbering, true);
-        $this->assertEquals('- B-2.b) ', $test);
+        $this->assertEquals('- A-2.b) ', $test);
 
         $numbering = new Numbering('1:.((Chapter.)).fr((Chapitre.)) :&I:-,2::1:.,3::a:.,4::1:');
         $numbering->setLevelLimits(1, 3);
@@ -214,12 +219,12 @@ class HeadingArrayTest extends TestCase
         Heading::init(); //: reset global numbers
         $a = $this->getTestData();
         $h = $this->getHeadingDataRoman();
-        $numbering = new Numbering('1:.((Chapter.)).fr((Chapitre.)):&I:-,2::1:.,3::a:.,4::1:');
+        $numbering = new Numbering('1:.((Chapter .)).fr((Chapitre .)):&I:-,2::1:.,3::a:.,4::1:');
         $numbering->setLevelLimits(1, 3);
         $numbering->resetSubNumbering();
         echo "\n\n";
         for ($i = 0; $i <= $a->getLastIndex(); $i += 1) {
-            $test = $a->getText($i, $numbering);
+            $test = $a->getHeadingText($i, $numbering);
             if ($test) {
                 $this->assertEquals($h[$i], $test);
             }
@@ -244,8 +249,8 @@ class HeadingArrayTest extends TestCase
             //$this->assertEquals($h[$i], $test);
         }
         
-        $this->assertEquals('  - II-2) [heading 2.2](main.mlmd#a5)', $a->getTOCLine(4, $numbering));
-        $this->assertEquals('    - II-3.a) [heading 2.3.1](main.mlmd#a10)', $a->getTOCLine(9, $numbering));
+        $this->assertEquals('.all((  - I-2) .)).all(([.))heading 1.2.all((](main{extension}#a5).))', $a->getTOCLine(4, $numbering));
+        $this->assertEquals('.all((    - I-3.a) .)).all(([.))heading 1.3.1.all((](main{extension}#a10).))', $a->getTOCLine(9, $numbering));
         $this->assertNull($a->getTOCLine(10, $numbering));
 
         echo "\n\nMDPURE:";
@@ -259,8 +264,8 @@ class HeadingArrayTest extends TestCase
             //$this->assertEquals($h[$i], $test);
         }
         */
-        $this->assertEquals('   2. [heading 2.2](main.mlmd#a5)', $a->getTOCLine(4, $numbering));
-        $this->assertEquals('      1. [heading 2.3.1](main.mlmd#a10)', $a->getTOCLine(9, $numbering));
+        $this->assertEquals('.all((   2. [heading 2.2](main.mlmd#a5)', $a->getTOCLine(4, $numbering));
+        $this->assertEquals('.all((      1. [heading 2.3.1](main.mlmd#a10)', $a->getTOCLine(9, $numbering));
         $this->assertNull($a->getTOCLine(10, $numbering));
 
         echo "\n\nHTML:";

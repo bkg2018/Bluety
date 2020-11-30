@@ -3,9 +3,25 @@
 /**
  * Multilingual Markdown generator - Filer class
  *
- * The Filer class handles input file reading through a paragraph buffer and output files writing through temporary storage.
- * It is used by the Generator main class which manages all the file processing for output, and by the Lexer for reading
- * and tokenizing.
+ * The Filer class handles input file reading through a paragraph buffer and output files
+ * writing through temporary storage. It is controled by Lexer and Generator, and output is done by
+ * each Token through Lexer control.
+ *
+ * Input is done through a Storage instance which ha ndles a buffer for one line of text.
+ * End of line (EOL) characters are handled separately from the text so Lexer can generate
+ * appropriate tokens and control their number. Output retain EOLs until non-EOL text is
+ * written and limit their successive number to 2 because Markdown convention forbid
+ * multiple empty lines.
+ *
+ * Text can be written with or wothout variables expansion. Variable expansion is done in
+ * Filer::expand() function, to add variable it can be added there. No special syntax check
+ * is done and variables are checked for exact identity, however MLMD convention is to put
+ * a self-explanatory name between curved braces, like {main} which expands to the main file name.
+ * 
+ * Output is stored for each language as sequences of parts. A part is a text with a flag telling
+ * if this text must be written as is or if it must be expanded with variables first. EOLs are
+ * always stored as separate parts and Filer takes care of never writing more than 2 successive EOLs
+ * in any file.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -21,7 +37,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_main_generator_class
+ * @package   mlmd_main_filer_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -33,8 +49,8 @@ declare(strict_types=1);
 namespace MultilingualMarkdown {
 
     require_once 'Constants.php';
-
     require_once 'Utilities.php';
+    require_once 'OutputModes.class.php';
     require_once 'Logger.interface.php';
     require_once 'LanguageList.class.php';
     require_once 'Storage.class.php';
@@ -50,33 +66,60 @@ namespace MultilingualMarkdown {
     class Filer implements Logger, \Iterator
     {
         // Input filenames, files and reading status
-        private $allInFilePathes = [];          /// Array of all the input files - relative to root dir
-        private $relFilenames = [];             /// relative filenames for each filename
-        private $inFilename = null;             /// current file name e.g. 'example.mlmd' - relative to root dir
-        private $inFile = null;                 /// current input file handle
-        private $storage = null;                /// input buffers handling object
+
+        /** Array of all the input files - relative to root dir */
+        private $allInFilePathes = [];
+        /** relative filenames for each filename */
+        private $relFilenames = [];
+        /** current file name e.g. 'example.mlmd' - relative to root dir */
+        private $inFilename = null;
+        /** current input file handle */
+        private $inFile = null;
+        /** input buffers handling object */
+        private $storage = null;
 
         // Output filenames, files and writing status
-        private $outFilenameTemplate = null;    /// as 'example'
-        private $outFilenames = [];             /// '<language>' => 'example.md' / 'example.<language>.md'
-        private $outFiles = [];                 /// '<language>' => file-handle
-        private $mainFilename = null;           /// -main parameter
-        private $rootDir = null;                /// root directory, or main file directory
-        private $rootDirLength = 0;             /// root directory utf-8 length
-        private $lastToken = null;              /// last written token type
-        private $outRootDir = null;             /// -od parameter (root directory for output files)
-        private $pendingEols = [];              /// successive EOLs waiting to be written into each output file
-        private $previousEols = [];             /// last successive EOLs written into each output file
+
+        /** as 'example' */
+        private $outFilenameTemplate = null;
+        /** '<language>' => 'example.md' / 'example.<language>.md' */
+        private $outFilenames = [];
+        /** '<language>' => file-handle */
+        private $outFiles = [];
+        /** -main parameter */
+        private $mainFilename = null;
+        /** root directory, or main file directory */
+        private $rootDir = null;
+        /** root directory utf-8 length */
+        private $rootDirLength = 0;
+        /** last written token type */
+        private $lastToken = null;
+        /** -od parameter (root directory for output files) */
+        private $outRootDir = null;
+        /** successive EOLs waiting to be written into each output file */
+        private $pendingEols = [];
+        /** last successive EOLs written into each output file */
+        private $previousEols = [];
 
         // Languages handling (LanguageList class)
-        private $languageList = null;           /// list of languages, will be set by Lexer
-        private $ignoreLevel = 0;               /// number of 'ignore' to close in language stack
-                                                /// don't send any output while this variable is not 0
-        private $curLanguage =  IGNORE;         /// current language code, or all, ignore, default
-        private $curOutput = [];                /// array of (array of OutputPart), one for each language code
-        private $curDefault = [];               /// array of OutputPart for default text
-        private $languageFunction = [];         /// language codes will be added by setLanguage
-        private $outputMode = OutputModes::MD;  /// output mode for anchors and links (mdpure etc)
+        
+        /** list of languages, will be set by Lexer via TokenLanguages */
+        private $languageList = null;
+        /**
+         * number of 'ignore' to close in language stack.
+         * don't send any output while this variable is not 0 
+         */
+        private $ignoreLevel = 0;
+        /** current language code or all, ignore, default  */
+        private $curLanguage =  IGNORE;
+        /** array of (array of OutputPart), one for each language code */
+        private $curOutput = [];
+        /** array of OutputPart for default text */
+        private $curDefault = [];
+        /** language codes will be added by setLanguage */
+        private $languageFunction = [];
+        /** output mode for anchors and links (mdpure etc) */
+        private $outputMode = OutputModes::MD;
 
         /**
          * Initialize string function names.
@@ -112,10 +155,11 @@ namespace MultilingualMarkdown {
             }
             return false;
         }
+
         /**
          * Logger interface: Send an error message to output and php log.
          *
-         * @param string $msg    the text to display and log.
+         * @param string $msg    the text to display and log
          * @param string $source optional file name for MLMD script, can be null to ignore
          * @param int    $line   optional line number for MLMD script
          *
@@ -125,10 +169,11 @@ namespace MultilingualMarkdown {
         {
             return $this->log('error', $msg, $source, $line);
         }
+
         /**
          * Logger interface: Send a warning message to output and php log.
          *
-         * @param string $msg the text to display and log.
+         * @param string $msg the text to display and log
          * @param string $source optional file name for MLMD script, can be null to ignore
          * @param int    $line   optional line number for MLMD script
          *
@@ -172,6 +217,7 @@ namespace MultilingualMarkdown {
         {
             return $this->inFilename;
         }
+
         /**
          * Get the current line number for current reading position.
          */
@@ -179,6 +225,7 @@ namespace MultilingualMarkdown {
         {
             return $this->storage->getCurrentLineNumber();
         }
+
         /**
          * Set root directory for relative filenames.
          * Resets all registered input files relative to the new root directory.
@@ -228,6 +275,7 @@ namespace MultilingualMarkdown {
             // try to find this file name in registered files
             $mainExtension = \isMLMDfile($name);
             if ($mainExtension === null) {
+                $this->error("wrong extension for main MLMD file, should be '.base.md' or '.mlmd'");
                 return false;
             }
             $wantedPath = mb_substr($name, 0, - mb_strlen($mainExtension));
@@ -258,15 +306,6 @@ namespace MultilingualMarkdown {
             }
             $this->readyInputs();
             return true;
-        }
-
-        /**
-         * Check if a file name is the main file.
-         */
-        public function isMainFilename(string $filename): bool
-        {
-            $basename = \pathinfo($filename, PATHINFO_FILENAME);
-            return ($this->mainFilename == $basename);
         }
 
         /**
@@ -315,12 +354,12 @@ namespace MultilingualMarkdown {
             // check file extension
             $extension = isMLMDfile($path);
             if ($extension === null) {
-                return $this->error("invalid file extension ($path)", __FILE__, __LINE__);
+                return $this->error("invalid file extension ($path)");
             }
             // check if it is relative or absolute
             $absolutePath = normalizedPath(realpath($path));
             if ($absolutePath === false) {
-                return $this->error("file $path doesn't exist", __FILE__, __LINE__);
+                return $this->error("file $path doesn't exist");
             }
             $filePos = $posFunction($absolutePath, $path, 0);
             if ($filePos !== 0) {
@@ -337,7 +376,7 @@ namespace MultilingualMarkdown {
                     // delete starting '../' or './'
                     foreach (['../', './'] as $pattern) {
                         do {
-                            $curPos = \mb_strpos($path, $pattern);
+                            $curPos = $posFunction($path, $pattern);
                             if ($curPos === 0) {
                                 $path = mb_substr($path, mb_strlen($pattern));
                             }
@@ -602,22 +641,6 @@ namespace MultilingualMarkdown {
         public function getString(int $charsNumber): ?string
         {
             return $this->storage->getString($charsNumber);
-        }
-
-        /**
-         * Skip over any space/tabulation.
-         *
-         * @return int the number of space and tabulations skipped over.
-         */
-        public function skipSpaces(): int
-        {
-            $count = 0;
-            $c = $this->getCurrentChar();
-            while ($c == ' ' || $c == "\t") {
-                $count += 1;
-                $c = $this->getNextChar();
-            }
-            return $count;
         }
 
         /**
@@ -907,7 +930,7 @@ namespace MultilingualMarkdown {
 
         /**
          * Append text part to default output.
-         * First flush current outputs if there is any content.
+         * First flush current outputs if there is any content for some language.
          */
         public function outputDefault(string $text, bool $expand): bool
         {
@@ -943,81 +966,6 @@ namespace MultilingualMarkdown {
         public function outputCurrent(string $text, bool $expand): bool
         {
             return $this->outputLanguage($text, $this->curLanguage, $expand);
-        }
-
-        /**
-         * Limit the number of successive EOLs to given number depending on previous write. Reformat the input
-         * text so it doesn't lead to more than the given number of EOLs either at the beginning of text
-         * following previous EOLs, either at the end of given text.
-         * 
-         * EOLs at the beginning of normal text are *not* handled. Unless all the text is only
-         * made of EOLs, this can lead to more EOLs than expected between previous and new text.
-         *
-         * previous     new             start       ending      previousEols    resulting   new
-         * text         text            pos         eols                        text        previousEols
-         * ----------------------------------------------------------------------------------------------
-         * x x x        x x x           >= 0        0           0               ok              0
-         * x x x        x x eol         >= 0        1           0               ok              1
-         * x x x        x eol(...)      >= 0        >= 2        0               limit 2 eols    2
-         * 
-         * x x x        eol             -1          1           0               ok              1
-         * x x x        eol(...)        -1          >= 2        0               "\n\n"          2
-         * x x eol      eol(...)        -1          >= 1        1               "\n"            2
-         * x eol eol    eol(...)        -1          >= 1        2               ''              2
-         *
-         * @param string $text the text to output
-         * @param string $code the current language code
-         * @param int $maxEols the maximum number of successive EOLs in actual output
-         * @return bool|array false if output must not be done, or ['text'=>text, 'eols'=>new value for previousEols]
-         *
-        private function limitSuccessiveEols(string $text, string $code, int $maxEols)
-        {
-            // count number of ending eols in text
-            $endingEols = 0;
-            $length = mb_strlen($text);
-            $startPos = $length - 1;
-            while ($startPos >= 0) {
-                if (mb_substr($text, $startPos, 1) == "\n") {
-                    $endingEols += 1;
-                    $startPos -= 1;
-                } else break;
-            }
-            // is there any non eol character at the beginning of text?
-            if ($startPos >= 0) {
-                // keep text, but limit ending EOLs to 2
-                if ($endingEols > $maxEols) {
-                    $text = mb_substr($text, 0, $length - $endingEols + $maxEols);
-                    $endingEols = $maxEols;
-                }
-                return ['text' => $text, 'eols' => $endingEols];
-            }
-            // only eols, adjust depending on previous EOLs
-            if ($endingEols + $this->previousEols[$code] > $maxEols) {
-                if ($this->previousEols[$code] == 0) {
-                    $endingEols = 2;
-                } else if ($this->previousEols[$code] == 1) {
-                    $endingEols = 1;
-                } else {
-                    $endingEols = max($maxEols, $endingEols);
-                }
-            }
-            $text = \str_repeat("\n", $endingEols);
-            if (empty($text)) {
-                return false;
-            }
-            return ['text' => $text, 'eols' => $endingEols + $this->previousEols[$code]];
-        }*/
-
-        /**
-         * Append a last EOL if needed.
-         * Markdown files must end on an end of line character so they can be assembled.
-         */
-        public function appendLastEOL(): void
-        {
-            foreach ($this->languageList as $index => $array) {
-                $code = $array['code'] ?? null;
-                $this->output("\n", false, TokenType::EOL);
-            }
         }
 
         /**
@@ -1092,7 +1040,9 @@ namespace MultilingualMarkdown {
             if ($this->mainFilename !== null) {
                 $result = str_replace('{main}', $this->mainFilename . $extension, $result);
             }
-            $result = str_replace('{language}', $language, $result);
+            $languageArray - $this->languageList->getLanguage($language);
+            $result = str_replace('{language}', $languageArray['code'], $result);
+            $result = str_replace('{iso}', $languageArray['iso'], $result);
             return $result;
         }
     }

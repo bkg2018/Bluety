@@ -49,11 +49,10 @@ namespace MultilingualMarkdown {
             parent::__construct(TokenType::EOL, "\n", true);
         }
 
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $input->gotoNextLine();
             $lexer->adjustEolCloseEolSequence($filer);
-            return true;
         }
         public function output(Lexer &$lexer, Filer &$filer): bool
         {

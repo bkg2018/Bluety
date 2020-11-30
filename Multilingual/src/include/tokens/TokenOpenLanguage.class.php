@@ -3,8 +3,9 @@
 /**
  * Multilingual Markdown generator - TokenOpenLanguage class
  *
- * This class represents a token for an opening language code .<code>(( directive. The language code
- * must have been declared in the .languages directive.
+ * This class represents a token for an opening language code .<code>(( directive. Each language code
+ * must have been declared in the .languages directive. The token for each open language directive
+ * is instanciated when Lexer preprocesses the .languages directive.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -54,7 +55,11 @@ namespace MultilingualMarkdown {
             return $this->language;
         }
 
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
+        /**
+         * Process input by skkipping the directive and pushing the language
+         * on the language stack in lexer.
+         */
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->skipSelf($input);
             if ($lexer->pushLanguage($this->language, $filer)) {
@@ -63,8 +68,12 @@ namespace MultilingualMarkdown {
             }
             $currentChar = $input->getCurrentChar();
             $lexer->setCurrentChar($currentChar);
-            return ($currentChar == null || $currentChar == "\n");
         }
+
+        /**
+         * Output updates the Lexer language stack which indirectly sets the current
+         * language in Filer.
+         */
         public function output(Lexer &$lexer, Filer &$filer): bool
         {
             $lexer->pushLanguage($this->language, $filer);

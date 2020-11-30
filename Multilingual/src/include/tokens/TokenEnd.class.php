@@ -3,7 +3,8 @@
 /**
  * Multilingual Markdown generator - TokenEnd class
  *
- * This class represents a token for the .end directive.
+ * This class represents a token for the .end directive which ends current file processing.
+ * It is useful mostly for debugging an MLMD file when resulting MD files are not as expected.
  *
  * Copyright 2020 Francis Piérot
  *

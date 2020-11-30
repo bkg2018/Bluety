@@ -3,10 +3,11 @@
 /**
  * Multilingual Markdown generator - Generator class
  *
- * This is the main class for MLMD conversion. Parameters for the process
+ * This is the main entry class for MLMD conversion. Parameters for the process
  * handling classes objects like Filer, Numbering, Lexer, Storage are forwarded by
  * Generator from the command line arguments to the handling classes with
- * minimal interpretation or checking.
+ * minimal interpretation or checking. It has ownership of the Lexer and Filer
+ * instances for the whole process.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -40,11 +41,15 @@ namespace MultilingualMarkdown {
     require_once 'Heading.class.php';
     require_once 'HeadingArray.class.php';
     require_once 'Utilities.php';
-    require_once 'debugFiler.class.php'; // includes normal Filer
-    require_once 'debugLexer.class.php'; // includes normal Lexer
-
-    use MultilingualMarkdown\debugLexer;
+    if (\getenv('debug')) {
+        require_once 'debugFiler.class.php';
+        require_once 'debugLexer.class.php';
+    } else {
+        require_once 'Filer.class.php';
+        require_once 'Lexer.class.php';
+    }
     use MultilingualMarkdown\Lexer;
+    use MultilingualMarkdown\debugLexer;
 
     /**
      * Generator class.
@@ -67,9 +72,6 @@ namespace MultilingualMarkdown {
         // Initialize handlers and default settings
         public function __construct()
         {
-            if (getenv("debug") != 0) {
-
-            } 
             $this->filer = /*(getenv("debug") != 0) ? new debugFiler() : */ new Filer();
             $this->lexer = /*(getenv("debug") != 0) ? new debugLexer() : */new Lexer();
             $this->outputModeName = 'md'; 
@@ -92,6 +94,7 @@ namespace MultilingualMarkdown {
         {
             return $this->filer->error($msg, $source, $line);
         }
+
         /**
          * Logger interface: Send a warning message to output and php log.
          *
@@ -163,8 +166,6 @@ namespace MultilingualMarkdown {
          * @param string $mode 'htmlold' to set HTML mode (<A name> links and anchors),
          *                     'html' to set HTML mode (<A id> links and anchors),
          *                     'md for MD mode ([]() links and {:# } anchors)
-         *
-         * @return nothing
          */
         public function setOutputMode(string $mode): void
         {
@@ -179,8 +180,6 @@ namespace MultilingualMarkdown {
          * Set the numbering scheme.
          *
          * @param string $scheme a string containing numbering scheme.
-         *
-         * @return nothing
          */
         public function setNumbering(string $scheme): void
         {
@@ -224,16 +223,12 @@ namespace MultilingualMarkdown {
          * This function reads the files without going through Storage class and only looks
          * for languages directives and headings, skipping over code fences and some
          * escape text sequences.
-         *
-         * @return bool true if pre processing found languages and headings correctly, false
-         *              if there is no languages directive in any file.
          */
-        public function preProcess(): bool
+        public function preProcess(): void
         {
             $this->filer->readyInputs();
             $this->filer->setOutputMode($this->outputModeName, null);
             $this->lexer->preProcess($this->filer);
-            return true;
         }
 
         //------------------------------------------------------------------------------------------------------

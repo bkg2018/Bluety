@@ -39,17 +39,28 @@ namespace MultilingualMarkdown {
     class Numbering
     {
         // settings
-        private $outputMode = OutputModes::MD;       // output mode
-        private $startLevel = 10;       // starting level, do not number levels below
-        private $endLevel = 0;          // ending level, do not number levels above
-        private $levelsPrefix = [];     // level => prefix for this level alone, should only be used for level 1
-        private $levelsNumbering = [];  // level => starting symbol ('a'..'z', 'A'..'Z', '1'..'9, '&I', '&i')
-        private $levelsRoman = [];      // level => boolean for Roman numbers
-        private $levelsSeparator = [];  // level => separator string after symbol for each level
+
+        /** Output mode */
+        private $outputMode = OutputModes::MD;
+        /** starting level, do not number levels below */
+        private $startLevel = 10;
+        /** ending level, do not number levels above */
+        private $endLevel = 0;
+        /** level => prefix for this level alone, should only be used for level 1 */
+        private $levelsPrefix = [];
+        /** level => starting symbol ('a'..'z', 'A'..'Z', '1'..'9, '&I', '&i') */
+        private $levelsNumbering = [];
+        /** level => boolean for Roman numbers */
+        private $levelsRoman = [];
+        /** level => separator string after symbol for each level */
+        private $levelsSeparator = [];
 
         // status
-        private $curLevelNumbering = [];     // current increment for each level
-        private $prevLevel = 0;         // previous level processed by getTOCline()
+
+        /** current increment for each level */
+        private $curLevelNumbering = [];
+        /** previous level processed by getTOCline() */
+        private $prevLevel = 0;
 
         // Roman numbers arrays
         private static $intToRoman = [1000 => 'M', 900 => 'CM', 500 => 'D', 400 => 'CD', 100 => 'C', 90 => 'XC', 50 => 'L', 40 => 'XL', 10 => 'X', 9 => 'IX', 5 => 'V', 4 => 'IV', 1 => 'I'];

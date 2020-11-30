@@ -4,6 +4,8 @@
  * Multilingual Markdown generator - TokenOpenDefault class
  *
  * This class represents a token for the default text opening directive .(( or .default((.
+ * Text out of language open/close directives also goes into default output, so this directive
+ * is generally not needed.
  *
  * Copyright 2020 Francis Piérot
  *

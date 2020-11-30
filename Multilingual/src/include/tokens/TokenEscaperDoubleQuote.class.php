@@ -3,7 +3,7 @@
 /**
  * Multilingual Markdown generator - TokenEscaperDoubleQuote class
  *
- * This class represents a token for a double quote escaper surrounding escaped text.
+ * This class represents a token for a double quote escaper <"> surrounding escaped text.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +19,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_double_quote_class
+ * @package   mlmd_token_escaper_double_quote_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License

@@ -3,7 +3,8 @@
 /**
  * Multilingual Markdown generator - TokenTOC class
  *
- * This class represents a token for the .toc directive.
+ * This class represents a token for the .toc directive. The processInput for this
+ * token will generate a token flow for each table of contents line.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -64,7 +65,7 @@ namespace MultilingualMarkdown {
         /**
          * TOC directive input processing.
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             // skip the directive (no need to store)
             $this->skipSelf($input);
@@ -165,7 +166,6 @@ namespace MultilingualMarkdown {
                         if ($text === null) {
                             $filer->error("Inconsistent levels in TOC directive or missing numbering scheme", $relFilename, $filer->getCurrentLineNumber());
                             continue;
-//                            $text = $headingsArray->getTOCLine($index, $numbering, $filer);
                         }
                         $lexer->appendTokenEOL($filer);
                         $lexer->tokenize($text, $filer, false);
@@ -174,7 +174,6 @@ namespace MultilingualMarkdown {
                     }
                 }
             }
-            return true;
         }
     }
 }

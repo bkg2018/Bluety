@@ -3,8 +3,8 @@
 /**
  * Multilingual Markdown generator - TokenEscaperFence class
  *
- * This class represents a token for code fence start or end at the beginning of a line (or after spaces only) present
- * before and after escaped text lines.
+ * This class represents a token for code fence <```> start or end at the beginning of a line
+ * (or after spaces only) present before and after escaped text lines.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -20,7 +20,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_fence_class
+ * @package   mlmd_token_escaper_fence_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -83,7 +83,7 @@ namespace MultilingualMarkdown {
          * Update tokens array with the token itself. The escaped text is stored
          * by the token. 
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->content = $input->getLine();// <```code> starting marker 
             do {
@@ -102,7 +102,6 @@ namespace MultilingualMarkdown {
             $this->content = rtrim($this->content, "\n");
             $this->length = mb_strlen($this->content);
             $lexer->appendToken($this, $filer);
-            return true;
         }
         public function output(Lexer &$lexer, Filer &$filer): bool
         {

@@ -10,9 +10,9 @@ xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
 $generator = new Generator();
 $generator->setOutputMode('html');
 $generator->setNumbering('1::&I:-,2::1:-,3::1');
-$generator->addInputFile('testdata/test2.mlmd');
-$generator->setMainFilename("test2.mlmd");
-$generator->setOutputDirectory(realpath('.') . '/testdata/out');
+$generator->addInputFile('README.mlmd');
+$generator->setMainFilename("README.mlmd");
+$generator->setOutputDirectory(realpath('.') . '/out');
 $generator->processAllFiles();
 
 $allCoverage = xdebug_get_code_coverage();

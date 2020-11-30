@@ -3,10 +3,11 @@
 /**
  * Multilingual Markdown generator - TokenEscaperMLMD class
  *
- * This class represents a token for MLMD escaped text between '.{' and '.}'. This syntax allows MLMD content to use any special
- * characters without bothering about vaationsriable exxpansion or directives interpreting. MLMD escaped text may contain normal
- * MD escaping notations as well as MLMD directives or variables between accolades. This is used in MLMD documentation itself to avoid
- * interpretation of directives when the desired effect is to have them written into the final output files.
+ * This class represents a token for MLMD escaped text between '.{' and '.}'. This syntax allows MLMD content
+ * to use any special characters without bothering about variable expansion or directives interpretation.
+ * MLMD escaped text may contain normal MD escaping notations as well as MLMD directives or variables between
+ * accolades. This is used in MLMD documentation itself to avoid interpretation of directives when the desired
+ * effect is to have them written into the final output files.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -47,7 +48,7 @@ namespace MultilingualMarkdown {
         {
             parent::__construct('.{');
         }
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->content = '';    
             $this->skipSelf($input);
@@ -75,7 +76,6 @@ namespace MultilingualMarkdown {
             } while ($currentChar != null);
             $this->length = mb_strlen($this->content);
             $lexer->appendToken($this, $filer);
-            return ($currentChar == null);
         }
     }
 

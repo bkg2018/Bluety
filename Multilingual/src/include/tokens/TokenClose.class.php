@@ -3,7 +3,9 @@
 /**
  * Multilingual Markdown generator - TokenClose class
  *
- * This class represents a token for the .)) ending directive which closes the streamed .xxxx(( directives.
+ * This class is the token for the .)) language ending directive.
+ * It closes the previous opening .<code>(( directive and restores previous language
+ * from the Lexer language stack.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -44,7 +46,7 @@ namespace MultilingualMarkdown {
             parent::__construct(TokenType::CLOSE_DIRECTIVE, '.))', true);
         }
 
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->skipSelf($input);
             if ($lexer->popLanguage($filer)) {
@@ -52,7 +54,6 @@ namespace MultilingualMarkdown {
             }
             $currentChar = $input->getCurrentChar();
             $lexer->setCurrentChar($currentChar);
-            return ($currentChar == null || $currentChar == "\n");
         }
         // Output: have Lexer updating the current output language
         public function output(Lexer &$lexer, Filer &$filer): bool

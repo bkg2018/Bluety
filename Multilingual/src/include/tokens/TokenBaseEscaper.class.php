@@ -3,10 +3,13 @@
 /**
  * Multilingual Markdown generator - TokenBaseEscaper class
  *
- * This class is base for all the tokens holding an escaped text. All escaper tokens
+ * This class is base for all the tokens containing escaped text. All escaper tokens
  * have a text content and an identifier which starts and ends the escape sequence.
- * Only the text content will be output to files, with no variables or directive
- * interpretation.
+ * The text content will be output to files with no variables or directive interpretation.
+ *
+ * Purely Markdown escape sequences are output with the opening and closing sequence,
+ * but there is also the .{.} special escape sequence which is specific to MLMD. This sequence
+ * outputs the escaped text without ythe escape markers. See TokenEscaperMLMD for details.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -22,7 +25,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_escaper_class
+ * @package   mlmd_token_base_escaper_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -65,7 +68,7 @@ namespace MultilingualMarkdown {
         {
             return true;
         }
-                /**
+        /**
          * Check if content is uniquely composed of spacing characters.
          * NB this doesn't handle UTF-8 spacing.
          */
@@ -113,7 +116,7 @@ namespace MultilingualMarkdown {
          * Update tokens array with the token itself. The escaped text is stored
          * by the token.
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->content = $this->keyword;    
             $this->skipSelf($input);
@@ -130,8 +133,11 @@ namespace MultilingualMarkdown {
             $this->length = mb_strlen($this->content);
             $lexer->appendToken($this, $filer);
             $lexer->setCurrentChar($currentChar);
-            return ($currentChar == null || $currentChar == "\n");
         }
+        
+        /**
+         * Output content.
+         */
         public function output(Lexer &$lexer, Filer &$filer): bool
         {
             return $filer->output($this->content, false, $this->type);

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Static class for yoken types.
+ * Static class for token types.
  *
  * Copyright 2020 Francis Piérot
  *

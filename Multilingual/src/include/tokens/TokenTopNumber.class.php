@@ -3,8 +3,9 @@
 /**
  * Multilingual Markdown generator - TokenTopNumber class
  *
- * This class is a token for the .topnumber directive which allows a file to set the number for its level 1 top heading within
- * the active numbering scheme set either by the CLI '-numbering' parameter either by the '.numbering' directive.
+ * This class is a token for the .topnumber directive which allows a file to set the number
+ * for its level 1 top heading within the active numbering scheme set either by the CLI
+ * '-numbering' parameter either by the '.numbering' directive.
  *
  * Copyright 2020 Francis Piérot
  *

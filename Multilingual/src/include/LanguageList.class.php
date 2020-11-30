@@ -21,7 +21,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_languagelist_interface
+ * @package   mlmd_languagelist_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -36,7 +36,7 @@ namespace MultilingualMarkdown {
 
     class LanguageList implements \SeekableIterator, \ArrayAccess, \Countable
     {
-        private $allLanguages = [];         // array of languages: [i => ['code' => code value, 'ISO' => iso value]]
+        private $allLanguages = [];         // array of languages: [i => ['code' => code value, 'iso' => iso value]]
         private $curIndex = 0;
         private $mainLanguage = null;       // main language code
         private $lowerMainLanguage = null;  // main language code in lowercases
@@ -107,6 +107,11 @@ namespace MultilingualMarkdown {
 
         /**
          * Return code and ISO for a given language or null if it is not known.
+         * Each language code is stored as an array where index 'code' gives the code
+         * declared in the .languages directive, and 'iso' gives the optional ISO code
+         * also declared in theb .languages directive. This seconde ISO code can be used
+         * with various web services URLs for instance to point to a flag picture. The
+         * {iso} variable expands to this code.
          *
          * @param string $code a code previously given in .languages directive
          *
@@ -130,13 +135,13 @@ namespace MultilingualMarkdown {
          * This includes special codes like 'all', 'ignore' and 'default', plus each
          * language added by the .languages directives.
          */
-        public function existLanguage($language)
+        public function existLanguage(string $code): bool
         {
-            if (\in_array($language, [ALL, IGNORE, DEFLT])) {
+            if (\in_array($code, [ALL, IGNORE, DEFLT])) {
                 return true;
             }
             foreach ($this->allLanguages as $array) {
-                if (isset($array['code']) && ($array['code'] == $language)) {
+                if (isset($array['code']) && ($array['code'] == $code)) {
                     return true;
                 }
             }
@@ -204,7 +209,7 @@ namespace MultilingualMarkdown {
                         default:
                             $exists = $this->getLanguage($parts[0]);
                             if ($exists == null) {
-                                $this[] = ['code' => $parts[0], 'ISO' => $parts[1] ?? null];
+                                $this[] = ['code' => $parts[0], 'iso' => $parts[1] ?? null];
                             }
                     }
                 }

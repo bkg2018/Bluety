@@ -102,15 +102,6 @@ namespace MultilingualMarkdown {
         public function isSpacing(): bool
         {
             return \ctype_space($this->content);
-            /* abandonned for ctype_space(), have to test this throughly
-            // false on any spacing character
-            foreach ($this->content as $char) {
-                if (($char != ' ') && ($char != "\t") && ($char != "\n")) {
-                    return false;
-                }
-            }
-            return true;
-            */
         }
 
         /**

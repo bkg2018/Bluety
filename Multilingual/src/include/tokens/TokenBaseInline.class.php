@@ -3,7 +3,8 @@
 /**
  * Multilingual Markdown generator - TokenBaseInline class
  *
- * This class represents a token for an opening directive of the .xxxx(( kind.
+ * This class represents a token which occurs in the text flow, as opposed to TokenBaseSingleLine
+ * which is used for tokens standing alone on one line of text.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +20,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_stream_directive_class
+ * @package   mlmd_token_base_inline_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -52,13 +53,12 @@ namespace MultilingualMarkdown {
         /**
          * Processing input: store in token list, skip over directive and go next character. 
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->skipSelf($input);
             $lexer->appendToken($this, $filer);
             $currentChar = $input->getCurrentChar();
             $lexer->setCurrentChar($currentChar);
-            return ($currentChar == null || $currentChar == "\n");
         }
     }
 }

@@ -1,61 +1,59 @@
-.languages fr,en main=en
-.numbering 1:.((Chapter .)).fr((Chapitre .)):&I:-,2::1:.,3::1
+.languages fr=fr_FR,en=en_UK main=en
+.numbering 2::1:.,3::1
 
 # Multilingual Markdown Generator .fr((Générateur de Markdown Multilingue .)).all((MLMD.))
 
-MLMD is a PHP 7 script which generates one or more Markdown files for a set of declared languages
-from one or more multilingual Markdown template files, using directives in the templates to distinguish
-each language parts.
-.fr((MLMD est un script PHP 7 qui génère des fichiers Markdown dans plusieurs
-langues à partir de modèles multilingues, grâce à des directives placées dans les modèles
-pour distinguer les parties propres à chaque langue..))
+MLMD generates one or more Markdown files for a set of declared languages from one or more
+multilingual source files, using directives in the files to distinguish each language parts.
+.fr((MLMD génère des fichiers Markdown dans plusieurs langues à partir de fichiers sources
+multilingues grâce à des directives placées dans les fichiers pour distinguer les parties
+propres à chaque langue..))
 
 MLMD is a convenient way of keeping the documentation structure in unique files without having
 to duplicate them for each target language, and permits the translation by different authors while
-keeping the file in a shared place. Being text files, the MLMD multilingual templates work well with
-versioning systems like Git.
-.fr((MLMD est un moyen simple pour conserver la structure d'une documentation
-dans des fichiers uniques sans avoir à les dupliquer pour chaque langue, et facilite la rédaction
-par plusieurs traducteurs se partageant les fichiers. Les fichiers textes des modèles multilingues
-s'utilisent facilement avec les systèmes de contrôle de version comme Git.))
+keeping the file in a unique and shared place. Being text files, the MLMD multilingual sources
+work well with versioning systems like Git.
+.fr((MLMD est un moyen simple pour conserver la structure d'une documentation dans des fichiers
+uniques sans avoir à les dupliquer pour chaque langue, et facilite la rédaction par plusieurs
+traducteurs se partageant les fichiers. Les fichiers sources multilingues sont de simples
+fichiers texte et s'utilisent facilement avec les systèmes de contrôle de version comme Git.))
 
-MLMD can add a Table Of Content in the generated Markdown files and number headings in all files
-and in tables of Content. Table of contents can be global and include headings from all the input files,
-or they can be local to ine input file.
-.fr((MLMD peut ajouter des tables des matières et numéroter
-les titres dans les fichiers et les tables des matières. Une table des matières peut être globale et
-inclure les titres de tous les fichiers en entrée, ou locale à un fichier..))
+MLMD can add tables of content (TOC) in the generated Markdown files and allow a numbering scheme
+to be applied on all headings in all files and in tables of content. Table of contents can be
+global and include headings from all the input files, or they can be local to their own file.
+.fr((MLMD peut ajouter des sommaires (table des matières) et numéroter les titres dans les fichiers
+et les sommaires. Une table des matières peut être globale et inclure les titres de tous les
+fichiers en entrée, ou rester locale et n'inclure que les titres de son propre fichier..))
 
-The user has full control over the generated languages, the table of content generation and the
-headings numbering scheme.
-.fr((L'utilisateur peut contrôler les langues, la génération des tables des matières et le schéma
-de numérotation des titres..))
+The user has control over the generated languages, the table of content generation and the
+headings numbering scheme using either command line parameters or directives in source files.
+.fr((L'utilisateur contrôle les langues, la génération des sommaires et le schéma
+de numérotation des titres par le biais de paramètres de la ligne de commande ou par
+des directives placées dans les fichiers sources..))
 
-.{supprimé pour tests plus rapide, à remettre
 .toc title=.((Table Of Contents.)).fr((Sommaire.)) level=2-3
-.}
 
 ## Installation
 
-MLMD consists of a main script `mlmd.php` and a few dependencies files. The script and its
-dependancies files can be put anywhere at user choice.
+MLMD consists of a main PHP 7 script `mlmd.php` and a few dependencies files. The script and its
+dependencies files can be put anywhere at user choice.
 .fr((MLMD est constitué d'un script principal `mlmd.php` et de dépendances. Le script et ses
 dépendances peuvent être placés dans n'importe quel répertoire accessible à l'utilisateur..))
 
 ### PHP version.fr((Version PHP.))
 
-MLMD has been tested with PHP 7.3 CLI version.
-.fr((MLMD a été testé avec PHP 7.3 CLI..))
+MLMD has been tested with PHP 7.3 CLI version. Version 7.2 at least is required.
+.fr((MLMD a été testé avec PHP 7.3 CLI. La version 7.2 minimale est requise..))
 
 To make sure PHP is accessible from a command line type the following command:
-.fr((Pour vérifier que PHP est accessible depuis une ligne de commande tapez la commande suivante :.))
+.fr((Pour vérifier que PHP est accessible depuis une ligne de commande on tape la commande suivante :.))
 
 ```code
 php -v
 ```
 
-It should display something like:
-.fr((Elle doit afficher des lignes similaires aux suivantes :.))
+It should display something like the following lines (exact text may vary):
+.fr((Elle doit afficher à peu près les lignes suivantes (le texte exact peut varier) :.))
 
 ```code
 PHP 7.3.20 (cli) (built: Jul  9 2020 23:50:54) ( NTS )

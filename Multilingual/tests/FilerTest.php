@@ -65,9 +65,10 @@ namespace MultilingualMarkdown {
             $filer = new Filer();
             $filer->exploreDirectory('testdata');
             $filer->readyInputs();
+            print_r($filer);
             $name = $filer->getRelativeInputFile(0);
-            $this->assertEquals('test.mlmd', $name);
-            $name = $filer->getRelativeInputFile(1);
+            $this->assertEquals('test3.mlmd', $name);
+            $name = $filer->getRelativeInputFile(4);
             $this->assertEquals('subdata/tertiary.mlmd', $name);
             $name = $filer->getRelativeInputFile(10);
             $this->assertNull($name);

@@ -3,7 +3,9 @@
 /**
  * Multilingual Markdown generator - TokenIgnoreDirective class
  *
- * This class represents a token for the .ignore(( directive.
+ * This class represents a token for the .ignore(( directive. Text after
+ * this directive will not be output, until a close or another open language
+ * is found.
  *
  * Copyright 2020 Francis Piérot
  *

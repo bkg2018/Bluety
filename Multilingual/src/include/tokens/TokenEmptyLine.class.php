@@ -3,7 +3,8 @@
 /**
  * Multilingual Markdown generator - TokenEmptyLine class
  *
- * This class represents a token for an empty line, meaning the end of a previous paragraph.
+ * This class represents a token for an empty line. It is converted
+ * into two successive EOLs.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -73,21 +74,12 @@ namespace MultilingualMarkdown {
             return parent::identify($input);
         }
         /**
-         * Processing input: append 2 EOL tokens, goto next line
+         * Processing input: append an EOL token, goto next line.
          */
-        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): bool
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $input->gotoNextLine();
             $lexer->appendTokenEOL($filer);
-            return true;
-        }
-
-        /**
-         * Output now: empty line will make Lexer processi all current tokens if the language stack is empty
-         */
-        public function ouputNow(Lexer $lexer): bool
-        {
-            return ($lexer->getLanguageStackSize() <= 1);
         }
     }
 }

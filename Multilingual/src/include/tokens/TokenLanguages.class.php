@@ -3,7 +3,9 @@
 /**
  * Multilingual Markdown generator - TokenLanguages class
  *
- * This class represents a token for the .languages directive.
+ * This class represents the .languages directive. It is processed
+ * by Lexer::preProcess and not buy the token itself because languages
+ * must be set before files generation
  *
  * Copyright 2020 Francis Piérot
  *

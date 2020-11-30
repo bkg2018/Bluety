@@ -3,7 +3,10 @@
 /**
  * Multilingual Markdown generator - TokenNumbering class
  *
- * This class represents a token for the .numbering directive.
+ * This class represents a token for the .numbering directive which sets the numbering scheme for
+ * current file. This can also be set with the -numbering command line parameter. This directive
+ * is handled by Lexer::preProcess before files generation actually starts and the token
+ * is only used for identification.
  *
  * Copyright 2020 Francis Piérot
  *

@@ -4,8 +4,8 @@
  * Multilingual Markdown generator - TokenEscaperTripleBacktick class
  *
  * This class represents a token for a triple back-tick sequence around escaped text. Normaly this
- * should be only used by code fences at the beginning of lines, but using a token for triple backtick
- * handles wrong syntax where triple `is used within text.
+ * should be only used by code fences at the beginning of lines, but MLMD handles triple backtick
+ * within text as normally escaped text.
  * 
  * Without this token :
  *      text ```escaped text```text
@@ -30,7 +30,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_triple_backtick_class
+ * @package   mlmd_token_escaper_triple_backtick_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License

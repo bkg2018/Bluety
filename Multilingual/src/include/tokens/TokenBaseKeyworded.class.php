@@ -3,7 +3,7 @@
 /**
  * Multilingual Markdown generator - TokenBaseKeyworded class
  *
- * This class represents a token identified by a sequence of characters.
+ * This base class represents a token identified by a keyword.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -19,7 +19,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_keyworded_class
+ * @package   mlmd_token_base_keyworded_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -79,7 +79,7 @@ namespace MultilingualMarkdown {
         {
             $test = mb_substr($buffer, $pos, $this->keywordLength);
             $testLower = \mb_strtolower($test);
-            return ($this->ignoreCase ? (\strcmp($testLower, $this->keyword) == 0) : (\strcmp($test, $this->keyword) == 0) );
+            return ($this->ignoreCase ? (\strcasecmp($testLower, $this->keyword) == 0) : (\strcmp($test, $this->keyword) == 0) );
         }
         /**
          * Let the token self-identify against an input handler Filer or Storage object.

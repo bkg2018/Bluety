@@ -2,6 +2,11 @@
 
 /**
  * Multilingual Markdown generator - Heading class
+ * 
+ * Each heading from each processed file is stored as an instance of this class. Text is separated from
+ * the '#' prefix and a unique number is generated for each newly created Heading instance. This number
+ * restarts at 0 when the static function init() is called. Having unique number over all files is not
+ * necessary so init() can be done at the start of each file processing but not during it.
  *
  * Copyright 2020 Francis Piérot
  *

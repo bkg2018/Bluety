@@ -3,14 +3,16 @@
 /**
  * Multilingual Markdown generator - Storage class
  *
- * The Storage class handles buffers for reading paragraphs from an input file and writing languages parts in output files.
- * The filenames and pathes are not handles by Storage, which uses file handles sent by the caller. The file is neither opened
- * nor closed by Storage but the current file positions are modified by Storage when reading and writing, so callers should not
- * rely on positions nor alter them.
+ * The Storage class handles buffers for reading text from an input file. The filenames and pathes are not
+ * managed by Storage, which uses a file handle sent by the caller. The file is neither opened
+ * nor closed by Storage but the current file positions are modified by Storage when reading, so callers
+ * should not rely on positions nor alter them unless explicitely expected. The Storage class
+ * gives functions to advance in input file and check previous or next characters without
+ * moving the current position.
  *
  * See the Filer class for file names handling and files opening.
  *
- * Ends of lines are normalized the the \n character alone.
+ * Ends of lines are normalized to a single \n (0x0A ASCII) character alone with no \r (0x0D ASCII).
  *
  * NOTATION:
  *      - EOL means end of line and/or the end-of-line control character (\n)
@@ -43,14 +45,20 @@ namespace MultilingualMarkdown {
 
     class Storage
     {
-        // Input file and reading status
-        private $buffer = '';                   /// current line content
-        private $bufferPosition = 0;            /// current pos in line buffer (utf-8)
-        private $bufferLength = 0;              /// current line size in characters (utf-8)
-        private $curLine = 0;                   /// current line number from input file
-        private $lastLine = 0;                  /// current last line number stored in buffer on or after current position
-        private $previousChars = [];            /// array of last 3 characters: [0] = current, [1] = previous, [2] = pre-previous
-        private $inFile = null;                 /// file opened for reading (setInputFile) or null
+        /** current line content */
+        private $buffer = '';
+        /** current pos in line buffer (utf-8) */
+        private $bufferPosition = 0;
+        /** current line size in characters (utf-8) */
+        private $bufferLength = 0;
+        /** current line number from input file */
+        private $curLine = 0; 
+        /** current last line number stored in buffer on or after current position */
+        private $lastLine = 0;
+        /** array of last 3 characters: [0] = current, [1] = previous, [2] = pre-previous */
+        private $previousChars = [];
+        /** file opened for reading (setInputFile) or null */
+        private $inFile = null;
 
         public function __construct($source)
         {
