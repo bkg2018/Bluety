@@ -38,17 +38,17 @@ class HeadingArrayTest extends TestCase
     public function getTestData(): HeadingArray
     {
         $a = new HeadingArray('main.mlmd');
-        $a[] = new Heading('# heading 1', 1, null);               // 0
-        $a[] = new Heading('## heading 1.1', 3, null);            // 1
-        $a[] = new Heading('### heading 1.1.1', 5, null);            // 2
-        $a[] = new Heading('### heading 1.1.2', 7, null);            // 3
-        $a[] = new Heading('## heading 1.2', 9, null);            // 4
-        $a[] = new Heading('### heading 1.2.1', 11, null);        // 5
-        $a[] = new Heading('### heading 1.2.2', 13, null);        // 6
-        $a[] = new Heading('#### heading 1.2.2.1', 15, null);        // 7
-        $a[] = new Heading('## heading 1.3', 17, null);           // 8
-        $a[] = new Heading('### heading 1.3.1', 19, null);        // 9
-        $a[] = new Heading('#### heading 1.3.1.1', 21, null);     // 10
+        $a[] = new Heading('# heading I', 1, null);               // 0
+        $a[] = new Heading('## heading I.1', 3, null);            // 1
+        $a[] = new Heading('### heading I.1.a', 5, null);            // 2
+        $a[] = new Heading('### heading I.1.b', 7, null);            // 3
+        $a[] = new Heading('## heading I.2', 9, null);            // 4
+        $a[] = new Heading('### heading I.2.a', 11, null);        // 5
+        $a[] = new Heading('### heading I.2.b', 13, null);        // 6
+        $a[] = new Heading('#### heading I.2.b.1', 15, null);        // 7
+        $a[] = new Heading('## heading I.3', 17, null);           // 8
+        $a[] = new Heading('### heading I.3.a', 19, null);        // 9
+        $a[] = new Heading('#### heading I.3.a.1', 21, null);     // 10
         return $a;
     }
 
@@ -56,17 +56,17 @@ class HeadingArrayTest extends TestCase
     public function getHeadingDataRoman(): array
     {
         return [
-            '.all((.((Chapter .)).fr((Chapitre .))I) .))heading 1.all((<A id="a1"></A>.))',
-            '.all((I-1) .))heading 1.1.all((<A id="a2"></A>.))',
-            '.all((.((Chapter .)).fr((Chapitre .))II) .))heading 2.all((<A id="a3"></A>.))',
-            '.all((II-1) .))heading 2.1.all((<A id="a4"></A>.))',
-            '.all((II-2) .))heading 2.2.all((<A id="a5"></A>.))',
-            '.all((II-2.a) .))heading 2.2.1.all((<A id="a6"></A>.))',
-            '.all((II-2.b) .))heading 2.2.2.all((<A id="a7"></A>.))',
-            '.all((II-2.c) .))heading 2.2.3.all((<A id="a8"></A>.))',
-            '.all((II-3) .))heading 2.3.all((<A id="a9"></A>.))',
-            '.all((II-3.a) .))heading 2.3.1.all((<A id="a10"></A>.))',
-            '.all((II-3.a.1) .))heading 2.3.1.1.all((<A id="a11"></A>.))'
+            '.all((.((Chapter .)).fr((Chapitre .))I) .))heading I.all((<A id="a1"></A>.))',
+            '.all((I-1) .))heading I.1.all((<A id="a2"></A>.))',
+            '.all((I-1.a) .))heading I.1.a.all((<A id="a3"></A>.))',
+            '.all((I-1.b) .))heading I.1.b.all((<A id="a4"></A>.))',
+            '.all((I-2) .))heading I.2.all((<A id="a5"></A>.))',
+            '.all((I-2.a) .))heading I.2.a.all((<A id="a6"></A>.))',
+            '.all((I-2.b) .))heading I.2.b.all((<A id="a7"></A>.))',
+            '.all((I-2.b.1) .))heading I.2.b.1.all((<A id="a8"></A>.))',
+            '.all((I-3) .))heading I.3.all((<A id="a9"></A>.))',
+            '.all((I-3.a) .))heading I.3.a.all((<A id="a10"></A>.))',
+            '.all((I-3.a.1) .))heading I.3.a.1.all((<A id="a11"></A>.))'
         ];
     }
 
@@ -161,27 +161,27 @@ class HeadingArrayTest extends TestCase
 
         $a->setOutputMode('htmlold');
         $test = $a->getTOCLink('dummyfile.md', 0, 1, 3);
-        $this->assertEquals('.all((<A href="dummyfile.md#a1">heading 1</A><BR>.))', $test);
+        $this->assertEquals('.all((<A href="dummyfile.md#a1">heading I</A><BR>.))', $test);
         $test = $a->getTOCLink('dummyfile.md', 6, 1, 3);
-        $this->assertEquals('.all((<A href="dummyfile.md#a7">heading 1.2.2</A><BR>.))', $test);
+        $this->assertEquals('.all((<A href="dummyfile.md#a7">heading I.2.b</A><BR>.))', $test);
 
         $a->setOutputMode('html');
         $test = $a->getTOCLink('dummyfile.md', 0, 1, 3);
-        $this->assertEquals('.all((<A href="dummyfile.md#a1">heading 1</A><BR>.))', $test);
+        $this->assertEquals('.all((<A href="dummyfile.md#a1">heading I</A><BR>.))', $test);
         $test = $a->getTOCLink('dummyfile.md', 6, 1, 3);
-        $this->assertEquals('.all((<A href="dummyfile.md#a7">heading 1.2.2</A><BR>.))', $test);
+        $this->assertEquals('.all((<A href="dummyfile.md#a7">heading I.2.b</A><BR>.))', $test);
 
         $a->setOutputMode('md');
         $test = $a->getTOCLink('dummyfile.md', 0, 1, 3);
-        $this->assertEquals('.all(([.))heading 1.all((](dummyfile.md#a1).))', $test);
+        $this->assertEquals('.all(([.))heading I.all((](dummyfile.md#a1).))', $test);
         $test = $a->getTOCLink('dummyfile.md', 6, 1, 3);
-        $this->assertEquals('.all(([.))heading 1.2.2.all((](dummyfile.md#a7).))', $test);
+        $this->assertEquals('.all(([.))heading I.2.b.all((](dummyfile.md#a7).))', $test);
 
         $a->setOutputMode('mdpure');
         $test = $a->getTOCLink('dummyfile.md', 0, 1, 3);
-        $this->assertEquals('.all(([.))heading 1.all((](dummyfile.md#a1).))', $test);
+        $this->assertEquals('.all(([.))heading I.all((](dummyfile.md#a1).))', $test);
         $test = $a->getTOCLink('dummyfile.md', 6, 1, 3);
-        $this->assertEquals('.all(([.))heading 1.2.2.all((](dummyfile.md#a7).))', $test);
+        $this->assertEquals('.all(([.))heading I.2.b.all((](dummyfile.md#a7).))', $test);
     }
 
     public function testNumbering()
@@ -249,8 +249,8 @@ class HeadingArrayTest extends TestCase
             //$this->assertEquals($h[$i], $test);
         }
         
-        $this->assertEquals('.all((  - I-2) .)).all(([.))heading 1.2.all((](main{extension}#a5).))', $a->getTOCLine(4, $numbering));
-        $this->assertEquals('.all((    - I-3.a) .)).all(([.))heading 1.3.1.all((](main{extension}#a10).))', $a->getTOCLine(9, $numbering));
+        $this->assertEquals('.all((  - I-2) .)).all(([.))heading I.2.all((](main{extension}#a5).))', $a->getTOCLine(4, $numbering));
+        $this->assertEquals('.all((    - I-3.a) .)).all(([.))heading I.3.a.all((](main{extension}#a10).))', $a->getTOCLine(9, $numbering));
         $this->assertNull($a->getTOCLine(10, $numbering));
 
         echo "\n\nMDPURE:";
@@ -264,8 +264,8 @@ class HeadingArrayTest extends TestCase
             //$this->assertEquals($h[$i], $test);
         }
         */
-        $this->assertEquals('.all((   2. [heading 2.2](main.mlmd#a5)', $a->getTOCLine(4, $numbering));
-        $this->assertEquals('.all((      1. [heading 2.3.1](main.mlmd#a10)', $a->getTOCLine(9, $numbering));
+        $this->assertEquals('.all((   2. .)).all(([.))heading I.2.all((](main{extension}#a5).))', $a->getTOCLine(4, $numbering));
+        $this->assertEquals('.all((      1. .)).all(([.))heading I.3.a.all((](main{extension}#a10).))', $a->getTOCLine(9, $numbering));
         $this->assertNull($a->getTOCLine(10, $numbering));
 
         echo "\n\nHTML:";
@@ -279,8 +279,8 @@ class HeadingArrayTest extends TestCase
             //$this->assertEquals($h[$i], $test);
         }
         */
-        $this->assertEquals('&nbsp;&nbsp;&nbsp;&nbsp;II-2) <A href="main.mlmd#a5">heading 2.2</A><BR>', $a->getTOCLine(4, $numbering));
-        $this->assertEquals('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;II-3.a) <A href="main.mlmd#a10">heading 2.3.1</A>', $a->getTOCLine(9, $numbering));
+        $this->assertEquals('.all((&nbsp;&nbsp;&nbsp;&nbsp;I-2) .)).all((<A href="main{extension}#a5">heading I.2</A><BR>.))', $a->getTOCLine(4, $numbering));
+        $this->assertEquals('.all((&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I-3.a) .)).all((<A href="main{extension}#a10">heading I.3.a</A>.))', $a->getTOCLine(9, $numbering));
         $this->assertNull($a->getTOCLine(10, $numbering));
     }
 }

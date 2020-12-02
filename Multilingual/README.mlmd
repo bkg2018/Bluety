@@ -31,11 +31,11 @@ headings numbering scheme using either command line parameters or directives in 
 de numérotation des titres par le biais de paramètres de la ligne de commande ou par
 des directives placées dans les fichiers sources..))
 
-.toc title=.((Table Of Contents.)).fr((Sommaire.)) level=2-3
+.toc title=Table Of Contents.fr((Sommaire.)) level=2-3
 
 ## Installation
 
-MLMD consists of a main PHP 7 script `mlmd.php` and a few dependencies files. The script and its
+MLMD consists of a main PHP 7 script `mlmd.php` and a set of dependencies PHP files. The script and its
 dependencies files can be put anywhere at user choice.
 .fr((MLMD est constitué d'un script principal `mlmd.php` et de dépendances. Le script et ses
 dépendances peuvent être placés dans n'importe quel répertoire accessible à l'utilisateur..))
@@ -46,14 +46,14 @@ MLMD has been tested with PHP 7.3 CLI version. Version 7.2 at least is required.
 .fr((MLMD a été testé avec PHP 7.3 CLI. La version 7.2 minimale est requise..))
 
 To make sure PHP is accessible from a command line type the following command:
-.fr((Pour vérifier que PHP est accessible depuis une ligne de commande on tape la commande suivante :.))
+.fr((La commande suivante permet de vérifier que PHP est accessible depuis une ligne de commande :.))
 
 ```code
 php -v
 ```
 
 It should display something like the following lines (exact text may vary):
-.fr((Elle doit afficher à peu près les lignes suivantes (le texte exact peut varier) :.))
+.fr((Des lignes similaires aux suivantes doivent s'afficher (le texte exact peut varier) :.))
 
 ```code
 PHP 7.3.20 (cli) (built: Jul  9 2020 23:50:54) ( NTS )
@@ -85,23 +85,25 @@ The PHP script and its dependencies must be put in a directory with easy user ac
 Parameters that can be passed to the script are described in [How To Use MLMD](#how-to-use-mlmd)
 .fr((Les paramètres du script sont décrits dans la partie [Utilisation de MLMD](#utilisation-de-mlmd).))
 
-### .((Using an alias to launch MLMD.)).fr((Utilisation d'un alias pour lancer MLMD.))
+### Using an alias to launch MLMD.fr((Utilisation d'un alias pour lancer MLMD.))
 
-.((This is optional and allows to type `mlmd` as if it were a command of the Operating System or
-command shell. Without aliases, the script must be launched by typing `php <your_path_to_mlmd>/mlmd.php`..))
+This is optional and allows to type `mlmd` as if it were a command of the Operating System or
+command shell. Without aliases, the script must be launched by typing `php <your_path_to_mlmd>/mlmd.php`.
 .fr((Ce qui suit est facultatif mais permet d'utiliser le script MLMD comme s'il était une commande
 du système d'exploitation. Sans les alias, le script doit être exécuté en tapant `php <chemin>/mlmd.php`
 avec le chemin où ont été stockés le script et ses dépendances..))
 
-.((The commands detailed in the following examples must be adapted to the directory where the script has
-been stored..)).fr((Les commandes indiquées ci-après doivent être adaptées pour le répertoire où se situe
+The commands detailed in the following examples must be adapted to the directory where the script has
+been stored.
+.fr((Les commandes indiquées ci-après doivent être adaptées pour le répertoire où se situe
 le script..))
 
 #### Linux / macOS / OS X
 
-* .((The following alias command must be put in the shell startup script (most likely `~/.bashrc`, `~/.zshrc`
-etc):.)).fr((La commande suivante peut être placée dans le script de démarrage du shell (en général `~/.bashrc`,
-`~/.zshrc` etc) :.))
+* The following alias command must be put in the shell startup script
+(most likely `~/.bashrc`, `~/.zshrc` etc):
+.fr((* La commande suivante peut être placée dans le script de démarrage
+du shell (en général `~/.bashrc`, `~/.zshrc` etc) :.))
 
 ```code
 alias mlmd=php ~/phpscripts/mlmd.php
@@ -109,47 +111,56 @@ alias mlmd=php ~/phpscripts/mlmd.php
 
 #### Windows 10
 
-* .((A text file must be created (e.g. using NOTEPAD.EXE) containing the following line:.))
-.fr((Un fichier texte doit être créé - par exemple avec le Bloc Note - contenant la ligne suivante :.))
+* A text file must be created (e.g. using NOTEPAD.EXE) containing the following line:
+.fr((* Un fichier texte doit être créé - par exemple avec le Bloc Note - contenant la ligne suivante :.))
 
 ```code
 doskey mlmd=php %HOMEDRIVE%%HOMEPATH%\phpscripts\mlmd.php $*
 ```
 
-* .((The file can be saved as `MLMD.CMD`or `mlmd.cmd` (letters case is ignored by Windows.) on the Desktop
-or any user accessible directory..)).fr((Le fichier est enregistré sous le nom `MLMD.CMD` ou `mlmd.cmd`
+* The file can be saved as `MLMD.CMD`or `mlmd.cmd` (letters case is ignored by Windows.) on the Desktop
+or any user accessible directory.
+.fr((* Le fichier est enregistré sous le nom `MLMD.CMD` ou `mlmd.cmd`
 (Windows ne différencie pas minuscules et majuscules dans les noms de fichiers.) sur le bureau ou dans
 n'importe quel répertoire accessible à l'utilisateur..))
-* .((A shortcut to this CMD file must be created (right-click on file in Explorer, then create shortcut)..))
-.fr((Un raccourci vers ce fichier est créé par un clic de droite suivi de la commande *Créer un raccourci*..))
-* .((The `shell:startup` directory must be opened (by hitting the *Windows* and *R* keys together and typing
-`shell:startup`)..)).fr((Le répertoire `shell:startup` est ouvert en tapant les touches *Windows* et *R* puis
+
+* A shortcut to this CMD file must be created (right-click on file in Explorer, then create shortcut).
+.fr((* Un raccourci vers ce fichier est créé par un clic de droite suivi de la commande *Créer un raccourci*..))
+
+* The `shell:startup` directory must be opened (by hitting the *Windows* and *R* keys together and typing
+`shell:startup`).
+.fr((* Le répertoire `shell:startup` est ouvert en tapant les touches *Windows* et *R* puis
 en tapant `shell:startup`..))
-* .((The shortcut must be moved from its directory to this startup directory..)).fr((Le raccourci créé à
-l'étape précédente est déplacé vers le répertoire startup..))
-* .((Windows must be restarted..)).fr((Windows doit être redémarré..))
 
-.((From then on, the `mlmd` alias is available in any command line box as a normal command..))
-.fr((A partir de ce moment, l'alias `mlmd` est disponible dans les invites de commande.))
+* The shortcut must be moved from its directory to this startup directory.
+.fr((* Le raccourci créé à l'étape précédente est déplacé vers le répertoire startup..))
 
-.((This method may work with earlier versions of Windows but they have not been tested..))
-.fr((Cette méthode peut fonctionner avec des versions antérieures de Windows mais celles=ci
+* Windows must be restarted.
+.fr((* Windows doit être redémarré..))
+
+* From then on, the `mlmd` alias is available in any command line box as a normal command.
+.fr((* A partir de ce moment, l'alias `mlmd` est disponible dans les invites de commande.))
+
+* This method may work with earlier versions of Windows but they have not been tested.
+.fr((* Cette méthode peut fonctionner avec des versions antérieures de Windows mais celles=ci
 n'ont pas été testées..))
 
-## .((How to Use MLMD.)).fr((Utilisation de MLMD.))
+## How to Use MLMD.fr((Utilisation de MLMD.))
 
-.((MLMD is run by the php interpreter and either receives parameters telling it which templates files to process,
-either processes all the template files it finds in the current directory from where it has been launched..))
-.fr((MLMD est exécuté par l'interpréteur PHP et reçoit des paramètres qui lui indiquent les fichiers à traiter
-ou explore le répertoire actuel et ses sous-répertoires pour localiser les fichiers à traiter..))
+MLMD is run by the php interpreter and either receives parameters telling it which source
+files to process, either processes all the template files it finds in the current directory
+from where it has been launched.
+.fr((MLMD est exécuté par l'interpréteur PHP et reçoit des paramètres qui lui indiquent
+les fichiers à traiter ou explore le répertoire actuel et ses sous-répertoires pour localiser
+les fichiers à traiter..))
 
-.((Optional parameters tells mlmd where to write generated files, how to number headings or write links..))
-.fr((D'autres paramètres indiquent à MLMD où placer les ficheirs générés, comment numéroter les titres
+Optional parameters tells mlmd where to write generated files, how to number headings or write links.
+.fr((D'autres paramètres indiquent à MLMD où placer les fichiers générés, comment numéroter les titres
 ou écrire les liens..))
 
-### .((MLMD run parameters.)).fr((Paramètres d'exécution MLMD.))
+### MLMD run parameters.fr((Paramètres d'exécution MLMD.))
 
-.((The syntax for `mlmd.php` and its arguments is:.))
+The syntax for `mlmd.php` and its arguments is:
 .fr((La syntaxe pour `mlmd.php` et ses paramètres est la suivante :.))
 
 .((
@@ -174,151 +185,162 @@ paramètres :
 ```
 .))
 
-.((If an alias has been set up, there's no need to explicitely call `php` or give the full path of MLMD script..))
+If an alias has been set there's no need to explicitely call `php` or give the full path of MLMD script.
 .fr((Si un alias a été créé, il est inutile d'appeler explicitement l'interpréteur php ou de donner
 le chemin complet du script MLMD..))
 
-.((The input files can be given to the script with the `-i` parameter, or they can be found in the current directory
-from where the script is called if not `-i` parameter is used. This is explained in [Input files](#input-files--i-argument)..))
-.fr((Les fichiers sources peuvent être spécifiés avec le paramètre `-i`, ou bien ils peuvent être trouvés
-automatiquement par le script si aucun `-i` n'est spécifié. Cela est décrit dans [Fichiers sources](#fichiers-sources-parametre--i).))
+The input files can be given to the script with the `-i` parameter, or they can be found in
+the current directory from where the script is called if no `-i` parameter is given. This is explained
+in [Input files](#input-files--i-argument).
+.fr((Les fichiers sources peuvent être spécifiés avec le paramètre `-i`, ou bien être trouvés
+automatiquement par le script si aucun `-i` n'est spécifié. Cela est décrit dans
+[Fichiers sources](#fichiers-sources-parametre--i).))
 
-### .((Source file pathes and names.)).fr((Chemin des fichiers sources.))
+### Source file pathes and names.fr((Chemin des fichiers sources.))
 
-.((The files names for the MLMD source files must end with `.base.md` or `.mlmd` extension. Files with other extensions
-will be ignored. The `.base.md` extension can be convenient because syntax highlighting and Markdown previewing will work
-in most editors, however the MLMD templates are not actual Markdown files and do not fully conform to Markdown syntax so
-this can lead to some confusion. The `.mlmd` extension is more explicit and makes it clear that the files are MLMD templates
-rather than variants of Markdown files, and text editors can generally be configured to recognized MLMD syntax..))
-.fr((.Le noms des fichiers sources MLMD doivent posséder l'extension `.base.md`ou `.mlmd`. Les fichiers avec une extension
-différente seront ignorés par MLMD. L'extension `.base.md` peut être pratique car la coloration syntaxique Markdown
-fonctionnera dans la plupart des éditeurs de texte pour la majorité des fichiers, toutefois les fichiers sources MLMD ne
-sont pas réellement des fichiers Markdown, ce qui peut mener à une certaine confusion lors de l'édition. L'extension `.mlmd`
-est plus explicite et montre clairement que les fichiers sont à destination de MLMD, et les éditeurs de texte peuvent
-généralement être paramétrés pour reconnaitre la syntaxe MLMD..))
+The files names for the MLMD source files must end with either `.base.md` or `.mlmd` extension. Files with
+other extensions will be ignored. The `.base.md` extension can be convenient because syntax highlighting
+and Markdown previewing will work in most editors, however the MLMD templates are not actual Markdown files
+and do not fully conform to Markdown syntax so this can lead to some confusion. The `.mlmd` extension is
+more explicit and makes it clear that the files are MLMD templates rather than variants of Markdown files,
+and text editors can generally be configured to recognized MLMD syntax.
+.fr((.Le noms des fichiers sources MLMD doivent posséder l'extension `.base.md`ou `.mlmd`. Les fichiers
+avec une extension différente seront ignorés par MLMD. L'extension `.base.md` peut être pratique car la
+coloration syntaxique Markdown fonctionnera dans la plupart des éditeurs de texte pour la majorité des
+fichiers, toutefois les fichiers sources MLMD ne sont pas réellement des fichiers Markdown, ce qui peut
+mener à une certaine confusion lors de l'édition. L'extension `.mlmd` est plus explicite et montre clairement
+que les fichiers sont à destination de MLMD, et les éditeurs de texte peuvent généralement être paramétrés
+pour reconnaitre la syntaxe MLMD..))
 
-.((When no source files parameter (`-i`) is given to the script, MLMD will explore the directory tree where it starts
-and generate files for all the templates it finds and the languages declared in them. The generated files will be put
-in the same directory as their source template..))
-.fr((Lorsqu'aucun paramètre `-i` n'est fourni, MLMD explore le répertoire de départ et génère des fichiers pour chacun des
-fichiers `.mlmd` ou `.base.md` qu'il y trouvera, en respectant la même hiérarchie de répertoires..))
+When no source files parameter (`-i`) is given to the script, MLMD will explore the directory tree where
+it starts and generate files for all the templates it finds and the languages declared in them. The generated
+files will be put in the same directory as their source template.
+.fr((Lorsqu'aucun paramètre `-i` n'est fourni, MLMD explore le répertoire de départ et génère des fichiers
+pour chacun des fichiers `.mlmd` ou `.base.md` qu'il y trouvera, en respectant la même hiérarchie de répertoires..))
 
-.((The `-main` parameter sets the main input file and the root directory for all relative links in the generated files:
-the directory of this main file will be considered as the root directory for all other files. For consistency, no other
-file should lie above this root directory or in a directory outside the tree under this root, so that all internal links
-in generated files can use relative pathes..))
-.fr((Le paramètre `-main` indique le fichier principal et le répertoire racine pour tous les liens relatifs qui
-seront placés dans les fichiers générés. Le répertoire de ce fichier est considéré comme la racine de la hiérarchie de
-l'ensemble des fichiers. Aucun fichier situé au dessus de ce répertoire ou dans une autre branche ne sera retenu, et
-tous les liens et noms de fichiers ou de répertoires seront relatifs à cette racine..))
+The `-main` parameter sets the main input file and the root directory for all relative links in the
+generated files: the directory of this main file will be considered as the root directory for all other files.
+For consistency, no other file should lie above this root directory or in a directory outside the tree under
+this root, so that all internal links in generated files can use relative pathes.
+.fr((Le paramètre `-main` indique le fichier principal et le répertoire racine pour tous les liens relatifs
+qui seront placés dans les fichiers générés. Le répertoire de ce fichier est considéré comme la racine de
+la hiérarchie de l'ensemble des fichiers. Aucun fichier situé au dessus de ce répertoire ou dans une autre
+branche ne sera retenu, et tous les liens et noms de fichiers ou de répertoires seront relatifs à cette racine..))
 
-.((The various directives are described in.)).fr((les différentes directives sont décrites dans la partie.)) [Directives](#directives).
+The various directives are described in.fr((les différentes directives sont décrites dans la partie.)) [Directives](#directives).
 
-### .((Input files: `-i` argument.)).fr((Fichiers sources : paramètre `-i`.))
+### Input files: `-i` argument.fr((Fichiers sources : paramètre `-i`.))
 
-.((To process specific files, use the `-i` parameter followed by the files pathes. To process more than one files,
+To process specific files, use the `-i` parameter followed by the files pathes. To process more than one files,
 it is best to have them in a same tree and to start MLMD at the root directory where the main Markdown file lies so
-MLMD will find all the source files. In this case the `-i` argument is not needed..))
+MLMD will find all the source files. In this case the `-i` argument is not needed.
 .fr((.Pour traiter des fichiers spécifiques, on utilise le paramètre `-i` suivi d'un chemin de fichier. Pour traiter
 plusieurs fichiers il est préférable de les placer dans un arbre de sous-répertoires et de démarrer MLMD à partir de la racine
 de cet arbre de répertoires afin qu'il trouve de lui-même tous les fichiers sources. le paramètre `-i` est alors inutile.))
 
-* .((Process a given file: use `-i <template_path>`:.))
-.fr((Traiter un fichier donné : `-i <chemin>` :.))
+* Process a given file: use `-i <template_path>`:
+.fr((* Traiter un fichier donné : `-i <chemin>` :.))
 
   ```code
   php ~/phpscripts/mlmd.php -i ~/project/README.mlmd
   ```
 
-* .((Process multiple files: use multiples `-i <template_path>`:.))
-.fr((Traiter plusieurs fichiers : utiliser plusieurs `-i` :.))
+* Process multiple files: use multiples `-i <template_path>`:
+.fr((* Traiter plusieurs fichiers : utiliser plusieurs `-i` :.))
 
   ```code
   php ~/phpscripts/mlmd.php -i ~/project/README.mlmd -i ~/project/HOWTOUSE.mlmd
   ```
 
-* .((Process a whole directory and subdirectories: change to this directory and don't give any `-i` parameter:.))
-.fr((Traiter un répertoire et ses sous-répertoires : se placer dans ce répertoire et ne pas donner de paramètre `-i`:.))
+* Process a whole directory and subdirectories: change to this directory and don't give any `-i` parameter:
+.fr((* Traiter un répertoire et ses sous-répertoires : se placer dans ce répertoire et ne pas donner de paramètre `-i`:.))
 
   ```code
   cd ~/project
   php ~/phpscripts/mlmd.php
   ```
 
-  .((This syntax will process any file found in the directory tree which ends by `.base.md` or `.mlmd`, including those
-  found in sub directories. Other files will be ignored..)).fr((Cette syntaxe traite tous les fichiers d'extension
-  `.mlmd` ou `.base.md` trouvés dans le répertoire et ses sous-répertoires. Les autres fichiers sont ignorés..))
+  This syntax will process any file found in the directory tree which ends by `.base.md` or `.mlmd`,
+  including those found in sub directories. Other files will be ignored.
+  .fr((Cette syntaxe traite tous les fichiers d'extension `.mlmd` ou `.base.md` trouvés dans le répertoire
+  et ses sous-répertoires. Les autres fichiers sont ignorés..))
 
-### .((Main file: `-main` argument.)).fr((Fichier principal : paramètre `-main`.))
+### Main file: `-main` argument.fr((Fichier principal : paramètre `-main`.))
 
-.((If a file is named `README.mlmd` in the directory where the script is started, it will be considered the main file of
-all the directory tree and all the links will use pathes relative to its directory. Notice the name casing: `README`
-is uppercase, while the `.mlmd` extension is lowercase. On Windows, case is not significant but the script still
-searches an uppercase `README`..))
-.fr((Si un fichier se nomme `README.mlmd`dans le répertoire de démarrage de MLMD, il est considéré comme le fichier
-principal et les chemins et liens générés seront relatifs à l'emplacement de ce fichier. Attention à la casse du nom :
-`README` est en majuscules tandis que `.mlmd` est en minuscules. Sur Windows les majuscules ne sont pas significatives
-mais MLMD cherchera tout de même `README` en majuscules..))
+If a file is named `README.mlmd` in the directory where the script is started, it will be considered
+the main file of all the directory tree and all the links will use pathes relative to its directory.
+Notice the name casing: `README` is uppercase, while the `.mlmd` extension is lowercase. On Windows,
+case is not significant but the script still searches an uppercase `README`.
+.fr((Si un fichier se nomme `README.mlmd`dans le répertoire de démarrage de MLMD, il est considéré
+comme le fichier principal et les chemins et liens générés seront relatifs à l'emplacement de ce
+fichier. Attention à la casse du nom : `README` est en majuscules tandis que `.mlmd` est en minuscules.
+Sur Windows les majuscules ne sont pas significatives mais MLMD cherchera tout de même `README`
+en majuscules..))
 
-.((If there is no `README.md` file in the starting directory, the `-main` parameter can be used to tell the script which
-template is the main file, and indirectly which directory is the root directory:.))
-.fr((S'il n'y a aucun fichier `README.mlmd` dans le répertoire de démarrage, le paramètre `-main` peut être utilisé pour
-indiquer le fichier source principal et, indirectement, le répertoire racine de tous les liens relatifs :.))
+If there is no `README.md` file in the starting directory, the `-main` parameter can be used to tell
+the script which template is the main file, and indirectly which directory is the root directory:
+.fr((S'il n'y a aucun fichier `README.mlmd` dans le répertoire de démarrage, le paramètre `-main`
+peut être utilisé pour indiquer le fichier source principal et, indirectement, le répertoire racine
+de tous les liens relatifs :.))
 
 ```code
 php ~/phpscripts/mlmd.php -main ./main.mlmd
 ```
 
-.((.The main file is generally the bets place where to put a global table of contents covering all the sorce files.
-See the `.toc` directive for more informations..))
-.fr((Le fichier principal est en général l'endroit le plus approprié pour insérer une table des matières globales
-qui recouvre tous les fichiers. Voir la directive `.toc` pour plus de détails..))
+The main file is generally the bets place where to put a global table of contents covering
+all the sorce files. See the `.toc` directive for more informations.
+.fr((Le fichier principal est en général l'endroit le plus approprié pour insérer un sommaire
+global qui couvre tous les fichiers. Voir la directive `.toc` pour plus de détails..))
 
-### .((Output mode html/htmlold/md/mdpure: `-out` argument.)).fr((Mode de sortie html/htmlolf/md/mdpure : paramètre `-out`.))
+### Output mode html/htmlold/md/mdpure: `-out` argument.fr((Mode de sortie html/htmlolf/md/mdpure : paramètre `-out`.))
 
+The `-out` parameter selects the HTML or Markdown syntax for the links in the Tables Of Contents.
+.fr((Le paramètre `-out` choisit la syntaxe HTML ou Markdown pour les liens
+générés dans les sommaires..))
 
-.((The `-out` parameter selects the HTML or Markdown links style in the Table Of Contents..))
-.fr((Le paramètre `-out` choisit entre les syntaxes HTML et Markdown pour les liens générés dans la table des matières..))
-
-.((Markdown allows a few ways for creating links to a heading in a file:.))
+Markdown allows a few ways for creating links to a heading in a file:
 .fr((Dans les fichiers Markdown on dispose de plusieurs syntaxes pour créer un lien vers un titre :.))
 
-* .((use standard HTML `<A>` anchors and links, using the `name` or `id` attribute to identify anchors..))
-  .fr((utiliser des ancres et des liens HTML standards avec la balise `<A>`, en utilisant un attribut `id`
+* use standard HTML `<A>` anchors and links, using the `name` or `id` attribute to identify anchors.
+.fr((* utiliser des ancres et des liens HTML standards avec la balise `<A>`, en utilisant un attribut `id`
   ou `name` pour identifier les ancres..))
-* .((use Markdown automatic heading targets, all lowercase with non alphanumeric characters deleted and spaces
-  changed to dashes..))
-  .fr((utiliser des cibles automatiques Markdown vers les titres, passés en minuscules, débarrassés des caractères 
-  non alphanumériques et où les espaces sont remplacés par des traits d'union..))
-* .((use Markdown `{:` targets in headings..))
-  .fr((utiliser des cibles `{:` dans les titres..))
+* use Markdown automatic heading targets, all lowercase with non alphanumeric characters deleted and spaces
+  changed to dashes.
+.fr((* utiliser des cibles automatiques Markdown vers les titres, passés en minuscules, débarrassés
+  des caractères non alphanumériques et où les espaces sont remplacés par des traits d'union..))
+* use Markdown `{:` targets in headings: this style is not recognized by all Markdown editors and
+viewers and may not work very well.
+.fr((* utiliser des cibles `{:` dans les titres : ce style n'est pas reconnu par tous les éditeurs
+et visualisateurs Markdown et peut ne pas fonctionner très bien.
 
-.((The standard old style HTML `<A name="target"></A>` or modern style HTML `<A id="target"></A>` anchors and
-`<A href="file#target"></A>` links can be used in MLMD templates just like they would in standard HTML or Markdown
+The standard old style HTML `<A name="target"></A>` or modern style HTML `<A id="target"></A>` anchors and
+`<A href="file#target"></A>` links can be used in MLMD templates just like they would in standard HTML or Markdown.
 The Markdown automatic links `[](#heading-text)` also works as they would in a normal Markdown: MLMD won't change
-the anchors and links written using these forms..))
+the anchors and links written using these forms. However this needs a change in titles text in the automatic link
+as they must be cleaned from any space or non alphabnumeric characters.
 .fr((Le style d'ancres HTML le plus ancien `<A name="ancre"></A>` ou le plus moderne `<A id="ancre"></A>` ainsi
 que les liens HTML `<A href="fichier#ancre"></A>` peuvent être utilisés dans les sources MLMD et fonctionneront
-comme dans n'importe quel fichier Markdown ou HTML. Les liens Markdown automatiques `[](#titre)` fonctionnent également
-comme dans les fichiers Markdown normaux : MLMD ne modifiera pas ces ancres et liens lors de la génération..))
+comme dans n'importe quel fichier Markdown ou HTML. Les liens Markdown automatiques `[](#titre)` fonctionnent
+également comme dans les fichiers Markdown normaux : MLMD ne modifiera pas ces ancres et liens lors de la
+génération. Toutefois ces liens demandent une modificagtion du texte du titre qui doit être débarrassé des
+espaces et des caractères non alphanumériques..))
 
-.((Common use standards for Markdown discourage the use of HTML, however it is perfectly valid to use HTML and
+Common use standards for Markdown discourage the use of HTML, however it is perfectly valid to use HTML and
 HTML anchors are more versatile and reliable than Markdown links which are not always correctly handled by
-Markdown files viewers or editors..))
+Markdown files viewers or editors.
 .fr((Par convention on évite généralement d'utiliser du HTML directement dans des fichiers Markdown afin de
 permettre la génération vers d'autres formats, toutefois ce n'est pas interdit et les liens HTML sont plus fiables
 que les liens Markdown, ces derniers n'étant pas toujours bien reconnus ou gérés par les logiciels d'affichage
 ou d'édition Markdown.))
 
-.((That said, MLMD can generate a Table Of Contents using the `.toc` directive and will put links to headings
+That said, MLMD can generate a Table Of Contents using the `.toc` directive and will put links to headings
 in this table. To help with adopted conventions, MLMD allow the choice for anchors and links styles it places in the
-table of contents links and in file headings. This is done using the `-out` parameter..))
-.fr((Ceci étant dit, MLMD peut générer un sommaire avec la directive `.toc` et va insérer des liens vers les
+table of contents links and in file headings. This is done using the `-out` parameter.
+.fr((Ceci étant, MLMD peut générer un sommaire avec la directive `.toc` et va y insérer des liens vers les
 titres des fichiers placés dans le sommaire. Pour respecter les conventions choisies, MLMD propose le choix entre
 différents styles de liens et d'ancres dans les sommaires et les titres, à l'aide du paramètre `-out`..))
 
-
-.((| Parameter        | Headings anchors      | TOC links                  |.))
+| Parameter        | Headings anchors      | TOC links                  |
 .fr((| Paramètre      | Ancre des titres      | Liens sommaire             |.))
 |---------------------|-----------------------|----------------------------|
 | `-out htmlold`      | `<A name="target">`   | `<A href="file#target">`   |
@@ -326,116 +348,169 @@ différents styles de liens et d'ancres dans les sommaires et les titres, à l'a
 | `-out md`           | `<A id="target">`     | `[](file#target)`          |
 | `-out mdpure`       | `{#id}`               | `[](file#target)`          |
 
-.((All identifiers in anchors are guaranteed unique over all the processed files by MLMD..))
-.fr((MLMD affecte des identifiants uniques à tous les titres de tous les fichiers..))
+All the generated identifiers in anchors are guaranteed globally unique over the processed files by MLMD.
+.fr((MLMD affecte un identifiant globalement unique à chaque titre de chaque fichiers..))
 
-.((There is no absolute best method, the choice for the right method is context dependent. To try
-another mode it is sufficient to run MLMD on source files changing only the `-out`parameter value..))
+There is no absolute best method, the choice for the right method is context dependent. To try
+another mode it is best to run MLMD on source files changing only the `-out`parameter value and check
+if the result is as expected..))
 .fr((Il n'y a pas de meilleure méthode, chacune est appropriée à un contexte. Pour essayer un mode il
-suffit de passer MLMD sur les fichiers en changeant le paramètre `-out` et tous les fichies MD seront régénérés.))
+suffit de passer MLMD sur les fichiers en changeant le paramètre `-out` et de vérifier si le résultat
+correspond à ce qui était attendu..))
 
-#### .((Named HTML anchors: `htmlold`.)).fr((Ancres HTML nommées : `htmlold`.))
+#### Named HTML anchors: `htmlold`.fr((Ancres HTML nommées : `htmlold`.))
 
-.((This mode uses plain old HTML style `<a name="id">` anchors to headings targets and `<a href>` links in the TOC.
-It is best used in vanilia HTML context for existing documentation or system, to keep maximum compatibility
-with possibly old Web browsers..))
+This mode uses plain old HTML style `<a name="id">` anchors to headings targets and `<a href>` links
+in the TOC. It is best used in vanilia HTML context for existing documentation or system, to keep maximum
+compatibility with possibly old Web browsers.
 .fr((Ce mode utilise des ancres de style ancien `<a name="id">` et des liens classiques `<a href>`. Il est
-très approprié dans un contexte HTML standard ou pour une documentation ou un système existants afin de maintenir
+très approprié dans un contexte HTML standard, pour une documentation ou un système existants afin de maintenir
 une excellente compatibilité..))
 
-#### .((Identified HTML anchors: `html`.)).fr((Ancres HTML identifiées : `html`.))
+#### Identified HTML anchors: `html`.fr((Ancres HTML identifiées : `html`.))
 
-.((Recent standards have replaced the `name` attribute in HTML `<A>` anchors by the `id` attribute, which has the
-benefit of automatic interfacing with Javascript. This mode uses the new `id` attribute for anchors and `<a href>`
-links in the TOC and is well suited for HTML documentation in a modern, dynamic scripted environment..))
-.fr((Les standrads récents ont remplacé l'attribut `name` des ancres HTML `<A>` par l'attribut ìd`, qui a l'avantage
-d'être automatiquement connu de Javascript. Dans ce mode, MLMD utilise `id` dans les ancres. Il est particulièrement
-adapté pour une documentation HTML dans un environnement moderne dynamique ou scripté..))
+Recent standards have replaced the `name` attribute in HTML `<A>` anchors by the `id` attribute,
+which has the benefit of automatic interfacing with Javascript. This mode uses the new `id` attribute
+for anchors and `<a href>` links in the TOC and is well suited for HTML documentation in a modern,
+dynamic scripted environment.
+.fr((Les standrads récents ont remplacé l'attribut `name` des ancres HTML `<A>` par l'attribut ìd`,
+qui a l'avantage d'être automatiquement connu de Javascript. Dans ce mode, MLMD utilise `id` dans les
+ancres. Il est particulièrement adapté pour une documentation HTML dans un environnement moderne
+dynamique ou scripté..))
 
-#### .((Anchored Markdown: `md`.)).fr((Ancres Markdown : `md`.))
+#### Anchored Markdown: `md`.fr((Ancres Markdown : `md`.))
 
-.((This hybrid mode uses HTML anchors with the `id` attribute and `[]()` Markdown links in the TOC. It is appropriate
-for software or Github documentation and works in a lot of different situations where HTML is allowed..))
-.fr((Ce mode hybride utilise des ancres HTML avec un attribut `id` mais des liens Markdown `[]()` dans le sommaire. 
-Il est approprié pour les documentations Github ou de logiciel et fonctionne parfaitement dans différentes
-situations où le HTML est autorisé..))
+This hybrid mode uses HTML anchors with the `id` attribute and `[]()` Markdown links in the TOC.
+It is appropriate for software or Github documentation and works in a lot of different situations
+where HTML is allowed.
+.fr((Ce mode hybride utilise des ancres HTML avec un attribut `id` mais des liens Markdown `[]()`
+dans le sommaire. Il est approprié aux documentations Github ou de logiciel et fonctionne
+parfaitement dans différentes situations où le HTML est autorisé..))
 
-#### .((Pure Markdown: `mdpure`.)).fr((Markdown pur : `mdpure`.))
+#### Pure Markdown: `mdpure`.fr((Markdown pur : `mdpure`.))
 
-.((This mode generate Markdown `{#}` anchors for headings and uses `[]()` Markdown links in the TOC. It is well suited
-in pure Markdown contexts or when files are automatically checked against Markdown conformity. However Markdown
-anchors may not work in all Markdown processors.; so if that happens, the `md` mode can be a better choice..))
-.fr((Ce mode génère des ancres Markdown `{#}` dans les titres et des liens Markdown `[]()` dans les sommaires. Il
-est très adapté aux contextes Markdown purs lorsque la conformité des fichiers aux standards Markdown est vérifiée
-automatiquement. Toutefois les ancres Markdown ne fonctionnent pas dans tous les processeurs Markdown (éditeurs
-ou browsers). En cas de problème, le mode hybride `md` peut se révéler plus efficace..))
+This mode generate Markdown `{#}` anchors for headings and uses `[]()` Markdown links in the TOC
+and use no HTML construction at all. It is well suited in pure Markdown contexts or when files are
+automatically checked against Markdown conformity. However Markdown anchors may not work in all
+Markdown processors so if this is a problem, the `md` hybrid mode can be a better choice.
+.fr((Ce mode génère des ancres Markdown `{#}` dans les titres et des liens Markdown `[]()` dans
+les sommaires et n'emploie aucune construction HTML. Il est très adapté aux contextes Markdown purs
+ou lorsque la conformité des fichiers aux standards Markdown est vérifiée automatiquement. Toutefois
+les ancres Markdown ne fonctionnent pas dans tous les processeurs Markdown (éditeurs ou browsers).
+En cas de problème, le mode hybride `md` peut se révéler un meilleur choix..))
 
-#### .((About non-unique headings.)).fr((A propos des titres non uniques.))
+#### About non-unique headings.fr((A propos des titres non uniques.))
 
-.((Because of the automatic headings links feature, Markdown convention is generally to avoid identical headings
-in a file. However, except for a warning from Markdown lint tools, identical headings are not an actual issue
-for MLMD *if they are not targeted by any automatic link*. MLMD allocates unique anchor identifiers over all the
-processed files so even identical headings can be targeted unambigously in the TOC. However the user cannot know
-the MLMD unique identifiers before all files are processed, so links in the text body cannot use the MLMD anchors..))
-.fr((En raison des liens automatiques vers les titres, par convention les fichiers Markdown ne doivent généralement
-pas utiliser un même texte de titre plusieurs fois. Toutefois, excepté un warning des outils de vérification
-Markdown (linting) de tels titres ne posent pas de réel problèmes à MLMD s'ils ne sont pas explicitement visés par
-des liens automatiques Markdown. Pour ses propres liens de sommaire, MLMD alloue un identifiant et une ancre unique
-à chacun des titres présents dans l'ensemble des fichiers sources traités même si certains sont identiques. Ces
-identifiants ne sont pas connus avant la génération, aussi le rédacteur ne peut pas les utiliser dans les fichiers
-sources de façon simple..))
+Because of the automatic headings links feature, Markdown convention is generally forbidding identical
+heading texts in a file. However, except for a warning from Markdown lint tools, identical headings are
+not an actual issue for MLMD if they are not targeted by any automatic link. MLMD allocates unique anchor
+identifiers over all the processed files so even identical headings can be targeted unambigously in the TOC.
+However the user cannot know the MLMD unique identifier before all files are processed, so links in the text
+body cannot easily use the MLMD anchors.
+.fr((En raison des liens automatiques vers les titres, par convention les fichiers Markdown ne doivent
+généralement pas utiliser un même texte de titre plusieurs fois. Toutefois, excepté un warning des outils
+de vérification Markdown (linting) de tels titres ne posent pas de réel problèmes à MLMD s'ils ne sont pas
+explicitement visés par des liens automatiques Markdown. Pour ses propres liens de sommaire, MLMD alloue
+un identifiant et une ancre unique à chacun des titres présents dans l'ensemble des fichiers sources
+même si certains sont identiques. Ces identifiants ne sont toutefois pas connus avant la génération, aussi
+le rédacteur ne peut pas les utiliser dans les fichiers sources de façon simple.
 
-.((To solve this and use the unique MLMD headings anchors, the best way is to use explicit anchors in the
+To solve this and use the unique MLMD headings anchors, the best way is to use explicit anchors in the
 identical headings so they can be referenced in manual links in the source files. Either Markdown or HTML syntax
 can be used. MLMD will forward these anchors and links into the generated files and won't mess with them, provided
 they don't use the `a<integer>` format used by MLMD. (E.g. `a12`.). MLMD will add its own anchors and links which
-won't interfere with the text body anchors and links..))
-.fr((Pour répondre à ce besoin d'ancre unique dans les titres identiques, le meilleur moyen est d'utiliser des
+won't interfere with the text body anchors and links.
+.fr((Pour répondre au besoin d'ancre unique dans des titres identiques, le meilleur moyen est d'utiliser des
 ancres explicites dans ces titres afin de pouvoir les référencer dans des liens dans le corps du texte des
 fichiers sources. Les syntaxes HTML ou MD peuvent être utilisées, MLMD reproduira simplement ces ancres et liens
 dans les fichiers générés sans interférer avec ses propres ancres et liens de titres, à condition que les ancres
 explicites n'utilisent pas le format `a<nombre>` de MLMD.))
 
-.((Another solution is to process files once so each heading anchor can be checked in the generated files and
-then used in the source files manual links..))
-.fr((Une autre solution possible est de générer les fichiers une première fois avec MLMD afin de pouvoir connaitre
-les ancres des titres dans les fichiers générés pour pouvoir les référencer dans les liens des fichiers sources..))
+Another solution is to process files once so each heading anchor can be checked in the generated files and
+then used in the source files manual links, but this assume headings won't change in future source files
+updates and is hazardous..))
+.fr((Une autre solution est de générer les fichiers une première fois avec MLMD afin de révéler
+les ancres uniques des titres dans les fichiers générés pour pouvoir les référencer dans les liens des
+fichiers sources. Toutefois ceci suppose que les titres ne changeront pas lors de futures mises à jour
+des documents sources et est déconseillé..))
 
-### .((Headings numbering: `-numbering`.)).fr((Numérotation des titres : `-numbering`.))
+### Headings numbering: `-numbering`.fr((Numérotation des titres : `-numbering`.))
 
-.((The `-numbering` parameter sets a numbering scheme for headings levels over all the generated files and in the
-tables of contents. For example, a third level heading could be numbered `A.2.5) Using objects`. The numbering
-can be set in two ways:.))
-
+The `-numbering` parameter sets a numbering scheme for headings levels over all the generated files and in the
+tables of contents. For example, a third level heading could be numbered `A.2-5) Using objects`. The numbering
+can be set in two ways:
+.fr((Le paramètre `-numbering` indique un schéma de numérotation pour les différents niveaux
+de titres rencontrés dans tous les fichiers sources et dans les sommaires. Par exemple un titre de niveau
+3 peut être numéroté `A.2-5) Utiliser les objets`. La numérotation peut être choisie de deux façons :.))
 
 * globally for all generated files, using the `-numbering` script argument
+.fr((* globalement pour tous els ficheirs avec l'argument `-numbering`.))
 * file by file using the `.numbering` directive.
+.fr((* fichier par fichier avec al directive `.numbering` dans les fichiers sources.))
 
-The script argument has priority and will make MLMD ignore any file `.numbering` directive. The following addresses the script argument,
-the syntax is identical for the file directive and is addressed later.
+The script argument has priority and will make MLMD ignore any file `.numbering` directive. The following
+addresses the script argument, the syntax is identical for the file directive and is addressed later.
+.fr((L'argument de la ligne de commande a priorité et supplantera les directives `.numbering``
+dans les fichiers source. Ce qui suit traite de cet argument, la syntaxe de ses paramètres est identique
+pour la directive qui sera abordée plus loin..))
 
-#### Syntax
+#### Syntax.fr((Syntaxe.))
 
 The parameter consists of any number of levels definitions separated by a comma:
+.fr((Le paramètre contient un nombre quelconque de définitions de niveaux séparées par une virgule :.))
 
+.((
 ```code
 -numbering [<level>]:[<prefix>]:<symbol>[<separator>][,...]]
 ```
+.)).fr((
+```code
+-numbering [<niveau>]:[<préfixe>]:<symbole>[<séparateur>][,...]]
+```
+.))
 
 Following are details about each definition part.
+.fr((Voici une description des parties de la définition de niveau.))
 
-* `<level>` is optional and is a digit between `1` and `9` representing the heading level (which is the number of '#' at the heading beginning). By default, this defines the next level, starting with 1 and incrementing at each definition.
-* `:` is a mandatory separator between parts of the definition.
-* `prefix` is an optional prefix for the level numbering, e.g. '`Chapter `'. The prefix only appears in the level numbering for the heading of this level, and will be omitted from inferior levels numbering.
-* `<symbol>` is a mandatory symbol which can be an uppercase letter `A` to `Z`, a lowercase letter from `a` to `z` or a digit from `1` to `9`. It sets the starting symbol for the level numbering.
-* `separator` is an optional symbol which will be concatenated to the numbering symbol before the next level numbering. Conventional symbols can be `.`, `-`or `)`. Omitting this separator for the last level is identical to using `)`.
+* `<level>` is optional and is a digit between `1` and `9` representing the heading level (which is the number of '#' at
+the heading beginning). By default, this defines the next level, starting with 1 and incrementing at each definition.
+* `:` is a mandatory separator between parts of the definition, even for the empty ones.
+* `prefix` is an optional prefix for the level numbering, e.g. '`Chapter `'. The prefix only appears in the level numbering
+for the heading of this level, and will be omitted from inferior levels numbering.
+* `<symbol>` is a mandatory symbol which can be an uppercase letter `A` to `Z`, a lowercase letter from `a` to `z`,
+a digit from `1` to `9` or the spcial notation '&I' or '&i' for uppercase or lowercase Roman numbers. It sets the starting
+value for the level numbering, except for Roman numbers which always start at `I`.
+* `separator` is an optional symbol which will be concatenated to the numbering symbol before the next level numbering.
+Conventional symbols can be `.`, `-`or `)`. Omitting this separator for the last level is identical to using `.`.
 * `,` is a separator before the next level definition.
+.fr((
+* `<niveau>` est un chiffre entre `1` and `9` facultatif qui indique le ,niveau de titre concerné (c'est le nombre de `#`
+qui débute le titre). Par défaut c'est le niveau suivant celui de la définition précédente, en commençant par 1.
+* `:` est un séparateur obligatoire entre chacune des parties de la définition, même pour les parties omises.
+* `préfixe` est un préfixe facultatif pour le tout premier niveau de titre, par exemple `Chapitre `. Le préfixe n'apparait
+que dans le libellé des titres de premier niveau, même s'il est spécifié pour un autre niveau.
+* `<symbole>` est un syùbole obligatoire qui peut être une lettre majuscule `A` à `Z`, une lettre minuscule `a` à `z`,
+un chiffre de `1` à `9` ou la mention spéciale `&I` ou `&i` pour représenter les chiffres romains en majuscules
+ou minuscules. Ce symbole indique la valeur de départ pour la numérotation du niveau, sauf pour les chiffres romains
+qui commencent toujours à `I` ou `i`.
+* `séparateur` est un caractère facultatif qui sera écrit après les symboles de numérotation de ce niveau. Les symboles
+séparateurs les plus courants sont `.`, `-` ou `)`. Par défaut les niveaux de la numérotation sont séparés par un `.`.
+* `,` sépare les différentes définitions de niveau.
+.))
 
-A level always starts with the defined symbol, then all the following headings at the same level will increment this symbol. A Heading with a level above will reset the current level, and continue with the next number in the setting for the above level.
+A level N always starts with the defined symbol, then all the following headings at the same level N will increment
+this symbol until a heading with a level N-1 above will reset the current level N, and continue with the next number
+in the setting for the above level N.
+.fr((Le premier titre d'un niveau N est numéroté avec le symbole indiqué, les suivants au même niveau N seront ensuite
+incrémentés jusqu'à ce que survienne un titre de niveau supérieur N-1 qui réinitialisera la prochaine séquence de
+niveau N au symbole de départ..))
 
-#### Example
+#### Example.fr((Exemple.))
 
-This is how to number level 1 headings with the 'A', 'B' etc letters followed by a dash `-`, then add a number followed by a dot `.` for level 2 headings, then add a number for level 3 headings:
+This is how to number level 1 headings with the 'A', 'B' etc letters followed by a dash `-`, then add a number followed
+by a dot `.` for level 2 headings, then add a number for level 3 headings:
+.fr((Voici comment numéroter les titres de niveau 1 avec les lettres 'A', 'B' etc, suivies d'un tiret '-' puis d'un
+nombre suivi d'un point pour les titres de niveau 2 et d'un nombre pour les ittres de niveau 3 :.))
 
 ```code
 -numbering 1:Chapter :A-,2::1.,3::1

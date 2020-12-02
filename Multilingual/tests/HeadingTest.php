@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 namespace MultilingualMarkdown;
-
+require 'src/include/Heading.class.php';
 use PHPUnit\Framework\TestCase;
 use MultilingualMarkdown\Heading;
 
