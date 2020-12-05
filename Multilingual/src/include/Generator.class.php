@@ -77,6 +77,10 @@ namespace MultilingualMarkdown {
             $this->outputModeName = 'md'; 
         }
 
+        public function setTrace(bool $yes)
+        {
+            $this->lexer->setTrace($yes);
+        }
         //------------------------------------------------------------------------------------------------------
         //MARK: Logger interface (relayed to Filer object)
         //------------------------------------------------------------------------------------------------------

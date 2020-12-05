@@ -83,7 +83,9 @@ Global directives on one line:
 Directives anywhere in the text and in headings:
 - .all((        starts a section for all languages
 - .ignore((     starts an ignored section
+- .!((          identical to .ignore((
 - .default((    starts a section for languages which don't have a specific section
+- .((           identical to .default((
 - .<language>(( starts a section specific to <language>
 - .))           ends a section
 - .{ .}         encloses escaped text (no variable expansion)

@@ -3,6 +3,8 @@
     .fr((français.)).en((english.))
     default text.fr((texte français..))
 
+* les lignes ne sont pas trimmées il peut rester un espace en fin de ligne
+
 * ~~variable {main} non expansée si pas de fichier main => devrait être le premier fichier~~
 
 * ~~{file} ne gère pas bien l'extension .base.md~~

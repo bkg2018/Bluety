@@ -45,6 +45,15 @@ function displayVersion()
 }
 
 /**
+ * Activate trace
+ */
+function setTrace()
+{
+    global $generator;
+    $generator->setTrace(true);
+}
+
+/**
  * Array of parameters.
  * Each parameter is defined by its name as index, and value is an array [function to call on value, 'type' of value]
  *  - function starts with a ':'       -> global function
@@ -61,6 +70,7 @@ $allParams = [
     '-out'          => ['function'=>'setOutputMode',        'type'=>'string'],  // set Markdown output mode
     '-numbering'    => ['function'=>'setNumbering',         'type'=>'string'],  // set the headings numbering scheme for headings and TOC
     '-od'           => ['function'=>'setOutputDirectory',   'type'=>'string'],  // set the root output directory (else files go into input directory)
+    '-trace'        => ['function'=>':setTrace',            'type'=>'-'],
     '-h'            => ['function'=>':displayHelp',         'type'=>'-'],       // (global function) display help
     '-v'            => ['function'=>':displayVersion',      'type'=>'-']        // display MLMD translator version
 ];

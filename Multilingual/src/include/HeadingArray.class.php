@@ -380,13 +380,12 @@ namespace MultilingualMarkdown {
          * @param int    $index     the index of the heading, -1 to use current exploration index.
          * @param int    $start     the minimum heading level (lowest number of '#'s)
          * @param int    $end       the maximum heading level (biggest number of '#'s)
-         * @param object $logger    the caller object with an error() function, can be null to ignore errors.
+         * @param Filer  $filer     the filer object
          * @see Logger interface
          *
          * @return string the TOC link, or null if error.
-
          */
-        public function getTOCLink(string $path, int $index, int $start, int $end, ?object $logger = null): string
+        public function getTOCLink(string $path, int $index, int $start, int $end, Filer $filer): string
         {
             $index = $this->checkIndex($index, $logger);
             if ($index === null) {
@@ -394,6 +393,9 @@ namespace MultilingualMarkdown {
             }
             $id = $this->allHeadings[$index]->getNumber();
             $text = $this->allHeadings[$index]->getText();
+            if ($path==$filer->current()) {
+                $path = '';
+            }
             switch ($this->outputMode) {
                 case OutputModes::MDPURE:
                 case OutputModes::MD:
@@ -500,7 +502,6 @@ namespace MultilingualMarkdown {
          * @param int    $index     index of the heading, -1 to use current exploration index.
          * @param object $numbering the Numbering object in charge of current file numbering scheme.
          * @param Filer  $filer    the caller object with an error() function, can be null to ignore errors.
-         * @see Logger interface
          *
          * @return string the full heading line, or null if error or level not within
          *                numbering scheme limits.
@@ -519,7 +520,11 @@ namespace MultilingualMarkdown {
             $numberingText = $this->getNumberingText($index, $numbering, true, $filer);
             $extension = pathinfo($this->file, PATHINFO_EXTENSION);
             $filename = mb_substr($this->file, 0, - (mb_strlen($extension) + 1));
-            $text = $this->getTOCLink($filename . '{extension}', $index, (int)$numbering->getStart(), (int)$numbering->getEnd(), $filer);
+            if ($filename.'.'.$extension == $filer->current()) {
+                $text = $this->getTOCLink('', $index, (int)$numbering->getStart(), (int)$numbering->getEnd(), $filer);
+            } else {
+                $text = $this->getTOCLink($filename . '{extension}', $index, (int)$numbering->getStart(), (int)$numbering->getEnd(), $filer);
+            }
             return '.all((' . $spacing . $numberingText . '.))' . $text;
         }
     }

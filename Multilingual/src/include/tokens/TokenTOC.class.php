@@ -43,9 +43,9 @@ namespace MultilingualMarkdown {
      */
     class TokenTOC extends TokenBaseSingleLine
     {
-        private $title = '.((Table of Contents.))';    /// title parameter
-        private $start = 1;     /// starting level
-        private $end = 3;       /// ending level
+        private $title = 'Table of Contents';    /// title parameter
+        private $start = 2;     /// starting level
+        private $end = 4;       /// ending level
         
         public function __construct()
         {

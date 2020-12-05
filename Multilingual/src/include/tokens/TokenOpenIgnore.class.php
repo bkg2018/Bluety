@@ -41,11 +41,11 @@ namespace MultilingualMarkdown {
      */
     class TokenOpenIgnore extends TokenOpenLanguage
     {
-        public function __construct()
+        public function __construct($language)
         {
-            parent::__construct(IGNORE);
+            parent::__construct($language);
+            $this->language = IGNORE;
         }
-
         public function output(Lexer &$lexer, Filer &$filer): bool
         {
             $lexer->pushLanguage(IGNORE, $filer);

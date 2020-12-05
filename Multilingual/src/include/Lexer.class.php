@@ -130,9 +130,10 @@ namespace MultilingualMarkdown {
 
             // streamed language directives
             $this->mlmdTokens[ALL]          = new TokenOpenAll();                   ///  .all((
-            $this->mlmdTokens['']           = new TokenOpenDefault('');             ///  .((
             $this->mlmdTokens[DEFLT]        = new TokenOpenDefault(DEFLT);          ///  .default((, identical to .((
-            $this->mlmdTokens[IGNORE]       = new TokenOpenIgnore();                ///  .ignore((
+            $this->mlmdTokens['']           = new TokenOpenDefault('');             ///  .((
+            $this->mlmdTokens[IGNORE]       = new TokenOpenIgnore(IGNORE);          ///  .ignore((
+            $this->mlmdTokens['!']          = new TokenOpenIgnore('!');             ///  .!((
             $this->mlmdTokens['close']      = new TokenClose();                     ///  .))
 
             // other streamed directives
@@ -872,6 +873,9 @@ namespace MultilingualMarkdown {
                         } while ($text !== null && !$fenceToken->identifyInBuffer($text,0));
                         if ($text === null) {
                             $filer->error("Code fence (```) unable to find closing code fence", $filename, $firstLine);
+                        }
+                        if ($this->trace) {
+                            $filer->warning("Code fence found at lines $firstLine-$curLineNumber");
                         }
                     }
                     // handle .topnumber directive

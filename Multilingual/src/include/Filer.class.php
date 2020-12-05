@@ -1040,7 +1040,7 @@ namespace MultilingualMarkdown {
             if ($this->mainFilename !== null) {
                 $result = str_replace('{main}', $this->mainFilename . $extension, $result);
             }
-            $languageArray - $this->languageList->getLanguage($language);
+            $languageArray = $this->languageList->getLanguage($language);
             $result = str_replace('{language}', $languageArray['code'], $result);
             $result = str_replace('{iso}', $languageArray['iso'], $result);
             return $result;
