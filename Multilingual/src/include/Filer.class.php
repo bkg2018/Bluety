@@ -4,20 +4,20 @@
  * Multilingual Markdown generator - Filer class
  *
  * The Filer class handles input file reading through a paragraph buffer and output files
- * writing through temporary storage. It is controled by Lexer and Generator, and output is done by
+ * writing through temporary storage. It is controlled by Lexer and Generator, and output is done by
  * each Token through Lexer control.
  *
- * Input is done through a Storage instance which ha ndles a buffer for one line of text.
+ * Input is done through a Storage instance which handles a buffer for one line of text.
  * End of line (EOL) characters are handled separately from the text so Lexer can generate
  * appropriate tokens and control their number. Output retain EOLs until non-EOL text is
  * written and limit their successive number to 2 because Markdown convention forbid
  * multiple empty lines.
  *
- * Text can be written with or wothout variables expansion. Variable expansion is done in
+ * Text can be written with or without variables expansion. Variable expansion is done in
  * Filer::expand() function, to add variable it can be added there. No special syntax check
  * is done and variables are checked for exact identity, however MLMD convention is to put
  * a self-explanatory name between curved braces, like {main} which expands to the main file name.
- * 
+ *
  * Output is stored for each language as sequences of parts. A part is a text with a flag telling
  * if this text must be written as is or if it must be expanded with variables first. EOLs are
  * always stored as separate parts and Filer takes care of never writing more than 2 successive EOLs
@@ -107,7 +107,7 @@ namespace MultilingualMarkdown {
         private $languageList = null;
         /**
          * number of 'ignore' to close in language stack.
-         * don't send any output while this variable is not 0 
+         * don't send any output while this variable is not 0
          */
         private $ignoreLevel = 0;
         /** current language code or all, ignore, default  */
@@ -559,7 +559,7 @@ namespace MultilingualMarkdown {
             }
             if (isset($this->storage)) {
                 $this->storage->close();
-                unset ($this->storage);
+                unset($this->storage);
             }
             return false;
         }
@@ -628,7 +628,6 @@ namespace MultilingualMarkdown {
                 // relative filename is the index for the work arrays
                 $this->relFilenames[$index] = mb_substr($filename, $rootLen + 1);
             }
-
         }
 
 
@@ -648,7 +647,7 @@ namespace MultilingualMarkdown {
          * This call must be done after all input files have been set and readyInputs() has
          * been called.
          *
-         * @param object $languageList the LanguageList object 
+         * @param LanguageList $languageList the LanguageList object
          */
         public function readyOutputs(object $languageList): bool
         {
@@ -656,7 +655,7 @@ namespace MultilingualMarkdown {
                 return $this->error("output file template not set", __FILE__, __LINE__);
             }
             $return = true;
-            $this->languageFunction = [ALL=>'outputAll',IGNORE=>'outputIgnore',DEFLT=>'outputDefault'];
+            $this->languageFunction = [ALL => 'outputAll',IGNORE => 'outputIgnore',DEFLT => 'outputDefault'];
             foreach ($languageList as $index => $array) {
                 $code = $array['code'] ?? null;
                 $this->outFiles[$code] = null;
@@ -673,14 +672,14 @@ namespace MultilingualMarkdown {
                 $this->languageFunction[$code] = 'outputCurrent';
                 $this->pendingEols[$code] = 0;
             }
-            $this->curDefault = []; // each [i] is an OuputPart
+            $this->curDefault = []; // each [i] is an OutputPart
             $this->languageList = $languageList;
             $this->lastToken = TokenType::FIRST;
             return $return;
         }
 
         /**
-         * Tells if output has been writtent something significant.
+         * Tells if output has been written something significant.
          */
         public function outputStarted(): bool
         {
@@ -723,7 +722,7 @@ namespace MultilingualMarkdown {
         /**
          * Skip every character starting at next one until next line starts. Do not read the first character on new line,
          * so at exit the current character is the current line EOL.
-         * 
+         *
          * @return null|string EOL or null at end of file
          */
         public function gotoNextLine(): ?string
@@ -993,14 +992,14 @@ namespace MultilingualMarkdown {
                     // write to file
                     if (empty($text)) {
                         continue; // ignore this loop
-                    } 
-                    fwrite($this->outFiles[$code], $text); 
+                    }
+                    fwrite($this->outFiles[$code], $text);
                     // reset EOL count on any non eol starting text
                     if ($text[0] != "\n") {
                         $this->previousEols[$code] = 0;
                     }
                     // count ending EOLs
-                    $pos = mb_strlen($text) - 1; 
+                    $pos = mb_strlen($text) - 1;
                     while ($pos >= 0 && mb_substr($text, $pos, 1) == "\n") {
                         $this->previousEols[$code] += 1;
                         $pos -= 1;
@@ -1021,7 +1020,7 @@ namespace MultilingualMarkdown {
             foreach ($this->languageList as $index => $array) {
                 $code = $array['code'] ?? null;
                 if ($this->previousEols[$code] < 1) {
-                    fwrite($this->outFiles[$code], str_repeat("\n", 1 - $this->previousEols[$code])); 
+                    fwrite($this->outFiles[$code], str_repeat("\n", 1 - $this->previousEols[$code]));
                 }
             }
         }
@@ -1042,7 +1041,11 @@ namespace MultilingualMarkdown {
             }
             $languageArray = $this->languageList->getLanguage($language);
             $result = str_replace('{language}', $languageArray['code'], $result);
-            $result = str_replace('{iso}', $languageArray['iso'], $result);
+            if ($languageArray['iso']) {
+                $result = str_replace('{iso}', $languageArray['iso'], $result);
+            } elseif (strpos('{iso}', $result) !== false) {
+                $this->warning("ISO code variable found and no associated iso for $language");
+            }
             return $result;
         }
     }

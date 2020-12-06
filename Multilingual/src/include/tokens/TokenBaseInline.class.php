@@ -51,7 +51,7 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Processing input: store in token list, skip over directive and go next character. 
+         * Processing input: store in token list, skip over directive and go next character.
          */
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {

@@ -42,12 +42,12 @@ namespace MultilingualMarkdown {
     
     /**
      * Class for an escaper starting/ending.
-     * 
+     *
      * This class will store escaped text tokens by parsing until its closing marker.
      * This is why there are only opening escaper tokens and no closing ones.
      * The content text will be output as is with no variable expansion and no
      * directive interpretation.
-     * 
+     *
      * Escaping can be done with multiple backtics as well as unique ones, so the identification
      * must be checked by trying triple first, then double, then single bacticks in this order.
      * This is the only place where identification order is significant.
@@ -112,13 +112,13 @@ namespace MultilingualMarkdown {
         }
         
         /**
-         * Process input: get text until we find the closing escape marker. 
+         * Process input: get text until we find the closing escape marker.
          * Update tokens array with the token itself. The escaped text is stored
          * by the token.
          */
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
-            $this->content = $this->keyword;    
+            $this->content = $this->keyword;
             $this->skipSelf($input);
             $input->adjustNextLine();
             $currentChar = $input->getCurrentChar();

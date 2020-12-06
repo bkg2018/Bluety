@@ -6,7 +6,7 @@
  * This class represents a token for a triple back-tick sequence around escaped text. Normaly this
  * should be only used by code fences at the beginning of lines, but MLMD handles triple backtick
  * within text as normally escaped text.
- * 
+ *
  * Without this token :
  *      text ```escaped text```text
  * becomes :

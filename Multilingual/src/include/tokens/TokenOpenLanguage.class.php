@@ -49,6 +49,10 @@ namespace MultilingualMarkdown {
             $this->language = $language;
             parent::__construct(TokenType::OPEN_DIRECTIVE, ".$language((", true);
         }
+        protected function setLanguage(string $language)
+        {
+            $this->language = $language;
+        }
 
         public function getLanguage(): string
         {

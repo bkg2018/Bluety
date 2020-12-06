@@ -37,7 +37,7 @@ namespace MultilingualMarkdown {
     
     /**
      * .TOC directive token.
-     * 
+     *
      * The token stores the parameters following it as a string, and
      * interpret them in output() to send the decorated headings.
      */
@@ -76,7 +76,7 @@ namespace MultilingualMarkdown {
             // .toc title=<xxxxxxxxxx> level=<start>-<end>
             $storage = new Storage($this->content);
             $char = $storage->getCurrentChar();
-            $paramKeys=['title=', 'level='];
+            $paramKeys = ['title=', 'level='];
             while ($char != null) {
                 $keyIndex = $storage->isMatching($paramKeys);
                 if ($keyIndex >= 0) {
@@ -106,13 +106,13 @@ namespace MultilingualMarkdown {
                             // level=N
                             $this->start = (int)$levels;
                             $this->end = $this->start;
-                        } else if ($separatorPos == 0) {
+                        } elseif ($separatorPos == 0) {
                             // level=-N
                             $this->start = 1;
                             $this->end = (int)substr($levels, 1);
-                        } else if ($separatorPos == strlen($levels) - 1) {
+                        } elseif ($separatorPos == strlen($levels) - 1) {
                             // level=N-
-                            $this->start = (int)substr($levels, 0, strlen($levels)-1);
+                            $this->start = (int)substr($levels, 0, strlen($levels) - 1);
                             $this->end = 9;
                         } else {
                             // level=N-N
@@ -143,11 +143,11 @@ namespace MultilingualMarkdown {
                 $allFiles = [];
                 foreach ($allHeadingsArrays as $relFilename => $headingsArray) {
                     $numbering = $lexer->getNumbering($relFilename);
-                    $topNumber = $numbering->getLevelNumbering(1); 
+                    $topNumber = $numbering->getLevelNumbering(1);
                     $allFiles[$topNumber] = $relFilename;
                 }
                 ksort($allFiles);
-            } else  {
+            } else {
                 $allFiles = [$filer->current()];
             }
             // output each file in correct order

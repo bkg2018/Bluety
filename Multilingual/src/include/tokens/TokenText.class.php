@@ -30,8 +30,6 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    mb_internal_encoding('UTF-8');
-
     require_once 'Token.class.php';
 
     use MultilingualMarkdown\Token;
@@ -111,7 +109,5 @@ namespace MultilingualMarkdown {
         {
             return $filer->output($this->content, true, $this->type);
         }
-
     }
-
 }

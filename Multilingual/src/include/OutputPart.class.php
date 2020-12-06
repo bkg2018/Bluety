@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Multilingual Markdown generator - OutputPart class
  *

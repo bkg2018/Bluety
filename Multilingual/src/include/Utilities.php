@@ -26,8 +26,6 @@
 
 declare(strict_types=1);
 
-mb_internal_encoding('UTF-8');
-
 //MARK: Global Utility functions
 
 /**
@@ -48,7 +46,7 @@ function isWindows(): bool
 /**
  * Unset all content from an array but keep the array itself.
  */
-function unsetArrayContent(array & $array)
+function unsetArrayContent(array &$array)
 {
     $key = array_key_last($array);
     while ($key !== null) {
@@ -60,7 +58,7 @@ function unsetArrayContent(array & $array)
 /**
  * Unset all content from an array and reset the array itself to an empty array.
  */
-function resetArray(array & $array)
+function resetArray(array &$array)
 {
     unsetArrayContent($array);
     unset($array);
@@ -69,9 +67,9 @@ function resetArray(array & $array)
 
 /**
  * Normalize a path to use unix style separators.
- * 
+ *
  * @param string|bool|null $path the input path to normalize
- * 
+ *
  * @return string|bool|null the normalized path
  */
 function normalizedPath($path)
@@ -142,7 +140,9 @@ function exploreDirectory(string $dirName): array
 function getNextLineTrimmed($file, int &$lineNumber): ?string
 {
     $newLine = fgets($file);
-    if ($newLine === false) return null;
+    if ($newLine === false) {
+        return null;
+    }
     $newLine = rtrim($newLine, " \t\n\r") . "\n";
     $lineNumber += 1;
     return $newLine;
@@ -156,13 +156,19 @@ function mb_strcmp(string $s1, string $s2): int
     $length1 = mb_strlen($s1);
     $length2 = mb_strlen($s2);
     $length = min($length1, $length2);
-    for ($i = 0 ; $i < $length ; $i++) {
+    for ($i = 0; $i < $length; $i++) {
         $c1 = mb_ord(mb_substr($s1, $i, 1));
         $c2 = mb_ord(mb_substr($s2, $i, 1));
-        if ($c1 < $c2) return -1;
-        if ($c1 > $c2) return  1;
+        if ($c1 < $c2) {
+            return -1;
+        } elseif ($c1 > $c2) {
+            return  1;
+        }
     }
-    if ($length1 < $length2) return -1;
-    if ($length1 > $length2) return  1;
+    if ($length1 < $length2) {
+        return -1;
+    } elseif ($length1 > $length2) {
+        return  1;
+    }
     return 0;
 }

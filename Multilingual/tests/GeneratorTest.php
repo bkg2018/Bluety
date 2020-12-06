@@ -40,6 +40,7 @@ namespace MultilingualMarkdown {
             $generator->setMainFilename("test.mlmd");
             $generator->addInputFile('testdata/subdata/secondary.mlmd');
             $generator->addInputFile('testdata/subdata/tertiary.mlmd');
+            $generator->setOutputDirectory(realpath('.') . '/out');
             $generator->processAllFiles();
 
             $this->assertTrue(true);

@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 require_once 'include/Generator.class.php';
 use MultilingualMarkdown\Generator;
 mb_internal_encoding('UTF-8');

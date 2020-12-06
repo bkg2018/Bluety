@@ -29,8 +29,6 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    mb_internal_encoding('UTF-8');
-
     require_once 'OutputModes.class.php';
 
     /**
@@ -57,7 +55,7 @@ namespace MultilingualMarkdown {
 
         // status
 
-        /** current increment for each level */
+        /** current increment for each level, -1 to disable*/
         private $curLevelNumbering = [];
         /** previous level processed by getTOCline() */
         private $prevLevel = 0;
@@ -234,8 +232,11 @@ namespace MultilingualMarkdown {
                 }*/
                 $prevLevel = $level;
                 $level = $parts[0] ?? ($prevLevel + 1);
-                if ((int)$level < $this->startLevel) $this->startLevel = $level;
-                if ((int)$level > $this->endLevel)   $this->endLevel = $level;
+                if ((int)$level < $this->startLevel) {
+                    $this->startLevel = $level;
+                } elseif ((int)$level > $this->endLevel) {
+                    $this->endLevel = $level;
+                }
                 $prefix = $parts[1] ?? '';
                 $symbol = $parts[2] ?? '1';
                 $separator = $parts[3] ?? '';
@@ -280,11 +281,11 @@ namespace MultilingualMarkdown {
 
         /**
          * Set the first and last level to number.
-         * Zeroing both limits (calling wioth no parameters) disables Numbering.
+         * Zeroing both limits (calling with no parameters) disables Numbering.
          * Numbering scheme is not required to define all levels
          * between start and end.
          *
-         * @param int $start first elvel to number between 1 and 9, 0 to disable
+         * @param int $start first level to number between 1 and 9, 0 to disable
          * @param int $end   last level to number between start and 9, 0 to disable
          */
         public function setLevelLimits(int $startLevel = 0, int $endLevel = 0): void
@@ -382,17 +383,22 @@ namespace MultilingualMarkdown {
             // MLMD give the actual level number (1. 2. 3. etc) , although not necessary.
             if ($this->outputMode == OutputModes::MDPURE) {
                 $number = $this->curLevelNumbering[$level] + 1; // 0 becomes '1.', 1 becomes '2.' etc
-                $sequence = "{$number}. ";
+                if ($number > 0) {
+                    $sequence = "{$number}. ";
+                }
                 return $sequence;
             }
 
             // Only level 1 headings may be prefixed (Chapter I, etc)
-            if (($level == 1) && isset($this->levelsPrefix[1]) && ($this->startLevel <= 1)) {
+            if (($level == 1) && isset($this->levelsPrefix[1]) && ($this->startLevel <= 1) && ($this->curLevelNumbering[1] >= 0)) {
                 $sequence .= $this->levelsPrefix[1];
             }
 
             // build <symbol><separator>... string
             for ($i = $this->startLevel; $i <= $level; $i += 1) {
+                if ($this->curLevelNumbering[$i] < 0) {
+                    continue;
+                }
                 // set <symbol><separator>
                 $numbering = $this->levelsNumbering[$i] ?? '1';
                 if (is_numeric($numbering)) {

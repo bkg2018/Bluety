@@ -2,7 +2,7 @@
 
 /**
  * Multilingual Markdown generator - Heading Array class
- * This class maintains an array which contains one Heading object for each heading 
+ * This class maintains an array which contains one Heading object for each heading
  * from one file. It can find a heading in this array from its line number.
  *
  * Copyright 2020 Francis Piérot
@@ -29,8 +29,6 @@
 declare(strict_types=1);
 
 namespace MultilingualMarkdown {
-
-    mb_internal_encoding('UTF-8');
 
     use MultilingualMarkdown\Heading;
     use MultilingualMarkdown\Numbering;
@@ -130,10 +128,10 @@ namespace MultilingualMarkdown {
          * given output mode. The scheme may have been set beforehand, but it can also be
          * set afterwards on the Numbering object.
          *
-         * @param string $name      the output mode name, 'md', 'mdpure', 'html' or 'htmlold'
-         * @param object $numbering the Numbering associated object if any, can be null or ignored
+         * @param string    $name      the output mode name, 'md', 'mdpure', 'html' or 'htmlold'
+         * @param Numbering $numbering the Numbering associated object if any, can be null or ignored
          */
-        public function setOutputMode(string $name, ?object $numbering = null): void
+        public function setOutputMode(string $name, ?Numbering $numbering = null): void
         {
             $this->outputMode = OutputModes::getFromName($name);
             if ($numbering !== null) {
@@ -282,16 +280,16 @@ namespace MultilingualMarkdown {
         /**
          * Check if an index is valid.
          *
-         * @param int $index -1 for current index or a heading index
-         * @param object $logger the caller object with an error() function, can be null to ignore errors.
+         * @param int   $index -1 for current index or a heading index
+         * @param Filer $filer the caller object with an error() function, can be null to ignore errors.
          *
          * @return int|null same index if valid, current index if -1, null if invalid
          */
-        private function checkIndex(int $index = -1, ?object $logger = null): ?int
+        private function checkIndex(int $index = -1, ?Filer $filer = null): ?int
         {
             if ($index < -1 || $index >= count($this->allHeadings)) {
-                if ($logger) {
-                    $logger->error("invalid heading index $index");
+                if ($filer) {
+                    $filer->error("invalid heading index $index");
                 }
                 return $this->null;
             }
@@ -315,9 +313,9 @@ namespace MultilingualMarkdown {
          *
          * @return string the spacing prefix for current output mode, or null if error.
          */
-        public function getSpacing(int $index = -1, ?object $logger = null): string
+        public function getSpacing(int $index = -1, ?Filer $filer = null): string
         {
-            $index = $this->checkIndex($index, $logger);
+            $index = $this->checkIndex($index, $filer);
             if ($index === null) {
                 return null;
             }
@@ -335,8 +333,8 @@ namespace MultilingualMarkdown {
                     return \str_repeat('&nbsp;', 4 * ($heading->getLevel() - 1));
             }
             // impossible case
-            if ($logger) {
-                $logger->error("impossible case in " . __FUNCTION__);
+            if ($filer) {
+                $filer->error("impossible case in " . __FUNCTION__);
             }
             return null;
         }
@@ -351,17 +349,17 @@ namespace MultilingualMarkdown {
          * HTMLOLD/HTMLOLDNUM : an name HTML anchor <A name="a{id}">
          *
          * @param int    $index  valid index of the heading (not checked here)
-         * @param object $logger the caller object with an error() function, can be null to ignore errors.
+         * @param Filer  $filer  the filer object
          * @see Logger interface
          *
          * @return string the anchor, or null if error.
          */
-        public function getAnchor(int $index, ?object $logger = null): string
+        public function getAnchor(int $index, ?Filer $filer = null): string
         {
             $id = (string)($this->allHeadings[$index]->getNumber());
             $result = OutputModes::getAnchor($this->outputMode, $id);
-            if ($result === null && $logger !== null) {
-                $logger->error("invalid output mode {$this->outputMode}");
+            if ($result === null && $filer !== null) {
+                $filer->error("invalid output mode {$this->outputMode}");
             }
             return $result;
         }
@@ -387,13 +385,13 @@ namespace MultilingualMarkdown {
          */
         public function getTOCLink(string $path, int $index, int $start, int $end, Filer $filer): string
         {
-            $index = $this->checkIndex($index, $logger);
+            $index = $this->checkIndex($index, $filer);
             if ($index === null) {
                 return null;
             }
             $id = $this->allHeadings[$index]->getNumber();
             $text = $this->allHeadings[$index]->getText();
-            if ($path==$filer->current()) {
+            if ($path == $filer->current()) {
                 $path = '';
             }
             switch ($this->outputMode) {
@@ -407,8 +405,8 @@ namespace MultilingualMarkdown {
                     }
                     return ".all((<A href=\"{$path}#a{$id}\">{$text}</A><BR>.))";
             }
-            if ($logger) {
-                $logger->error("invalid output mode {$this->outputMode}");
+            if ($filer) {
+                $filer->error("invalid output mode {$this->outputMode}");
             }
             return '';
         }
@@ -423,22 +421,22 @@ namespace MultilingualMarkdown {
          * MDPURE with NUM:     `1.`
          * all other variants:  `-`
          *
-         * @param int    $index     the index of the heading, -1 to use current exploration index.
-         * @param object $numbering the Numbering object in charge of current file numbering scheme.
-         * @param bool   $addDash   true to add a dash prefix in MDNUM or non numbered modes
-         * @param object $logger    the caller object with an error() function, can be null to ignore errors.
+         * @param int       $index     the index of the heading, -1 to use current exploration index.
+         * @param Numbering $numbering the Numbering object in charge of current file numbering scheme.
+         * @param bool      $addDash   true to add a dash prefix in MDNUM or non numbered modes
+         * @param Filer     $filer     the filer object
          * @see Logger interface
          *
          * @return string the numbering string, or null if error.
         */
-        public function getNumberingText(int $index, ?object $numbering, bool $addDash, ?object $logger = null): ?string
+        public function getNumberingText(int $index, ?Numbering $numbering, bool $addDash, Filer $filer = null): ?string
         {
             if ($numbering == null) {
                 return null;
             }
             if ($index >= 0) {
                 // jump to the idnex while updating the numbering
-                $index = $this->checkIndex($index, $logger);
+                $index = $this->checkIndex($index, $filer);
                 if ($index === null) {
                     return null;
                 }
@@ -465,22 +463,22 @@ namespace MultilingualMarkdown {
          * HTML all variants:  .all((<anchor><numbering> .))<text>\n\n
          * MD all variants:    .all((<numbering> .))<text>.all((<anchor>.))\n\n
          *
-         * @param int    $index     index of the heading, -1 to use current exploration index.
-         * @param object $numbering the Numbering object in charge of current file numbering scheme.
-         * @param object $logger    the caller object with an error() function, can be null to ignore errors.
+         * @param int       $index     index of the heading, -1 to use current exploration index.
+         * @param Numbering $numbering the Numbering object in charge of current file numbering scheme.
+         * @param Filer     $filer     the filer object
          * @see Logger interface
          *
          * @return string the text for the heading line, or null if error.
          */
-        public function getHeadingText(int $index, ?object $numbering = null, ?object $logger = null): ?string
+        public function getHeadingText(int $index, ?Numbering $numbering = null, ?Filer $filer = null): ?string
         {
-            $index = $this->checkIndex($index, $logger);
+            $index = $this->checkIndex($index, $filer);
             if ($index === null) {
                 return null;
             }
             $heading = $this->allHeadings[$index];
-            $anchor = $this->getAnchor($index, $logger);
-            $numberingText = $this->getNumberingText($index, $numbering, false, $logger);
+            $anchor = $this->getAnchor($index, $filer);
+            $numberingText = $this->getNumberingText($index, $numbering, false, $filer);
             $text = $heading->getText();
             if (\in_array($this->outputMode, [OutputModes::MD, OutputModes::MDNUM, OutputModes::MDPURE])) {
                 return ($numberingText ? '.all((' . $numberingText . '.))' : '') . $text . '.all((' . $anchor . '.))';
@@ -499,14 +497,14 @@ namespace MultilingualMarkdown {
          * HTML all variants:  <spacing><numbering> <TOClink>\n\n
          * MD all variants:    <spacing><numbering> <TOClink>\n\n
          *
-         * @param int    $index     index of the heading, -1 to use current exploration index.
-         * @param object $numbering the Numbering object in charge of current file numbering scheme.
-         * @param Filer  $filer    the caller object with an error() function, can be null to ignore errors.
+         * @param int       $index     index of the heading, -1 to use current exploration index.
+         * @param Numbering $numbering the Numbering object in charge of current file numbering scheme.
+         * @param Filer     $filer    the caller object with an error() function, can be null to ignore errors.
          *
          * @return string the full heading line, or null if error or level not within
          *                numbering scheme limits.
          */
-        public function getTOCLine(int $index, object &$numbering, ?Filer $filer = null): ?string
+        public function getTOCLine(int $index, Numbering &$numbering, ?Filer $filer = null): ?string
         {
             $index = $this->checkIndex($index, $filer);
             if ($index === null) {
@@ -520,7 +518,7 @@ namespace MultilingualMarkdown {
             $numberingText = $this->getNumberingText($index, $numbering, true, $filer);
             $extension = pathinfo($this->file, PATHINFO_EXTENSION);
             $filename = mb_substr($this->file, 0, - (mb_strlen($extension) + 1));
-            if ($filename.'.'.$extension == $filer->current()) {
+            if ($filename . '.' . $extension == $filer->current()) {
                 $text = $this->getTOCLink('', $index, (int)$numbering->getStart(), (int)$numbering->getEnd(), $filer);
             } else {
                 $text = $this->getTOCLink($filename . '{extension}', $index, (int)$numbering->getStart(), (int)$numbering->getEnd(), $filer);

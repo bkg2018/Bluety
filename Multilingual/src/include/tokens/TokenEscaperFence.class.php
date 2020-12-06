@@ -77,24 +77,24 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Process input: get text until we find the closing escape marker. 
+         * Process input: get text until we find the closing escape marker.
          * Code fenced text can cross many lines so don't stop at end of input if
          * it's a Storage and read next lines from filer into input.
          * Update tokens array with the token itself. The escaped text is stored
-         * by the token. 
+         * by the token.
          */
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
-            $this->content = $input->getLine();// <```code> starting marker 
+            $this->content = $input->getLine(); // <```code> starting marker
             do {
                 $thisLine = $filer->getLine();
                 if ($thisLine != null) {
                     $this->content .= "\n" . $thisLine;
                 }
-            } while (!$this->identifyInBuffer($thisLine,0));
+            } while (!$this->identifyInBuffer($thisLine, 0));
             // In the lines below I take care to modify $this->content before
             // appending $this to lexer, but it may be possible to add the token first
-            // and then modify its content. As PHP is not clear about about object 
+            // and then modify its content. As PHP is not clear about about object
             // copies I prefer to do as if $this could be copied in the append
             // and not stored by reference.
 

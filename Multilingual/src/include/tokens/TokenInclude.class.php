@@ -1,12 +1,11 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenNumbering class
+ * Multilingual Markdown generator - TokenInclude class
  *
- * This class represents a token for the .numbering directive which sets the numbering scheme for
- * current file. This can also be set with the -numbering command line parameter. This directive
- * is handled by Lexer::preProcess before files generation actually starts and the token
- * is only used for identification.
+ * This class represents the .include directive. It is processed by Lexer::preProcess
+ * and not buy the token itself. It is equivalent to the -i command line parameter and add
+ * the following file name to the list of input files.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -22,7 +21,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_numbering_class
+ * @package   mlmd_token_include_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -34,17 +33,19 @@ declare(strict_types=1);
 namespace MultilingualMarkdown {
 
     require_once 'TokenBaseSingleLine.class.php';
-    
+
     use MultilingualMarkdown\TokenBaseSingleLine;
     
     /**
-     * .NUMBERING directive token.
+     * .INCLUDE directive token.
      */
-    class TokenNumbering extends TokenBaseSingleLine
+    class TokenInclude extends TokenBaseSingleLine
     {
+        private $params; /// content of line after token
+
         public function __construct()
         {
-            parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, '.numbering', true);
+            parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, '.include', true);
         }
     }
 }

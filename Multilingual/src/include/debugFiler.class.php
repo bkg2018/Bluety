@@ -39,7 +39,7 @@ namespace MultilingualMarkdown {
      * Debugging version of Filer class.
      * Each character read is sent to standard output.
      */
-    class debugFiler extends Filer
+    class DebugFiler extends Filer
     {
         private $currentDisplayed = false;
 

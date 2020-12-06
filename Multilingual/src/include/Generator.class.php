@@ -33,10 +33,8 @@
 declare(strict_types=1);
 
 namespace MultilingualMarkdown {
-
-    \mb_internal_encoding('UTF-8');
+    
     require_once 'Constants.php';
-
     require_once 'Logger.interface.php';
     require_once 'Heading.class.php';
     require_once 'HeadingArray.class.php';
@@ -50,6 +48,7 @@ namespace MultilingualMarkdown {
     }
     use MultilingualMarkdown\Lexer;
     use MultilingualMarkdown\debugLexer;
+    use MultilingualMarkdown\Generator as Generator;
 
     /**
      * Generator class.
@@ -72,9 +71,9 @@ namespace MultilingualMarkdown {
         // Initialize handlers and default settings
         public function __construct()
         {
-            $this->filer = /*(getenv("debug") != 0) ? new debugFiler() : */ new Filer();
-            $this->lexer = /*(getenv("debug") != 0) ? new debugLexer() : */new Lexer();
-            $this->outputModeName = 'md'; 
+            $this->filer = /*(getenv("debug") != 0) ? new DebugFiler() : */ new Filer();
+            $this->lexer = /*(getenv("debug") != 0) ? new DebugLexer() : */new Lexer();
+            $this->outputModeName = 'md';
         }
 
         public function setTrace(bool $yes)
@@ -128,7 +127,7 @@ namespace MultilingualMarkdown {
          *
          * If there is no root directory in Filer yet, the base directory of the
          * added input file will be used as root directory for further added files which
-         * will hahve to be in or under this root directory.
+         * will have to be in or under this root directory.
          *
          * @param string $path a relative or absolute file path ending with .mlmd
          *                     or .base.md extension.
@@ -212,8 +211,8 @@ namespace MultilingualMarkdown {
         //------------------------------------------------------------------------------------------------------
 
         /**
-         * Find the languages directives and all headings and sub headings in the set of input files
-         * before processing them.
+         * Find the included files, languages directives and all headings and sub headings
+         * in the set of input files before processing them.
          *
          * - The languages directives found in all files will preset the list of output files
          *   for each language for each input file.
@@ -230,6 +229,8 @@ namespace MultilingualMarkdown {
          */
         public function preProcess(): void
         {
+            $this->filer->readyInputs();
+            $this->lexer->preProcessIncludes($this->filer);
             $this->filer->readyInputs();
             $this->filer->setOutputMode($this->outputModeName, null);
             $this->lexer->preProcess($this->filer);

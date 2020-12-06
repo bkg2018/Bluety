@@ -2,7 +2,7 @@
 
 /**
  * Multilingual Markdown generator - Heading class
- * 
+ *
  * Each heading from each processed file is stored as an instance of this class. Text is separated from
  * the '#' prefix and a unique number is generated for each newly created Heading instance. This number
  * restarts at 0 when the static function init() is called. Having unique number over all files is not
@@ -32,8 +32,6 @@
 declare(strict_types=1);
 
 namespace MultilingualMarkdown {
-
-    mb_internal_encoding('UTF-8');
 
     require_once 'OutputModes.class.php';
 

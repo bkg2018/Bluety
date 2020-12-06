@@ -50,11 +50,11 @@ namespace MultilingualMarkdown {
         }
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
-            $this->content = '';    
+            $this->content = '';
             $this->skipSelf($input);
             $fromStorage = \get_class($input) == 'MultilingualMarkdown\\Storage';
             do {
-                if ($input->isMatching(['.}'])==0) {
+                if ($input->isMatching(['.}']) == 0) {
                     $input->getNextChar();// skip end marker
                     $input->getNextChar();// skip end marker
                     $currentChar = $input->getCurrentChar();

@@ -27,14 +27,25 @@
 			},
 			{
 				"name": "Launch MLMD TEST",
-				"stopOnEntry": false,
+				"stopOnEntry": true,
 				"type": "php",
-				"request": "launch",
-				"program": "${workspaceFolder}/src/test1.php",
-				"cwd": "${workspaceFolder}",
+                "request": "launch",
+                "runtimeExecutable": "php",
+				"program": "${workspaceFolder}/src/mlmd.php",
+                "cwd": "${workspaceFolder}",
+                "args": ["-i", "README.mlmd", "-out","md","-od","out", "-trace"],
 				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1"},
 				"port": 9000
 			}
 		]
-	}
+    },
+    "settings": {
+        "cSpell.words": [
+            "MLMD",
+            "htmlold",
+            "mdpure",
+            "phpscripts",
+            "topnumber"
+        ]
+    }
 }

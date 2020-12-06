@@ -52,7 +52,7 @@ namespace MultilingualMarkdown {
         /** current line size in characters (utf-8) */
         private $bufferLength = 0;
         /** current line number from input file */
-        private $curLine = 0; 
+        private $curLine = 0;
         /** current last line number stored in buffer on or after current position */
         private $lastLine = 0;
         /** array of last 3 characters: [0] = current, [1] = previous, [2] = pre-previous */
@@ -62,7 +62,6 @@ namespace MultilingualMarkdown {
 
         public function __construct($source)
         {
-            mb_internal_encoding('UTF-8');
             if (\is_resource($source)) {
                 $this->setInputFile($source);
             } elseif (is_string($source)) {
@@ -97,7 +96,7 @@ namespace MultilingualMarkdown {
             // initialize on first line
             $this->curLine = 1;
             $this->fetchCharacters(1);
-            $this->previousChars[0] = mb_substr($this->buffer,0,1);
+            $this->previousChars[0] = mb_substr($this->buffer, 0, 1);
             return true;
         }
 
@@ -119,7 +118,7 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Set the buffer content and length. 
+         * Set the buffer content and length.
          * Ignores any opened file and totally replace the buffer content.
          */
         public function setInputBuffer(?string $content): void
@@ -142,9 +141,13 @@ namespace MultilingualMarkdown {
          */
         public function loadLine(): ?string
         {
-            if (!isset($this->inFile)) { return null; }
+            if (!isset($this->inFile)) {
+                return null;
+            }
             $line = fgets($this->inFile);
-            if ($line === false) { return null; }
+            if ($line === false) {
+                return null;
+            }
             return rtrim($line, "\n\r");
         }
 
@@ -275,7 +278,7 @@ namespace MultilingualMarkdown {
         /**
          * Skip every character starting at next one until next line starts. Do not read the first character on new line,
          * so at exit the current character is the current line EOL.
-         * 
+         *
          * @return null|string EOL when line has been read, null at end of file
          */
         public function gotoNextLine(): ?string

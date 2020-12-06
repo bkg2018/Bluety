@@ -23,39 +23,23 @@
  * @link      TODO
  */
 
-$MLMD_VERSION = "1.0.0";
-$MLMD_DATE    = strftime ("%F (%X)", filemtime(__FILE__));
+$MLMD_VERSION = "1.0.2";
+$MLMD_DATE    = strftime("%F (%X)", filemtime(__FILE__));
 
-require_once 'include/displayHelp.php';
+require_once 'include/Functions.php';
 require_once 'include/Generator.class.php';
+use MultilingualMarkdown\Generator as Generator;
 
 //MARK: CLI launch
 
 /// Create the generator instance
 mb_internal_encoding('UTF-8');
-$generator = new \MultilingualMarkdown\Generator();
-
-/**
- * Current version of MLMD.
- */
-function displayVersion()
-{
-    global $MLMD_VERSION, $MLMD_DATE;
-    echo "MLMD MultiMingual MarkDown Generator\nVersion $MLMD_VERSION - $MLMD_DATE\n";
-}
-
-/**
- * Activate trace
- */
-function setTrace()
-{
-    global $generator;
-    $generator->setTrace(true);
-}
+$generator = new Generator();
 
 /**
  * Array of parameters.
- * Each parameter is defined by its name as index, and value is an array [function to call on value, 'type' of value]
+ * Each parameter is defined by its name as index, and value is an array [function to call on value,
+ * 'type' of value]
  *  - function starts with a ':'       -> global function
  *  - function does not start with ':' -> Generator member function
  *  - type 'file'   : value must be an existing file
@@ -65,14 +49,14 @@ function setTrace()
  */
 
 $allParams = [
-    '-i'            => ['function'=>'addInputFile',         'type'=>'file'],    // set one input file
-    '-main'         => ['function'=>'setMainFilename',      'type'=>'file'],    // set a main filename
-    '-out'          => ['function'=>'setOutputMode',        'type'=>'string'],  // set Markdown output mode
-    '-numbering'    => ['function'=>'setNumbering',         'type'=>'string'],  // set the headings numbering scheme for headings and TOC
-    '-od'           => ['function'=>'setOutputDirectory',   'type'=>'string'],  // set the root output directory (else files go into input directory)
-    '-trace'        => ['function'=>':setTrace',            'type'=>'-'],
-    '-h'            => ['function'=>':displayHelp',         'type'=>'-'],       // (global function) display help
-    '-v'            => ['function'=>':displayVersion',      'type'=>'-']        // display MLMD translator version
+    '-i'            => ['function' => 'addInputFile',         'type' => 'file'],    // set one input file
+    '-main'         => ['function' => 'setMainFilename',      'type' => 'file'],    // set a main filename
+    '-out'          => ['function' => 'setOutputMode',        'type' => 'string'],  // set Markdown output mode
+    '-numbering'    => ['function' => 'setNumbering',         'type' => 'string'],  // set the headings numbering scheme for headings and TOC
+    '-od'           => ['function' => 'setOutputDirectory',   'type' => 'string'],  // set the root output directory (else files go into input directory)
+    '-trace'        => ['function' => ':setTrace',            'type' => '-'],
+    '-h'            => ['function' => ':displayHelp',         'type' => '-'],       // (global function) display help
+    '-v'            => ['function' => ':displayVersion',      'type' => '-']        // display MLMD translator version
 ];
 $arg = 1;
 while ($arg < $argc) {
@@ -89,7 +73,7 @@ while ($arg < $argc) {
             if ($arg > $argc - 1) {
                 echo "WARNING: Missing value for parameter $key\n";
                 $value = '';
-            } else {
+            } elseif ($type != '-') {
                 $arg += 1;
                 $value = $argv[$arg];
             }
@@ -114,6 +98,7 @@ while ($arg < $argc) {
                     break;
                 case '-':
                     // no value for this parameter
+                    $value = $generator;// setTrace() parameter
                     break;
                 default:// never happens
                     echo "ERROR: unknown parameter type [$type] in script!\n";
@@ -141,4 +126,8 @@ while ($arg < $argc) {
     }
     $arg += 1;
 }
+$timeStart = microtime(true);
 $generator->processAllFiles();
+$timeEnd = microtime(true);
+$seconds = sprintf("%.02f", $timeEnd - $timeStart);
+echo "Processed in $seconds s\n";

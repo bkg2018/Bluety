@@ -31,8 +31,6 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    mb_internal_encoding('UTF-8');
-
     require_once 'TokenBaseKeyworded.class.php';
 
     use MultilingualMarkdown\TokenBaseKeyworded;

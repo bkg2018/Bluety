@@ -37,7 +37,7 @@ namespace MultilingualMarkdown {
      * Debugging version of Lexer class.
      * Sends a separator to standard output after a set of tokens is output.
      */
-    class debugLexer extends Lexer
+    class DebugLexer extends Lexer
     {
         private $dashes;
         public function __construct()

@@ -7,7 +7,7 @@
  * parts of different types like text, escaped text, language directives, end of lines etc.
  * The Token class is the base class for each of these possible parts.
  *
- * Some token types are only recognized when another one is interpreted. For example, 
+ * Some token types are only recognized when another one is interpreted. For example,
  * escaped text is only found when the opening escaper token is found. Most tokens can
  * not happen inside escaped text except the ones closing the escaped sequence. The opening
  * token interprets the text flow and detects both the escaped text and the closing escape
@@ -26,7 +26,7 @@
  * - tell Lexer to append it to the token flow when needed
  *
  * Input processing should be done only after a positive self identification: the token will not
- * check for this. Some tokens do no process a buffer but rather simply store an information: 
+ * check for this. Some tokens do no process a buffer but rather simply store an information:
  * then processInput() will do nothing and will advance the position only right after the token.
  *
  * During processInput(), the token can use Lexer::appendToken() to append itself to the tokens
@@ -36,8 +36,8 @@
  * See TokenHeading class for more details.
  *
  * The Token::output() function is called by Lexer to output some content to output files.
- * The outputs are done through the Filer class instance which is given to output(). 
- * Tokens which have nothing to output will simply do nothing in the function, other will 
+ * The outputs are done through the Filer class instance which is given to output().
+ * Tokens which have nothing to output will simply do nothing in the function, other will
  * rather act on Lexer to update the generation context. Both Filer and Lexer instances
  * are given as parameter to output() so it can work on them.
  *
@@ -204,7 +204,7 @@ namespace MultilingualMarkdown {
          */
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
-           $lexer->appendToken($this, $filer);
+            $lexer->appendToken($this, $filer);
         }
  
         /**
@@ -214,9 +214,9 @@ namespace MultilingualMarkdown {
         protected function debugTextPart(string $text): string
         {
             $result = '';
-            for ($pos =  0 ; $pos < mb_strlen($text) ; $pos += 1) {
+            for ($pos =  0; $pos < mb_strlen($text); $pos += 1) {
                 $c = mb_substr($text, $pos, 1);
-                $result .= $c < ' ' ? '['.ord($c).']' : $c;
+                $result .= $c < ' ' ? '[' . ord($c) . ']' : $c;
             }
             return $result;
         }
@@ -254,9 +254,11 @@ namespace MultilingualMarkdown {
          */
         public function output(Lexer &$lexer, Filer &$filer): bool
         {
+            /*
             $class = get_class($this);
             $backslash = strrpos($class, '\\');
             $lexer->debugEcho('WARNING: no output() for class ' . substr($class, $backslash + 1) . "\n");
+            */
             return true;
         }
 
