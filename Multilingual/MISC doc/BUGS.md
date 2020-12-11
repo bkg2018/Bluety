@@ -50,5 +50,5 @@ Structure souhaitée :
       - II-2) [Tertiary title 2.1](subdata/tertiary.md#a12)
   - 
 * Revoir le schéma de numérotation :
-  * autoriser .topnumber 0 pour désactiver la numérotation niveau 1 dans un fichier
+  ~~* autoriser .topnumber 0 pour désactiver la numérotation niveau 1 dans un fichier~~
   * pas de préfixe ni numérotation niveau 1 sur fichier main ?

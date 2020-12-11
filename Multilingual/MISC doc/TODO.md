@@ -11,4 +11,4 @@
 ## EVOLUTIONS at 2020-11-14
 
 - copy of dependencies (images and other files) in output directory
-- add? .include(( directive and an opened-files stack in Filer instead of single input file
+- ~~add? .include(( directive and an opened-files stack in Filer instead of single input file~~
