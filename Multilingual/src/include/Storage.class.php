@@ -6,7 +6,7 @@
  * The Storage class handles buffers for reading text from an input file. The filenames and pathes are not
  * managed by Storage, which uses a file handle sent by the caller. The file is neither opened
  * nor closed by Storage but the current file positions are modified by Storage when reading, so callers
- * should not rely on positions nor alter them unless explicitely expected. The Storage class
+ * should not rely on positions nor alter them unless explicitly expected. The Storage class
  * gives functions to advance in input file and check previous or next characters without
  * moving the current position.
  *
@@ -365,7 +365,7 @@ namespace MultilingualMarkdown {
          * @param int $charsNumber the number of characters to return
          * @return null|string     the next characters which will be read,  null when file and buffer are finished.
          */
-        public function fetchNextChars(int $charsNumber): ?string
+        public function fetchNextCharacters(int $charsNumber): ?string
         {
             if ($this->bufferPosition >= $this->bufferLength) {
                 return null;
@@ -379,26 +379,31 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Check if current and next characters match a string in current line buffer.
-         * This test fetch necessary characters if the buffer has less than needed
-         * left to read.
+         * Check if a given string with given length matches incoming input.
          *
-         * @param array|string $test the string or an array of strings to match, starting at current character
+         * @param string $word   the word to check
+         * @param int    $length the number of UTF-8 characters in word
          *
-         * @return int 0 or the index in array if marker has been found, -1 if not found
+         * @return bool true if the word matches incoming input
          */
-        public function isMatching($test): int
+        public function isMatchingWord(string &$word, int $length): bool
         {
-            $allMarkers = [];
-            if (\is_array($test)) {
-                $allMarkers = $test;
-            } else {
-                $allMarkers = [$test];
-            }
-            foreach ($allMarkers as $index => $marker) {
-                $nextCharsLength = mb_strlen($marker) - 1;
-                $content  = $this->previousChars[0] . $this->fetchNextChars($nextCharsLength);
-                if (mb_strcmp($content, $marker) == 0) {
+            $content  = $this->previousChars[0] . $this->fetchNextCharacters($length - 1);
+            return (mb_strcmp($content, $word) == 0);
+        }
+
+        /**
+         * Check if a string from an array matches incoming input.
+         * The arrays must be indexed by successive numbers starting at 0
+         *
+         * @param string[] $allWords the array of words to check
+         *
+         * @return int index of the word found, or -1 if none found
+         */
+        public function isMatchingWords(array &$allWords, array &$allLengths): int
+        {
+            foreach ($allWords as $index => &$word) {
+                if ($this->isMatchingWord($word, $allLengths[$index])) {
                     return $index;
                 }
             }

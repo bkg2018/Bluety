@@ -40,7 +40,7 @@ namespace MultilingualMarkdown {
     
     /**
      * Class for the MLMD escaper token.
-     * Starts with '.{' and runs until '.}' if ound. Start and end symbols are not put into the content.
+     * Starts with '.{' and runs until '.}' if found. Start and end symbols are not put into the content.
      */
     class TokenEscaperMLMD extends TokenBaseEscaper
     {
@@ -51,10 +51,11 @@ namespace MultilingualMarkdown {
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->content = '';
+            $end = '.}';
             $this->skipSelf($input);
             $fromStorage = \get_class($input) == 'MultilingualMarkdown\\Storage';
             do {
-                if ($input->isMatching(['.}']) == 0) {
+                if ($input->isMatchingWord($end, 2)) {
                     $input->getNextChar();// skip end marker
                     $input->getNextChar();// skip end marker
                     $currentChar = $input->getCurrentChar();

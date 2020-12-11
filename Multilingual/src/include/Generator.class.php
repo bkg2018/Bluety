@@ -48,7 +48,6 @@ namespace MultilingualMarkdown {
     }
     use MultilingualMarkdown\Lexer;
     use MultilingualMarkdown\debugLexer;
-    use MultilingualMarkdown\Generator as Generator;
 
     /**
      * Generator class.
@@ -67,6 +66,7 @@ namespace MultilingualMarkdown {
         // Settings
         private $outputModeName = '';           /// from -out command line argument
         private $waitLanguages = true;          /// wait for .languages directive in each file
+        private $processedLines = 0;            /// computed by processAllFiles() for status display only
         
         // Initialize handlers and default settings
         public function __construct()
@@ -76,10 +76,22 @@ namespace MultilingualMarkdown {
             $this->outputModeName = 'md';
         }
 
+        /**
+         * Trace control accessor.
+         */
         public function setTrace(bool $yes)
         {
             $this->lexer->setTrace($yes);
         }
+
+        /**
+         * processed lines accessors.
+         */
+        public function getProcessedLines(): int
+        {
+            return $this->processedLines;
+        }
+        
         //------------------------------------------------------------------------------------------------------
         //MARK: Logger interface (relayed to Filer object)
         //------------------------------------------------------------------------------------------------------
@@ -256,11 +268,17 @@ namespace MultilingualMarkdown {
             $dashes = str_repeat('=', 60);
             $this->preProcess();
             $this->lexer->initSet();
+            $this->processedLines = 0;
             foreach ($this->filer as $index => $relFilename) {
-                echo "$dashes\nPROCESSING FILE: $relFilename\n";
+                echo "$dashes\nProcessing file: $relFilename ";
+                $timeStart = microtime(true);
                 if (!$this->process($index)) {
+                    echo "\n";
                     return false;
                 }
+                $time = sprintf("%.1f", microtime(true) - $timeStart);
+                echo "{$this->filer->getProcessedLines()} lines in {$time} seconds\n";
+                $this->processedLines += $this->filer->getProcessedLines();
             }
             return true;
         }

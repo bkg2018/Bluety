@@ -5,20 +5,22 @@
 .include docs/2-Using.mlmd
 .include docs/3-Writing.mlmd
 .include docs/4-Directives.mlmd
-.include docs/5-Conclusion.mlmd
+.include docs/5-Debugging.mlmd
+.include docs/6-Conclusion.mlmd
 
 # Multilingual Markdown Generator .fr((Générateur de Markdown Multilingue .)).all((MLMD.))
 
 MLMD generates one or more Markdown files for a set of declared languages from one or more
-multilingual source files, using directives in the files to distinguish each language parts.
+multilingual source files UTF-8 encoded, using directives in the files to distinguish each
+language parts.
 .fr((MLMD génère des fichiers Markdown dans plusieurs langues à partir de fichiers sources
-multilingues grâce à des directives placées dans les fichiers pour distinguer les parties
-propres à chaque langue..))
+multilingues encodés en UTF-8 grâce à des directives placées dans les fichiers pour distinguer
+les parties propres à chaque langue..))
 
 MLMD is a convenient way of keeping the documentation structure in unique files without having
 to duplicate them for each target language, and permits the translation by different authors while
 keeping the file in a unique and shared place. Being text files, the MLMD multilingual sources
-work well with versioning systems like Git.
+work well with versioning systems like Git. 
 .fr((MLMD est un moyen simple pour conserver la structure d'une documentation dans des fichiers
 uniques sans avoir à les dupliquer pour chaque langue, et facilite la rédaction par plusieurs
 traducteurs se partageant les fichiers. Les fichiers sources multilingues sont de simples
@@ -46,5 +48,12 @@ Stay safe and protect others.
 .fr((Prenez soin de vous et des autres.))
 
 Francis Piérot
+.((
 August-December 2020
 Dedicated to my father Serge, 1932-2020.
+.)).fr((
+Aout-Décembre 2020
+Dédié à mon papa Serge, 1932-2020.
+.))
+
+[Français](README.fr.md) - [English](README.md)

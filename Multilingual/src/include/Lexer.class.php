@@ -69,7 +69,11 @@ namespace MultilingualMarkdown {
     class Lexer
     {
         /** predefined tokens and languages codes directives tokens added by .languages */
-        private $mlmdTokens = [];
+        private $mlmdTokens = [];               // keyword => token, e.g. '.{' => TokenEscaperMLMD
+        private $mlmdTokensLengths = [];        // keyword => token keyword length
+        private $tokenMaxLength = 0;
+        private $tokenFENCE = null;             // specific handling for ``` at line beginning
+        private $tokenTRIPLEBACKTICK = null;    // specific handling for ``` in text stream
 
         /** LanguageList object handling all available languages codes */
         private $languageList = null;
@@ -98,7 +102,7 @@ namespace MultilingualMarkdown {
         private $waitLanguages = true;
         /** stack of tokens names for languages switching, including .all, .default and .ignore */
         private $languageStack = [['code' => DEFLT, 'line' => 0]];
-        /** name of current language token (index in $mlmdTokens) */
+        /** name of current language code */
         private $curLanguage = DEFLT;
         /** number of opened 'ignore', do not output anything when this variable is not 0 */
         private $ignoreLevel = 0;
@@ -119,39 +123,68 @@ namespace MultilingualMarkdown {
         /** false after the first non empty text token */
         private $emptyContent = true;
 
+        /** shortcuts */
+        private $tokenCLOSE = null;
+        private $tokenALL = null;
+        private $tokenDEFLT = null;
+        private $tokenEOL = null;
+
         public function __construct()
         {
-            // single line directives, derived from TokenBaseSingleLine
-            $this->mlmdTokens['numbering']  = new TokenNumbering();                 ///  .numbering
-            $this->mlmdTokens['topnumber']  = new TokenTopNumber();                 ///  .topnumber
-            $this->mlmdTokens['languages']  = new TokenLanguages();                 ///  .languages
-            $this->mlmdTokens['include']    = new TokenInclude();                   ///  .include
-            $this->mlmdTokens['toc']        = new TokenTOC();                       ///  .toc
-            $this->mlmdTokens['end']        = new TokenEnd();                       ///  .end
-            $this->mlmdTokens['stop']       = new TokenStop();                      ///  .stop
 
             // streamed language directives
-            $this->mlmdTokens[ALL]          = new TokenOpenAll();                   ///  .all((
-            $this->mlmdTokens[DEFLT]        = new TokenOpenDefault(DEFLT);          ///  .default((, identical to .((
-            $this->mlmdTokens['']           = new TokenOpenDefault('');             ///  .((
-            $this->mlmdTokens[IGNORE]       = new TokenOpenIgnore(IGNORE);          ///  .ignore((
-            $this->mlmdTokens['!']          = new TokenOpenIgnore('!');             ///  .!((
-            $this->mlmdTokens['close']      = new TokenClose();                     ///  .))
+            $this->mlmdTokens['.))']        = new TokenClose();
+            $this->tokenCLOSE = &$this->mlmdTokens['.))'];
+            // NB: TokenOpenLanguage will be instantiated by the .languages directive for each declared language <code>, stored in $this->mlmdTokens['code']
+            // NB: TokenText will be instantiated by Lexer for each normal text part, stored in the tokens flow $this->curTokens
+
+            // Other streamed open((
+            $this->mlmdTokens['.all((']     = new TokenOpenAll(); 
+            $this->tokenALL = &$this->mlmdTokens['.all(('];
+            $this->mlmdTokens['.((']        = new TokenOpenDefault(''); 
+            $this->tokenDEFLT = &$this->mlmdTokens['.(('];
+            $this->mlmdTokens['.default(('] = new TokenOpenDefault(DEFLT);
+            $this->mlmdTokens['.ignore((']  = new TokenOpenIgnore(IGNORE);
+            $this->mlmdTokens['.!((']       = new TokenOpenIgnore('!');
 
             // other streamed directives
             $this->mlmdTokens['empty']      = new TokenEmptyLine();                 ///  \n at beginning of line
-            $this->mlmdTokens['eol']        = new TokenEOL();                       ///  \n, must be checked later than TokenEmptyLine
+            $this->mlmdTokens["\n"]         = new TokenEOL();                       ///  \n, must be checked later than TokenEmptyLine
+            $this->tokenEOL = &$this->mlmdTokens["\n"];
 
             // escaped text streamed directives, derived from TokenBaseEscaper
             $this->mlmdTokens['"']          = new TokenEscaperDoubleQuote();        ///  "   - MD double quote escaping
-            $this->mlmdTokens['fence']      = new TokenEscaperFence();              ///  ``` - MD code fence
-            $this->mlmdTokens['```']        = new TokenEscaperTripleBacktick();     ///  ``` - MD triple backtick escaping, must be checked later than TokenEscaperFence
+            $this->mlmdTokens['```c']       = new TokenEscaperFence();              ///  ``` cannot be handled using the mlmdTokens array
+            $this->tokenFENCE               = $this->mlmdTokens['```c'];
+            $this->mlmdTokens['```']        = new TokenEscaperTripleBacktick();
+            $this->tokenTRIPLEBACKTICK      = $this->mlmdTokens['```'];
             $this->mlmdTokens['``']         = new TokenEscaperDoubleBacktick();     ///  ``  - MD double backtick escaping, must be checked later than TokenEscaperTripleBacktick
             $this->mlmdTokens['`']          = new TokenEscaperSingleBacktick();     ///  `   - MD single backtick escaping, must be checked later than TokenEscaperDoubleBacktick
-            $this->mlmdTokens['{}']         = new TokenEscaperMLMD();               /// .{.} - MLMD escaping
+            $this->mlmdTokens['.{']         = new TokenEscaperMLMD();               /// .{.} - MLMD escaping
 
-            // NB: TokenOpenLanguage will be instantiated by the .languages directive for each declared language <code>, stored in $this->mlmdTokens['code']
-            // NB: TokenText will be instantiated by Lexer for each normal text part, stored in the tokens flow $this->curTokens
+            // single line directives, derived from TokenBaseSingleLine
+            $this->mlmdTokens['.numbering'] = new TokenNumbering();
+            $this->tokenNUMBERING = &$this->mlmdTokens['.numbering'];
+            $this->mlmdTokens['.topnumber'] = new TokenTopNumber();
+            $this->tokenTOPNUMBER = &$this->mlmdTokens['.topnumber'];
+            $this->mlmdTokens['.languages'] = new TokenLanguages();
+            $this->tokenLANGUAGES = &$this->mlmdTokens['.languages'];
+            $this->mlmdTokens['.include']   = new TokenInclude();
+            $this->tokenINCLUDE = &$this->mlmdTokens['.include'];
+            $this->mlmdTokens['.toc']       = new TokenTOC();
+            $this->mlmdTokens['.end']       = new TokenEnd();
+            $this->mlmdTokens['.stop']      = new TokenStop();
+            $this->tokenEND = &$this->mlmdTokens['.end'];
+            $this->tokenSTOP = &$this->mlmdTokens['.stop'];
+
+            $this->tokenMaxLength = 0;
+            foreach ($this->mlmdTokens as $key => $token) {
+                $len = strlen($key);
+                if ($len > $this->tokenMaxLength) {
+                    $this->tokenMaxLength = $len;
+                }
+                $this->mlmdTokensLengths[$key] = $len;
+            }
         }
 
         /**
@@ -352,10 +385,10 @@ namespace MultilingualMarkdown {
                 if (($this->languageCount == 0) && $prevToken->isType(TokenType::EOL)) {
                     // replace the two EOLs by open all / eol / eol / close
                     $this->deleteLastToken();
-                    $this->appendToken($this->mlmdTokens[ALL], $filer);
+                    $this->appendToken($this->tokenALL, $filer);
                     $this->appendTokenEOL($filer);
                     $this->appendTokenEOL($filer);
-                    $this->appendToken($this->mlmdTokens['close'], $filer);
+                    $this->appendToken($this->tokenCLOSE, $filer);
                     return;
                 }
                 //  <EOL><space only text> ?
@@ -400,7 +433,7 @@ namespace MultilingualMarkdown {
         public function appendTokenEOL(Filer &$filer): void
         {
             if (!$this->emptyContent) {
-                $this->appendToken($this->mlmdTokens['eol'], $filer);
+                $this->appendToken($this->tokenEOL, $filer);
             }
         }
 
@@ -451,7 +484,7 @@ namespace MultilingualMarkdown {
                     if ($prevToken->isType([TokenType::EOL]) && !$prevPrevToken->isType(TokenType::EOL)) {
                         $this->deleteLastToken();// delete close
                         $this->deleteLastToken();// delete eol
-                        $this->appendToken($this->mlmdTokens['close'], $filer); // re-append close
+                        $this->appendToken($this->tokenCLOSE, $filer); // re-append close
                     }
                 }
             }
@@ -488,6 +521,36 @@ namespace MultilingualMarkdown {
                     return $token;
                 }
             }
+
+            /*
+            $extract = $input->getCurrentChar() . $input->fetchNextCharacters($this->tokenMaxLength);
+            // try direct key matching
+            foreach ($this->mlmdTokens as $key => &$token) {
+                $keylen = strlen($key);
+                $match = true;                
+                for ($pos = 0 ; $match && ($pos < $keylen) ; $pos += 1) {
+                    $match = (mb_substr($extract, $pos, 1) == substr($key, $pos, 1));
+                }
+                if ($match) {
+                    // make sure the token accepts identification
+                    if ($token->identify($input)) {
+                        // Escaped text tokens have a content so they must be instantiated
+                        if ($token->isType(TokenType::ESCAPED_TEXT)) {
+                            return $token->newInstance();
+                        }
+                        // for others, use Lexer's own token instance
+                        return $token;
+                    }
+                }
+            }
+            // code fence cannot be identified by direct matching, let token check itself
+            if ($this->tokenFENCE->identify($input)) {
+                return $this->tokenFENCE->newInstance();
+            }
+            if ($this->tokenTRIPLEBACKTICK->identify($input)) {
+                return $this->tokenTRIPLEBACKTICK;
+            }
+            */
             return null;
         }
 
@@ -553,7 +616,7 @@ namespace MultilingualMarkdown {
             // important functions are :
             // - storeCurrentGoNext() : store current character into current text and go to next character
             // - gotoNextLine() : skip over next characters until end of current line
-            // - fetchNextChars() : fetch more characters from input while not changing read position
+            // - fetchNextCharacters() : fetch more characters from input while not changing read position
             // - fetchToken() : try to recognize a token starting at current character
             // 'fetch' means that more characters will be taken from input if needed, but current read position will not change
             do {
@@ -561,11 +624,11 @@ namespace MultilingualMarkdown {
                 $token = null;
                 switch ($this->currentChar) {
                     case null:
-                        $token = &$this->mlmdTokens['eol'];
+                        $token = &$this->tokenEOL;
                         break;
                     case '.':
                         // ignore when followed by space or EOL
-                        $nextChar = $storage->fetchNextChars(1); // pre-read next character
+                        $nextChar = $storage->fetchNextCharacters(1); // pre-read next character
                         if (($nextChar != ' ') && ($nextChar != "\n") && ($nextChar != "\t")) {
                             $token = $this->fetchToken($storage);
                             // special handling for '.languages' if needed
@@ -659,18 +722,16 @@ namespace MultilingualMarkdown {
             $this->currentChar = '';
             $this->resetCurrentText();
             $this->curTokens = [];
-            $endToken = $this->mlmdTokens['end'];
-            $stopToken = $this->mlmdTokens['stop'];
 
             // skip right after languages directive (only at first time)
             if ($this->waitLanguages && !$this->languageSet) {
                 $startLineNumber = $this->allStartingLines[$relFilename];
                 do {
                     $lineContent = $filer->getLine(); // read until eol and increment line number
-                    if ($endToken->identifyInBuffer($lineContent, 0)) {
+                    if ($this->tokenEND->identifyInBuffer($lineContent, 0)) {
                         break;
                     }
-                    if ($stopToken->identifyInBuffer($lineContent, 0)) {
+                    if ($this->tokenSTOP->identifyInBuffer($lineContent, 0)) {
                         $stop = $filer->getCurrentLineNumber();//for debug purposes put a bkpkt here
                     }
                     if ($this->currentChar === null) {
@@ -684,11 +745,11 @@ namespace MultilingualMarkdown {
             $filer->setLanguage($this->languageList, DEFLT);
 
             while ($lineContent !== null) {
-                if ($endToken->identifyInBuffer($lineContent, 0)) {
+                if ($this->tokenEND->identifyInBuffer($lineContent, 0)) {
                     $filer->warning(".end directive found");
                     break;
                 }
-                if ($stopToken->identifyInBuffer($lineContent, 0)) {
+                if ($this->tokenSTOP->identifyInBuffer($lineContent, 0)) {
                     $filer->warning(".stop directive found");//for debug purposes put a bkpkt here
                 }
                 $curLineNumber = $filer->getCurrentLineNumber();
@@ -742,7 +803,9 @@ namespace MultilingualMarkdown {
             if (empty($name)) {
                 $name = DEFLT;
             }
-            if (!\array_key_exists($name, $this->mlmdTokens)) {
+            //$key = '.' . $name . '((';
+            //if (!\array_key_exists($key, $this->mlmdTokens)) {
+            if (!$this->languageList->existLanguage($name)) {
                 $filer->error("unknown language '$name'");
                 return false;
             }
@@ -817,14 +880,8 @@ namespace MultilingualMarkdown {
         /**
          * Return an array with the list of included files found in a given file.
          */
-        public function getIncludedFiles(string $filename): ?array
+        public function getIncludedFiles(string $filename, Filer &$filer): ?array
         {
-            $languagesToken = &$this->mlmdTokens['languages']; // shortcut
-            $includeToken   = &$this->mlmdTokens['include']; // shortcut
-            $ignoreToken    = &$this->mlmdTokens['ignore']; // shortcut
-            $fenceToken     = &$this->mlmdTokens['fence']; // shortcut
-            $endToken       = &$this->mlmdTokens['end']; // shortcut
-            $stopToken      = &$this->mlmdTokens['stop']; // shortcut
             $includes = [];            
             $path = pathinfo($filename, PATHINFO_DIRNAME);
             $file = fopen($filename, 'rb');
@@ -838,22 +895,23 @@ namespace MultilingualMarkdown {
                 if (!$text) {
                     break;
                 }
-                if ($endToken->identifyInBuffer($text, 0)) {
+                if ($this->tokenEND->identifyInBuffer($text, 0)) {
                     break;
                 }
-                if ($stopToken->identifyInBuffer($text, 0)) {
+                if ($this->tokenSTOP->identifyInBuffer($text, 0)) {
                     echo "STOP directive found in Lexer::preProcessIncludes loop\n";
                 }
-                if ($fenceToken->identifyInBuffer($text, 0)) {
+                if ($this->tokenFENCE->identifyInBuffer($text, 0)) {
+                    $firstLine = $curLineNumber;
                     do {
                         $text = getNextLineTrimmed($file, $curLineNumber);
-                    } while ($text !== null && !$fenceToken->identifyInBuffer($text, 0));
+                    } while ($text !== null && !$this->tokenFENCE->identifyInBuffer($text, 0));
                     if ($text === null) {
                         $filer->error("Code fence (```) unable to find closing code fence", $filename, $firstLine);
                     }
                 }
-                if ($includeToken->identifyInBuffer($text, 0)) {
-                    $lineEnd = trim(mb_substr($text, $includeToken->getLength()));
+                if ($this->tokenINCLUDE->identifyInBuffer($text, 0)) {
+                    $lineEnd = trim(mb_substr($text, $this->tokenINCLUDE->getLength()));
                     $filePath = $path . '/' . $lineEnd;
                     if (file_exists($filePath)) {
                         if (!in_array($filePath, $includes)) {
@@ -868,7 +926,7 @@ namespace MultilingualMarkdown {
             // recurse inclusion in included files
             $subIncludes = [];
             foreach ($includes as $file) {
-                $array = $this->getIncludedFiles($file);
+                $array = $this->getIncludedFiles($file, $filer);
                 foreach ($array as $subFile) {
                     if (!in_array($subFile, $subIncludes)) {
                         $subIncludes[] = $subFile;
@@ -887,11 +945,11 @@ namespace MultilingualMarkdown {
         /**
          * Look for included files in all input files.
          */
-        public function preProcessIncludes(object $filer): void
+        public function preProcessIncludes(Filer &$filer): void
         {
             $includes = [];
             foreach ($filer as $index => $relFilename) {
-                $subIncludes = $this->getIncludedFiles($filer->getInputFile($index));
+                $subIncludes = $this->getIncludedFiles($filer->getInputFile($index), $filer);
                 foreach ($subIncludes as $subInclude) {
                     if (!in_array($subInclude, $includes)) {
                         $includes[] = $subInclude;
@@ -911,13 +969,6 @@ namespace MultilingualMarkdown {
         {
             resetArray($this->allHeadingsArrays);
             resetArray($this->allNumberings);
-            $languagesToken = &$this->mlmdTokens['languages']; // shortcut
-            $ignoreToken    = &$this->mlmdTokens['ignore']; // shortcut
-            $numberingToken = &$this->mlmdTokens['numbering']; // shortcut
-            $topnumberToken = &$this->mlmdTokens['topnumber']; // shortcut
-            $fenceToken     = &$this->mlmdTokens['fence']; // shortcut
-            $endToken       = &$this->mlmdTokens['end']; // shortcut
-            $stopToken      = &$this->mlmdTokens['stop']; // shortcut
             Heading::init();// reset global headings numbering to 0
             $languageSet = false; // remember if the .languages directive has been read
             $defaultNumberingScheme = $this->defaultNumberingScheme; // start with CLI parameter scheme if any
@@ -942,15 +993,15 @@ namespace MultilingualMarkdown {
                         break;
                     }
                     // handle .end and .stop directive first
-                    if ($endToken->identifyInBuffer($text, 0)) {
+                    if ($this->tokenEND->identifyInBuffer($text, 0)) {
                         break;
                     }
-                    if ($stopToken->identifyInBuffer($text, 0)) {
+                    if ($this->tokenSTOP->identifyInBuffer($text, 0)) {
                         echo "STOP directive found in Lexer::preProcess loop\n";
                     }
                     // handle .languages directive before anything else
-                    if ($languagesToken->identifyInBuffer($text, 0)) {
-                        $languageParams = trim(mb_substr($text, $languagesToken->getLength()));
+                    if ($this->tokenLANGUAGES->identifyInBuffer($text, 0)) {
+                        $languageParams = trim(mb_substr($text, $this->tokenLANGUAGES->getLength()));
                         $this->setLanguagesFrom($languageParams, $filer);
                         $languageSet = true;
                         // remember line number for languages directive
@@ -962,11 +1013,11 @@ namespace MultilingualMarkdown {
                         continue;
                     }
                     // handle code fences
-                    if ($fenceToken->identifyInBuffer($text, 0)) {
+                    if ($this->tokenFENCE->identifyInBuffer($text, 0)) {
                         $firstLine = $curLineNumber;
                         do {
                             $text = getNextLineTrimmed($file, $curLineNumber);
-                        } while ($text !== null && !$fenceToken->identifyInBuffer($text, 0));
+                        } while ($text !== null && !$this->tokenFENCE->identifyInBuffer($text, 0));
                         if ($text === null) {
                             $filer->error("Code fence (```) unable to find closing code fence", $filename, $firstLine);
                         }
@@ -975,18 +1026,18 @@ namespace MultilingualMarkdown {
                         }
                     }
                     // handle .topnumber directive
-                    if ($topnumberToken->identifyInBuffer($text, 0)) {
-                        $this->allTopNumbers[$relFilename] = (int)(mb_substr($text, $topnumberToken->getLength()));
+                    if ($this->tokenTOPNUMBER->identifyInBuffer($text, 0)) {
+                        $this->allTopNumbers[$relFilename] = (int)(mb_substr($text, $this->tokenTOPNUMBER->getLength()));
                         if (isset($this->allNumberings[$relFilename])) {
                             $this->allNumberings[$relFilename]->setLevelNumber(1, $this->allTopNumbers[$relFilename]);
                         }
                     }
                     // handle .numbering directive
-                    if ($numberingToken->identifyInBuffer($text, 0)) {
+                    if ($this->tokenNUMBERING->identifyInBuffer($text, 0)) {
                         if (!empty($this->allNumberingScheme[$relFilename])) {
                             $filer->warning("numbering scheme overloading for $relFilename", $filename, $firstLine);
                         }
-                        $this->allNumberingScheme[$relFilename] = trim(mb_substr($text, $numberingToken->getLength()));
+                        $this->allNumberingScheme[$relFilename] = trim(mb_substr($text, $this->tokenNUMBERING->getLength()));
                         $this->allNumberings[$relFilename] = new Numbering($this->allNumberingScheme[$relFilename]);
                         if ($defaultNumberingScheme == null) {
                             $defaultNumberingScheme = $this->allNumberingScheme[$relFilename];
@@ -1052,8 +1103,14 @@ namespace MultilingualMarkdown {
             $result = $this->languageList->setFrom($parameters);
             if ($result) {
                 foreach ($this->languageList as $index => $language) {
-                    if (!\array_key_exists($language['code'], $this->mlmdTokens)) {
-                        $this->mlmdTokens[$language['code']] = new TokenOpenLanguage($language['code']);
+                    $key = '.' . $language['code'] . '((';
+                    if (!\array_key_exists($key, $this->mlmdTokens)) {
+                        //$this->mlmdTokens[$language['code']] = new TokenOpenLanguage($language['code']);
+                        $this->mlmdTokens = array($key => new TokenOpenLanguage($language['code'])) + $this->mlmdTokens;
+                        $this->mlmdTokensLengths[$key] = mb_strlen($key);
+                        if ($this->mlmdTokensLengths[$key] > $this->tokenMaxLength) {
+                            $this->tokenMaxLength = $this->mlmdTokensLengths[$key];
+                        }
                     }
                 }
                 $this->languageSet = isset($index);

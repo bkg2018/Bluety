@@ -92,15 +92,6 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Return the token type as a string, derived from class name.
-         */
-        public function getTypeName(): string
-        {
-            $class = \get_class($this);
-            return \str_replace("MultilingualMarkdown\\Token", '', $class);
-        }
-
-        /**
          * Let the token self-identify against a Filer or Storage object.
          *
          * @param object $input the Filer or Storage object
@@ -128,11 +119,11 @@ namespace MultilingualMarkdown {
 
         /**
          * Tells if a token has a content and should be instanciated.
-         */
         public function hasContent(): bool
         {
             return false;
-        }
+        }         */
+
 
         /**
          * Skip over the token itself in the input object.

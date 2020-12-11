@@ -77,6 +77,8 @@ namespace MultilingualMarkdown {
         private $inFile = null;
         /** input buffers handling object */
         private $storage = null;
+        /** number of processed lines after end of process() */
+        private $processedLines = 0;
 
         // Output filenames, files and writing status
 
@@ -208,6 +210,14 @@ namespace MultilingualMarkdown {
         public function valid()
         {
             return isset($this->relFilenames[$this->iteratorIndex]);
+        }
+
+        /**
+         * Processed lines accessor.
+         */
+        public function getProcessedLines(): int
+        {
+            return $this->processedLines;
         }
 
         /**
@@ -557,7 +567,9 @@ namespace MultilingualMarkdown {
                 unset($this->outFilenameTemplate);
                 $this->outFilenameTemplate = null;
             }
+            $this->processedLines = 0;
             if (isset($this->storage)) {
+                $this->processedLines = $this->storage->getCurrentLineNumber();
                 $this->storage->close();
                 unset($this->storage);
             }
@@ -767,17 +779,34 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Check if current and next characters match a string in current line buffer.
-         * This will fetch more characters from input file if needed but won't advance the
-         * current reading position.
+         * Check if a given string with given length matches incoming input.
          *
-         * @param array|string $test the string or array of strings to match
+         * @param string $word   the word to check
+         * @param int    $length the number of UTF-8 characters in word
          *
-         * @return int 0 or index if marker has been found at current place, -1 if not
+         * @return bool true if the word matches incoming input
          */
-        public function isMatching($test): int
+        public function isMatchingWord(string &$word, int $length): bool
         {
-            return $this->storage->isMatching($test);
+            return $this->storage->isMatchingWord($word, $length);
+        }
+
+        /**
+         * Check if a string from an array matches incoming input.
+         * The arrays must be indexed by successive numbers starting at 0
+         *
+         * @param string[] $allWords the array of words to check
+         *
+         * @return int index of the word found, or -1 if none found
+         */
+        public function isMatchingWords(array &$allWords, array &$allLengths): int
+        {
+            foreach ($allWords as $index => &$word) {
+                if ($this->storage->isMatchingWord($word, $allLengths[$index])) {
+                    return $index;
+                }
+            } 
+            return -1;
         }
 
         /**

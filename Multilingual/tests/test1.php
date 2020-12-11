@@ -21,28 +21,4 @@ $generator->processAllFiles();
 
 exit(0);
 
-$allCoverage = xdebug_get_code_coverage();
-echo "Coveraging...\n";
-foreach ($allCoverage as $inFilepath => $coverage) {
-    $outFilepath = $inFilepath . '.log';
-    $inFile = fopen($inFilepath, "r");
-    $outFile = fopen($outFilepath, "w");
-    $inLine = fgets($inFile);
-    $lineNumber = 1;
-    while ($inLine != null) {
-        $prefix = '   ';
-        if (array_key_exists($lineNumber, $coverage)) {
-            switch ($coverage[$lineNumber]) {
-                case 1: $prefix = '[*]'; break;
-                case -1:$prefix = '[ ]'; break;
-                case -2:$prefix = ' - '; break;
-                default: break;
-            }
-        }
-        fputs($outFile, $prefix . ' ' . $inLine);
-        $inLine = fgets($inFile);
-        $lineNumber += 1;
-    }
-    fclose($inFile);
-    fclose($outFile);
-}
+DumpCoverage();

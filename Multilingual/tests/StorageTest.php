@@ -49,7 +49,7 @@ require_once __DIR__ . '/../src/include/Storage.class.php';
   * gotoNextLine        yes (+n)    yes                 yes (null or \n)        yes
   * getString           yes         yes                 yes (N characters)      yes
   * fetchPreviousChars  -           -                   yes (previous chars)
-  * fetchNextChars      -           yes                 yes (N characters)
+  * fetchNextCharacters      -           yes                 yes (N characters)
   * isMatching          -           yes                 -
   * 
   * 

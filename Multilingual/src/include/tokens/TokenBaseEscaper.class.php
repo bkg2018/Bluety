@@ -63,11 +63,11 @@ namespace MultilingualMarkdown {
         }
         /**
          * Tells if a token has a content and should be instanciated.
-         */
         public function hasContent(): bool
         {
             return true;
-        }
+        }         */
+
         /**
          * Check if content is uniquely composed of spacing characters.
          * NB this doesn't handle UTF-8 spacing.

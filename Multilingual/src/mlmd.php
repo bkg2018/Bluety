@@ -23,7 +23,9 @@
  * @link      TODO
  */
 
-$MLMD_VERSION = "1.0.2";
+xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
+
+$MLMD_VERSION = "1.0.3";
 $MLMD_DATE    = strftime("%F (%X)", filemtime(__FILE__));
 
 require_once 'include/Functions.php';
@@ -129,5 +131,8 @@ while ($arg < $argc) {
 $timeStart = microtime(true);
 $generator->processAllFiles();
 $timeEnd = microtime(true);
+$dashes  = str_repeat('-', 79);
 $seconds = sprintf("%.02f", $timeEnd - $timeStart);
-echo "Processed in $seconds s\n";
+echo "$dashes\nTOTAL: {$generator->getProcessedLines()} lines processed in $seconds seconds\n";
+
+DumpCoverage();

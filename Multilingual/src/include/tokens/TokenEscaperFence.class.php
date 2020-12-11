@@ -38,7 +38,7 @@ namespace MultilingualMarkdown {
     /**
      * Class for the code fence.
      * The code fence opening starts with a triple back-tick possibly followed
-     * by a language name. The token will skip over the reste of current line and
+     * by a language name. The token will skip over the rest of current line and
      * send everything to outputs while watching for ending fence.
      */
     class TokenEscaperFence extends TokenBaseEscaper

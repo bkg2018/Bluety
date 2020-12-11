@@ -1,8 +1,21 @@
-This MLMD template is a test file.
-
-Lines preceeding the `.languages` directive are ignored.
+This is a test file.
+Lines preceding the `.languages` directive are ignored.
 
 .languages fr,en main=en
+
+# first title
+
+Any text outside directives and appearing after the `.languages` directive
+is generated as default text as if it were in a `.((` section.
+.fr((Tout texte en dehors des directives d'ouverture et de fermeture de langue
+est considéré comme du texte par défaut comme si une directive `.((` était active..))
+
+```code
+.all((
+```
+
+### Examples.fr((Exemples.))
+
 .numbering 1:.((Chapter .)).fr((Chapitre .)):&I:-,2::1:.,3::1
 .!((Ignored text:
 numbering scheme for file 2 title 3 subtitle 4 is II-3.4

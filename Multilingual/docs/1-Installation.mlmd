@@ -38,7 +38,7 @@ imply a specific setting as it should be embedded in standard PHP 7.3 distributi
 ne nécessite pas de réglage particulier car elle est intégrée par défaut dans les distributions
 standards de PHP 7..))
 
-## Storing MLMD .fr((Emplacement de MLMD.))
+## Storing MLMD.fr((Emplacement de MLMD.))
 
 The PHP script and its dependencies must be put in a directory with easy user access, e.g.:
 .fr((Le script et ses dépendances doivent se situer dans un répertoire accessible à l'utilisateur, par exemple :.))

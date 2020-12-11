@@ -77,17 +77,18 @@ namespace MultilingualMarkdown {
             $storage = new Storage($this->content);
             $char = $storage->getCurrentChar();
             $paramKeys = ['title=', 'level='];
+            $paramKeysLengths = [6, 6];
             while ($char != null) {
-                $keyIndex = $storage->isMatching($paramKeys);
+                $keyIndex = $storage->isMatchingWords($paramKeys, $paramKeysLengths);
                 if ($keyIndex >= 0) {
-                    $storage->getString(strlen($paramKeys[$keyIndex]));// skip key
+                    $storage->getString($paramKeysLengths[$keyIndex]);// skip key
                 }
                 // title?
                 switch ($keyIndex) {
                     case 0:
                         $this->title = '';
                         $char = $storage->getCurrentChar();
-                        while (($char != null) && ($storage->isMatching($paramKeys) < 0)) {
+                        while (($char != null) && ($storage->isMatchingWords($paramKeys, $paramKeysLengths) < 0)) {
                             $this->title .= $char;
                             $char = $storage->getNextChar();
                         }
@@ -96,7 +97,7 @@ namespace MultilingualMarkdown {
                     case 1:
                         $levels = '';
                         $char = $storage->getCurrentChar();
-                        while (($char != null) && ($storage->isMatching($paramKeys) < 0)) {
+                        while (($char != null) && ($storage->isMatchingWords($paramKeys, $paramKeysLengths) < 0)) {
                             $levels .= $char;
                             $char = $storage->getNextChar();
                         }

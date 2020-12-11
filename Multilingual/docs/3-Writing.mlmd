@@ -80,6 +80,113 @@ des fichiers sources traités mais ce n'est pas obligatoire.))
   la directive `.languages` et le titre de niveau 1 `#`. Le `.numbering` sera ignoré si
   un paramètre `-numbering` a été fourni à la ligne de commande..))
 
+## Including files.fr((Inclusion de fichiers.))
+
+Any file set by the `-i` command line parameters or from scanning the starting directory
+can add other files in the set of input files. File inclusion do not actually insert a file content
+but rather include the file into the set of processed files.
+.fr((Tout fichier indiqué dans un paramètre `-i` de la ligne de commande ou résultant
+de l'exploration du répertoire de démarrage peut ajouter d'autres fichiers à la liste de ceux
+traités. L'inclusion n'insère pas réellement le texte d'un autre fichier à un endroit
+d'un autre fichier mais l'ajoute à l'ensemble des fichiers sources..))
+
+This allows a main file to reference the various parts of documentation from separate files
+and keep a clean and simple main file with a global table of contents.
+.fr((Cette fonction permet à un fichier principal de référencer des fichiers dans lesquels
+se trouvent les différentes parties de la documentation tout en conservant un fichier principal
+simple et propre avec un sommaire global..))
+
+### Include directive.fr((Directive d'inclusion.))
+
+The `.include` directive is followed by a relative file name which must be accessible
+from the main file root directory. The file is not necessarily relative to the file
+where the directive lies. It is written after the directive with no special delimiter
+or quote characters around it and it ends the line.
+.fr((La directive `.include` est suivie d'un nom relatif de fichier qui doit être accessible
+à partir du répertoire du fichier principal. Le fichier inclus n'est pas forcément relatif
+à celui où se trouve la directive mais plutôt au fichier principal, par exemple indiqué par
+le paramètre `-main` de la ligne de commande. Le nom suit la directive sans délimiteur
+particulier ou guillemets autours de lui..))
+
+MLMD documentation is organized as a main `README.mlmd` file with a main title and
+a global Table of Contents, which includes 5 other files containing the different parts
+of documentation. This maintains a clean and simple main file from which the reader can jump
+to any part of documentation using the global TOC:
+.fr((La documentation MLMD est organisée en un fichier principal `README.mlmd` avec un titre
+principal et un sommaire global, qui inclut 5 autres fichiers contenant les parties de la
+documentation. Ceci maintient un fichier principal clair et simple à partir duquel
+le lecteur peut sauter aux diverses parties de la documentation grâce aux liens du sommaire :.))
+
+```code
+  .include docs/1-Installation.mlmd
+  .include docs/2-Using.mlmd
+  ...
+```
+
+In this extract from the main `README.mlmd` file, the included files are in a `docs`
+folder which lies at the same level as the `README.mlmd` file itself. The headings
+in these files can be included in a global toc in the main file:
+.fr((Dans cet extrait du fichier `README.mlmd` les fichiers inclus sont dans le répertoire
+`docs`situé au même niveau que le `README.mlmd`. Les titres de ces fichiers sont inclus
+dans le sommaire global du fichier principal :.))
+
+```code
+  .toc level=1-3
+```
+
+This global Table Of Content will features headings level 1 to 3 from each processed file
+including the one declared in `.include` directives even if only `README.mlmd` is given in
+a `-i` command line parameter.
+.fr((Le sommaire global contiendra tous les titres de fichiers de niveau 1 à 3 y compris
+ceux des fichiers indiqués dans les directives `.include`, bien qu'ils ne soient pas
+listés dans les paramètres `-i` de la ligne de commande..))
+
+### Numbering main and included files.fr((Numérotation des fichiers.))
+
+To control numbering of the main and included files the `.topnumber` directive allow
+setting of each file level 1 heading. A good way of using it is to put .`topnumber 0`
+in the main file to cancel numbering of its file title, then include the other files
+and put `.topnumber` directives with numbers 1 and above to make sure te files will
+appear with the right number in a global TOC.
+.fr((Pour contrôler la numérotation des fichiers principaux et inclus, la directive
+`.topnumber` règle le numéro du titre de niveau 1 dans un fichier. Un bon moyen de l'employer 
+est d'utiliser `.topnumber 0` dans le fichier principal pour supprimer la numérotation de son
+titre de niveau 1, puis d'inclure une directive `.topnumber` dans chaque fichier inclus
+pour indiquer l'ordre dans lequel ils doivent apparaitre dans le sommaire global..))
+
+The MLMD documentation uses this scheme:
+.fr((La documentation MLMD utilise ce schéma :.))
+
+- the main `README.mlmd` uses `.topnumber 0` to neutralize its level 1 heading numbering,
+  and use `.include docs/1-Installation.mlmd` to include one file. The `#` heading is followed 
+  by an introduction and then a `.toc` directive allowing levels 1 to 3 of all headings:
+.fr((- le fichier `README.mlmd` utilise `.topnumber 0` pour neutraliser la numérotation de
+son titre de niveau 1 et utilise `.include docs/1-Installation.mlmd` pour inclure un fichier.
+Le titre `#` est suivi d'une introduction puis d'une directive `.toc` incluant les niveaux 1 à 3
+des titres :.))
+
+```code
+  .numbering 1::&I:-,2::1:.,3::1
+  .topnumber 0
+  .include docs/1-Installation.mlmd
+  .include docs/2-Using.mlmd
+  ...
+  .toc title=Table Of Contents.fr((Sommaire.)) level=1-3
+```
+
+- the included files use their own `.topnumber` value, which determine their order in the
+  global TOC:
+.fr((- les fichiers inclus comportent leur propre valeur derrière `.topnumber`, ce qui détermine
+leur ordre dans le sommaire global :.))
+
+```code
+  .topnumber 1
+  ...
+```
+
+Refer to MLMD own's documentation for a complete example of MLMD `.include` and `.topnumber` use.
+.((La documentation de MLMD illustre l'utilisation des directivess `.include` et `.topnumber`..))
+
 ## Headings.fr((Titres.))
 
 MLMD requires `#` prefixed headings and doesn't recognize the alternate syntax for

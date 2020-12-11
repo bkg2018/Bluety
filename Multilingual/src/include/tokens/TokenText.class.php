@@ -50,12 +50,12 @@ namespace MultilingualMarkdown {
         }
         /**
          * Tells if a token has a content and should be instanciated.
-         */
+
         public function hasContent(): bool
         {
             return true;
         }
-        
+         */        
         /**
          * Tell if the token is empty of significant text content.
          *

@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-require_once 'include/Generator.class.php';
+require_once 'src/include/Generator.class.php';
 use MultilingualMarkdown\Generator;
 mb_internal_encoding('UTF-8');
 
-xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
+xdebug_set_filter( XDEBUG_FILTER_TRACING, XDEBUG_PATH_EXCLUDE, [ __DIR__ . "/vendor/" ] );
+xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE | XDEBUG_CC_BRANCH_CHECK);
 
 $generator = new Generator();
 $generator->setOutputMode('html');

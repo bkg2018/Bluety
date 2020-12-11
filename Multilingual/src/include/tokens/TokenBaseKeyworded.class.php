@@ -64,14 +64,14 @@ namespace MultilingualMarkdown {
             * Identify self against an UTF-8 buffer and position.
             *
             * The token knows its UTF-8 identifier / symbols and checks if the
-            * given buffer is positionned on an occurence of this identifier.
+            * given buffer is positioned on an occurrence of this identifier.
             *
             * No change is made to the given buffer and position.
             *
             * @param string $buffer        the content where to look for self keyword
             * @param int    $pos           the 0-based character position where to look for
             *
-            * @return bool true if the token can be found at the given position in the gvien buffer
+            * @return bool true if the token can be found at the given position in the given buffer
             */
         public function identifyInBuffer(string $buffer, int $pos): bool
         {
@@ -84,11 +84,11 @@ namespace MultilingualMarkdown {
          *
          * @param object $input the input object
          *
-         * @return bool true if theh current token can be found at current Filer position and buffer content.
+         * @return bool true if the current token can be found at current Filer position and buffer content.
          */
         public function identify(object $input): bool
         {
-            return ($input->isMatching([$this->keyword]) == 0);
+            return $input->isMatchingWord($this->keyword, $this->keywordLength);
         }
         /**
             * Return the length of the token identifier.
