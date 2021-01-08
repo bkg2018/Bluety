@@ -1,0 +1,33 @@
+.languages fr,en main=en
+.topnumber 0
+
+<A id="top">
+[<img src="https://www.countryflags.io/fr/flat/16.png">](Bluety.fr.md)
+[<img src="https://www.countryflags.io/gb/flat/16.png">](Bluety.md)
+
+# .all((Bluety - .))Case panels with I/O controls for Z-80 Retro Computers.fr((Panneaux avec contrôles E/S pour ordinateurs Z-80.)) 
+
+Bluety is a set of printed circuit boards for a case hosting a retro-computer from the RC2014
+family of Z-80 based retro-computers, particularly the SC126 kit from Stephen S. Cousins and the original RC2014
+from Spencer Owens.
+.fr((Bluety est un ensemble de circuits imprimés pour un boîtier destiné à recevoir un ordinateur rétro 
+basé sur le Z-80 de la famille RC2014, en particulier le kit SC126 de Stephen S. Cousins et le RC2014 Pro
+de Spencer Owens..))
+
+.toc title=Table of Contents.fr((Sommaire.)) level=1-3
+
+.include 01-Introduction.mlmd
+.include 02-Kit Content.mlmd
+.include 03-Preparing.mlmd
+.include 04-Assembling Bus Daughter.mlmd
+.include 05-Assembling Blink'n Switch.mlmd
+.include 06-Assembling Front Panel.mlmd
+.include 07-Assembling Back Panel.mlmd
+.include 08-Installing and Wiring.mlmd
+.include 09-Using.mlmd
+
+[^](#top)
+[<img src="https://www.countryflags.io/fr/flat/16.png">](Bluety.fr.md)
+[<img src="https://www.countryflags.io/gb/flat/16.png">](Bluety.md)
+
+
