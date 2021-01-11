@@ -1,27 +1,44 @@
 .topnumber 2
 
-# Contenu du kit
+# Kit Content.fr((Contenu du kit.))
 
-Vérifiez le contenu du kit, et contactez moi en cas d'erreur. Vous pouvez aussi intervenir dans le groupe de discussion
-https://groups.google.com/forum/#!forum/rc2014-z80.
+Please check the kit content and con tact me in case something is wrong or missing. You can also
+ask for help in the https://groups.google.com/forum/#!forum/rc2014-z80 group.
+.fr((Vérifiez le contenu du kit, et contactez moi en cas d'erreur. Vous pouvez aussi intervenir dans le groupe de
+discussion https://groups.google.com/forum/#!forum/rc2014-z80..))
 
-Avant toute chose, une précaution importante.
+But first, a very important notice.
+.fr((Avant toute chose, une précaution importante..))
 
+<TABLE><TR><TD><img src="pictures/attention.png" width="300px" /></TD><TD><B>Do not touch the integrated circuits
+and the LCD screen without wearing an antistatic wristwrath linked to some earth.</B>. Preferably, leave them
+in teir antistatic bag until final aznd front panel assembly to limit the risk of a static discharge which could
+damage them seriously. In any case, never place them before doing the electric checkings.</TD></TR></TABLE>
+.fr((
 <TABLE><TR><TD><img src="pictures/attention.png" width="300px" /></TD><TD><B>Ne touchez pas les circuits intégrés et
 l'écran LCD sans être équipé d'un bracelet antistatique relié à une masse</B>. De préférence, laissez les à l'abri dans
 leur étui anti-statique jusqu'au moment de la fixation de la façade avant sur le boîtier pour éliminer le risque de les
 endommager avec de l'électricité statique. Dans tous les cas, ne les placez pas sur le circuit avant d'avoir procédé
 aux vérifications électriques.</TD></TR></TABLE>
+.))
 
-<TABLE><TR><TD><img src="pictures/thisway.png" alt="Vérification" width="150px" /></TD><TD> Dans le processus d'assemblage,
-les étapes où vous devrez procéder à une vérification ou à un assemblage particulier seront indiquées par ce panneau.
-<B>N'ignorez pas ces étapes</B>, elles garantissent le bon résultat de l'assemblage.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="pictures/thisway.png" alt="Verification" width="150px" /></TD><TD>During assembly,
+you will be informed to proceed with a specific checking by this panel. Do not oversee these recommendations,
+they will guarantee a perfect assembly where proceeding is not obvious.</TD></TR></TABLE>
+.fr((
+<TABLE><TR><TD><img src="pictures/thisway.png" alt="Vérification" width="150px" /></TD><TD> Dans le processus
+d'assemblage, les étapes où vous devrez procéder à une vérification ou à un assemblage particulier seront
+indiquées par ce panneau.<B>N'ignorez pas ces étapes</B>, elles garantissent le bon résultat de l'assemblage.</TD></TR></TABLE>
+.))
 
-## Cartes et circuits imprimés
+## Printed boards.fr((Cartes et circuits imprimés.))
 
-<TABLE><TR><TD><img src="pictures/attention.png" width="180px" /></TD><TD>Veillez à protéger les deux façades de toute
-rayure, brûlure, ou projection de flux lors des soudures. Ce sont les faces visibles donc conservez les à l'écart
-lorsqu'elles ne sont pas nécessaires. Les façades ne nécessitent aucune soudure.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="pictures/attention.png" width="180px" /></TD><TD>Make sure. you protect both front and
+back panels from scratching, projections, burning duriong soldering. These are the visible faces of Bluety
+so keep them apart until the final assembly. There is no soldering at all on the front and back panels.</TD></TR></TABLE>
+.fr((<TABLE><TR><TD><img src="pictures/attention.png" width="180px" /></TD><TD>Veillez à protéger les deux façades
+de toute rayure, brûlure, ou projection de flux lors des soudures. Ce sont les faces visibles donc conservez
+les à l'abri jusqu'à la fin de l'assemblage. Les façades ne nécessitent aucune soudure.</TD></TR></TABLE>.))
 
 Les façades peuvent être légèrement incurvées mais ceci disparaîtra après fixation sur le boîtier
 
