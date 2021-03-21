@@ -1,48 +1,78 @@
 .topnumber 3
-# Préparatifs
 
-Dans ce chapitre nous allons préparer l'équipement nécessaire.
+# Preparation.fr((Préparatifs.))
 
-## Boitier
+In this part we will prepare the needed materials.
+.fr((Dans ce chapitre nous allons préparer l'équipement nécessaire..))
 
-Bluety est conçu pour un boîtier bleu que l'on peut trouver sur la plupart des sites marchands : AliExpress, Banggood, Amazon, eBay.
-Dans le champ de recherche de votre site préféré, entrez "**Blue Metal Electronic Enclosures**" et choisissez le boîtier de dimensions
-**250 x 190 x 110** (mm) dans les résultats. 
+## Case.fr((Boitier.))
 
-<TABLE><TR><TD><img src="pictures/attention.png" width="100px" /></TD><TD>Il existe d'autres boitiers d'aspect similaire mais de
-dimensions inférieures qui ne conviendront pas à Bluety, donc vérifiez bien les dimensions.</TD></TR></TABLE>
+Bluety is designed for a blue metal case which can be found on most commercial sites with an electronics section:
+AliExpress, Banggood, Amazon, eBay. In their search input field, enter the following: **"Blue Metal
+Electronic Enclosure"** and choose the case with following dimensions:  **250 x 190 x 110** (mm) in results.
+.fr((Bluety est conçu pour un boîtier métallique bleu que l'on peut trouver sur la plupart des sites marchands :
+AliExpress, Banggood, Amazon, eBay. Dans le champ de recherche de votre site préféré, entrez
+**"Blue Metal Electronic Enclosures"** et choisissez le boîtier de dimensions **250 x 190 x 110** (mm)
+dans les résultats. .))
+
+.((
+<TABLE><TR><TD><img src="pictures/attention.png" width="100px" /></TD><TD>There are other similar cases
+with inferior dimensions which won't accept Bluety boards size, so make sure you choose the right dimensions.</TD></TR></TABLE>
+.)).fr((
+<TABLE><TR><TD><img src="pictures/attention.png" width="100px" /></TD><TD>Il existe d'autres boitiers d'aspect similaire
+mais de dimensions inférieures qui ne conviendront pas à Bluety, donc vérifiez bien les dimensions.</TD></TR></TABLE>
+.))
 
 | <img src="pictures/00-AE.png" alt="AliExpress" style="zoom:33%;" /> | <img src="pictures/00-BG.png" alt="BangGood" style="zoom:33%;" /> |
 | ------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | <img src="pictures/00-AZ.png" alt="Amazon" style="zoom:33%;" />     | <img src="pictures/00-EB.png" alt="eBay" style="zoom:33%;" />     |
 
-Le coût est d'environ 20 à 40 euros / dollars livraison comprise. Les coûts de livraison en provenance de chine sont très bas par rapport
+The cost is about 20 to 40 euros or dollars shipping included. Shipping costs from China are many times lower than from
+France so I don't re-sell the case which would make Bluety kit a lot more expensive.
+.fr((Le coût est d'environ 20 à 40 euros / dollars livraison comprise. Les coûts de livraison en provenance de chine sont très bas par rapport
 à ceux au départ de France, aussi je ne propose pas le boîtier dans le kit car son poids augmenterait considérablement le coût de livraison
-de Bluety.
+de Bluety..))
 
-Il y a une autre raison pour laquelle je ne propose pas le boîtier : vous devez vous attendre à ce que les coins des cadres plastifiés
-blancs puissent être abîmés durant le transport : j'ai eu ce problème sur 3 exemplaires que j'ai commandés. 
+There's another reason why I don't resell the case: the plastic frames holding the front and back panels may have their
+corners slightly damaged during shipping. I had this problem with 3 cases I ordered.
+.fr((Il y a une autre raison pour laquelle je ne propose pas le boîtier : il est possible que les coins des cadres
+plastifiés blancs soient abîmés durant le transport. J'ai eu ce problème sur 3 exemplaires que j'ai commandés..))
 
 <img src="pictures/00-damagedcorner.jpg" style="zoom:33%;" />
 
-C'est aussi parce que je ne peux pas garantir le bon état des angles que je ne propose pas le boîtier avec le kit Bluety. Toutefois
-avec un peu de travail au cutter et du papier de verre très fin, on peut arrondir les angles et leur redonner un bel aspect.
-Par ailleurs les deux cadres sont  identiques et symétriques, donc on peut les démonter pour placer le meilleur en façade avant.
-
-Si vous possédez une imprimante 3D de taille suffisante vous pouvez reproduire ces cadres, mais je ne propose pas de modèle.
-N'hésitez pas à me contacter si vous pouvez fabriquer ces cadres ou leur modèle.
-
-Si vous souhaitez utiliser un autre boîtier, vous devez vous assurer que ses dimensions seront d'au moins 250 mm de largeur
+If you plan to use another case you must ensure it has a width of at least 250mm, an height of at least 110mm and a depth
+of at least 190mm. These dimensions are perfect for the SC126 and for all the RC2014 versions including the Pro with its
+12 bus connectors. You might have to build some cables if the kit's ones are not long enough.
+.fr((Si vous souhaitez utiliser un autre boîtier, vous devez vous assurer que ses dimensions seront d'au moins 250 mm de largeur
 par 110 mm de hauteur, avec une profondeur d'au moins 190 mm. Ces dimensions  conviennent au SC126 et à toutes les versions
 du RC2014 y compris la version Pro avec ses 12 connecteurs de bus. Vous devrez également peut-être fabriquer certains câbles
-si la longueur de ceux fournis avec le kit n'est pas suffisante.
+si la longueur de ceux fournis avec le kit n'est pas suffisante..))
 
-Pour fixer le SC126 ou le RC2014 Pro sur le fond du boîtier, le kit propose deux gabarits de perçage.
+The kit contains templates to help drilling the fixation holes in the case bottom for SC126 and RC2014 Pro.
+.fr((Le kit contient deux gabarits de perçage pour fixer le SC126 ou le RC2014 Pro sur le fond du boîtier..))
 
-## Inventaire des outils
+## Tools inventory.fr((Inventaire des outils.))s
 
-Ce tableau liste les outils dont vous aurez besoin pour assembler le kit.
+The following table lists the tools needed to build the kit.
+.fr((Ce tableau liste les outils dont vous aurez besoin pour assembler le kit..))
 
+.((
+| Tool                                                         |                                                              |
+| ------------------------------------------------------------ | -----------------------------------------------------------: |
+| Soldering station, preferably with heat control              | <img src="pictures/001-station.jpg" alt="Soldering station" style="zoom: 33%;" /> |
+| Solder wire (recommended: 0.6mm or 0.8mm)                    | <img src="pictures/002-solderwire.jpg" alt="Solder wire" style="zoom: 33%;" /> |
+| Fine pliers                                                  | <img src="pictures/003-pliers.jpg" alt="Pliers" style="zoom: 33%;" /> |
+| Angled pliers                                                | <img src="pictures/004-pliers.jpg" alt="Pliers" style="zoom: 33%;" /> |
+| Angled cutting pliers                                        | <img src="pictures/005-pliers.jpg" alt="Cutting pliers" style="zoom: 33%;" /> |
+| Solder sucker                                                | <img src="pictures/006-pump.jpg" alt="Pump" style="zoom: 33%;" /> |
+| Silicone mat (or isolating protection for working bench). It protects your bench from burning but also from scratching, and isolates circuits between them when they're lying on the bench surface. Clean the surface regularly during work to avoid metal and solder residues may scratch panels or printed boards or damage circuit conducting tracks. Pick up the metal and solder smithereens and clean the silicon mat under water then dry it. Do this regularly during assembly, do not let random residues accumulate on your working surface. |                          ![Mat](pictures\006A-silicon.jpg) |
+| Anti-static wristink the pincer to a metal ground. Do not link it to the earth pin on a plug of your home electric installation, you'd risk charging yourself with electricity instead of the contrary. If you don't have a special box you can link the pincer to the negative pin of a 5V trasformer or to the metallic case of a computer. | <img src="pictures/007-bracelet.jpg" alt="Bracelet" style="zoom: 33%;" /> |
+| Soldering iron cleaning kit| <img src="pictures/008-tipscleaner.jpg" alt="Cleaning" style="zoom: 25%;" /><img src="pictures/009-tipscleaner.jpg" alt="Nettoyage" style="zoom:25%;" /> |
+| ALLEN keys for M2x8 and M3x8 screws                            | <img src="pictures/010-allen.jpg" alt="Allen keys" style="zoom: 33%;" /> |
+| Multi heads micro screwdriver | <img src="pictures/011-screwdriver.jpg" alt="Screwdriver" style="zoom: 33%;" /> |
+| Multimeter for voltage and resistors, possibly continuity test (diods) | <img src="pictures/011A-multimeter.jpg" alt="Multimeter" style="zoom: 33%;" /> |
+| Column drill for case bottom holes (ex: Dremel) with 3mm drill|                               ![Drill](pictures/TODO.PNG) |
+.)).fr((
 | Outil                                                        |                                                              |
 | ------------------------------------------------------------ | -----------------------------------------------------------: |
 | Station de soudure, de préférence avec température réglable  | <img src="pictures/001-station.jpg" alt="Station de soudure" style="zoom: 33%;" /> |
@@ -58,25 +88,37 @@ Ce tableau liste les outils dont vous aurez besoin pour assembler le kit.
 | Tournevis avec têtes cruxiformes, plates, Allen si vous n'avez pas de clés Allen. | <img src="pictures/011-screwdriver.jpg" alt="Tournevis" style="zoom: 33%;" /> |
 | Multimètre avec mesure de voltage et résistance, éventuellement test de continuité (diodes) | <img src="pictures/011A-multimeter.jpg" alt="Multimètre" style="zoom: 33%;" /> |
 | Perceuse à colonne pour le fond du boîtier (par exemple Dremel) avec une mèche de 3mm |                               ![Perceuse](pictures/TODO.PNG) |
+.))
 
+## Advices.fr((Conseils.))
 
+Respect the assembly orders to build a nice front panel woth well aligned components.
+.fr((Respectez les consignes d'assemblage pour obtenir une belle façade avec les composants bien alignés..))
 
-## Conseils 
+The connexion and assembling order is designed to ease the building process: do not jump over steps.
+.fr((L'ordre des branchements et des assemblages est destiné à vous faciliter le travail : ne sautez pas les étapes..))
 
-Respectez les consignes d'assemblage pour obtenir une belle façade avec les composants bien alignés.
-
-L'ordre des branchements et des assemblages est destiné à vous faciliter le travail : ne sautez pas les étapes.
-
+.((
+<TABLE><TR><TD><img src="pictures/thisway.png" width="75px" /></TD><TD>Here's a method to limit damages in case of a soldering mistake:<BR>
+<LI> solder <EM>only one leg</EM> of the component with as little solder as possible</LI>
+<LI> check that the component is at the right place and has the right orientation if polarity is important</LI>
+<LI> in case of mistake, you can easily unsolder the component and restart the step</LI>
+<LI> when evrything looks correct only, solder the other legs as usual</LI>
+<LI> complete the first leg soldering with more solder</TD></TR></TABLE>
+.)).fr((
 <TABLE><TR><TD><img src="pictures/thisway.png" width="75px" /></TD><TD>Pour les soudures, voici une méthode qui limite les dégâts en cas d'erreur :<BR>
 <LI> souder <EM>une seule patte</EM> avec peu de soudure</LI>
 <LI> vérifier que le composant a été mis au bon endroit et dans le bon sens</LI>
 <LI> en cas d'erreur, retirer la soudure et replacer correctement le composant</LI>
 <LI> quand tout est correct, souder les autres pattes normalement</LI>
 <LI> compléter la soudure de la première patte</TD></TR></TABLE>
+.))
 
-
-Si vous placez trop de soudure ou soudez toutes les pattes, il sera difficile voire impossible de réparer une erreur
+If you solder all legs immediately, it will be difficult if not impossible to fix a mistake like a LED or a switch
+soldered the wrong way. Having only one leg soldered also helps to tune components alignment before final soldering.
+.fr((Si vous placez trop de soudure ou soudez toutes les pattes, il sera difficile voire impossible de réparer une erreur
 comme un interrupteur ou une LED à l'envers. Avoir une seule patte légèrement soudée permet de vérifier l'alignement
-mais aussi la polarité lorsque celle-ci est importante.
+mais aussi la polarité lorsque celle-ci est importante..))
 
-Je recommande en particulier cette méthode pour tous les composants apparaissant en façade avant.
+I recommend this method particularly for the front panel components which must be carefully aligned.
+.fr((Je recommande en particulier cette méthode pour tous les composants apparaissant en façade avant..))

@@ -35,7 +35,7 @@ The kit contains the following elements:.fr((L'ensemble se compose des élément
 .))
 
 The kit design and look are based on a blue case that can be bought from most merchant sites featuring an electronics hobby section.
-(See [Boitier](#boitier).) The blue color of this case gave its name and design to Bluety and dictated the size of electronic boards
+(See [Case](#boitier).) The blue color of this case gave its name and design to Bluety and dictated the size of electronic boards
 and front / back panels. Both the boards and when possible the components are blue colored. But Bluety can be hosted by any case with
 correctly sized front and back panel, as well as sufficient depth for the hosted computer. The user will have to practice a rectangular
 cutout in front and back panel in order to fix Bluety panels on them, and if depth is too big, build a few cables.
@@ -62,7 +62,7 @@ logiciels de contrôle [*Small Computer Monitor*](https://smallcomputercentral.w
 intégrés tels que deux ports série, un port SD et un port I2C. Ce dernier permet d'accéder à l'écran LCD..))
 
 Bluety can also be used with Spencer Owens [RC2014](https://www.tindie.com/stores/Semachthemonkey/) computer kit in all versions
-up to the [Backplane Pro](https://www.tindie.com/products/Semachthemonkey/backplane-pro-for-rc2014-z80-homebrew-computer/) with 12
+up to the [Backplane Pro](https://www.tindie.com/products/semachthemonkey/rc2014-pro-homebrew-z80-computer-kit/) with 12
 bus connectors, as well as other computers based on the RC2014, although Bluety only handles I2C connexion for the LCD display.
 A non I2C can also be used using one I/O parallel port but this has not been designed yet.
 .fr((Bluety est également utilisable avec le [RC2014](https://www.tindie.com/stores/Semachthemonkey/) de Spencer Owens dans toutes ses
@@ -76,16 +76,16 @@ I wish you a lot of pleasure in assembling and using Bluety.
 
 F. Piérot, 2020/12
 
-<img src="pictures_finished/finished.jpg" alt="Bluety terminé"  />
+<img src="Pictures/finished.jpg" alt="Bluety terminé"  />
 
 ## Bus expansion.fr((Extension de bus.))
 
 The SC126 computer has 2 bus connectors and one lateral expansion connector which can receive an expansion board like
 [SC113](https://www.tindie.com/products/tindiescx/sc113-modular-backplane-kit-for-rc2014/?pt=ac_prod_search)
 featuring 6 more bus connectors and another more expansion connector to expand furthermore.
-L'ordinateur SC126 possède 2 connecteurs de bus et un connecteur d'extension latéral, conçu pour recevoir par exemple le kit
+.fr((L'ordinateur SC126 possède 2 connecteurs de bus et un connecteur d'extension latéral, conçu pour recevoir par exemple le kit
 [SC113](https://www.tindie.com/products/tindiescx/sc113-modular-backplane-kit-for-rc2014/?pt=ac_prod_search) qui propose 6
-connecteurs de bus et un nouveau connecteur d'extension.
+connecteurs de bus et un nouveau connecteur d'extension..))
 
 However the SC113 board is too long for Bluety casing, so I have derived a shorted version of Stephen S. Cousins board which
 I called SC113-Tiny, giving 3 bus connectors instead of 6 and fits in the Bluety casing. It also features an expansion connector
@@ -108,7 +108,8 @@ de commander un [SC113](https://www.tindie.com/products/tindiescx/sc113-modular-
 ses composants sur la carte SC113 Tiny. Quelques composants du kit SC113 sont inutilisés mais en dehors de cela le
 fonctionnement et l'assemblage sont identiques..))
 
-<img src="pictures/SC113tiny.jpg" .((alt="SC113 beside SC113-Tiny".)).fr((alt="SC113 à côté de SC113 Tiny".)) style="zoom: 50%;" />
+<img src="pictures/SC113tiny.jpg" alt="SC113 beside SC113-Tiny" style="zoom: 50%;" />
+.fr((<img src="pictures/SC113tiny.jpg" alt="SC113 à côté de SC113 Tiny" style="zoom: 50%;" />.))
 
 ## SC126 power switch.fr((Interrupteur marche/arrêt SC126.))
 
@@ -120,6 +121,6 @@ itself is wired elsewhere on the SC126.
 .fr((Bluety possède son propre gros bouton bleu marche/arrêt. Si vous n'avez pas encore assemblé votre SC126, vous pouvez remplacer
 son interrupteur par un connecteur à trois broches et placer un jumper sur les deux broches éloignées du bord de la carte afin
 de remplacer l'interrupteur en position ON comme indiqué sur l'image ci-dessous. Si en revanche votre SC126 est déjà assemblé,
-il vous suffira de placer l'interrupteur en position ON. Le bouton de Bouety lui-même est relié à un autre endroit du SC126.
+il vous suffira de placer l'interrupteur en position ON. Le bouton de Bluety lui-même est relié à un autre endroit du SC126..))
 
 <img src="pictures/97-contact.jpg" .((alt="On/Off replacement".)).fr((alt="Remplacement on/off".)) style="zoom:50%;" />

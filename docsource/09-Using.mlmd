@@ -1,37 +1,73 @@
 .topnumber 9
-# Utilisation
+# Using Bluety.fr((Utilisation.))
 
-Les ports d'entrée-sortie sont contrôlés par des instructions IN et OUT du Z-80 ou du BASIC. L'écran LCD se contrôle via l'interface
+The input and output ports on a Z-80 are controlled by the IN and OUT instructions, as well as some derivatives on the Z180 of the SC126.
+BASIC also has IN and OUT instructions to read or write a byte on a port. The LCD screen is controlled on the SC126 by the I2C bus,
+using a library you put in your programs, or using Bluety specific SCM or BASIC versions which are in development.
+These versions optionally send an echo of their output to the LCD screen. The echo and LCD console poarameters are
+determined by RAM variables ag specific addresses.
+.fr((Les ports d'entrée-sortie sont contrôlés par des instructions IN et OUT du Z-80 ou du BASIC. L'écran LCD se contrôle via l'interface
 I2C à l'aide d'une librairie à intégrer dans vos programmes, ou à l'aide de versions de SCM et BASIC en cours de développement.
 Ces versions de SCM et BASIC peuvent également envoyer un écho de leur sortie console sur l'écran LCD. Les caractéristiques de l'écran,
-de la console LCD et de l'écho sont contrôlées par des variables en RAM.
+de la console LCD et de l'écho sont contrôlées par des variables en RAM..))
 
-## Port de contrôle (13/0Dh)
+## Control port.fr((Port de contrôle.)) (13/0Dh)
 
-Le port de contrôle est câblé sur le numéro de port 13 (0D en hexadécimal) : ceci correspond aux deux logiciels de contrôle disponibles
-pour l'ordinateur SCZ180 dans sa version SC126.
+The control port is  fixed on the 13 decimal / 0D hexadecimal: this is used by design in both control softwares for the SC126.
+.fr((Le port de contrôle est câblé sur le numéro de port 13 (0D en hexadécimal) : ceci correspond aux deux logiciels de
+contrôle disponibles pour l'ordinateur SC126.
 
-* Le moniteur Small Computer Monitor affiche l'état de ses tests à l'allumage sur ce port.
-* Le boot de RomWBW affiche l'avancement de son démarrage sur ce port.
-* Tout programme peut allumer ou éteindre ces 8 LEDs en envoyant une donnée 8-bits sur le port 13. La LED la plus à gauche représente
-le bit de poids fort.
+The 8 Bluety LEDs below the LCD screen are direct echoes of the last byte written to the control port..fr((Les 8 LED de Bluety 
+sous l'écran LCD représentent le dernier octet écrit sur ce port de contrôle.))
 
-<TABLE><TR><TD><img src="pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>Remarque : le port 13 retient la dernière donnée
+.((
+- The monitor *Small Computer Monitor* dispklays the result of its startup tests on this port.
+- The RomWBW booting process displays its progression on this port.
+- Any program can switch these LEDs on or off by sending a 8-bits data on the control port. The leftmost LED represents
+the most significant bit: writing 80h will light this LED alone.
+.)).fr((
+- Le moniteur Small Computer Monitor affiche l'état de ses tests à l'allumage sur ce port.
+- Le boot de RomWBW affiche l'avancement de son démarrage sur ce port.
+- Tout programme peut allumer ou éteindre ces 8 LEDs en envoyant une donnée 8-bits sur le port 13. La LED la plus à gauche représente
+le bit de poids fort : écrire 80h allumera uniquement cette LED.
+.))
+
+<TABLE><TR><TD><img src="pictures/thisway.png" alt=.(("Advice".)).fr(("Conseil".)) width="75px" /></TD><TD>
+.((Remark: the control port retains the last written byte, so to switch LEDs off you mlust explicitely write a 0. This is
+particularly true with RomWBW which lights all 8 LEDs during its boot process and leaves them in this state.
+.)).fr((Remarque : le port 13 retient la dernière donnée
 écrite, donc il faut explicitement écrire un 0 pour éteindre les LEDs, notamment avec RomWBW qui laisse les 8 LEDs allumées à la fin
-de son démarrage.</TD></TR></TABLE>
+de son démarrage..))
+</TD></TR></TABLE>
 
-## Ports d'entrée sortie A et B
+## Input and Output ports A and B.fr((Ports d'entrée sortie A et B.))
 
-Les 2 ports possèdent chacun 8 LEDs pour le port en entrée et 8 LEDs pour le port en sortie. Dans les deux cas, le bit de poids fort
-(bit 7) est représenté par la LED la plus à gauche.
+These 2 ports have 8 LEDs for the input port and 8 LEDs for the output port. In both cases, the most significant bit
+(bit 7) corresponds to the leftmost LED.
+.fr((Les 2 ports possèdent chacun 8 LEDs pour le port en entrée et 8 LEDs pour le port en sortie. Dans les deux cas, le bit de poids fort
+(bit 7) est représenté par la LED la plus à gauche..))
 
-Le numéro de chacun des deux ports est sélectionnable par les huit interrupteurs d'un dipswitch qui représentent les valeurs de 0 à 255.
-Là aussi, le bit de poids fort (bit 7) est situé à gauche.
+The port number for both of these ports can be choosen with the 8 triggers of their respective dip-switch, on which the leftmost
+trigger also represents the most significant bit in the port number: to select the 80h port, put the leftmost trigger UP and all the
+others DOWN.
+.fr((Le numéro de chacun des deux ports est sélectionnable par les huit interrupteurs d'un dipswitch qui représentent les valeurs de 0 à 255.
+Là aussi, le bit de poids fort (bit 7) est situé à gauche. Pour sélectionner le port 80h, placez l'interrupteur le plus à gauche en HAUT, et
+tous les autres en bas..))
 
-### Utiliser le port A ou B *en entrée*
+### using the A or B input port.fr((Utiliser le port A ou B en entrée.))
 
-Chacun des ports en entrée dispose d'un connecteur 8 fils, de 8 LEDs et de 8 interrupteurs. 
+Both input ports have an 8-bits female header for +5V input, 8 control LEDs, and 8 input switches.
+.fr((Chacun des ports en entrée dispose d'un connecteur 8 fils, de 8 LEDs et de 8 interrupteurs..))
 
+.((
+| Step  | Description                                                  |                                                        |
+| ----- | :----------------------------------------------------------- | -----------------------------------------------------: |
+| 1     | Choose the port number and put the corresponding switches on the port select dip-switch up for bits 1, down for bits 0. The leftmost most significant bit is on the leftmost switch. For example, to select the port number 7 you put the 3 right most switches up and all the pthers down. | <img src="pictures/97-portselect.jpg" width="400px" /> |
+| 2     | Put the input source 3-positions switch in the middle position and connect your input wires to the input header. |     <img src="pictures/096-input.jpg" width="300px" /> |
+| 3     | Each switch can be set up to force a bit at 1 or down to force it at 0. |          <img src="pictures/TODO.PNG" width="300px" /> |
+| 4     | The control switch at the LEDs top right enable or disables all LEDs lighting. This saves a few current if case you need it. Each LED reflects the state of its corresponding bit in the input header or LED switch. In bottom position, the switch disables LEDs whatever the state of the input bit, which avoid consuming input current just for the LEDs. |          <img src="pictures/TODO.PNG" width="300px" /> |
+| 5     | To read the port input value, use:<br />● the Z-80 `IN` instruction family<br />● the Z-180 `IN0` instruction<br />● the BASIC `INP()` function<br />● the SCM `IN` command<br />The received data will have bits 1 on the input lines which receive +5V and the corresponding LEDs will be lighted (if the global control switch is not down). The bits for input lines at GND level or significantly less than +5V will be at 0 and the LED will be off. |                                                        |
+.)).fr((
 | Etape | Description                                                  |                                                        |
 | ----- | :----------------------------------------------------------- | -----------------------------------------------------: |
 | 1     | Choisissez le numéro de port avec le DIPswitch, le bit de poids fort du numéro est représenté par l'interrupteur le plus à gauche. Par exemple, pour utiliser le port 7, on place les trois interrupteurs les plus à droite en position haute et les cinq autres en position basse. | <img src="pictures/97-portselect.jpg" width="400px" /> |
@@ -39,9 +75,27 @@ Chacun des ports en entrée dispose d'un connecteur 8 fils, de 8 LEDs et de 8 in
 | 3     | Les interrupteurs peuvent être placés en position haute pour forcer un bit à 1 ou en position basse pour le forcer à 0. |          <img src="pictures/TODO.PNG" width="300px" /> |
 | 4     | L'interrupteur supérieur à droite des LEDs les active ou désactive. Chaque LED affiche l'état de l'entrée qui lui correspond. En position basse, l'interrupteur éteint les LEDs quel que soit l'état du port, ce qui évite que le port d'entrée ou de sortie dépense du courant pour l'allumage des LEDs. |          <img src="pictures/TODO.PNG" width="300px" /> |
 | 5     | Pour lire l'état du port , utilisez :<br />● l'instruction `IN` du Z-80<br />● l'instruction `IN0` du Z-180<br />● la fonction `INP()` du BASIC<br />● la commande `IN` de SCM<br />La donnée reçue aura les bits à 1 sur les entrées qui seront à +5V, et les LEDs de ces bits seront allumées (si l'interrupteur on/off est sur *on*). Les bits des entrées reliées à GND ou recevant moins de 5V seront à 0 et la LED sera éteinte. |                                                        |
+.))
 
-### Utiliser le port A ou B *en sortie*
+Beware that input lines directly feed integrated conponents and LEDs, so take care of not drawing more than a few milliampers and not much more
+than +5V or you could burn components and make your input port definitely useless.
+.fr((Attention: les lignes d'entrée alimentent directement des circuits intégrés et les LEDs, aussi vous ne devez pas tirer plus de quelques milliampères
+et pas beaucoup plus de +5V sous peine de brûler des composants et de rendre définitivement inutile le poirt d'entrée..))
 
+Generally, less than +4.7V on an input line will be considered as a 0 bit..fr((En général, un niveau d'entrée inférieur à +4.7V sera considéré comme
+un bit à 0..))
+
+### Using the A or B output port.fr((Utiliser le port A ou B en sortie.))
+
+.((
+| Step  | Description                                                  |                                                        |
+| ----- | ------------------------------------------------------------ | -----------------------------------------------------: |
+| 1     | Choose the port number and put the corresponding switches on the port select dip-switch up for bits 1, down for bits 0. The leftmost most significant bit is on the leftmost switch. For example, to select the port number 7 you put the 3 right most switches up and all the pthers down. | <img src="pictures/97-portselect.jpg" width="400px" /> |
+| 2     | Connect up to 8 output wires to the output header.          |            <img src="pictures/TODO.PNG" width="300" /> |
+| 3     | The switch at the LEDs bottom right enables or disables the LEDs lighting. When they're disabled, the output header receives all the output current, when they're enabled they consume a few milliampers of the output load. |            <img src="pictures/TODO.PNG" width="300" /> |
+| 4     | To write a data on the port, use:<br />● the Z-80 `OUT` instruction family<br />● the `OUT0` Z-180 instruction<br />● the BASIC `OUT` instruction<br />● the SCM `OUT` command<br />+5V will be sent on the lines with a bit at 1 and the matching LED will be lighted. |            <img src="pictures/TODO.PNG" width="300" /> |
+| 5     | You can use the additional +5V/GND header to feed external devices like circuits with sensors or relays, independently from any switch or LED. |                                                        |
+.)).fr((
 | Etape | Description                                                  |                                                        |
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------: |
 | 1     | Choisissez le numéro de port avec le DIPswitch, le bit de poids fort du numéro est représenté par l'interrupteur le plus à gauche. Par exemple, pour utiliser le port 7, on place les trois interrupteurs les plus à droite en position haute et les cinq autres en position basse. | <img src="pictures/97-portselect.jpg" width="400px" /> |
@@ -49,38 +103,81 @@ Chacun des ports en entrée dispose d'un connecteur 8 fils, de 8 LEDs et de 8 in
 | 3     | L'interrupteur inférieur à droite des LEDs active ou désactive les LEDs. Lorsqu'elles sont désactivées, le connecteur de sortie reçoit tout le courant disponible, sinon les LEDs allumées prennent une part de la charge. |            <img src="pictures/TODO.PNG" width="300" /> |
 | 4     | Pour écrire une donnée 8 bits sur le port, utilisez :<br />● l'instruction `OUT` du Z-80<br />● l'instruction `OUT0` du Z-180<br />● la commande `OUT` du BASIC<br />● la commande `OUT`de SCM<br />5V sont placés sur les sorties des bits placés à 1 et les LEDs des bits à 1 sont allumées. Les autres bits restent à 0 et la LED éteinte. |            <img src="pictures/TODO.PNG" width="300" /> |
 | 5     | Vous pouvez utiliser le connecteur +5V/GND pour alimenter des dispositifs extérieurs comme des circuits avec des relais ou des capteurs, indépendamment de l'état du port ou des interrupteurs en façade. |                                                        |
+.))
 
 <TABLE>
-<TR><TD><img src="pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>Remarque : Chaque port de sortie retient sa dernière
-donnée, donc pour éteindre les LEDs il faut explicitement écrire un 0.</TD></TR>
-<TR><TD><img src="pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>Vous pouvez utiliser le dipswitch pour espionner
+<TR><TD><img src="pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
+.((Remark: Output ports retain their last data, so to switch all lines and LEDs to GND level you must explicitely write a 0 to the output port..))
+.fr((Remarque : Chaque port de sortie retient sa dernière donnée, donc pour éteindre les LEDs il faut explicitement écrire un 0..))
+</TD></TR>
+<TR><TD><img src="pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
+.((You can use the dipswitch port select to spy any of the Z-80 port, for example gthe Z-180 internal ports on the SC126 
+or the ports used by a ROM with BusRaider..))
+.fr((Vous pouvez utiliser le dipswitch pour espionner
 n'importe quel numéro de port, par exemple les ports internes du Z-180 sur le SC126 ou les ports contrôlés par une ROM
-avec BusRaider.</TD></TR></TABLE>
+avec BusRaider..))
+</TD></TR></TABLE>
 
-## Ecran LCD : Interface I2C (SC126)
+## LCD Screen: I2C Interface.fr((Ecran LCD : Interface I2C (SC126).))
 
-Sur un SC126, l'écran LCD est contrôlé par le bus I2C sur le port 0Ch. L'écran du kit étant livré avec un adaptateur I2C, vous n'avez
+On the SC126, the LCD display is controlled through the I2C bus on port 0Ch. The kit display is equipped with an I2C adapter and
+doesn't need any additionnal board and the only thing to do is connect the 4-wires cable between the SC126 I2C header and the LCD
+adapter.
+.fr((Sur un SC126, l'écran LCD est contrôlé par le bus I2C sur le port 0Ch. L'écran du kit étant livré avec un adaptateur I2C, vous n'avez
 aucune carte supplémentaire à installer, et rien d'autre à effectuer que le branchement déjà décrit d'un câble 4 fils fourni dans le
-kit Bluety (Voir [Façade avant](#façade-avant)).
+kit Bluety..))
 
-Le reste de l'installation concerne la partie logicielle.
+The LCD adapter doesn't feature an output I2C port to insert it in a chain and it must be last, so if you want to plug another I2C device
+you will have to put it before the LCD display and make sure the device I2C IDs are not conflicting. Refer to I2C and your devices
+specifications.
+.fr((L'adaptateur I2C de l'écran ne possède pas de sortie pour l'insérer dans une chaine et doit donc être placé en dernier, aussi pour
+utiliser d'autres dispositifs I2C vous devrez les placer avant et vous assurer qu'ils possèdent une sortie pour reconduire le bus vers
+un dispositif suivant. Reportez vous aux spécifications I2C et à celles de vos dispositifs I2C..))
 
-Si vous souhaitez conserver le port I2C pour un autre périphérique, vous pouvez utiliser un port en sortie et une connexion parallèle
-mais vous aurez besoin d'une carte d'interfaçage : reportez vous à la partie ci-après concernant le RC2014 Pro.
+Instead of using the kit I2C display you may buy a similar display without I2C and connect it using a parallel port RC2014 board or
+an I/O controller RC2014 board. Stephen S. Cousins site shows a number of ways to do this and offers Z-80 code to control an LCD
+display using OUT instructions. The Bluety kit doesn't include options for this method by itself and you will need an I/O or PIO board
+as described on Stephen S. Cousins site.
+.fr((AU lieu d'utiliser l'écran I2C fourni avec Bluety vous pouvez installer un écran similaire sans adaptateur I2C et le contrôler
+par le biais d'un port parallèle ou d'une carte E/S. Le site de Stephen S. Cousins décrit diverses manières de controler un écran LCD
+à partir d'un SC126 ou nd'un RC2014. Le kit Bluety ne propose pas ces options par lui même et vous devrez vous équiper selon les 
+instructions du site de Stephen S. Cousins..))
 
-## Ecran LCD : Interface parallèle (SC126,RC2014 Pro)
+## LCD Display: parallel interfacing.fr((Ecran LCD : Interface parallèle.)) (SC126,RC2014 Pro)
 
-Il n'existe pas de bus I2C dans le kit RC2014 Pro, aussi vous devrez passer par une interface parallèle, comme décrit dans [l'exemple
+The RC2014 Pro kit has no I2C bus and cannot control Bluety LCD screen. In this configuration, one way to have an LCD display
+is to use a parallel interfacing as described in [Stephen S. Cousins example](https://smallcomputercentral.wordpress.com/example-alphanumeric-lcd/),
+using either an 8-bit output port controller board, either a Z-80 PIO circuit, both adressing the LCD screen 8 control pins.
+.fr((Il n'existe pas de bus I2C dans le kit RC2014 Pro, aussi vous devrez passer par une interface parallèle, comme décrit dans [l'exemple
 de Stephen S. Cousins](https://smallcomputercentral.wordpress.com/example-alphanumeric-lcd/) qui utilise soit un port de sortie 8-bits,
-soit un Z-80 PIO, le tout vers 8 broches de l'écran LCD.
+soit un Z-80 PIO, le tout vers 8 broches de l'écran LCD..))
 
-Avec le SC126, vous pouvez aussi utiliser cette solution si vous destinez le bus I2C à un autre usage.
+With SC126 you can also use this solution if you want to keep the I2C bus for other uses.
+.fr((Avec le SC126, vous pouvez aussi utiliser cette solution si vous destinez le bus I2C à un autre usage..))
 
-<TABLE><TR><TD><img src="pictures/attention.png" width="100px" /></TD><TD>Lors de la commande du kit Bluety, vous devrez spécifier que
-vous souhaitez un écran LCD <EM>sans module I2C</EM>, ou bien il vous faudra le déssouder ce qui est très difficile.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="pictures/attention.png" width="100px" /></TD><TD>
+.((When ordering your Bluety kit, make sure you select the right LCD screen type <EM>without I2C adapter</EM>, 
+or you will hzve to unsolder the adapter, which is very difficult.))
+.fr((Lors de la commande du kit Bluety, vous devrez spécifier que vous souhaitez un écran LCD <EM>sans module I2C</EM>, 
+ou bien il vous faudra le déssouder ce qui est très difficile..))
+</TD></TR></TABLE>
 
-Sur le plan matériel, vous devez installer une carte pour contrôler un port de sortie. Il existe au moins trois kits qui permettent cela :
+You will have to use a board for the output port control. If you don't use a Z-80 PIO board, you have at least three
+options:.fr((Sur le plan matériel, vous devez installer une carte pour contrôler un port de sortie. Il existe au moins
+trois kits qui permettent cela :.))
 
+.((
+- The 8-bits [SC129 input/output board](https://smallcomputercentral.wordpress.com/sc129-digital-i-o-rc2014/) from Stephen S. Cousins
+  (buy on [Tindie](https://www.tindie.com/products/tindiescx/sc129-digital-io-module-kit-for-rc2014/)): it features an output
+  connector on which to connect an 8-wires cable for the LCD screen control.
+- The official RC2014 [Digital Output Module](http://rc2014.co.uk/modules/digital-io/) from Spencer Owens
+  (buy on [Tindie](https://www.tindie.com/products/Semachthemonkey/digital-output-module-for-rc2014-z80-computer/)):
+  you will have to configure the port number base as explained in Spencer's documentation and use the pins of one of the
+  three available ports to connect an 8-wires cable.
+- The [SC103 Z-80 PIO board](https://smallcomputercentral.wordpress.com/sc103-z80-pio-module-rc2014/) from Stephen S. Cousins:
+  you will have to configure the port number base as explained in Stephen's documentation and use the pins of one of the
+  three available ports to connect an 8-wires cable.
+.)).fr((
 - la carte d'entrée-sortie 8 bits [SC129](https://smallcomputercentral.wordpress.com/sc129-digital-i-o-rc2014/) de Stephen S. Cousins
   (achat sur [Tindie](https://www.tindie.com/products/tindiescx/sc129-digital-io-module-kit-for-rc2014/)) : elle possède un connecteur de
   sortie sur lequel vous brancherez un câble 8 fils
@@ -90,6 +187,7 @@ Sur le plan matériel, vous devez installer une carte pour contrôler un port de
 - la carte [SC103 Z-80 PIO](https://smallcomputercentral.wordpress.com/sc103-z80-pio-module-rc2014/) de Stephen S. Cousins :
   vous devrez configurer le numéro de base des ports comme indiqué dans la documentation de Stephen et utiliser les broches
   de l'un des 2 ports pour brancher un câble 8 fils
+.))
 
 Le contrôle matériel sera le même quelle que soit la carte. Le reste concerne l'installation logicielle qui contrôle le SC216 ou le RC2014.
 
