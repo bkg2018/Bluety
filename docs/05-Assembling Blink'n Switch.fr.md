@@ -31,17 +31,16 @@ Placez le **dos** visible (l'orifice du bouton marche arrêt en bas à gauche)
 <TD><EM>Ne soudez pas</EM> le connecteur P1 et le condensateur C5 pour l'instant : ils gêneraient la suite de l'assemblage.</TD>
 </TR></TABLE>
 
-Voici l'allure de la carte à ce stade."Vue carte soudée" style="zoom:50%;" />
+Voici l'allure de la carte à ce stade.<img src="Pictures/044.jpg" alt="Vue carte soudée" style="zoom:50%;" />
 
 ## Avant : supports des dip-switch<A id="a22"></A>
 
-"Vérification" width="250px" /></TD>
-
+<TABLE><TR>
+<TD><img src="Pictures/thisway.png" alt="Vérification" width="250px" /></TD>
 <TD>Tous les éléments soudés sur l'avant apparaissent en façade à travers une ouverture, aussi une grande partie de l'assemblage consiste à souder
 <EM>une seule patte</EM>, puis placer la façade pour vérifier et corriger l'alignement. Ainsi il est possible de réchauffer la soudure pour bouger
 l'élément en cas de problème d'alignement. Une fois celui-ci correct on peut souder le reste des pattes.
 </TD>
-
 </TR></TABLE>
 
 Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenant en bas à droite.

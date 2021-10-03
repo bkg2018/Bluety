@@ -31,14 +31,13 @@ Place the **back** visible. (the opening for pow<er button must be on the bottom
 <TD><EM>Do not solder</EM> the P1 connector and C5 capacitor yet, they would hamper the next assembly steps.</TD>
 </TR></TABLE>
 
-Here's a view of the board at this step. <img src="Pictures/044.jpg"
-alt="Soldered view" style="zoom:50%;" />
+Here's a view of the board at this step. 
+<img src="Pictures/044.jpg" alt="Soldered view" style="zoom:50%;" />
 
 ## Front: dip-switch sockets<A id="a22"></A>
 
 <TABLE><TR>
 <TD><img src="Pictures/thisway.png" alt="Check" width="250px" /></TD>
-
 <TD>All the elements soldered on the front face will appear on the front panel through an opening, so a great part
 of the assembly will be soldering <EM>only one leg</EM> at first with very few solder, put the front panel on
 your assembly to check alignement, heat again the leg and fix in case of problems, and when everything is correctly
