@@ -23,8 +23,12 @@ Placez le **dos** visible (l'orifice du bouton marche arrêt en bas à gauche)
 | 7     | Le composant est marqué 471, ce qui signifie 47 x 10^1^, soit 470 Ohms.                               | <img src="Pictures/043A.jpg" alt="470" style="zoom: 33%;" /> |
 | 8     | Attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit | <img src="Pictures/043C.jpg" alt="Repère" style="zoom: 33%;" /> |
 
-"Vérification"Pour les composants le nécessitant,
-coupez l'excédent des pattes au fur et à mesure pour ne pas être gêné."Vérification"<EM>Ne soudez pas</EM> le connecteur P1 et le condensateur C5 pour l'instant : ils gêneraient la suite de l'assemblage.</TD>
+<TABLE><TR>
+<TD width="100px"> <img src="Pictures/thisway.png" alt="Vérification" width="75px" /></TD>
+<TD>Pour les composants le nécessitant, coupez l'excédent des pattes au fur et à mesure pour ne pas être gêné.</TD>
+</TR><TR>
+<TD width="100px"> <img src="Pictures/thisway.png" alt="Vérification" width="75px" /></TD>
+<TD><EM>Ne soudez pas</EM> le connecteur P1 et le condensateur C5 pour l'instant : ils gêneraient la suite de l'assemblage.</TD>
 </TR></TABLE>
 
 Voici l'allure de la carte à ce stade."Vue carte soudée" style="zoom:50%;" />
@@ -139,12 +143,10 @@ Préparez les LEDs :
 
 - Nettoyez précautionneusement la façade avec un chiffon doux ou microfibre propre.
 
-"Conseil"  width="75px" /></TD><TD>
-
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
   <B>N'utilisez aucun produit détergent, solvant ou alcoolique.</B>
   <P>L'eau chaude et les produits de nettoyage pour écran plat sont acceptables.
   <P>Si vous souhaitez utiliser un produit, faites un essai sur un petit endroit au dos de la façade ou sur la carte Bus Daughter pour vérifier qu'il n'abime pas le vernis.
-
 </TD></TR></TABLE>
 
 IMPORTANT : Mettez votre bracelet anti-statique maintenant.</B></TD></TR></TABLE>

@@ -49,16 +49,23 @@ Place the **back** visible. (the opening for pow<er button must be on the bottom
 | 8     | Attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit | <img src="Pictures/043C.jpg" alt="Repère" style="zoom: 33%;" /> |
 .))
 
-
+.((
 <TABLE><TR>
-<TD width="100px"> <img src="Pictures/thisway.png" alt=.(("Check".)).fr(("Vérification".)) width="75px" /></TD>
-<TD>.((When necessary, cut the components legs exceedent while progressing so they don't get in the way..)).fr((Pour les composants le nécessitant,
-coupez l'excédent des pattes au fur et à mesure pour ne pas être gêné..))</TD>
+<TD width="100px"> <img src="Pictures/thisway.png" alt="Check" width="75px" /></TD>
+<TD>When necessary, cut the components legs exceedent while progressing so they don't get in the way.</TD>
 </TR><TR>
-<TD width="100px"> <img src="Pictures/thisway.png" alt=.(("Check".)).fr(("Vérification".)) width="75px" /></TD>
-<TD>.((<EM>Do not solder</EM> the P1 connector and C5 capacitor yet, they would hamper the next assembly steps..))
-.fr((<EM>Ne soudez pas</EM> le connecteur P1 et le condensateur C5 pour l'instant : ils gêneraient la suite de l'assemblage..))</TD>
+<TD width="100px"> <img src="Pictures/thisway.png" alt="Check" width="75px" /></TD>
+<TD><EM>Do not solder</EM> the P1 connector and C5 capacitor yet, they would hamper the next assembly steps.</TD>
 </TR></TABLE>
+.)).fr((
+<TABLE><TR>
+<TD width="100px"> <img src="Pictures/thisway.png" alt="Vérification" width="75px" /></TD>
+<TD>Pour les composants le nécessitant, coupez l'excédent des pattes au fur et à mesure pour ne pas être gêné.</TD>
+</TR><TR>
+<TD width="100px"> <img src="Pictures/thisway.png" alt="Vérification" width="75px" /></TD>
+<TD><EM>Ne soudez pas</EM> le connecteur P1 et le condensateur C5 pour l'instant : ils gêneraient la suite de l'assemblage.</TD>
+</TR></TABLE>
+.))
 
 Here's a view of the board at this step..fr((Voici l'allure de la carte à ce stade..)) <img src="Pictures/044.jpg"
 alt=.(("Soldered view".)).fr(("Vue carte soudée".)) style="zoom:50%;" />
@@ -272,17 +279,19 @@ Prepare the LEDs:.fr((Préparez les LEDs :.))
 .((- Gently clean the front panel with a clean soft or microfiber cloth. .))
 .fr((- Nettoyez précautionneusement la façade avec un chiffon doux ou microfibre propre..))
 
-<TABLE><TR><TD><img src="Pictures/thisway.png" alt=.(("Advice".)).fr(("Conseil".))  width="75px" /></TD><TD>
 .((
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Advice" width="75px" /></TD><TD>
   <B>Don't use detergent, solvers or alcoholic products.</B>
   <P>Hot water and flat screens cleaning products are acceptable.
   <P>If you want to use a cleaning product, test it on a little non-visible part like Bus Daughter or the front panel back side and make sure it doesn't damage the vernish.
+</TD></TR></TABLE>
 .)).fr((
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
   <B>N'utilisez aucun produit détergent, solvant ou alcoolique.</B>
   <P>L'eau chaude et les produits de nettoyage pour écran plat sont acceptables.
   <P>Si vous souhaitez utiliser un produit, faites un essai sur un petit endroit au dos de la façade ou sur la carte Bus Daughter pour vérifier qu'il n'abime pas le vernis.
-.))
 </TD></TR></TABLE>
+.))
 
 <TABLE><TR><TD><img src="Pictures/attention.png" alt="attention" style="width:75%;" /></TD><TD><B>
 .((IMPORTANT: put your anti-static bracelet NOW..))

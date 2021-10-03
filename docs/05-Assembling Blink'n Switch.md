@@ -142,8 +142,7 @@ Prepare the LEDs:
 
 - Gently clean the front panel with a clean soft or microfiber cloth. 
 
-<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Advice"  width="75px" /></TD><TD>
-
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Advice" width="75px" /></TD><TD>
   <B>Don't use detergent, solvers or alcoholic products.</B>
   <P>Hot water and flat screens cleaning products are acceptable.
   <P>If you want to use a cleaning product, test it on a little non-visible part like Bus Daughter or the front panel back side and make sure it doesn't damage the vernish.
