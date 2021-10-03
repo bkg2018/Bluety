@@ -45,12 +45,20 @@ Both panels can be slightly curved depending on shipping and manufacturing but t
 fixed to the case.
 .fr((Les façades peuvent être légèrement incurvées mais ceci disparaîtra après fixation sur le boîtier..))
 
-| Number.fr((Nombre.)) | Board.fr((Carte.))          |                                                                                     |
+.((
+| Number | Board          |                                                                                     |
 | -------| -------------- | ----------------------------------------------------------------------------------: |
 | 1      | Bus Daughter   | <img src="Pictures/012-busdaughter.jpg" alt="Bus Daughter" style="zoom: 33%;" />    |
 | 1      | Blink'n Switch | <img src="Pictures/020-blinknswitch.jpg" alt="Blink'n Switch" style="zoom: 33%;" /> |
-| 1      | Front panel.fr((Façade avant.))   | <img src="Pictures/021-frontpanel.jpg" alt=.(("Front Panel".)).fr(("Façade avant".)) style="zoom: 33%;" />     |
-| 1      | Back panel.fr((Façade arrière.)) | <img src="Pictures/021B-backpanel.jpg" alt=.(("Back panel".)).fr(("Façade arrière".)) style="zoom: 33%;" />   |
+| 1      | Front panel    | <img src="Pictures/021-frontpanel.jpg" alt="Front Panel" style="zoom: 33%;" />      |
+| 1      | Back panel     | <img src="Pictures/021B-backpanel.jpg" alt="Back panel" style="zoom: 33%;" />       |
+.)).fr((
+| Nombre | Carte          |                                                                                     |
+| -------| -------------- | ----------------------------------------------------------------------------------: |
+| 1      | Bus Daughter   | <img src="Pictures/012-busdaughter.jpg" alt="Bus Daughter" style="zoom: 33%;" />    |
+| 1      | Blink'n Switch | <img src="Pictures/020-blinknswitch.jpg" alt="Blink'n Switch" style="zoom: 33%;" /> |
+| 1      | Façade avant   | <img src="Pictures/021-frontpanel.jpg" alt="Façade avant" style="zoom: 33%;" />     |
+| 1      | Façade arrière | <img src="Pictures/021B-backpanel.jpg" alt="Façade arrière" style="zoom: 33%;" />   |
 .))
 
 ## Components.fr((Composants.))
@@ -235,4 +243,4 @@ prennent place correctement. Ajustez les contours en plastique du boitier avec d
 Keep the integrated components safe in their anti-static bags until the very last steps of assembly.
 Wear an anti-static wrist strap linked to ground when handling them.
 .fr((Conservez les circuits intégrés à l'abri dans leur sachet anti-statique jusqu'au dernières étapes de l'assemblage. Portez
-un bracelet anti-statique relié à une masse pour les manipuler.))
+un bracelet anti-statique relié à une masse pour les manipuler..))

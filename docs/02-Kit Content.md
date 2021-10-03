@@ -27,8 +27,8 @@ fixed to the case.
 | -------| -------------- | ----------------------------------------------------------------------------------: |
 | 1      | Bus Daughter   | <img src="Pictures/012-busdaughter.jpg" alt="Bus Daughter" style="zoom: 33%;" />    |
 | 1      | Blink'n Switch | <img src="Pictures/020-blinknswitch.jpg" alt="Blink'n Switch" style="zoom: 33%;" /> |
-| 1      | Front panel   | <img src="Pictures/021-frontpanel.jpg" alt="Front Panel" style="zoom: 33%;" />     |
-| 1      | Back panel | <img src="Pictures/021B-backpanel.jpg" alt="Back panel" style="zoom: 33%;" />   |
+| 1      | Front panel    | <img src="Pictures/021-frontpanel.jpg" alt="Front Panel" style="zoom: 33%;" />      |
+| 1      | Back panel     | <img src="Pictures/021B-backpanel.jpg" alt="Back panel" style="zoom: 33%;" />       |
 
 ## Components<A id="a8"></A>
 

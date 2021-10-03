@@ -24,7 +24,12 @@ les à l'abri jusqu'à la fin de l'assemblage. Les façades ne nécessitent aucu
 
 Les façades peuvent être légèrement incurvées mais ceci disparaîtra après fixation sur le boîtier.
 
-NombreCarteFaçade avant"Façade avant"Façade arrière"Façade arrière" style="zoom: 33%;" />   |
+| Nombre | Carte          |                                                                                     |
+| -------| -------------- | ----------------------------------------------------------------------------------: |
+| 1      | Bus Daughter   | <img src="Pictures/012-busdaughter.jpg" alt="Bus Daughter" style="zoom: 33%;" />    |
+| 1      | Blink'n Switch | <img src="Pictures/020-blinknswitch.jpg" alt="Blink'n Switch" style="zoom: 33%;" /> |
+| 1      | Façade avant   | <img src="Pictures/021-frontpanel.jpg" alt="Façade avant" style="zoom: 33%;" />     |
+| 1      | Façade arrière | <img src="Pictures/021B-backpanel.jpg" alt="Façade arrière" style="zoom: 33%;" />   |
 
 ## Composants<A id="a8"></A>
 
@@ -120,4 +125,4 @@ Vérifiez que vous avez commandé le bon boitier et que les panneaux de façade 
 prennent place correctement. Ajustez les contours en plastique du boitier avec du papier de verre si nécessaire.
 
 Conservez les circuits intégrés à l'abri dans leur sachet anti-statique jusqu'au dernières étapes de l'assemblage. Portez
-un bracelet anti-statique relié à une masse pour les manipuler
+un bracelet anti-statique relié à une masse pour les manipuler.
