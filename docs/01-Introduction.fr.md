@@ -1,9 +1,9 @@
-# Présentation<A id="a2"></A>
+# I) Présentation<A id="a2"></A>
 
 Bluety est un ensemble de circuits imprimés pour un boîtier destiné à recevoir un ordinateur de type RC2014, en particulier le kit SC126
 de Stephen S. Cousins et le RC2014 Pro de Spencer Owens.
 
-## Contenu du kit<A id="a3"></A>
+## I-1) Contenu du kit<A id="a3"></A>
 
 L'ensemble se compose des éléments suivants :
 
@@ -44,7 +44,7 @@ F. Piérot, 2020/12
 
 <img src="Pictures/finished.jpg" alt="Bluety terminé"  />
 
-## Extension de bus<A id="a4"></A>
+## I-2) Extension de bus<A id="a4"></A>
 
 L'ordinateur SC126 possède 2 connecteurs de bus et un connecteur d'extension latéral, conçu pour recevoir par exemple le kit
 [SC113](https://www.tindie.com/products/tindiescx/sc113-modular-backplane-kit-for-rc2014/?pt=ac_prod_search) qui propose 6
@@ -64,7 +64,7 @@ fonctionnement et l'assemblage sont identiques.
 
 <img src="Pictures/SC113tiny.jpg" alt="SC113 à côté de SC113 Tiny" style="zoom: 50%;" />
 
-## Interrupteur marche/arrêt SC126<A id="a5"></A>
+## I-3) Interrupteur marche/arrêt SC126<A id="a5"></A>
 
 Bluety possède son propre gros bouton bleu marche/arrêt. Si vous n'avez pas encore assemblé votre SC126, vous pouvez remplacer
 son interrupteur par un connecteur à trois broches et placer un jumper sur les deux broches éloignées du bord de la carte afin

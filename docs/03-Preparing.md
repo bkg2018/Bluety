@@ -1,8 +1,8 @@
-# Preparation<A id="a15"></A>
+# III) Preparation<A id="a15"></A>
 
 In this part we will prepare the needed materials.
 
-## Case<A id="a16"></A>
+## III-1) Case<A id="a16"></A>
 
 Bluety is designed for a blue metal case which can be found on most commercial sites with an electronics section:
 AliExpress, Banggood, Amazon, eBay. In their search input field, enter the following: **"Blue Metal
@@ -29,7 +29,7 @@ of at least 190mm. These dimensions are perfect for the SC126 and for all the RC
 
 The kit contains templates to help drilling the fixation holes in the case bottom for SC126 and RC2014 Pro.
 
-## Tools inventorys<A id="a17"></A>
+## III-2) Tools inventorys<A id="a17"></A>
 
 The following table lists the tools needed to build the kit.
 
@@ -49,7 +49,7 @@ The following table lists the tools needed to build the kit.
 | Multimeter for voltage and resistors, possibly continuity test (diods) | <img src="Pictures/011A-multimeter.jpg" alt="Multimeter" style="zoom: 33%;" /> |
 | Column drill for case bottom holes (ex: Dremel) with 3mm drill|                               ![Drill](pictures/TODO.PNG) |
 
-## Advices<A id="a18"></A>
+## III-3) Advices<A id="a18"></A>
 
 Respect the assembly orders to build a nice front panel woth well aligned components.
 

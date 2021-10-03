@@ -1,11 +1,11 @@
-# Façade avant<A id="a28"></A>
+# VI) Façade avant<A id="a28"></A>
 
 La façade avant possède des ouvertures pour les interrupteurs, switches, connecteurs et LEDs de la carte Blink'n Switch.
 Elle possède aussi un écran LCD de 4x20 caractères rétro éclairé et un bouton marche/arrêt lumineux.
 
 Pour assembler l'écran LCD et le bouton d'alimentation vous devez une dernière fois dévisser la façade pour écarter Blink'n Switch.
 
-## Ecran LCD 4x20<A id="a29"></A>
+## VI-1) Ecran LCD 4x20<A id="a29"></A>
 
 | Etape | Description                                                  |                                                           |
 | ----- | ------------------------------------------------------------ | --------------------------------------------------------: |
@@ -14,7 +14,7 @@ Pour assembler l'écran LCD et le bouton d'alimentation vous devez une dernière
 | 3     | Fixez le câble 4 fils sur le connecteur I2C. L'intérêt de le faire à ce stade est qu'il sera plus difficile de le brancher après que l'écran aura été fixé sur la façade à cause de la proximité de circuits intégrés. | <img src="Pictures/70A-lcdcable.jpg" style="zoom:33%;" /> |
 | 4     | Vissez l'écran sur la façade à l'aide des vis des supports.  |          <img src="Pictures/071.jpg" style="zoom:33%;" /> |
 
-## Bouton d'alimentation<A id="a30"></A>
+## VI-2) Bouton d'alimentation<A id="a30"></A>
 
 Notez qu'à ce stade la façade est encore séparée de Blink'n Switch, sinon vous ne pouvez pas visser le bouton marche/arrêt sur la façade. 
 Si ce n'est pas le cas, dévissez donc la façade.

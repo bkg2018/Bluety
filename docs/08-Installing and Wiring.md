@@ -1,8 +1,8 @@
-# Installing and wiring<A id="a34"></A>
+# VIII) Installing and wiring<A id="a34"></A>
 
 Now that every component is soldered or screwed comes the time to connect wires and install the computer in its case.
 
-## Installing an SC126 / RC2014<A id="a35"></A>
+## VIII-1) Installing an SC126 / RC2014<A id="a35"></A>
 
 The kit includes two drilling templates: one for the SC126 from Stephen S. Cousins with or without the SC113Tiny expansion,
 the other for the RC2014 [Backplane Pro](https://www.tindie.com/products/Semachthemonkey/backplane-pro-for-rc2014-z80-homebrew-computer/)
@@ -26,7 +26,7 @@ from Spencer Owens which you can also get with his RC2014 Pro kit.
 | 10    | Screw SC126 or RC2014. The support screws will go under the bottom plate, and nuts should already be screwed on top of the main board. |  |
 | 11    | At this time you will finally fix the front and back panels before last connections.<br />• Screw the front panel.<br />• Screw the back panel. If you connectedf a serial cable, pull it through the bottom side opening before screwing the back panel. | <img src="Pictures/091-Serial.jpg" alt="Connexion" style="zoom:50%;" /> |
 
-## Connecting BusDaughter and Blink'n Switch<A id="a36"></A>
+## VIII-2) Connecting BusDaughter and Blink'n Switch<A id="a36"></A>
 
 | Step  | Description                                                          |                                                              |
 | ----- | -------------------------------------------------------------------- | -----------------------------------------------------------: |
@@ -35,7 +35,7 @@ from Spencer Owens which you can also get with his RC2014 Pro kit.
 | 3     | Beware: the board angled corner must be on the front panel side. | <img src="Pictures/090-busdaughter.jpg" alt="Connexion" style="zoom:50%;" /> |
 | 4     | Beware: put the board into the rightmost 1x40 bus in the 2x40 bus connector as seen from back. The first pin (toward front) must match the "1" marked hole on the printed board.<br />Normally, the two cables should be parallel. The rightmost on Blink'n Switch will also be the rightmost on BusDaughter. |            <img src="Pictures/TODO.PNG" style="zoom:50%;" /> |
 
-## Front panel<A id="a37"></A>
+## VIII-3) Front panel<A id="a37"></A>
 
 The LCD screen has no predefined function on the RC2014 Pro as it doesn't have an I2C bus, so the LCD related
 instructions only apply to the SC126.
@@ -43,13 +43,13 @@ instructions only apply to the SC126.
 Connecting is easier if you already connected the LCD screen and power button cables *before* screwing the panel:
 
 - If you didn't attach the I2C cable on the LCD screen, unscrew the LCD from the front panel, connect the cable then screw again the
-  LCD screen on the front panel. Refer to the [Assembling Front Panel](06-Assembling Front Panellanguage}.md) part for connecting the I2C cable.- If you didn't attach the power button cable, unscrew the front panel, connect the power button as explained in  [Assembling Front Panel](06-Assembling Front Panel.{language}.md), then screw the front panel again..)).fr((- Si vous n'avez pas déjà fixé le câble I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le câble puis revissez l'écran.  Reportez-vous à la section [Façade avant](#façade-avant) pour le branchement.- Si vous n'avez pas fixé les câbles sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans  la section [Façade avant](#façade-avant) puis revissez la façade..))## Back panel<A id="a38"></A>
+  LCD screen on the front panel. Refer to the [Assembling Front Panel](06-Assembling Front Panellanguage}.md) part for connecting the I2C cable.- If you didn't attach the power button cable, unscrew the front panel, connect the power button as explained in  [Assembling Front Panel](06-Assembling Front Panel.{language}.md), then screw the front panel again..)).fr((- Si vous n'avez pas déjà fixé le câble I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le câble puis revissez l'écran.  Reportez-vous à la section [Façade avant](#façade-avant) pour le branchement.- Si vous n'avez pas fixé les câbles sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans  la section [Façade avant](#façade-avant) puis revissez la façade..))## VIII-4) Back panel<A id="a38"></A>
 
 At the bottom of the back panel lies an opening facing the numerous SC126 connectors, like serial port to allow control from
 a terminal software on a desktop or portable computer. (If you followed instructions, a cable is already installed on serial port
 and goes through this panel opening.)
 
-### HDMI (RC2014, SC126)<A id="a39"></A>
+### VIII-4.1) HDMI (RC2014, SC126)<A id="a39"></A>
 
 The HDMI connector is connected to a *PiZero Terminal* or *BusRaider* board HDMI with the HDMI cable extension featured in the Bluety kit,
 allowing a color display from internal software. (PiGfx or BusRaider.)
@@ -61,7 +61,7 @@ an USB connector because of difficulties finding an appropriate connector.
 | ----- | ---------------------------------------------------------------------------------------------------------------------- | --- | ------------------------------------------------: |
 | 1     | Connect the HDMI cable extension on the interior side of the HDMI connector on back panel, then on your PiZeroTerminal or BusRaider. |     | <img src="Pictures/TODO.PNG" style="zoom:50%;" /> |
 
-### ROMs switches (SC126 only)<A id="a40"></A>
+### VIII-4.2) ROMs switches (SC126 only)<A id="a40"></A>
 
 The select switches let you choose between the two SC126 flashs ROMs and allow or disable writing for updating them. The connect
 directly on corresponding confuguration jumpers on the SC126 board.
@@ -74,24 +74,24 @@ an RC2014 Pro configuration.</TD></TR></TABLE>
 | 1     | Connect the **two 3-wires switches** to **JP1** and **JP2** on SC126: make sure you place the right wires on the right connector depending on where you place RomWBW in U1 or U2. The switch on the top position goes to the connector for SCM, and the one on the bottom position goes to RomWBW. The cables should not cross: viewed from the back, the rightmost wire on the switch is also on the righton the SC126 obard and correspond to "PROTECT" both on the SC126 board and on the back panel printing. |      | <img src="Pictures/091-U1U2.jpg" alt="U1U2" style="zoom:75%;" /><br /><img src="Pictures/091-U1U2 protect.jpg" alt="Protect" style="zoom:75%;" /> |
 | 2     | Connect the **2-wires switch" to **P9** on SC126: if you have RomWBW in U1, the wires should be on the bottom. If you placed SCM in U1, the wires should be on the top. |      | <img src="Pictures/091-reset+select.jpg" alt="Select Reset" style="zoom:100%;" /><img src="Pictures/95_romselect.jpg" alt="RomWBW" style="zoom:75%;" /> |
 
-### RESET<A id="a41"></A>
+### VIII-4.3) RESET<A id="a41"></A>
 
 The reset button is particularly useful for the PiZero Terminal users as it generaly requires a reset after switching the computer ON, 
 but it also serves when a program freezes the computer, as crashing bugs can lock a Z-80 much easier than a modern CPU.
 
-### SC126<A id="a42"></A>
+### VIII-4.4) SC126<A id="a42"></A>
 
 | Step  | Description                                                  |      |                                                              |
 | ----- | ------------------------------------------------------------ | ---- | -----------------------------------------------------------: |
 | 1     | Connect the reset cable with the yellow connectors to **P8** on the  SC126 and to the panel button.Pour ce câble la position des fils n'a pas d'importance. |      |                                       ![](pictures/TODO.png) |
 
-### RC2014<A id="a43"></A>
+### VIII-4.5) RC2014<A id="a43"></A>
 
 **TDB**
 
-## Power button<A id="a44"></A>
+## VIII-5) Power button<A id="a44"></A>
 
-### SC126<A id="a45"></A>
+### VIII-5.1) SC126<A id="a45"></A>
 
 The power button is connected to the power connector on back panel and controls the SC126 power through the **J2** connector.
 In order to power the SC126 with the later, the SC126 normal power switch must be set to ON position so the powering function
@@ -104,6 +104,6 @@ will be handled by the front panel power button.
 | 3     | Connect the black wire from the **-** and the black cable to the GND pin on J2 | <img src="Pictures/091-borneGND.jpg" alt="Borne GND" style="zoom:50%;" /> |
 | 4     | Connect the **red** wire from power button To the **shortest** pin on the back panel power connector.<br /><br />Connect the **black** wire from J2to **the longest** pin on back panel power connector. | <img src="Pictures/95_powerconnect.jpg" alt="Connecteur" style="zoom:50%;" /><img src="Pictures/96_powerconnect.jpg" alt="Branchement" style="zoom:50%;" /> |
 
-### RC2014<A id="a46"></A>
+### VIII-5.2) RC2014<A id="a46"></A>
 
 **TBD**

@@ -1,4 +1,4 @@
-# Kit Content<A id="a6"></A>
+# II) Kit Content<A id="a6"></A>
 
 Please check the kit content and con tact me in case something is wrong or missing. You can also
 ask for help in the https://groups.google.com/forum/#!forum/rc2014-z80 group.
@@ -14,7 +14,7 @@ damage them seriously. In any case, never place them before doing the electric c
 you will be informed to proceed with a specific checking by this panel. Do not oversee these recommendations,
 they will guarantee a perfect assembly where proceeding is not obvious.</TD></TR></TABLE>
 
-## Printed boards<A id="a7"></A>
+## II-1) Printed boards<A id="a7"></A>
 
 <TABLE><TR><TD><img src="Pictures/attention.png" width="180px" /></TD><TD>Make sure. you protect both front and
 back panels from scratching, projections, burning duriong soldering. These are the visible faces of Bluety
@@ -30,7 +30,7 @@ fixed to the case.
 | 1      | Front panel   | <img src="Pictures/021-frontpanel.jpg" alt="Front Panel" style="zoom: 33%;" />     |
 | 1      | Back panel | <img src="Pictures/021B-backpanel.jpg" alt="Back panel" style="zoom: 33%;" />   |
 
-## Components<A id="a8"></A>
+## II-2) Components<A id="a8"></A>
 
 | Number | Components                                            |                                                                          |
 | ------ | ----------------------------------------------------- | -----------------------------------------------------------------------: |
@@ -42,7 +42,7 @@ fixed to the case.
 | 10     | Integrated circuits :<br />- 3x 74HCT273N<br />- 2x 74HCT245N<br />- 3x 74HCT688<br />- 2x 74HCT32 | <img src="Pictures/037-ics.jpg" alt="Integrated circuits" style="zoom: 33%;" /> |
 | 1      | Backlit 4x20 LCD screen with I2C adapter              | <img src="Pictures/038-LCD.jpg" alt="LCD display" style="zoom: 33%;" />    |
 
-## Connectors and sockets<A id="a9"></A>
+## II-3) Connectors and sockets<A id="a9"></A>
 
 | Number | Connectors and circuits sockets |                                                                                            |
 | ------ | -------------------------------------------- | -----------------------------------------------------------------------------------------: |
@@ -57,7 +57,7 @@ fixed to the case.
 | 1      | power connector                              | <img src="Pictures/039-power.jpg" alt="power connector" style="zoom: 33%;" />      |
 | 1      | HDMI connector                               | <img src="Pictures/040-hdmi.jpg" alt="HDMI connector" style="zoom: 33%;" />               |
 
-## Switches<A id="a10"></A>
+## II-4) Switches<A id="a10"></A>
 
 Bluety comes with 4 2-positions switches which control powering of the 4 LEDs banks and 16 3-positions switches which control
 the input port bits. To avoid mismatching, they use different colors but when assembling, it will be a good idea to double check
@@ -75,14 +75,14 @@ instructions.
 
 Notice: switches and cables colors may vary.
 
-## Buttons<A id="a11"></A>
+## II-5) Buttons<A id="a11"></A>
 
 | Number | Buttons                 |                                                                              |
 | ------ | ----------------------- | ---------------------------------------------------------------------------: |
 | 1      | Reset button            | <img src="Pictures/040-resetbtn.jpg" alt="Reset" style="zoom: 33%;" />       |
 | 1      | Power button with LED   | <img src="Pictures/040-pwrbtn.jpg" alt="ON/OFF button" style="zoom: 33%;" /> |
 
-## Screws and mounts<A id="a12"></A>
+## II-6) Screws and mounts<A id="a12"></A>
 
 | Number | Screws and sockets                                |                                                                                  |
 | ------ | ------------------------------------------------- | -------------------------------------------------------------------------------: |
@@ -94,7 +94,7 @@ Notice: switches and cables colors may vary.
 
 Note that 15mm mounts colour may vary.
 
-## Cables<A id="a13"></A>
+## II-7) Cables<A id="a13"></A>
 
 Bluety comes with custom cables cut at the right length for the reference case with a 190 mm depth and for the
 following 3 configurations:
@@ -115,7 +115,7 @@ To use a deeper case, Dupont cables can be used or other custom cables with the 
 | 1      | 4 wires I2C cable                            | <img src="Pictures/040-I2C.jpg" alt="Cable I2C" style="zoom: 33%;" />              |
 | 2      | 12 wires Dupont cable                        | <img src="Pictures/040-dupont.jpg" alt="Cables connexion" style="zoom: 33%;" />    |
 
-## Conclusion<A id="a14"></A>
+## II-8) Conclusion<A id="a14"></A>
 
 Make sure you have all the components, buttons, cables before assembling. Contact me in case of any problem and I will send 
 missing parts free of charge.

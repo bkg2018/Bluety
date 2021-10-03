@@ -1,8 +1,8 @@
-# Préparatifs<A id="a15"></A>
+# III) Préparatifs<A id="a15"></A>
 
 Dans ce chapitre nous allons préparer l'équipement nécessaire.
 
-## Boitier<A id="a16"></A>
+## III-1) Boitier<A id="a16"></A>
 
 Bluety est conçu pour un boîtier métallique bleu que l'on peut trouver sur la plupart des sites marchands :
 AliExpress, Banggood, Amazon, eBay. Dans le champ de recherche de votre site préféré, entrez
@@ -32,7 +32,7 @@ si la longueur de ceux fournis avec le kit n'est pas suffisante.
 
 Le kit contient deux gabarits de perçage pour fixer le SC126 ou le RC2014 Pro sur le fond du boîtier.
 
-## Inventaire des outilss<A id="a17"></A>
+## III-2) Inventaire des outilss<A id="a17"></A>
 
 Ce tableau liste les outils dont vous aurez besoin pour assembler le kit.
 
@@ -52,7 +52,7 @@ Ce tableau liste les outils dont vous aurez besoin pour assembler le kit.
 | Multimètre avec mesure de voltage et résistance, éventuellement test de continuité (diodes) | <img src="Pictures/011A-multimeter.jpg" alt="Multimètre" style="zoom: 33%;" /> |
 | Perceuse à colonne pour le fond du boîtier (par exemple Dremel) avec une mèche de 3mm |                               ![Perceuse](pictures/TODO.PNG) |
 
-## Conseils<A id="a18"></A>
+## III-3) Conseils<A id="a18"></A>
 
 Respectez les consignes d'assemblage pour obtenir une belle façade avec les composants bien alignés.
 
