@@ -48,11 +48,11 @@ Choice is yours.
 
 | Step  | Description                                               |                                                              |
 | ----- | --------------------------------------------------------- | -----------------------------------------------------------: |
-| 2     | Screw the 2-wires micro-switch on the vertical position "flash select" using M2x8 screws and an Allen key or an hexagoinal head screwdriver (not included in the kit). |  |
+| 2     | Screw the 2-wires micro-switch on the vertical position "flash select" using M2x8 screws and an Allen key or an hexagonal head screwdriver (not included in the kit). |  |
 | <img src="Pictures/thisway.png" alt="Conseil" width="75px" />     | Beware : if you've put the RomWBW flqash in U1 on your SC126, put the two wires on the bottom position. If you placed the SCM flash in U1 then put the two wires on the top position. | <img src="Pictures/073-selectU1U2.jpg" alt="Switch select" style="zoom:50%;" /> |
 | 3     | Screw the two 3-wires micro-switches on the horizontal positions "flash protect" with M2x8 screws. |           |
-| 4     | Screw the power connector.<br />Oriientation is not important but remember that the longest pin is for the ground (GND) and the shortest is for +5V, which is the contrary of capacitors and LEDs. |  ![Powering](pictures/091-powercnct.jpg) |
-| 5     | Screw the BRB reset (Big Red Button), pins orientation have no importance as it is ainly a temporary switch. put the Reset cable with yellow extremities. |                             ![Reset](pictures/091-reset.jpg) |
+| 4     | Screw the power connector.<br />Oriientation is not important but remember that the longest pin is for the ground (GND) and the shortest is for +5V, which is the contrary of capacitors and LEDs. |  ![Powering](Pictures/091-powercnct.jpg) |
+| 5     | Screw the BRB reset (Big Red Button), pins orientation have no importance as it is ainly a temporary switch. put the Reset cable with yellow extremities. |                             ![Reset](Pictures/091-reset.jpg) |
 
 The back panel will then look like this.
 <img src="Pictures/074-backpanel.jpg" alt="Façade Arrière" style="zoom:67%;" />

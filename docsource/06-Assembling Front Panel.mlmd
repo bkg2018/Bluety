@@ -57,11 +57,13 @@ Si ce n'est pas le cas, dévissez donc la façade..))
 | 6     | Branchez le câble 3 fils :<br />● le gros fil rouge sur la borne **C** et le petit fil rouge sur la borne **+**<br />● le gros fil noir sur la borne **-** | <img src="Pictures/072-vcc.jpg" alt="Fils rouges" style="zoom:50%;" /><br /><img src="Pictures/072-gnd.jpg" alt="Fil noir" style="zoom:50%;" /> |
 .))
 
-<TABLE><TR><TD><img src="Pictures/thisway.png" alt=.(("Advice".)).fr(("Conseil".)) width="75px" /></TD><TD>
 .((
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Advice" width="75px" /></TD><TD>
 The free cables extremities will stay free until the back panel is fixed on the case. 
+</TD></TR></TABLE>
 .)).fr((
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
 Les extrémités des câbles qui n'ont pas encore été branchées vont rester libres jusqu'à ce que la façade arrière soit
 fixée au boîtier.
-.))
 </TD></TR></TABLE>
+.))

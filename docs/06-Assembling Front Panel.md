@@ -30,6 +30,5 @@ So if it's not done, unscrew the front panel.
 | 6     | Connect the 3 wires cable:<br />● the long red wire on the **C** pin and the short red wire on the **+** pin<br />● the long black wire on the **-** pin | <img src="Pictures/072-vcc.jpg" alt="Red wires" style="zoom:50%;" /><br /><img src="Pictures/072-gnd.jpg" alt="Black wire" style="zoom:50%;" /> |
 
 <TABLE><TR><TD><img src="Pictures/thisway.png" alt="Advice" width="75px" /></TD><TD>
-
 The free cables extremities will stay free until the back panel is fixed on the case. 
 </TD></TR></TABLE>

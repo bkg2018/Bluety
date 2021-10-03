@@ -54,14 +54,14 @@ de Spencer Owens également disponible avec le kit RC2014 Pro..))
 
 ## Connecting BusDaughter and Blink'n Switch.fr((Branchement BusDaughter Blink'n Switch.))
 
-.((.))
+.((
 | Step  | Description                                                          |                                                              |
 | ----- | -------------------------------------------------------------------- | -----------------------------------------------------------: |
 | 1     | Connect the two 12-wires cables on BusDaughter, refering to the A7 wire you marked when connecting to Blink'n Swtch. |            <img src="Pictures/TODO.png" style="zoom:50%;" /> |
 | 2     | Install the BusDaughter board in the bus connector of your choice. |                                                              |
 | 3     | Beware: the board angled corner must be on the front panel side. | <img src="Pictures/090-busdaughter.jpg" alt="Connexion" style="zoom:50%;" /> |
 | 4     | Beware: put the board into the rightmost 1x40 bus in the 2x40 bus connector as seen from back. The first pin (toward front) must match the "1" marked hole on the printed board.<br />Normally, the two cables should be parallel. The rightmost on Blink'n Switch will also be the rightmost on BusDaughter. |            <img src="Pictures/TODO.png" style="zoom:50%;" /> |
-.fr((
+.)).fr((
 | Etape | Description                                                          |                                                              |
 | ----- | -------------------------------------------------------------------- | -----------------------------------------------------------: |
 | 1     | Branchez les deux cables 12 fils sur la BusDaughter en prenant soin de respecter le repérage du fil A7 effectué lors du branchement sur Blink'n Switch. |            <img src="Pictures/TODO.png" style="zoom:50%;" /> |

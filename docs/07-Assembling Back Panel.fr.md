@@ -55,8 +55,8 @@ leur véritable fonction. Le chpoix vous appartient.
 | 2     | Vissez le micro interrupteur avec 2 fils sur la position verticale "flash select" à l'aide des vis M2x8 et d'une clé Allen ou d'un tournevis à tête hexagonale (non fourni). |  |
 | <img src="Pictures/thisway.png" alt="Conseil" width="75px" />     | Attention : si vous avez placé la RomWBW en U1 sur SC126, vous devez mettre les deux fils en bas. Si par contre vous avez placé la rom SCM en U1 vous devez mettre les deux fils en haut. | <img src="Pictures/073-selectU1U2.jpg" alt="Switch select" style="zoom:50%;" /> |
 | 3     | Vissez les deux interrupteurs avec 3 fils aux positions "flash protect" horizontales à l'aide de 4 vis M2x8. |           |
-| 4     | Vissez le connecteur d'alimentation.<br />L'orientation n'a pas d'importance mais retenez que la patte la plus *longue* est la masse (GND) et la patte la plus *courte* est le +5V, contrairement à la convention des LEDs et condensateurs. |  ![Alimentation](pictures/091-powercnct.jpg) |
-| 5     | Vissez le bouton reset, la position des pattes n'a pas d'importance. Branchez le cable Reset avec les extrémités jaunes. |                             ![Reset](pictures/091-reset.jpg) |
+| 4     | Vissez le connecteur d'alimentation.<br />L'orientation n'a pas d'importance mais retenez que la patte la plus *longue* est la masse (GND) et la patte la plus *courte* est le +5V, contrairement à la convention des LEDs et condensateurs. |  ![Alimentation](Pictures/091-powercnct.jpg) |
+| 5     | Vissez le bouton reset, la position des pattes n'a pas d'importance. Branchez le cable Reset avec les extrémités jaunes. |                             ![Reset](Pictures/091-reset.jpg) |
 
 La façade arrière présente alors l'aspect suivant.
 <img src="Pictures/074-backpanel.jpg" alt="Façade Arrière" style="zoom:67%;" />

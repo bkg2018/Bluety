@@ -28,9 +28,7 @@ Si ce n'est pas le cas, dévissez donc la façade.
 | 5     | Branchez le long fil rouge serti aux deux extrémité sur la borne centrale **NO**. | <img src="Pictures/072-mainvcc.jpg" alt="Cable borne NO" style="zoom:50%;" /> |
 | 6     | Branchez le câble 3 fils :<br />● le gros fil rouge sur la borne **C** et le petit fil rouge sur la borne **+**<br />● le gros fil noir sur la borne **-** | <img src="Pictures/072-vcc.jpg" alt="Fils rouges" style="zoom:50%;" /><br /><img src="Pictures/072-gnd.jpg" alt="Fil noir" style="zoom:50%;" /> |
 
-"Conseil" width="75px" /></TD><TD>
-
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
 Les extrémités des câbles qui n'ont pas encore été branchées vont rester libres jusqu'à ce que la façade arrière soit
 fixée au boîtier.
-
 </TD></TR></TABLE>
