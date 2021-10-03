@@ -1,9 +1,9 @@
-# Presentation<A id="a2"></A>
+# I) Presentation<A id="a2"></A>
 
 Bluety is a set of printed electronic boards for a case hosting an RC2014 class computer, particularly aimed at the SC126 kit
 from Stephen S. Cousins and the RC2014 Pro from Spencer Owens, who created the original RC2014.
 
-## Kit Content<A id="a3"></A>
+## I-1) Kit Content<A id="a3"></A>
 
 The kit contains the following elements:
 
@@ -42,7 +42,7 @@ F. Piérot, 2020/12
 
 <img src="Pictures/finished.jpg" alt="Bluety terminé"  />
 
-## Bus expansion<A id="a4"></A>
+## I-2) Bus expansion<A id="a4"></A>
 
 The SC126 computer has 2 bus connectors and one lateral expansion connector which can receive an expansion board like
 [SC113](https://www.tindie.com/products/tindiescx/sc113-modular-backplane-kit-for-rc2014/?pt=ac_prod_search)
@@ -62,7 +62,7 @@ components to fill SC113-Tiny, which is built almost identically only with 3 bus
 
 <img src="Pictures/SC113tiny.jpg" alt="SC113 beside SC113-Tiny" style="zoom: 50%;" />
 
-## SC126 power switch<A id="a5"></A>
+## I-3) SC126 power switch<A id="a5"></A>
 
 Bluety has its own big blue power button. If the computer is not assembled yet, the original power switch can be
 replaced by a 3, 4 or 5 pins header in order to link the Bluety button to the power circuitry. On the SC126, a 3-pin header

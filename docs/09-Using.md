@@ -1,4 +1,4 @@
-# Using Bluety<A id="a47"></A>
+# IX) Using Bluety<A id="a47"></A>
 
 The input and output ports on a Z-80 are controlled by the IN and OUT instructions, as well as some derivatives on the Z180 of the SC126.
 BASIC also has IN and OUT instructions to read or write a byte on a port. The LCD screen is controlled on the SC126 by the I2C bus,
@@ -6,7 +6,7 @@ using a library you put in your programs, or using Bluety specific SCM or BASIC 
 These versions optionally send an echo of their output to the LCD screen. The echo and LCD console poarameters are
 determined by RAM variables ag specific addresses.
 
-## Control port (13/0Dh)<A id="a48"></A>
+## IX-1) Control port (13/0Dh)<A id="a48"></A>
 
 The control port is  fixed on the 13 decimal / 0D hexadecimal: this is used by design in both control softwares for the SC126.
 
@@ -22,7 +22,7 @@ Remark: the control port retains the last written byte, so to switch LEDs off yo
 particularly true with RomWBW which lights all 8 LEDs during its boot process and leaves them in this state.
 </TD></TR></TABLE>
 
-## Input and Output ports A and B<A id="a49"></A>
+## IX-2) Input and Output ports A and B<A id="a49"></A>
 
 These 2 ports have 8 LEDs for the input port and 8 LEDs for the output port. In both cases, the most significant bit
 (bit 7) corresponds to the leftmost LED.
@@ -31,7 +31,7 @@ The port number for both of these ports can be choosen with the 8 triggers of th
 trigger also represents the most significant bit in the port number: to select the 80h port, put the leftmost trigger UP and all the
 others DOWN.
 
-### using the A or B input port<A id="a50"></A>
+### IX-21) using the A or B input port<A id="a50"></A>
 
 Both input ports have an 8-bits female header for +5V input, 8 control LEDs, and 8 input switches.
 
@@ -48,7 +48,7 @@ than +5V or you could burn components and make your input port definitely useles
 
 Generally, less than +4.7V on an input line will be considered as a 0 bit.
 
-### Using the A or B output port<A id="a51"></A>
+### IX-22) Using the A or B output port<A id="a51"></A>
 
 | Step  | Description                                                  |                                                        |
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------: |
@@ -67,7 +67,7 @@ You can use the dipswitch port select to spy any of the Z-80 port, for example g
 or the ports used by a ROM with BusRaider.
 </TD></TR></TABLE>
 
-## LCD Screen: I2C Interface<A id="a52"></A>
+## IX-3) LCD Screen: I2C Interface<A id="a52"></A>
 
 On the SC126, the LCD display is controlled through the I2C bus on port 0Ch. The kit display is equipped with an I2C adapter and
 doesn't need any additionnal board and the only thing to do is connect the 4-wires cable between the SC126 I2C header and the LCD
@@ -82,7 +82,7 @@ an I/O controller RC2014 board. Stephen S. Cousins site shows a number of ways t
 display using OUT instructions. The Bluety kit doesn't include options for this method by itself and you will need an I/O or PIO board
 as described on Stephen S. Cousins site.
 
-## LCD Display: parallel interfacing (SC126,RC2014 Pro)<A id="a53"></A>
+## IX-4) LCD Display: parallel interfacing (SC126,RC2014 Pro)<A id="a53"></A>
 
 The RC2014 Pro kit has no I2C bus and cannot control Bluety LCD screen. In this configuration, one way to have an LCD display
 is to use a parallel interfacing as described in [Stephen S. Cousins example](https://smallcomputercentral.wordpress.com/example-alphanumeric-lcd/),
@@ -113,7 +113,7 @@ Le contrôle matériel sera le même quelle que soit la carte. Le reste concerne
 
 A ce jour, je n'ai pas encore développé de logiciel pour cette interface matérielle.
 
-## Ecran LCD : Interface logicielle<A id="a54"></A>
+## IX-5) Ecran LCD : Interface logicielle<A id="a54"></A>
 
 Actuellement, l'interface LCD logicielle est développée pour le bus I2C sur un SC126. Deux logiciels sont en cours de développement :
 

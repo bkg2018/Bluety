@@ -1,11 +1,11 @@
-# Utilisation<A id="a47"></A>
+# IX) Utilisation<A id="a47"></A>
 
 Les ports d'entrée-sortie sont contrôlés par des instructions IN et OUT du Z-80 ou du BASIC. L'écran LCD se contrôle via l'interface
 I2C à l'aide d'une librairie à intégrer dans vos programmes, ou à l'aide de versions de SCM et BASIC en cours de développement.
 Ces versions de SCM et BASIC peuvent également envoyer un écho de leur sortie console sur l'écran LCD. Les caractéristiques de l'écran,
 de la console LCD et de l'écho sont contrôlées par des variables en RAM.
 
-## Port de contrôle (13/0Dh)<A id="a48"></A>
+## IX-1) Port de contrôle (13/0Dh)<A id="a48"></A>
 
 Le port de contrôle est câblé sur le numéro de port 13 (0D en hexadécimal) : ceci correspond aux deux logiciels de
 contrôle disponibles pour l'ordinateur SC126.
@@ -23,7 +23,7 @@ le bit de poids fort : écrire 80h allumera uniquement cette LED.
 de son démarrage.
 </TD></TR></TABLE>
 
-## Ports d'entrée sortie A et B<A id="a49"></A>
+## IX-2) Ports d'entrée sortie A et B<A id="a49"></A>
 
 Les 2 ports possèdent chacun 8 LEDs pour le port en entrée et 8 LEDs pour le port en sortie. Dans les deux cas, le bit de poids fort
 (bit 7) est représenté par la LED la plus à gauche.
@@ -32,7 +32,7 @@ Le numéro de chacun des deux ports est sélectionnable par les huit interrupteu
 Là aussi, le bit de poids fort (bit 7) est situé à gauche. Pour sélectionner le port 80h, placez l'interrupteur le plus à gauche en HAUT, et
 tous les autres en bas.
 
-### Utiliser le port A ou B en entrée<A id="a50"></A>
+### IX-21) Utiliser le port A ou B en entrée<A id="a50"></A>
 
 Chacun des ports en entrée dispose d'un connecteur 8 fils, de 8 LEDs et de 8 interrupteurs.
 
@@ -50,7 +50,7 @@ et pas beaucoup plus de +5V sous peine de brûler des composants et de rendre d�
 En général, un niveau d'entrée inférieur à +4.7V sera considéré comme
 un bit à 0.
 
-### Utiliser le port A ou B en sortie<A id="a51"></A>
+### IX-22) Utiliser le port A ou B en sortie<A id="a51"></A>
 
 | Etape | Description                                                  |                                                        |
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------: |
@@ -65,7 +65,7 @@ n'importe quel numéro de port, par exemple les ports internes du Z-180 sur le S
 avec BusRaider.
 </TD></TR></TABLE>
 
-## Ecran LCD : Interface I2C (SC126)<A id="a52"></A>
+## IX-3) Ecran LCD : Interface I2C (SC126)<A id="a52"></A>
 
 Sur un SC126, l'écran LCD est contrôlé par le bus I2C sur le port 0Ch. L'écran du kit étant livré avec un adaptateur I2C, vous n'avez
 aucune carte supplémentaire à installer, et rien d'autre à effectuer que le branchement déjà décrit d'un câble 4 fils fourni dans le
@@ -80,7 +80,7 @@ par le biais d'un port parallèle ou d'une carte E/S. Le site de Stephen S. Cous
 à partir d'un SC126 ou nd'un RC2014. Le kit Bluety ne propose pas ces options par lui même et vous devrez vous équiper selon les 
 instructions du site de Stephen S. Cousins.
 
-## Ecran LCD : Interface parallèle (SC126,RC2014 Pro)<A id="a53"></A>
+## IX-4) Ecran LCD : Interface parallèle (SC126,RC2014 Pro)<A id="a53"></A>
 
 Il n'existe pas de bus I2C dans le kit RC2014 Pro, aussi vous devrez passer par une interface parallèle, comme décrit dans [l'exemple
 de Stephen S. Cousins](https://smallcomputercentral.wordpress.com/example-alphanumeric-lcd/) qui utilise soit un port de sortie 8-bits,
@@ -109,7 +109,7 @@ Le contrôle matériel sera le même quelle que soit la carte. Le reste concerne
 
 A ce jour, je n'ai pas encore développé de logiciel pour cette interface matérielle.
 
-## Ecran LCD : Interface logicielle<A id="a54"></A>
+## IX-5) Ecran LCD : Interface logicielle<A id="a54"></A>
 
 Actuellement, l'interface LCD logicielle est développée pour le bus I2C sur un SC126. Deux logiciels sont en cours de développement :
 

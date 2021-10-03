@@ -1,4 +1,4 @@
-# Contenu du kit<A id="a6"></A>
+# II) Contenu du kit<A id="a6"></A>
 
 Vérifiez le contenu du kit, et contactez moi en cas d'erreur. Vous pouvez aussi intervenir dans le groupe de
 discussion https://groups.google.com/forum/#!forum/rc2014-z80.
@@ -16,7 +16,7 @@ d'assemblage, les étapes où vous devrez procéder à une vérification ou à u
 indiquées par ce panneau.<B>N'ignorez pas ces recommandations</B>, elles garantissent le bon résultat de l'assemblage
 lors des étapes les moins évidentes.</TD></TR></TABLE>
 
-## Cartes et circuits imprimés<A id="a7"></A>
+## II-1) Cartes et circuits imprimés<A id="a7"></A>
 
 <TABLE><TR><TD><img src="Pictures/attention.png" width="180px" /></TD><TD>Veillez à protéger les deux façades
 de toute rayure, brûlure, ou projection de flux lors des soudures. Ce sont les faces visibles donc conservez
@@ -26,7 +26,7 @@ Les façades peuvent être légèrement incurvées mais ceci disparaîtra après
 
 NombreCarteFaçade avant"Façade avant"Façade arrière"Façade arrière" style="zoom: 33%;" />   |
 
-## Composants<A id="a8"></A>
+## II-2) Composants<A id="a8"></A>
 
 | Nombre | Composants                                            |                                                                          |
 | ------ | ----------------------------------------------------- | -----------------------------------------------------------------------: |
@@ -38,7 +38,7 @@ NombreCarteFaçade avant"Façade avant"Façade arrière"Façade arrière" style=
 | 10     | Circuits intégrés :<br />- 3x 74HCT273N<br />- 2x 74HCT245N<br />- 3x 74HCT688<br />- 2x 74HCT32 | <img src="Pictures/037-ics.jpg" alt="Circuits intégrés" style="zoom: 33%;" /> |
 | 1      | Ecran LCD 4x20 rétroéclairé bleu avec adaptateur I2C  | <img src="Pictures/038-LCD.jpg" alt="Ecran LCD" style="zoom: 33%;" />    |
 
-## Connecteurs et supports<A id="a9"></A>
+## II-3) Connecteurs et supports<A id="a9"></A>
 
 | Nombre | Connecteurs et supports de circuits intégrés |                                                                                            |
 | ------ | -------------------------------------------- | -----------------------------------------------------------------------------------------: |
@@ -53,7 +53,7 @@ NombreCarteFaçade avant"Façade avant"Façade arrière"Façade arrière" style=
 | 1      | Connecteur d'alimentation                    | <img src="Pictures/039-power.jpg" alt="Connecteur alimentation" style="zoom: 33%;" />      |
 | 1      | Connecteur HDMI                              | <img src="Pictures/040-hdmi.jpg" alt="Connecteur HDMI" style="zoom: 33%;" />               |
 
-## Interrupteurs<A id="a10"></A>
+## II-4) Interrupteurs<A id="a10"></A>
 
 Bluety est livré avec 4 interrupteurs à deux positions qui contrôlent l'allumage des 4 rangées de LEDs ainsi que 16 interrupteurs
 à trois position qui contrôlent les bits des ports d'entrée. Pour éviter la confusion le kit les livre dans des couleurs
@@ -71,14 +71,14 @@ façon pour obtenir un bon alignement : ceci sera rappelé dans les instructions
 
 NOTE : La couleur des interrupteurs et des câbles peut varier.
 
-## Boutons<A id="a11"></A>
+## II-5) Boutons<A id="a11"></A>
 
 | Nombre | Boutons                      |                                                                              |
 | ------ | ---------------------------- | ---------------------------------------------------------------------------: |
 | 1      | Bouton Reset                 | <img src="Pictures/040-resetbtn.jpg" alt="Reset" style="zoom: 33%;" />       |
 | 1      | Bouton marche/arrêt avec LED | <img src="Pictures/040-pwrbtn.jpg" alt="Bouton ON/OFF" style="zoom: 33%;" /> |
 
-## Visserie<A id="a12"></A>
+## II-6) Visserie<A id="a12"></A>
 
 | Nombre | Visserie et Supports                              |                                                                                  |
 | ------ | ------------------------------------------------- | -------------------------------------------------------------------------------: |
@@ -90,7 +90,7 @@ NOTE : La couleur des interrupteurs et des câbles peut varier.
 
 NOTE : la couleur et la matière des supports 15mm peut varier.
 
-## Câbles<A id="a13"></A>
+## II-7) Câbles<A id="a13"></A>
 
 Bluety est livré avec des câbles sur mesure dont la longueur convient pour le boîtier de référence d'une profondeur de 190 mm
 et pour les trois configurations suivantes :
@@ -111,7 +111,7 @@ Pour un boîtier plus profond il faudra utiliser des rallonges de type Dupont ou
 | 1      | Câble I2C 4 fils                             | <img src="Pictures/040-I2C.jpg" alt="Cable I2C" style="zoom: 33%;" />              |
 | 2      | Câbles Dupont 12 fils                        | <img src="Pictures/040-dupont.jpg" alt="Cables connexion" style="zoom: 33%;" />    |
 
-## Conclusion<A id="a14"></A>
+## II-8) Conclusion<A id="a14"></A>
 
 Assurez-vous d'avoir tous les composants, cables, boutons avant l'assemblage. Contactez-moi en cas de problème et j'enverrai
 gratuitement les pièces manquantes

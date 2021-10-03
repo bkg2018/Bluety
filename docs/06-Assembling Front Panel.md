@@ -1,4 +1,4 @@
-# Assembling the front panel<A id="a28"></A>
+# VI) Assembling the front panel<A id="a28"></A>
 
 The front panel has opening for the switches, connectors and LEDs of the Blink'n Switch board.
 It also features a 4x20 LCD retro lighted display and a power button with LED.
@@ -6,7 +6,7 @@ It also features a 4x20 LCD retro lighted display and a power button with LED.
 
 To assemble the LCD screen and the power button,  you must unscrew the front panel from Blink'n Swicth a last time.
 
-## LCD 4x20 display<A id="a29"></A>
+## VI-1) LCD 4x20 display<A id="a29"></A>
 
 | Step  | Description                                                  |                                                           |
 | ----- | ------------------------------------------------------------ | --------------------------------------------------------: |
@@ -15,7 +15,7 @@ To assemble the LCD screen and the power button,  you must unscrew the front pan
 | 3     | Attach the 4 wires cable on the display I2C connector. It is best to do this at this step as it will be more difficult after the display has been fixed on the front panel because of the neighboring circuits. | <img src="Pictures/70A-lcdcable.jpg" style="zoom:33%;" /> |
 | 4     | Screen the screen on the front panel using the supports screws on the attached bolts. |          <img src="Pictures/071.jpg" style="zoom:33%;" /> |
 
-## Power button<A id="a30"></A>
+## VI-2) Power button<A id="a30"></A>
 
 Notice that at this time the front panel is still separated from Blink'n Switch, or you won't be able to fix the power button on the front panel.
 So if it's not done, unscrew the front panel.

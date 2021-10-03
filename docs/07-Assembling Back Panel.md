@@ -1,4 +1,4 @@
-# Assembling the back panel<A id="a31"></A>
+# VII) Assembling the back panel<A id="a31"></A>
 
 The back panel features the following:
 
@@ -17,7 +17,7 @@ Notice that most RC2014 do not necessarily give a ROM choice and micro switches 
 
 This assembly step is only about placing the elements, as connecting will be done later.
 
-## HDMI connector<A id="a32"></A>
+## VII-1) HDMI connector<A id="a32"></A>
 
 This connector is a relay between the back panel and an RC2014 PiZEro Terminal HDMI-mini output. It protects the Pi
 HDMI plug and avoid tension on the RC2014 computer bus slot hosting the PiZero Terminal board.
@@ -40,7 +40,7 @@ of control softwares as BASIC, CP/M or SCM like the PiZero boards do.
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------------: |
 | 1     | Screw the HDMI connector using the 2 M3x8 screws.        | <img src="Pictures/074-HDMI.jpg" alt="hdmi" style="zoom:75%;" /> |
 
-## ROM Select and protect switches<A id="a33"></A>
+## VII-2) ROM Select and protect switches<A id="a33"></A>
 
 These 3 switches are directly linked to corresponding jumpers on the SC126 board and have no practical use on other computers kits
 but you can changed them for whatever jumper you want and place taped labels on the panel printing to witness their actual function.

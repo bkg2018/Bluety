@@ -1,4 +1,4 @@
-# Assembling Blink'n Switch<A id="a20"></A>
+# V) Assembling Blink'n Switch<A id="a20"></A>
 
 This board offers two input/ouput ports with indicator LEDs and control switches, as well as 8 front panel LEDs for the 13
 (0D hexa) control port for the SC26 computer from Stephen S. Cousins. This port can be used by any RC2014 computer to display 8 bits
@@ -8,7 +8,7 @@ on the front panel 8 LEDs using an `OUT` Z-80 instruction on port 13.
 with the front panel to make sure that the components appearing on the front view  are well aligned. <B>Make sure you respect
 the assembly order and advices</B> to ensure the front panel will offer a nice view on all visible controls.</TD></TR></TABLE>
 
-## Back (part 1): sockets and components<A id="a21"></A>
+## V-1) Back (part 1): sockets and components<A id="a21"></A>
 
 Place the **back** visible. (the opening for pow<er button must be on the bottom left.)
 
@@ -34,7 +34,7 @@ Place the **back** visible. (the opening for pow<er button must be on the bottom
 Here's a view of the board at this step. <img src="Pictures/044.jpg"
 alt="Soldered view" style="zoom:50%;" />
 
-## Front: dip-switch sockets<A id="a22"></A>
+## V-2) Front: dip-switch sockets<A id="a22"></A>
 
 <TABLE><TR>
 <TD><img src="Pictures/thisway.png" alt="Check" width="250px" /></TD>
@@ -60,7 +60,7 @@ Reverse the board to see the **front** side, with the power button opening now a
 | 7     | Once both DIP-switches are correctly aligned, return the set and finish soldering the sockets other legs, finishing by adding solder to the first leg. |                                                   |
 | 8     | Unscrew the front panel, put it apart and safe as well as the sloted sockets and DIP-switches. You'll put them back in place later. |                                                   |
 
-## Front: I/O connectors and power<A id="a23"></A>
+## V-3) Front: I/O connectors and power<A id="a23"></A>
 
 | Step  | Description                                                        |                                                              |
 | ----- | -------------------------------------------------------- | ------------------------------------------------------------ |
@@ -77,7 +77,7 @@ Reverse the board to see the **front** side, with the power button opening now a
 | 11    | Cut the legs exceedent when your soldering is well. Take care of protecting your eyes, as the legs are rather rigid and little parts of metal can be projected in any direction. |                                                              |
 | 12    | Unscrew the front panel.                                          |                                                              |
 
-## Front: switches<A id="a24"></A>
+## V-4) Front: switches<A id="a24"></A>
 
 Prepare the 16 ON-OFF-ON 3-positions switches and gthe 4 ON-OFF or ON-ON 2-positions switches. They have different colors so you should not mismatch them easily.
 
@@ -102,7 +102,7 @@ colors but this can be stock-dependent. The switches are delivered in different 
 | 11    | Put the switches in bottom or center position.    |                                                              |
 | 12    | Unscrew the front panel and put it apart, safe from projections.                               |                                                              |
 
-## Front: LEDs<A id="a25"></A>
+## V-5) Front: LEDs<A id="a25"></A>
 
 Prepare the LEDs:
 
@@ -130,7 +130,7 @@ Prepare the LEDs:
 | 14    | Curt the legs exceedent.                                |                                                              |
 | 15    | Unscrew the front panel.                                          |                                                              |
 
-## Back: components (part 2)s<A id="a26"></A>
+## V-6) Back: components (part 2)s<A id="a26"></A>
 
 | Step  | Description                                                       |                                                  |
 | ----- | --------------------------------------------------------- | ------------------------------------------------ |
@@ -138,7 +138,7 @@ Prepare the LEDs:
 | 2     | Solder the C5 capacitor, take care of polarity: the shorter leg must be on the (-) mark. The black strip marked `-` must match the hatched half-circle on the printed board. Cut legs on the other side. | <img src="Pictures/068.jpg" style="zoom:50%;" /> |
 | 3     | Solder the male 2x12-pins connector P1.                          | <img src="Pictures/069.jpg" style="zoom:50%;" /> |
 
-## Finishing<A id="a27"></A>
+## V-7) Finishing<A id="a27"></A>
 
 - Gently clean the front panel with a clean soft or microfiber cloth. 
 

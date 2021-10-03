@@ -1,9 +1,9 @@
-# Installation et branchements<A id="a34"></A>
+# VIII) Installation et branchements<A id="a34"></A>
 
 Tous les composants sont fixés ou soudés, il reste maintenant à effectuer les branchements et l'installation de
 l'ordinateur dans le boîtier.
 
-## Installation SC126 / RC2014<A id="a35"></A>
+## VIII-1) Installation SC126 / RC2014<A id="a35"></A>
 
 Le kit propose deux gabarits de perçage : un pour le SC126 de Stephen S. Cousins avec ou sans l'extension de bus SC113Tiny, 
 l'autre pour le RC2014 [Backplane Pro](https://www.tindie.com/products/Semachthemonkey/backplane-pro-for-rc2014-z80-homebrew-computer/) 
@@ -27,7 +27,7 @@ de Spencer Owens également disponible avec le kit RC2014 Pro.
 | 10    | Fixez le SC126 ou le RC2014 à l'aide des supports boulons vis. Les vis des supports iront sous le boîtier, et les boulons sont normalement déjà vissés sur le dessus de la carte. |  |
 | 11    | A cet instant vous allez fixer les deux façades définitivement avant de terminer les derniers branchements.<br />• Fixez la façade avant<br />• Fixez la façade arrière. Si vous avez branché un câble série, passez le à travers l'ouverture du bas avant de visser la façade. | <img src="Pictures/091-Serial.jpg" alt="Connexion" style="zoom:50%;" /> |
 
-## Branchement BusDaughter Blink'n Switch<A id="a36"></A>
+## VIII-2) Branchement BusDaughter Blink'n Switch<A id="a36"></A>
 
 | Etape | Description                                                          |                                                              |
 | ----- | -------------------------------------------------------------------- | -----------------------------------------------------------: |
@@ -36,7 +36,7 @@ de Spencer Owens également disponible avec le kit RC2014 Pro.
 | 3     | Attention : le coin biseauté de la carte se présente sur l'avant de l'ordinateur | <img src="Pictures/090-busdaughter.jpg" alt="Connexion" style="zoom:50%;" /> |
 | 4     | Attention : enficher la carte sur le côté droit du connecteur de bus de 2x40 prises (vu de l'arrière vers l'avant), la première broche (vers l'avant) se place dans le trou marqué "1" sur le circuit imprimé.<br />Normalement, les deux câbles doivent rester parallèles. Le plus à droite sur Blink'n Switch sera aussi le plus à droite sur BusDaughter. Si ce n'est pas le cas, vérifiez le branchement. |            <img src="Pictures/TODO.PNG" style="zoom:50%;" /> |
 
-## Façade avant<A id="a37"></A>
+## VIII-3) Façade avant<A id="a37"></A>
 
 L'écran LCD n'a pas de fonction prédéfinie sur un RC2014 Pro car il n'a pas de bus I2C, aussi les instructions
 qui concernent le lCD ne s'appliquent qu'au SC126.
@@ -45,13 +45,13 @@ Les branchements sont facilités si vous avez connecté les câbles de l'écran 
 *avant* de visser la façade :
 
 - If you didn't attach the I2C cable on the LCD screen, unscrew the LCD from the front panel, connect the cable then screw again the
-  LCD screen on the front panel. Refer to the [Assembling Front Panel](06-Assembling Front Panellanguage}.md) part for connecting the I2C cable.- If you didn't attach the power button cable, unscrew the front panel, connect the power button as explained in  [Assembling Front Panel](06-Assembling Front Panel.{language}.md), then screw the front panel again..)).fr((- Si vous n'avez pas déjà fixé le câble I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le câble puis revissez l'écran.  Reportez-vous à la section [Façade avant](#façade-avant) pour le branchement.- Si vous n'avez pas fixé les câbles sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans  la section [Façade avant](#façade-avant) puis revissez la façade..))## Façade arrière<A id="a38"></A>
+  LCD screen on the front panel. Refer to the [Assembling Front Panel](06-Assembling Front Panellanguage}.md) part for connecting the I2C cable.- If you didn't attach the power button cable, unscrew the front panel, connect the power button as explained in  [Assembling Front Panel](06-Assembling Front Panel.{language}.md), then screw the front panel again..)).fr((- Si vous n'avez pas déjà fixé le câble I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le câble puis revissez l'écran.  Reportez-vous à la section [Façade avant](#façade-avant) pour le branchement.- Si vous n'avez pas fixé les câbles sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans  la section [Façade avant](#façade-avant) puis revissez la façade..))## VIII-4) Façade arrière<A id="a38"></A>
 
 En bas de la façade, une ouverture permet de passer les câbles utiles pour les nombreux connecteurs du SC126, par exemple la prise série
 pour contrôler l'ordinateur via une machine de bureau ou portable (si vous avez suivi les indications, un câble est déjà installé et passe
 à travers cette ouverture).
 
-### HDMI (RC2014, SC126)<A id="a39"></A>
+### VIII-41) HDMI (RC2014, SC126)<A id="a39"></A>
 
 Le connecteur HDMI se branche par la rallonge fournie dans le kit directement sur une carte *PiZero Terminal* ou *BusRaider*, permettant
 d'avoir une sortie écran couleur via le logiciel interne (PiGfx ou BusRaider).
@@ -63,7 +63,7 @@ a été préférée à une prise USB en raison des difficultés à trouver un co
 | ----- | ---------------------------------------------------------------------------------------------------------------------- | --- | ------------------------------------------------: |
 | 1     | Branchez le raccord HDMI sur le connecteur intérieur de la façade arrière, puis sur votre PiZeroTerminal ou BusRaider. |     | <img src="Pictures/TODO.PNG" style="zoom:50%;" /> |
 
-### Interrupteurs ROM (SC126 seulement)<A id="a40"></A>
+### VIII-42) Interrupteurs ROM (SC126 seulement)<A id="a40"></A>
 
 Les interrupteurs de sélection permettent de choisir entre les deux ROM du SC126 et d'autoriser leur écriture pour une mise à jour. 
 Ils se connectent directement sur des jhmpers de configuration du SC126.
@@ -75,25 +75,25 @@ Ces interrupteurs n'ont pas de fonction pour une configuration RC2014 Pro.</TD><
 | 1     | Branchez les **deux interrupteurs** **3 fils** sur les connecteurs **JP1** et **JP2** du SC126 : attention à placer le bon câble sur le bon connecteur selon que vous avez placé RomWBW en U1 et SCM en U2 ou l'inverse. L'interrupteur situé en haut va sur le connecteur de la ROM SCM, et celui du bas sur celle de RomWBW. Les fils ne doivent pas se croiser ou subir de torsion : vu de l'arrière, le fil le plus à droite sur l'interrupteur est aussi à droite sur la carte SC126 et correspond à la position "PROTECT" à la fois sur la carte et sur l'inscription de la façade arrière. |      | <img src="Pictures/091-U1U2.jpg" alt="U1U2" style="zoom:75%;" /><br /><img src="Pictures/091-U1U2 protect.jpg" alt="Protect" style="zoom:75%;" /> |
 | 2     | Branchez **l'interrupteur** **2 fils** sur le connecteur **P9** : si vous avez RomWBW en U1, les deux fils doivent se situer en bas. Si en revanche vous avez placé SCM en U1, les deux fils doivent se trouver en haut. |      | <img src="Pictures/091-reset+select.jpg" alt="Select Reset" style="zoom:100%;" /><img src="Pictures/95_romselect.jpg" alt="RomWBW" style="zoom:75%;" /> |
 
-### RESET<A id="a41"></A>
+### VIII-43) RESET<A id="a41"></A>
 
 Le bouton Reset est particulièrement utile pour les utilisateurs de la carte PiZero Terminal qui nécessite en général un reset après
 la mise en marche, mais aussi lorsqu'une erreur de programme bloque l'ordinateur, ce qui arrive beaucoup plus facilement avec un Z-80 
 qu'avec un processeur moderne.
 
-### SC126<A id="a42"></A>
+### VIII-44) SC126<A id="a42"></A>
 
 | Etape | Description                                                  |      |                                                              |
 | ----- | ------------------------------------------------------------ | ---- | -----------------------------------------------------------: |
 | 1     | Branchez le cable du bouton reset avec les **fiches jaunes** sur le connecteur **P8** et le bouton de la façade. Pour ce câble la position des fils n'a pas d'importance. |      |                                       ![](pictures/TODO.png) |
 
-### RC2014<A id="a43"></A>
+### VIII-45) RC2014<A id="a43"></A>
 
 **TDB**
 
-## Bouton alimentation<A id="a44"></A>
+## VIII-5) Bouton alimentation<A id="a44"></A>
 
-### SC126<A id="a45"></A>
+### VIII-51) SC126<A id="a45"></A>
 
 Le bouton de la façade avant est relié au connecteur d'alimentation de la façade arrière et contrôle l'alimentation du SC126 via le
 connecteur **J2**. Pour que ce dernier puisse alimenter le SC126 il faut placer l'interrupteur de la carte SC126 en position ON, afin
@@ -106,6 +106,6 @@ de déporter la fonction ON/OFF sur le bouton de la façade avant.
 | 3     | Branchez le fil noir de la broche **-** et le câble noir séparé sur la borne GND du bornier J2 | <img src="Pictures/091-borneGND.jpg" alt="Borne GND" style="zoom:50%;" /> |
 | 4     | Branchez le fil **rouge** provenant du bouton marche/arrêt sur la cosse **la plus courte** du connecteur d'alimentation arrière<br /><br />Branchez le fil **noir** provenant du bornier J2 sur la cosse **la plus longue** du connecteur d'alimentation arrière. | <img src="Pictures/95_powerconnect.jpg" alt="Connecteur" style="zoom:50%;" /><img src="Pictures/96_powerconnect.jpg" alt="Branchement" style="zoom:50%;" /> |
 
-### RC2014<A id="a46"></A>
+### VIII-52) RC2014<A id="a46"></A>
 
 **TBD**

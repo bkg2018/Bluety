@@ -1,4 +1,4 @@
-# Façade arrière<A id="a31"></A>
+# VII) Façade arrière<A id="a31"></A>
 
 La façade arrière offre :
 
@@ -20,7 +20,7 @@ Notez que les autres ordinateurs RC2014 ne proposent pas forcément le choix ent
 
 Cette étape de l'assemblage ne concerne que le placement des éléments, les branchements seront effectués ultérieurement.
 
-## Connecteur HDMI<A id="a32"></A>
+## VII-1) Connecteur HDMI<A id="a32"></A>
 
 Ce connecteur est destiné à servir de relai entre la façade arrière et une carte RC2014 disposant d'une sortie HDMI Mini.
 Grâce à ce connecteur, le branchement d'un câble HDMI est beaucoup moins fragilisant pour la carte RC2014 qui le reçoit.
@@ -44,7 +44,7 @@ Il existe également des cartes avec des sorties VGA et un affichage graphique, 
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------------: |
 | 1     | Vissez le connecteur HDMI à l'aide des deux vis M3x8.        | <img src="Pictures/074-HDMI.jpg" alt="hdmi" style="zoom:75%;" /> |
 
-## Interrupteurs ROM Select et Protect<A id="a33"></A>
+## VII-2) Interrupteurs ROM Select et Protect<A id="a33"></A>
 
 Ces 3 interrupteurs correspondent directement à des jumpers sur la carte du SC126 et n'ont pas d'usage avec d'autres kits
 d'ordinateurs mais vous pouvez les utiliser pour n'importe quels jumpers et placer des étiquettes sur le panneau arrière pour indiquer

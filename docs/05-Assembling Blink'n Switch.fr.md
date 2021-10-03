@@ -1,4 +1,4 @@
-# Carte Blink'n Switch<A id="a20"></A>
+# V) Carte Blink'n Switch<A id="a20"></A>
 
 Cette carte offre deux ports d'entrée/sortie avec des LEDs témoins et des interrupteurs pour contrôler les entrées, ainsi que
 8 LEDs en façade pour le port de contrôles 13 (0D hexa) de l'ordinateur SC126 de Stephen S. Cousins. Ce port peut être utilisé par
@@ -8,7 +8,7 @@ n'importe quel ordinateur RC2014 pour afficher 8 bits sur les LEDs de la façade
 temporaires avec la façade avant pour que les composants apparaissant sur cette dernière soient correctement alignés. <B>Respectez
 l'ordre de montage et les consignes</B> pour avoir les meilleurs chances d'obtenir une belle façade.</TD></TR></TABLE>
 
-## Arrière (partie 1) : supports et composants<A id="a21"></A>
+## V-1) Arrière (partie 1) : supports et composants<A id="a21"></A>
 
 Placez le **dos** visible (l'orifice du bouton marche arrêt en bas à gauche)
 
@@ -29,7 +29,7 @@ coupez l'excédent des pattes au fur et à mesure pour ne pas être gêné."Vér
 
 Voici l'allure de la carte à ce stade."Vue carte soudée" style="zoom:50%;" />
 
-## Avant : supports des dip-switch<A id="a22"></A>
+## V-2) Avant : supports des dip-switch<A id="a22"></A>
 
 "Vérification" width="250px" /></TD>
 
@@ -55,7 +55,7 @@ Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenan
 | 7     | Une fois que tout est bien aligné, retournez l'ensemble et terminez la soudure des supports, en n'oubliant pas de finir par un ajout de soudure sur la première patte. |                                                   |
 | 8     | Dévissez les vis de la façade, démontez la et mettez là à l'abri ainsi que les ensembles support+dip-switch emboités. Vous les remettrez en place plus tard. |                                                   |
 
-## Avant : connecteurs E/S et Alimentation<A id="a23"></A>
+## V-3) Avant : connecteurs E/S et Alimentation<A id="a23"></A>
 
 | Etape | Description                                                        |                                                              |
 | ----- | -------------------------------------------------------- | ------------------------------------------------------------ |
@@ -72,7 +72,7 @@ Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenan
 | 11    | Coupez l'excédent de pattes. Attention aux projections éventuelles des petits bouts de métal car ces pattes sont très ridgides : protégez vos yeux. |                                                              |
 | 12    | Dévissez la façade.                                          |                                                              |
 
-## Avant : interrupteurs<A id="a24"></A>
+## V-4) Avant : interrupteurs<A id="a24"></A>
 
 Préparez les 16 interrupteurs à trois positions ON-OFF-ON et 4 interrupteurs à deux positions ON-OFF ou ON-ON. Ils sont de couleurs différentes donc vous ne devirez pas 
 pouvoir les confondre.
@@ -99,7 +99,7 @@ vérification manuelle des positions est aussi efficace.</TD></TR></TABLE>
 | 11    | Remettez les interrupteurs en position basse ou médiane.     |                                                              |
 | 12    | Dévissez et enlevez la façade.                               |                                                              |
 
-## Avant : LEDs<A id="a25"></A>
+## V-5) Avant : LEDs<A id="a25"></A>
 
 Préparez les LEDs :
 
@@ -127,7 +127,7 @@ Préparez les LEDs :
 | 14    | Coupez l'excédent des pattes.                                |                                                              |
 | 15    | Dévissez la façade.                                          |                                                              |
 
-## Arrière : composants (partie 2)s<A id="a26"></A>
+## V-6) Arrière : composants (partie 2)s<A id="a26"></A>
 
 | Etape | Description                                                       |                                                  |
 | ----- | --------------------------------------------------------- | ------------------------------------------------ |
@@ -135,7 +135,7 @@ Préparez les LEDs :
 | 2     | Soudez le condensateur C5, attention à la polarité la patte la plus courte est sur le (-). La bande noire avec le signe '-' doit être face au demi cercle hachuré sur le circuit imprimé. Coupez les pattes de l'autre côté. | <img src="Pictures/068.jpg" style="zoom:50%;" /> |
 | 3     | Soudez le connecteur mâle 2x12P P1.                          | <img src="Pictures/069.jpg" style="zoom:50%;" /> |
 
-## Finition<A id="a27"></A>
+## V-7) Finition<A id="a27"></A>
 
 - Nettoyez précautionneusement la façade avec un chiffon doux ou microfibre propre.
 
