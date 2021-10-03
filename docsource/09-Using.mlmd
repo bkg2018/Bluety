@@ -15,7 +15,7 @@ de la console LCD et de l'écho sont contrôlées par des variables en RAM..))
 
 The control port is  fixed on the 13 decimal / 0D hexadecimal: this is used by design in both control softwares for the SC126.
 .fr((Le port de contrôle est câblé sur le numéro de port 13 (0D en hexadécimal) : ceci correspond aux deux logiciels de
-contrôle disponibles pour l'ordinateur SC126.
+contrôle disponibles pour l'ordinateur SC126..))
 
 The 8 Bluety LEDs below the LCD screen are direct echoes of the last byte written to the control port..fr((Les 8 LED de Bluety 
 sous l'écran LCD représentent le dernier octet écrit sur ce port de contrôle.))

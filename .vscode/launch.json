@@ -32,13 +32,14 @@
             "name": "MLMD on BLUETY DOC",
             "stopOnEntry": true,
             "type": "php",
-            "runtimeExecutable": "/usr/local/opt/php@7.3/bin/php",
+            "runtimeExecutable": "C:\\php-8.0.10-nts-Win32-vs16-x64\\php.exe",
+            "runtimeArgs": ["-c", "C:\\php-8.0.10-nts-Win32-vs16-x64\\php-release.ini"],
             "request": "launch",
-            "program": "${workspaceFolder}/../../MLMD/src/mlmd.php",
+            "program": "${workspaceFolder}/../MLMD/src/mlmd.php",
             "args": ["-i", "docsource/Bluety.mlmd", "-od", "docs", "-out", "md"],
             "cwd": "${workspaceFolder}",
             "env": { "XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1", "XDEBUG_PROFILE": "1"},
-            "port": 9000
+            "port": 9003
         }
     ]
 }

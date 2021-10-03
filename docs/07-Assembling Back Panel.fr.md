@@ -1,13 +1,13 @@
 # Façade arrière<A id="a31"></A>
 
-Cette façade arrière offre :
+La façade arrière offre :
 
-* des micro-interrupteurs pour contrôler les mémoires FLASH de l'ordinateur SC126
-* un connecteur HDMI et une ouverture permettant de passer un câble USB pour une liaison directe vers un PiZero Terminal
+- des micro-interrupteurs pour contrôler les mémoires FLASH de l'ordinateur SC126
+- un connecteur HDMI et une ouverture permettant de passer un câble USB pour une liaison directe vers un PiZero Terminal
   RC2014 et de relier la prise HDMI de celui-ci
-* un connecteur d'alimentation pour un transformateur 5V à prise jack
-* un bouton reset
-* une ouverture en bas de la façade pour passer les cables vers les connecteurs arrière du SC126
+- un connecteur d'alimentation pour un transformateur 5V à prise jack
+- un bouton reset
+- une ouverture en bas de la façade pour passer les cables vers les connecteurs arrière du SC126
 
 Les micro interrupteurs sont livrés soudés avec un câble de longueur convenant à un SC126. Si vous utilisez un boîtier
 plus grand ou un autre ordinateur, vous pouvez utiliser des cables Dupont male/femelle comme rallonge ou sertir vos
@@ -27,23 +27,28 @@ Grâce à ce connecteur, le branchement d'un câble HDMI est beaucoup moins frag
 
 Il existe au moins deux cartes proposant une sortie vidéo HDMI :
 
-* [PiZero Terminal](https://www.tindie.com/products/Semachthemonkey/raspberry-pi-zero-serial-terminal-for-rc2014/)
+- [PiZero Terminal](https://www.tindie.com/products/Semachthemonkey/raspberry-pi-zero-serial-terminal-for-rc2014/)
   de Spencer Owens, utilisant un PiZero comme terminal série et qui envoie également sa sortie vidéo sur la prise HDMI
   Mini du PiZero. Le logiciel interne PiGfx est en cours de développement actif, et vous pouvez récupérer les releases
-  [à partir de GitHub](https://github.com/fbergama/pigfx/releases) pour mettre à jour la carte SD livrée avec le kit.
-* [BusRaider](https://www.tindie.com/products/robdobson/play-retro-games-rc2014-graphics-kit/) de Rob Dobson, une carte
+  [à partir de GitHub](https://github.com/fbergama/pigfx/releases) pour mettre à jour la carte SD livrée avec le kit
+  qui contient une ancienne version.
+- [BusRaider](https://www.tindie.com/products/robdobson/play-retro-games-rc2014-graphics-kit/) de Rob Dobson, une carte
   étonnante qui prend le contrôle du bus et du processeur d'un ordinateur RC2014 pour émuler un TRS-80, un ZX Spectrum
   ou d'autres ordinateurs à l'aide d'une image de leur ROM. Cette carte utilise également un PiZero pour sa sortie vidéo
   sur prise HDMI Mini.
 
 Il existe également des cartes avec des sorties VGA et un affichage graphique, mais elles ne vous permettront pas
-facilement d'afficher les entrées/sorties des logiciels de contrôle comme BASIC, CP/M ou SCM.
+ d'afficher les entrées/sorties des logiciels de contrôle BASIC, CP/M ou SCM comme le font les cartes PiZero.
 
 | Etape | Description                                                  |                                                              |
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------------: |
-| 1     | Vissez le connecteur HDMI à l'aide des deux vis M3x8.        | <img src="/Users/bkg2018/Desktop/RETROCOMP/Bluety/Documentation/Pictures/074-HDMI.jpg" alt="hdmi" style="zoom:75%;" /> |
+| 1     | Vissez le connecteur HDMI à l'aide des deux vis M3x8.        | <img src="Pictures/074-HDMI.jpg" alt="hdmi" style="zoom:75%;" /> |
 
 ## Interrupteurs ROM Select et Protect<A id="a33"></A>
+
+Ces 3 interrupteurs correspondent directement à des jumpers sur la carte du SC126 et n'ont pas d'usage avec d'autres kits
+d'ordinateurs mais vous pouvez les utiliser pour n'importe quels jumpers et placer des étiquettes sur le panneau arrière pour indiquer
+leur véritable fonction. Le chpoix vous appartient.
 
 | Etape | Description                                               |                                                              |
 | ----- | --------------------------------------------------------- | -----------------------------------------------------------: |
@@ -53,4 +58,5 @@ facilement d'afficher les entrées/sorties des logiciels de contrôle comme BASI
 | 4     | Vissez le connecteur d'alimentation.<br />L'orientation n'a pas d'importance mais retenez que la patte la plus *longue* est la masse (GND) et la patte la plus *courte* est le +5V, contrairement à la convention des LEDs et condensateurs. |  ![Alimentation](pictures/091-powercnct.jpg) |
 | 5     | Vissez le bouton reset, la position des pattes n'a pas d'importance. Branchez le cable Reset avec les extrémités jaunes. |                             ![Reset](pictures/091-reset.jpg) |
 
-La façade arrière présente alors l'aspect suivant. <img src="pictures/074-backpanel.jpg" alt="Façade Arrière" style="zoom:67%;" />
+La façade arrière présente alors l'aspect suivant.
+<img src="pictures/074-backpanel.jpg" alt="Façade Arrière" style="zoom:67%;" />

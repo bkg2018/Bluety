@@ -1,31 +1,35 @@
-# Façade avant<A id="a28"></A>
+# Assembling the front panel<A id="a28"></A>
 
-La façade avant possède des ouvertures pour les interrupteurs, switches, connecteurs et LEDs de la carte Blink'n Switch.
-Elle possède aussi un écran LCD de 4x20 caractères rétro éclairé et un bouton marche/arrêt.
+The front panel has opening for the switches, connectors and LEDs of the Blink'n Switch board.
+It also features a 4x20 LCD retro lighted display and a power button with LED.
+.)
 
-Pour assembler l'écran LCD et le bouton d'alimentation vous devez une dernière fois dévisser la façade pour écarter Blink'n Switch.
+To assemble the LCD screen and the power button,  you must unscrew the front panel from Blink'n Swicth a last time.
 
-## Ecran LCD 4x20<A id="a29"></A>
+## LCD 4x20 display<A id="a29"></A>
 
-| Etape  | Description                                                  |                                                           |
-| ------ | ------------------------------------------------------------ | --------------------------------------------------------: |
-| 1      | Dévissez la façade.                                          |                                                           |
-| 2      | Fixez les 4 supports 10 mm à l'écran, support sur l'avant et boulon au dos. Ne vous trompez pas de supports, sinon l'écran sera en retrait ou en avant de la façade. |          <img src="pictures/070.jpg" style="zoom:33%;" /> |
-| 3      | Fixez le câble 4 fils sur le connecteur I2C. L'intérêt de le faire à ce stade est qu'il sera plus difficile de le brancher après que l'écran aura été fixé sur la façade à cause de la proximité de circuits intégrés. | <img src="pictures/70A-lcdcable.jpg" style="zoom:33%;" /> |
-| 4      | Vissez l'écran sur la façade à l'aide des vis des supports.  |          <img src="pictures/071.jpg" style="zoom:33%;" /> |
+| Step  | Description                                                  |                                                           |
+| ----- | ------------------------------------------------------------ | --------------------------------------------------------: |
+| 1     | Unscrew the front panel.                                          |                                                           |
+| 2     | Fix 4 10mm supports on the screen, with the bolt on front and the nut on the back. Do not use the wrong supports or the screen will be too far from the front panel. |          <img src="pictures/070.jpg" style="zoom:33%;" /> |
+| 3     | Attach the 4 wires cable on the display I2C connector. It is best to do this at this step as it will be more difficult after the display has been fixed on the front panel because of the neighboring circuits. | <img src="pictures/70A-lcdcable.jpg" style="zoom:33%;" /> |
+| 4     | Screen the screen on the front panel using the supports screws on the attached bolts. |          <img src="pictures/071.jpg" style="zoom:33%;" /> |
 
-## Bouton d'alimentation<A id="a30"></A>
+## Power button<A id="a30"></A>
 
-A ce stade la façade est encore séparée de Blink'n Switch, sinon vous ne pouvez pas visser le bouton marche/arrêt sur la façade.
+Notice that at this time the front panel is still separated from Blink'n Switch, or you won't be able to fix the power button on the front panel.
+So if it's not done, unscrew the front panel.
 
-| Etape | Description                                                                     |                                                                              |
+| Step | Description                                                                     |                                                                              |
 | ------| ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 1     | Si ce n'est pas fait, dévissez la façade.                                       |                                                                              |
-| 2     | Vissez le bouton d'alimentation à l'aide de l'écrou. Si vous désirez utiliser le joint, placez le sur le pas de vis à l'intérieur du bouton pour qu'il aille s'appuyer sur l'extérieur de la façade, mais ce joint n'a pas d'utilité pratique. | <img src="pictures/TODO.png" style="zoom:50%;" />            |
-| 3     | Revissez une dernière fois la façade sur Blink'n Switch.                        |                                                                              |
-| 4     | Repérez les bornes du bouton : **+** et **-** à l'extérieur alimentent la LED, **NO** est l'entrée +5V, **C** est le fil de sortie +5V quand le bouton est enfoncé, et **NC** ne sera pas connecté. | <img src="pictures/072-pwrbtn.jpg" alt="Bornes bouton ON/OFF" style="zoom:50%;" /> |
-| 5     | Branchez le long fil rouge serti aux deux extrémité sur la borne centrale **C**. | <img src="pictures/072-mainvcc.jpg" alt="Cable borne C" style="zoom:50%;" /> |
-| 6     | Branchez le câble 3 fils :<br />● le gros fil rouge sur la borne **C** et le petit fil rouge sur la borne **+**<br />● le gros fil noir sur la borne **-** | <img src="pictures/072-vcc.jpg" alt="Fils rouges" style="zoom:50%;" /><br /><img src="pictures/072-gnd.jpg" alt="Fil noir" style="zoom:50%;" /> |
+| 1     | If needed, unscrew the front panel.                                       |                                                                              |
+| 2     | Screw the power button using the nut on the back screw thread. If you want to use the rubber joint, put it on the thread before putting the button in its hole, so it lies on the front of the panel, but this joint has no pratical use. | <img src="pictures/TODO.png" style="zoom:50%;" />            |
+| 3     | Screw the front panel on Blink'n Switch. This is the last time, so you can screw it solidly.                        |                                                                              |
+| 4     | Notice the buttons pins marks: **+** et **-** on the outside are powering the button LED, **NO** is the input +5V, **C** is the output +5V when the button is switched on, and **NC** will stay unconnected. | <img src="pictures/072-pwrbtn.jpg" alt="ON/OFF button pins" style="zoom:50%;" /> |
+| 5     | Connect the longest red wire on the central **NO** pin. | <img src="pictures/072-mainvcc.jpg" alt="NO pin cable" style="zoom:50%;" /> |
+| 6     | Connect the 3 wires cable:<br />● the long red wire on the **C** pin and the short red wire on the **+** pin<br />● the long black wire on the **-** pin | <img src="pictures/072-vcc.jpg" alt="Red wires" style="zoom:50%;" /><br /><img src="pictures/072-gnd.jpg" alt="Black wire" style="zoom:50%;" /> |
 
-<TABLE><TR><TD><img src="pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>Les extrémités des câbles qui n'ont pas encore été
-branchées vont rester libres jusqu'à ce que la façade arrière soit fixée au boîtier.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="pictures/thisway.png" alt="Advice" width="75px" /></TD><TD>
+
+The free cables extremities will stay free until the back panel is fixed on the case. 
+</TD></TR></TABLE>

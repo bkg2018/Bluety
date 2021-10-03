@@ -1,152 +1,162 @@
-# Carte Blink'n Switch<A id="a20"></A>
+# Assembling Blink'n Switch<A id="a20"></A>
 
-Cette carte offre deux ports d'entrée/sortie avec des LEDs témoins et des interrupteurs pour contrôler les entrées, ainsi que
-8 LEDs en façade pour le port de contrôles 13 (0Dh) de l'ordinateur SC126 de Stephen S. Cousins. Ce port peut être utilisé par
-n'importe quel ordinateur RC2014 pour afficher 8 bits sur les LEDs de la façade avant avec un `OUT` sur le port 13. 
+This board offers two input/ouput ports with indicator LEDs and control switches, as well as 8 front panel LEDs for the 13
+(0D hexa) control port for the SC26 computer from Stephen S. Cousins. This port can be used by any RC2014 computer to display 8 bits
+on the front panel 8 LEDs using an `OUT` Z-80 instruction on port 13.
 
-<TABLE><TR><TD><img src="pictures/thisway.png" width="150px" /></TD><TD>Le montage de cette carte nécessite plusieurs assemblages
-temporaires avec la façade avant pour que les composants apparaissant sur cette dernière soient correctement alignés. <B>Respectez
-l'ordre de montage et les consignes</B> pour avoir les meilleurs chances d'obtenir une belle façade.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="pictures/thisway.png" width="150px" /></TD><TD>This board assembly requires a few temporary assemblies
+with the front panel to make sure that the components appearing on the front view  are well aligned. <B>Make sure you respect
+the assembly order and advices</B> to ensure the front panel will offer a nice view on all visible controls.</TD></TR></TABLE>
 
-## Arrière (partie 1) : supports et composants<A id="a21"></A>
+## Back (part 1): sockets and components<A id="a21"></A>
 
-Placez le **dos** visible, (l'orifice' du bouton marche arrêt en bas à gauche)
+Place the **back** visible. (the opening for pow<er button must be on the bottom left.)
 
-| Etape | Description                                                                                           |                                                              |
+| Step  | Description                                                                                           |                                                              |
 | ----- | ----------------------------------------------------------------------------------------------------- | -----------------------------------------------------------: |
-| 1     | Soudez les 10 condensateurs 100nF C1 à C4 et C6 à C11. Ces condensateurs sont marqués *104*.          | <img src="pictures/040A.png" alt="Condensateurs" style="zoom: 33%;" /><br /><img src="pictures/040B.jpg" alt="Condensateurs" style="zoom:50%;" /> |
-| 4^    |                                                                                                       |                                                                         |
-| 2     | Soudez les 8 supports 20P et les 2 supports 14P, encoches vers le *haut* ou la *gauche* selon le cas. | <img src="pictures/041A.png" alt="Supports" style="zoom: 33%;" /><br /><img src="pictures/041B.jpg" alt="Supports" style="zoom: 50%;" /> |
-| 3     | Soudez les 3 réseaux de résistance **10K** RN1 RN4 RN7.                                               | <img src="pictures/042B.png" alt="Résistances" style="zoom: 33%;" /> |
-| 4     | Attention à *ne pas confondre avec les 470* : le composant est marqué *103*,ce qui signifie 10 x 10^3^, soit 10 Kilo Ohms. | <img src="pictures/042A.jpg" alt="10K" style="zoom: 33%;" /> |
-| 5     | Soudez d'abord une seule patte, vérifiez la position et le point de référence à gauche, correspondant au petit carré imprimé sur le circuit. <br /><br />Une fois la position vérifiée soudez les autres pattes. | <img src="pictures/042C.jpg" alt="Repères" style="zoom: 33%;" /> |
-| 6     | Soudez les 5 réseaux de résistance **470** RN2 RN3 RN5 RN6 RN8.                                       | <img src="pictures/043B.png" alt="Résistances" style="zoom: 33%;" /> |
-| 7     | Le composant est marqué 471, ce qui signifie 47 x 10^1^, soit 470 Ohms.                               | <img src="pictures/043A.jpg" alt="470" style="zoom: 33%;" /> |
-| 8     | Attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit | <img src="pictures/043C.jpg" alt="Repère" style="zoom: 33%;" /> |
+| 1     | Solder the ten 100nF capacitors C1 to C4 and C6 to C11. These capacitors are marked *104*.            | <img src="pictures/040A.png" alt="100nF Capacitors" style="zoom: 33%;" /><br /><img src="pictures/040B.jpg" alt="100nF Capacitors" style="zoom:50%;" /> |
+| 2     | Solder the eight 20-pins socketsand the two 14-pins sockets, with the little notch on the **top** or on the *left** depending on the orientation. | <img src="pictures/041A.png" alt="Sockets" style="zoom: 33%;" /><br /><img src="pictures/041B.jpg" alt="Sockets" style="zoom: 50%;" /> |
+| 3     | Solder the three **10K** resitors networks RN1 RN4 RN7.                                               | <img src="pictures/042B.png" alt="10K Resistors" style="zoom: 33%;" /> |
+| 4     | Take care: *do not mismatch with the 470 Ohms resistors*: the 10K component is marked *103*, which means 10 x 10^3^, hence 10 Kilo Ohms. | <img src="pictures/042A.jpg" alt="10K" style="zoom: 33%;" /> |
+| 5     | First, lightly solder one leg, then check position and the reference dot mark on the left which should match the little printed square on the circuit board. <br /><br />When everything is correct, finish soldering with the other legs and add sufficient solder on the first leg. | <img src="pictures/042C.jpg" alt="Marks" style="zoom: 33%;" /> |
+| 6     | Solder the five **470** resistors networks RN2 RN3 RN5 RN6 RN8.                                       | <img src="pictures/043B.png" alt=">Resistors" style="zoom: 33%;" /> |
+| 7     | The component is marked *471*, which means 47 x 10^1^, hence 470 Ohms.                                | <img src="pictures/043A.jpg" alt="470" style="zoom: 33%;" /> |
+| 8     | Make sure you align the component dot mark on gthe left with the little printed square on the circuit board. | <img src="pictures/043C.jpg" alt="Marks" style="zoom: 33%;" /> |
 
-<TABLE>
-<TR>
-<TD width="100px"> <img src="pictures/thisway.png" alt="Vérification" width="75px" /></TD><TD>Pour les composants le nécessitant,
-coupez l'excédent des pattes au fur et à mesure pour ne pas être gêné.</TD>
-</TD><TR>
-<TD width="100px"> <img src="pictures/thisway.png" alt="Vérification" width="75px" /></TD><TD><EM>Ne soudez pas</EM> le connecteur
-P1 et le condensateur C5 pour l'instant : ils gêneraient la suite de l'assemblage.</TD>
+<TABLE><TR>
+<TD width="100px"> <img src="pictures/thisway.png" alt="Check" width="75px" /></TD>
+<TD>When necessary, cut the components legs exceedent while progressing so they don't get in the way.</TD>
+</TR><TR>
+<TD width="100px"> <img src="pictures/thisway.png" alt="Check" width="75px" /></TD>
+<TD><EM>Do not solder</EM> the P1 connector and C5 capacitor yet, they would hamper the next assembly steps.</TD>
 </TR></TABLE>
 
-Voici l'allure de la carte à ce stade. <img src="pictures/044.jpg" alt="Vue carte soudée" style="zoom:50%;" />
+Here's a view of the board at this step. <img src="pictures/044.jpg"
+alt="Soldered view" style="zoom:50%;" />
 
-## Avant : supports des dip-switch<A id="a22"></A>
+## Front: dip-switch sockets<A id="a22"></A>
 
-<TABLE>
-<TR>
-<TD> <img src="pictures/thisway.png" alt="Vérification" width="250px" /></TD><TD>Tous les éléments soudés sur l'avant apparaissent en façade à travers une ouverture, aussi une grande partie de l'assemblage consiste à souder <EM>une seule patte</EM>, puis placer la façade pour vérifier et corriger l'alignement. Ainsi il est possible de réchauffer la soudure pour bouger l'élément en cas de problème d'alignement. Une fois celui-ci correct on peut souder le reste des pattes.</TD>
+<TABLE><TR>
+<TD><img src="pictures/thisway.png" alt="Check" width="250px" /></TD>
+
+<TD>All the elements soldered on the front face will appear on the front panel through an opening, so a great part
+of the assembly will be soldering <EM>only one leg</EM> at first with very few solder, put the front panel on
+your assembly to check alignement, heat again the leg and fix in case of problems, and when everything is correctly
+alignedf solder the other legss and finally add solder again to the first leg.</TD>
 </TR></TABLE>
 
-Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenant en bas à droite. 
+Reverse the board to see the **front** side, with the power button opening now appearing on the bottom right. 
 
-<img src="pictures/045.jpg" alt="Avant carte" style="zoom:50%;" />
+<img src="pictures/045.jpg" alt="Board front" style="zoom:50%;" />
 
-| Etape  | Description                                                       |                                                   |
-| ---- | -------------------------------------------------------- | ------------------------------------------------: |
-| 1 | Soudez *une patte* de chacun des 2 supports CI 16P (SW10 et SW21), encoche vers la gauche. Ils serviront de base aux DIP-Switchs de sélection du numéro de port. | <img src="pictures/TODO.png" style="zoom:33%;" /> |
-| 2 | Vissez les 5 supports 12 mm sur la carte : support sur le dessus, boulon au dos. | <img src="pictures/046.jpg" style="zoom: 50%;" /> |
-| 3 | Les supports vont servir à plusieurs assemblages provisoires afin de bien aligner les composants de la façade, donc ne les démontez pas tout le long de cette étape. L'espace de certains écrous est restreint une fois les composants en place, aussi il est préférable de maintenir l'écrou et tourner le support plutôt que l'inverse. |  <img src="pictures/047.jpg" style="zoom:50%;" /> |
-| 4 | Si un composant nécessite à un moment de tourner un boulon, dévissez légèrement le support, tournez un peu l'écrou et revissez le support. |                                                   |
-| 5 | Emboitez un second support 16P et un DIP-Switch sur chacun des deux supports. |  <img src="pictures/048.jpg" style="zoom:50%;" /> |
-| 6 | Fixez la façade avant avec au moins deux ou trois des supports en passant les dipswitch à travers leurs ouvertures. Si un switch n'est pas bien aligné, faites chauffer la soudure de la patte et réalignez l'ensemble pour qu'il soit bien aligné avec l'ouverture de la façade. |  <img src="pictures/049.jpg" style="zoom:50%;" /> |
-| 7 | Une fois que tout est bien aligné, retournez l'ensemble et terminez la soudure des supports. |                                                   |
-| 8 | Dévissez les vis de la façade, démontez la ainsi que les ensembles support+dip-switch emboités pour qu'il ne reste que les deux supports soudés. |                                                   |
+| Step  | Description                                                       |                                                   |
+| ------| -------------------------------------------------------- | ------------------------------------------------: |
+| 1     | Solder *one leg* of each of the two 16-pins IC sockets (SW10 and SW21), notch on the left. They will host the port select DIP-switches. | <img src="pictures/TODO.png" style="zoom:33%;" /> |
+| 2     | Screw the five 12mm bolts on the board: bolt on the front, nut on the back. | <img src="pictures/046.jpg" style="zoom: 50%;" /> |
+| 3     | The bolts will help for many temporary assemblies with front panel to ensure correct alignement, so you'll keep them screwed for this whole process step. There is little space on the back for some nuts when components are in place, so it is best to maintain the nut and turn the bolt than the contrary. |  <img src="pictures/047.jpg" style="zoom:50%;" /> |
+| 4     | If a component requires that you turn a nut, lightly unscrew the bolt, turn the nut a little, then screw again the bolt. |                                                   |
+| 5     | Put another 16-pin IC socket into the soldered ones, then a DIP-switch on each second socket.   |  <img src="pictures/048.jpg" style="zoom:50%;" /> |
+| 6     | Screw the front panel using at least 3 of the bolts and make sure the DIP-switches are correctly aligned and go through the openings. If a switch is not aligned correctly, heat the socket leg on the board back and realign the DIP-switch within it's opening while sodler is hot. |  <img src="pictures/049.jpg" style="zoom:50%;" /> |
+| 7     | Once both DIP-switches are correctly aligned, return the set and finish soldering the sockets other legs, finishing by adding solder to the first leg. |                                                   |
+| 8     | Unscrew the front panel, put it apart and safe as well as the sloted sockets and DIP-switches. You'll put them back in place later. |                                                   |
 
-## Avant : connecteurs E/S et Alimentation<A id="a23"></A>
+## Front: I/O connectors and power<A id="a23"></A>
 
-| Etape | Description                                                        |                                                              |
-| ---- | -------------------------------------------------------- | ------------------------------------------------------------ |
-| 1 | Posez le circuit imprimé, face avant sur le dessus, sur des supports de préférence non métalliques afin qu'il soit au dessus du plan de travail et permette aux composants de glisser dans leurs emplacements. Veillez à assurer une hauteur d'environ 10 mm. Des rouleaux de ruban adhésifs conviennent comme illustré sur l'image ci-contre. | <img src="pictures/050.jpg" style="zoom:50%;" />             |
-| 2 | Positionnez les 4 connecteurs femelles 8P à longues pattes (11mm) et les 2 connecteurs femelles 2P à longues pattes (11mm) | <img src="pictures/051.jpg" style="zoom:75%;" />             |
-| 3 | Fixez la façade *en évitant de fixer la vis centrale* elle gênerait le positionnement des connecteurs. | <img src="pictures/052.jpg" style="zoom:50%;" />             |
-| 4 | Posez la façade arrière sur la façade avant et perpendiculairement de manière à recouvrir les ouvertures des connecteurs. Vous pouvez placer une feuille de papier entre les deux si vous craignez d'abimer leur revêtement, la feuille de papier de soie qui les protège lorsque vous recevez le kit convient parfaitement à cet usage. | <img src="pictures/053.jpg" style="zoom:50%;" />             |
-| 5 | Retournez délicatement l'ensemble et posez le à l'envers sur le plan de travail. | <img src="pictures/054.jpg" style="zoom:50%;" />             |
-| 6 | A l'aide d'une pince, placez les connecteurs dans les ouvertures de la façade. <br />Ne forcez pas pour ne pas tordre les pattes. Si cela arrive, démontez la façade, sortez le connecteur, redressez les pattes et recommencez l'opération. | <img src="pictures/055.jpg" style="zoom:50%;" />             |
-| 7 | Les connecteurs doivent être bien placés dans les encoches de la façade. Utiisez une petite pince pour les repositionner jusqu'à ce que les six soient bien placés dans leur ouverture de la façade. | <img src="pictures/056.jpg" style="zoom:50%;" /><img src="pictures/057.jpg" style="zoom:50%;" /> |
-| 8 | Lorsque tout est bien en place, soudez *une patte* de chacun des 6 connecteurs. | <img src="pictures/058.jpg" style="zoom:50%;" />             |
-| 9 | Retournez l'ensemble pour vérifier l'alignement. En cas de besoin, rechauffez la soudure pour repositionner le conencteur. | <img src="pictures/059.jpg" style="zoom:50%;" />             |
-| 10 | Lorsque tout est correctement placé, retournez et terminez la soudure des pattes restantes. |                                                              |
-| 11 | Coupez l'excédent de pattes. Attention aux projections éventuelles des petits bouts de métal car ces pattes sont très ridgides : protégez vos yeux. |                                                              |
-| 12 | Dévissez la façade.                                          |                                                              |
+| Step  | Description                                                        |                                                              |
+| ----- | -------------------------------------------------------- | ------------------------------------------------------------ |
+| 1     | Put the printed board, front face on top, on some supports so it lies well above the working bench and let components slide in their position. Ensure a minimal height of 10 mm. Rolls of tape for example are perfect as shown on the picture. | <img src="pictures/050.jpg" style="zoom:50%;" />             |
+| 2     | Place the 4 8-pins female connectors with 11mm long legs and the 2 2-pins female connectors with 11mm long legs. | <img src="pictures/051.jpg" style="z  oom:75%;" />             |
+| 3     | Attach the front panel but *do not use the central screw* as it would hinder the connectors positionning. | <img src="pictures/052.jpg" style="zoom:50%;" />             |
+| 4     | Put the back panel perpendicularly on the front panel so it covers the connectors openings. Put a piece of paper between both panels if you fear scratching their surface. The silk paper protecing them in the kit is perfect for this. | <img src="pictures/053.jpg" style="zoom:50%;" />             |
+| 5     | Return both together on the bench. | <img src="pictures/054.jpg" style="zoom:50%;" />             |
+| 6     | Helped by a fine plier, place each connector in its front panel opening. <br />Don't force to avoid bending the legs. If this happens, unscrew the front panel, pull the connector, unbend the legs, and restart the operation. | <img src="pictures/055.jpg" style="zoom:50%;" />             |
+| 7     | The connectors must be placed correctly in the front panel openings. Use a small plier to place them so the six are well aligned in their openings. | <img src="pictures/056.jpg" style="zoom:50%;" /><img src="pictures/057.jpg" style="zoom:50%;" /> |
+| 8     | When everything is inplace and we sodler *one leg* on each of the six connectors. | <img src="pictures/058.jpg" style="zoom:50%;" />             |
+| 9     | Return everything to double check alignment. In case of need, heat again the leg solder to move a connector. | <img src="pictures/059.jpg" style="zoom:50%;" />             |
+| 10    | When everything looks fine, return the whole and finish soldering of all the other legs, ending with more solder on the first leg. |                                                              |
+| 11    | Cut the legs exceedent when your soldering is well. Take care of protecting your eyes, as the legs are rather rigid and little parts of metal can be projected in any direction. |                                                              |
+| 12    | Unscrew the front panel.                                          |                                                              |
 
-## Avant : interrupteurs<A id="a24"></A>
+## Front: switches<A id="a24"></A>
 
-Préparez les 16 interrupteurs à trois positions ON-OFF-ON et 4 interrupteurs à deux positions ON-OFF ou ON-ON.
+Prepare the 16 ON-OFF-ON 3-positions switches and gthe 4 ON-OFF or ON-ON 2-positions switches. They have different colors so you should not mismatch them easily.
 
-Pour pouvoir utiliser le port d'entrée correctement vous devez prendre garde à ne pas vous tromper de type
+To use the input port correctly you must not mismatch the switches types.
 
-<TABLE><TR><TD width="100px"><img src="pictures/thisway.png" alt="Vérification" width="100px" /></TD><TD>Séparez les tas pour ne pas vous tromper. Le kit présente normalement deux couleurs différentes mais cela peut dépendre du stock. Les interrupteurs sont livrés dans des sachets diffférents</TD></TR></TABLE>
+<TABLE><TR><TD width="100px"><img src="pictures/thisway.png" alt="Check" width="100px" /></TD><TD>Group the switches by type. The kit should give you different
+colors but this can be stock-dependent. The switches are delivered in different bags to help you sort them, but checking the positions manually also helps.
 
-| Etape | Description                                                        |                                                              |
-| --- | --------------------------------------------------------- | ------------------------------------------------------------ |
-| 1 | Positionnez les 8 interrupteurs à **trois positions ON-OFF-ON** du port A, SW1 à SW8. Attention à  *l'encoche située sur le pas de vis* : vous pouvez la placer vers le bas ou vers le haut mais assurez-vous d'utiliser la même orientation *pour chaque interrupteur*. Ils doivent être placés de la même façon car ils ne sont pas totalement symétriques. | <img src="pictures/060.jpg" style="zoom:50%;" />             |
-| 2 | De la même manière, positionnez les 8 interrupteurs à **trois positions ON-OFF-ON** SW17 à SW24 en prêtant attention à l'encoche. |                                                              |
-| 3 | Positionnez les 4 interrupteurs à **deux positions ON-OFF ou ON-ON** SW9, SW11, SW20, SW22, encoche du pas de vis vers le bas. | <img src="pictures/061.jpg" style="zoom:50%;" />             |
-| 4 | Placez tous les boutons en position basse ou centrale (pour ceux à trois positions) |                                                              |
-| 5 | Glissez et fixez la façade à l'aide des vis.                 |                                                              |
-| 6 | Assurez vous que tout est bien aligné et qu'aucun bouton ne s'est délogé, sinon replacez le et refaites la fixation de la façade. En principe vous ne pourrez pas fixer la façade si un interrupteur n'est pas bien en place dans son logement. |                                                              |
-| <img src="pictures/attention.jpg" alt="Interrupteurs" style="zoom:75%;" /> | Vérifiez que les quatre interrupteurs situés les plus à droite sont bien ceux à deux positions et non trois. En cas d'erreur, dévissez la façade, rectifiez et revissez la façade. | |
-| 7 | Retournez la carte, et soudez *un seul point* de chacun des 20 interrupteurs avec une petite quantité de soudure. |                                                              |
-| 8 | Soulevez légèrement l'extrémité de la carte côté LCD afin que les interrupteurs soient bien plaqués contre le circuit, et que les pattes à souder dépassent bien du circuit. Sur l'image ci-contre, l'interrupteur le plus à gauche n'est pas assez enfoncé dans son logement parce que l'extrêmité côté LCD de la carte est plus basse. En la soulevant on rétablit l'horizontalité de la carte et les interrupteurs seront tous enfoncés de la même longueur dans leur logement. | <img src="pictures/062.jpg" style="zoom:50%;" />             |
-| 9 | Vérifiez l'alignement en retournant l'ensemble. Alignez les leviers à l'aide d'une règle ou d'un bord de la façade avant. Au besoin, chauffez le point de l'interrupteur mal aligné pour le replacer correctement. | <img src="pictures/063A.jpg" style="zoom:50%;" /><img src="pictures/063B.jpg" style="zoom:50%;" /> |
-| 10 | Quant tout est bien aligné, soudez les autres pattes, remettez de la soudure sur la première selon besoin. Faites ceci pour les 20 interrupteurs. N'hésitez pas à charger en soudure, pour que l'ensemble assure une bonne solidité en plus du contact électrique. | <img src="pictures/064.jpg" style="zoom:50%;" />             |
-| 11 | Remettez les interrupteurs en position basse ou médiane.     |                                                              |
-| 12 | Dévissez et enlevez la façade.                               |                                                              |
+| Step  | Description                                                        |                                                              |
+| ----- | --------------------------------------------------------- | ------------------------------------------------------------ |
+| 1     | Place 8 ON-OFF-ON 3-positions switches for port A in SW1 to SW8. Take care of *the little notch on the screw thread*:  you can place it top or bottom but make sure you orient all switches consistently as they are not absolutely symetrical with respect to this notch. I recommend bottom as the notch will be less visible. | <img src="pictures/060.jpg" style="zoom:50%;" />             |
+| 2     | Do the same with the 8 ON-OFF-ON switches of port B at SW17 to SW24, again placing the little notch consistently for the 16 ON-OFF-ON switches. |                                                              |
+| 3     | Place the 4 ON-OFF or ON-ON 2-positions switches at SW9, SW11, SW20 and SW22, with the little notch oriented like the other switches. | <img src="pictures/061.jpg" style="zoom:50%;" />             |
+| 4     | Put all switches in the bottom (for 2-positions switches) or center (for 3-positions switches) position |                                                              |
+| 5     | Gently place the front panel by sliding each switch lever through its opening, and screw the front panel.                 |                                                              |
+| 6     | Make sure everything is well aligned and no switch got out of its place. If this happens, unscrew the front panel, place the switch correctly and restart. Normally you should not be able to screw the panel if any switch is not correctly placed. |                                                              |
+| <img src="pictures/attention.jpg" alt="Switches" style="zoom:75%;" /> | Make sure the 4 right most switches are 2-positions and not 3. In case of mistake, unscrew the front panel, fix the problem and screw the panel again.  | |
+| 7     | Return the whole and solder *only one leg* of each of the 20 switches with as little solder as possible. |                                                              |
+| 8     | Slightly lift the the board at the LCD opening border so the switches are well placed against the board and their legs are well exceeding on the other side. On this adjacent picture, the left-most switch is not pushed enough in its location because the LCD side is too low. By lifting it, the board is again horizontal and all switches will be aligned vertically. | <img src="pictures/062.jpg" style="zoom:50%;" />             |
+| 9     | Check the whole by returning it. Align the levers with a ruler or the fron Alignez lest panel border. If needed, heat the soldered leg on switches to move them correctly aligned. | <img src="pictures/063A.jpg" style="zoom:50%;" /><img src="pictures/063B.jpg" style="zoom:50%;" /> |
+| 10    | When everything is well aligned, sodler the other legs and finish by adding solder to the first leg. DO this for the 20 switches. Make sure you heat well and add enough solder, as the openings are quite large and the solder will be the only thing holding the switches in place when you'll move their lever.| <img src="pictures/064.jpg" style="zoom:50%;" />             |
+| 11    | Put the switches in bottom or center position.    |                                                              |
+| 12    | Unscrew the front panel and put it apart, safe from projections.                               |                                                              |
 
-## Avant : LEDs<A id="a25"></A>
+## Front: LEDs<A id="a25"></A>
 
-Préparez les LEDs :
+Prepare the LEDs:
 
-* 16 vertes pour les ports d'entrée
-* 16 jaunes pour les ports de sortie
-* vous pouvez inverser les couleurs vertes et jaunes selon votre goût
-* 8 bleues pour le port de contrôle
-* si vous préférez avoir des LED remplaçables, vous pouvez souder des supports femelles à deux broches à la place des LEDs, mais l'ajustement des LEDs à la bonne longueur sera sensiblement plus compliqué. Cette possibilité est laissée à votre appréciation et les supports ne sont pas fournis dans le kit.
+- 16 green pour input ports
+- 16 yellow for output ports
+- you can reverse colors if you like
+- 8 blues pour the control port
+- if you prefer having replaceable LEDs, you can solder 2-position sockets instead of LEDs and gthen insert LEDs in the sockets but having the LEDs all at the same depth and well aligned on the front panel will be substantially more difficult. This is left to your appreciation: the kit and instructions do not include this option or sockets. 
 
-| Etape | Description                                                  |                                                  |
+| Step  | Description                                                  |                                                  |
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------------: |
-| 1      | Posez le circuit imprimé, face avant sur le dessus, sur des supports de préférence non métalliques afin qu'il soit au dessus du plan de travail et permette aux LEDs de glisser dans leurs emplacements. Veillez à assurer une hauteur d'environ 10 mm. |                                                              |
-| 2     | Placez les 16 LEDs vertes (ou jaunes) des ports d'entrée LED1 à LED8 et LED17 à LED24. La patte la plus courte est l'anode et se place en haut sur le signe (-) du circuit imprimé. | <img src="pictures/065.jpg" alt="Polarité LED" style="zoom:75%;" /> |
-| 3      | Placez les 16 LEDs jaunes (ou vertes) des ports de sortie LED9 à LED16 et LED25 à LED32. La patte la plus courte est l'anode et se place en haut sur le signe (-) du circuit imprimé. |                                                              |
-| 4      | Placez les 8 LED bleues du port de contrôle LED33 à LED40. La patte la plus courte est l'anode et se place en haut sur le signe (-) du circuit imprimé. |                                                              |
-| 5     | Vérifiez une dernière fois que les pattes les plus courtes sont bien situées sur le haut, ainsi que l'applat de la LED. |                                                              |
-| 6      | Fixez de nouveau la façade à l'aide des 5 vis. Pensez à bien visser la vis unique à côté du trou du bouton marche/arrêt : elle assurera le bon alignement des LED situées sous le LCD. |            <img src="pictures/066.jpg" style="zoom:75%;" /> |
-| 7      | Soulevez l'ensemble : les LEDs glissent dans leur logement et se plaquent sur le circuit imprimé. |                                                              |
-| 8      | Retournez délicatement l'ensemble pour que les LEDs glissent en sens inverse et se placent dans leur ouverture sur la façade. Une grande partie d'entre elles va s'y positionner directement, pour les autres agissez avec une pince sur les pattes pour les placer dans leur ouverture en façade. Posez l'ensemble retourné sur le plan de travail, en appui sur les interrupteurs. |                                                              |
-| 9      | Si une LED est mal positionnée, utilisez ses pattes et une pince pour la replacer correctement. Procédez délicatement pour ne pas tordre les pattes. |           <img src="pictures/067A.jpg" style="zoom:75%;" /> |
-| 10      | Vérifiez bien que toutes les LEDs sont  placées dans leur logement sur la façade en la regardant par en dessous. Elles doivent toutes dépasser de la même hauteur. |           <img src="pictures/067B.jpg" style="zoom:75%;" /> |
-| 11      | Vérifiez une dernière fois que les pattes les plus courtes sont bien sur le symbole (-) du circuit. |           <img src="pictures/067C.jpg" style="zoom:75%;" /> |
-| 12      | En cas d'erreur, vous devez retourner la carte, dévisser et ôter la façade, remettre la LED dans le bon sens, revisser la façade et reprendre le bon positionnement des LEDs dans les logements. |                                                              |
-| 13      | Une fois tout bien positionné et vérifié, soudez les pattes des LEDs. |                                                              |
-| 14      | Coupez l'excédent des pattes.                                |                                                              |
-| 15      | Dévissez la façade.                                          |                                                              |
+| 1     | Put the printed board on non metallic supports, front face on the top so it lies above the working bench and will let the LEDs slide in their opening. Make sure it is at least 10 mm above the working surface. |                                                              |
+| 2     | Put the 16 green (or yellow) LEDs of input ports in LED1 to LED8 and LED17 to LED24. The shorter leg is the anode and is placed on the board top (-) mark. | <img src="pictures/065.jpg" alt="LED polarity" style="zoom:75%;" /> |
+| 3     | Put the 16 yellow (or green) LEDs of output ports in LED9 to LED16 and LED25 to LED32. The shorter leg is the anode and is placed on the board top (-) mark. |                                                              |
+| 4     | Put the 8 blue LEDS of control port in LED33 to LED40. The shorter leg is the anode and is placed on the board top (-) mark.|                                                              |
+| 5     | Check that the 40 shorter legs are all on the top side, as well as the LEDs plastic flat side. |                                                              |
+| 6     | Screw again the front panel with the 5 screws. Make sure you strongly screw the unique screw beside the on/off power button: it ensures the correct alignment of the LEDs below the LCD opening. |            <img src="pictures/066.jpg" style="zoom:75%;" /> |
+| 7     | Lift the whole: the LEDs will slide in their openings and take place on the printed board. |                                                              |
+| 8     | Gently reverse the whole so the LEDs slide in reverse direction and take place in their front panel openings. Most of them will take place easily, help the others with a fine plier to their opening. Put the reversed whole on the working bench, supported by the switches. |                                                              |
+| 9     | If a LED is not well positionned, use its legs with a plier to move it correctly. Proceed gently to avoid bending legs or you'll have to unscrew the front panel and restart. |           <img src="pictures/067A.jpg" style="zoom:75%;" /> |
+| 10    | Check that all LEDs are well placed in their front panel opening by looking from the bottom. They should all have the same visible height. |           <img src="pictures/067B.jpg" style="zoom:75%;" /> |
+| 11    | For the last time, check that all the short legs are on the (-) mark of the printed board. |           <img src="pictures/067C.jpg" style="zoom:75%;" /> |
+| 12    | In case of mistake, return the board, unscrew the front panel, replace the LED in the correct orientation, check, screw the front pan el and reposition all LEDs. |                                                              |
+| 13    | Once you're absolutely sure everything is well palced and aligned, you can solder the 80 LED legs. |                                                              |
+| 14    | Curt the legs exceedent.                                |                                                              |
+| 15    | Unscrew the front panel.                                          |                                                              |
 
-## Arrière : composants (partie 2)<A id="a26"></A>
+## Back: components (part 2)s<A id="a26"></A>
 
-| Etape  | Description                                                       |                                                  |
-| --- | --------------------------------------------------------- | ------------------------------------------------ |
-| 1 | Retournez le circuit.                                        |                                                  |
-| 2 | Soudez le condensateur C5, attention à la polarité la patte la plus courte est sur le (-). La bande noire avec le signe '-' doit être face au demi cercle hachuré sur le circuit imprimé. Coupez les pattes de l'autre côté. | <img src="pictures/068.jpg" style="zoom:50%;" /> |
-| 3 | Soudez le connecteur mâle 2x12P P1.                          | <img src="pictures/069.jpg" style="zoom:50%;" /> |
+| Step  | Description                                                       |                                                  |
+| ----- | --------------------------------------------------------- | ------------------------------------------------ |
+| 1     | Return the board.                                        |                                                  |
+| 2     | Solder the C5 capacitor, take care of polarity: the shorter leg must be on the (-) mark. The black strip marked `-` must match the hatched half-circle on the printed board. Cut legs on the other side. | <img src="pictures/068.jpg" style="zoom:50%;" /> |
+| 3     | Solder the male 2x12-pins connector P1.                          | <img src="pictures/069.jpg" style="zoom:50%;" /> |
 
-## Finition<A id="a27"></A>
+## Finishing<A id="a27"></A>
 
-* Nettoyez soigneusement la façade avec un chiffon doux ou microfibre.
+- Gently clean the front panel with a clean soft or microfiber cloth. 
 
-<TABLE><TR><TD><img src="pictures/thisway.png" alt="Conseil"  width="75px" /></TD><TD><B>N'utilisez aucun produit détergent, solvant ou alcoolique</B>
-  <P> Les produits spéciaux pour écran plat sont acceptables.
-  <P> Si vous souhaitez utiliser un produit, faites un essai sur un petit endroit au dos de la façade ou sur la carte Bus Daughter pour vérifier qu'il n'abime pas le vernis.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="pictures/thisway.png" alt="Advice"  width="75px" /></TD><TD>
 
-<TABLE><TR><TD><img src="pictures/attention.png" alt="attention" style="width:75%;" /></TD><TD><B>IMPORTANT : Mettez votre bracelet anti-statique</B></TD></TR></TABLE>
+  <B>Don't use detergent, solvers or alcoholic products.</B>
+  <P>Hot water and flat screens cleaning products are acceptable.
+  <P>If you want to use a cleaning product, test it on a little non-visible part like Bus Daughter or the front panel back side and make sure it doesn't damage the vernish.
+</TD></TR></TABLE>
 
-| Etape  | Description                                                       |                                                              |
-| --- | --------------------------------------------------------- | ------------------------------------------------------------ |
-| 1 | Installez les circuits intégrés dans leurs emplacements. Leur nom est indiqué sur le circuit imprimé, et prenez garde à placer l'encoche en face de celle du support : à gauche ou en haut selon l'orientation du circuit.<br />● 3x 74HCT273N<br />● 3x 74HCT688<br />● 2x 74HCT245N<br />● 2x 74HCT32 |                                                              |
-| 2 | Revissez la façade.                                          |                                                              |
-| 3 | Emboitez les dip-switch sur leurs supports 16P puis emboitez les ensembles sur le circuit imprimé à travers l'ouverture en façade. |                                                              |
-| 4 | Branchez les 2 cables 12 fils sur le connecteur P1, de préférence en inversant un des câbles pour que les couleurs soient différenciables : sur l'image ci-contre, le câble de gauche a ses fils marron-rouge-orange en haut et noir-marron-rouge en bas, sur le câble de droite c'est l'inverse. Si besoin, repérez le fil A7 par sa couleur (ici : marron en haut du câble de gauche) ou avec un petit autocollant placé à l'extrémité libre. | <img src="pictures/070-Cable connexion.jpg" style="zoom:50%;" /> |
+<TABLE><TR><TD><img src="pictures/attention.png" alt="attention" style="width:75%;" /></TD><TD><B>
+IMPORTANT: put your anti-static bracelet NOW.</B></TD></TR></TABLE>
+
+| Step  | Description                                                       |                                                              |
+| ----- | --------------------------------------------------------- | ------------------------------------------------------------ |
+| 1     | Install the integrated circuits in their socket. The name is printed on board, make sure you put the notch on the left or top side of the socket, matching the printed mark.<br />● 3x 74HCT273N<br />● 3x 74HCT688<br />● 2x 74HCT245N<br />● 2x 74HCT32 |                                                              |
+| 2     | Screw the front plate. It will be unscrewed a last time in the next assembly steps so don't screw too strongly.                                          |                                                              |
+| 3     | Put the dip-switches in their 16-pin socket, then put the whole on the soldered socket through the front panel opening. |                                                              |
+| 4     | Connect the 2 12-wires cables on the P1 connector, preferably inverting one cable so the colors can be differentiated. On the adjacent, the left cable has brown-red-orange on top and black-brown-red on bottom, while the right cable has the contrary. If needed, notice the A7 color or put a little tape on its other extremity to identify it easily. | <img src="pictures/070-Cable connexion.jpg" style="zoom:50%;" /> |
+
+You have now finished the most difficult part of assembly.

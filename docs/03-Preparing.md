@@ -62,7 +62,7 @@ The connexion and assembling order is designed to ease the building process: do 
 <LI> when evrything looks correct only, solder the other legs as usual</LI>
 <LI> complete the first leg soldering with more solder</TD></TR></TABLE>
 
-If you sodler all legs immediately, it will be difficult if not impossible to fix a mistake like a LED or a switch
+If you solder all legs immediately, it will be difficult if not impossible to fix a mistake like a LED or a switch
 soldered the wrong way. Having only one leg soldered also helps to tune components alignment before final soldering.
 
 I recommend this method particularly for the front panel components which must be carefully aligned.
