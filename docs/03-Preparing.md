@@ -47,7 +47,7 @@ The following table lists the tools needed to build the kit.
 | ALLEN keys for M2x8 and M3x8 screws                            | <img src="Pictures/010-allen.jpg" alt="Allen keys" style="zoom: 33%;" /> |
 | Multi heads micro screwdriver | <img src="Pictures/011-screwdriver.jpg" alt="Screwdriver" style="zoom: 33%;" /> |
 | Multimeter for voltage and resistors, possibly continuity test (diods) | <img src="Pictures/011A-multimeter.jpg" alt="Multimeter" style="zoom: 33%;" /> |
-| Column drill for case bottom holes (ex: Dremel) with 3mm drill|                               ![Drill](Pictures/TODO.PNG) |
+| Column drill for case bottom holes (ex: Dremel) with 3mm drill|                               ![Drill](Pictures/TODO.png) |
 
 ## Advices<A id="a18"></A>
 

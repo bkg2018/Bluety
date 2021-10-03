@@ -50,7 +50,7 @@ Ce tableau liste les outils dont vous aurez besoin pour assembler le kit.
 | Clés ALLEN pour vis M2x8 et M3x8                             | <img src="Pictures/010-allen.jpg" alt="Clés Allen" style="zoom: 33%;" /> |
 | Tournevis avec têtes cruxiformes, plates, Allen si vous n'avez pas de clés Allen. | <img src="Pictures/011-screwdriver.jpg" alt="Tournevis" style="zoom: 33%;" /> |
 | Multimètre avec mesure de voltage et résistance, éventuellement test de continuité (diodes) | <img src="Pictures/011A-multimeter.jpg" alt="Multimètre" style="zoom: 33%;" /> |
-| Perceuse à colonne pour le fond du boîtier (par exemple Dremel) avec une mèche de 3mm |                               ![Perceuse](Pictures/TODO.PNG) |
+| Perceuse à colonne pour le fond du boîtier (par exemple Dremel) avec une mèche de 3mm |                               ![Perceuse](Pictures/TODO.png) |
 
 ## Conseils<A id="a18"></A>
 

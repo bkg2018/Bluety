@@ -31,10 +31,10 @@ de Spencer Owens également disponible avec le kit RC2014 Pro.
 
 | Etape | Description                                                          |                                                              |
 | ----- | -------------------------------------------------------------------- | -----------------------------------------------------------: |
-| 1     | Branchez les deux cables 12 fils sur la BusDaughter en prenant soin de respecter le repérage du fil A7 effectué lors du branchement sur Blink'n Switch. |            <img src="Pictures/TODO.PNG" style="zoom:50%;" /> |
+| 1     | Branchez les deux cables 12 fils sur la BusDaughter en prenant soin de respecter le repérage du fil A7 effectué lors du branchement sur Blink'n Switch. |            <img src="Pictures/TODO.png" style="zoom:50%;" /> |
 | 2     | Installez la carte BusDaughter dans l'emplacement bus de votre choix |                                                              |
 | 3     | Attention : le coin biseauté de la carte se présente sur l'avant de l'ordinateur | <img src="Pictures/090-busdaughter.jpg" alt="Connexion" style="zoom:50%;" /> |
-| 4     | Attention : enficher la carte sur le côté droit du connecteur de bus de 2x40 prises (vu de l'arrière vers l'avant), la première broche (vers l'avant) se place dans le trou marqué "1" sur le circuit imprimé.<br />Normalement, les deux câbles doivent rester parallèles. Le plus à droite sur Blink'n Switch sera aussi le plus à droite sur BusDaughter. Si ce n'est pas le cas, vérifiez le branchement. |            <img src="Pictures/TODO.PNG" style="zoom:50%;" /> |
+| 4     | Attention : enficher la carte sur le côté droit du connecteur de bus de 2x40 prises (vu de l'arrière vers l'avant), la première broche (vers l'avant) se place dans le trou marqué "1" sur le circuit imprimé.<br />Normalement, les deux câbles doivent rester parallèles. Le plus à droite sur Blink'n Switch sera aussi le plus à droite sur BusDaughter. Si ce n'est pas le cas, vérifiez le branchement. |            <img src="Pictures/TODO.png" style="zoom:50%;" /> |
 
 ## Façade avant<A id="a37"></A>
 
@@ -61,7 +61,7 @@ a été préférée à une prise USB en raison des difficultés à trouver un co
 
 | Etape | Description                                                                                                            |     |                                                   |
 | ----- | ---------------------------------------------------------------------------------------------------------------------- | --- | ------------------------------------------------: |
-| 1     | Branchez le raccord HDMI sur le connecteur intérieur de la façade arrière, puis sur votre PiZeroTerminal ou BusRaider. |     | <img src="Pictures/TODO.PNG" style="zoom:50%;" /> |
+| 1     | Branchez le raccord HDMI sur le connecteur intérieur de la façade arrière, puis sur votre PiZeroTerminal ou BusRaider. |     | <img src="Pictures/TODO.png" style="zoom:50%;" /> |
 
 ### Interrupteurs ROM (SC126 seulement)<A id="a40"></A>
 

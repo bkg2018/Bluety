@@ -30,10 +30,10 @@ from Spencer Owens which you can also get with his RC2014 Pro kit.
 
 | Step  | Description                                                          |                                                              |
 | ----- | -------------------------------------------------------------------- | -----------------------------------------------------------: |
-| 1     | Connect the two 12-wires cables on BusDaughter, refering to the A7 wire you marked when connecting to Blink'n Swtch. |            <img src="Pictures/TODO.PNG" style="zoom:50%;" /> |
+| 1     | Connect the two 12-wires cables on BusDaughter, refering to the A7 wire you marked when connecting to Blink'n Swtch. |            <img src="Pictures/TODO.png" style="zoom:50%;" /> |
 | 2     | Install the BusDaughter board in the bus connector of your choice. |                                                              |
 | 3     | Beware: the board angled corner must be on the front panel side. | <img src="Pictures/090-busdaughter.jpg" alt="Connexion" style="zoom:50%;" /> |
-| 4     | Beware: put the board into the rightmost 1x40 bus in the 2x40 bus connector as seen from back. The first pin (toward front) must match the "1" marked hole on the printed board.<br />Normally, the two cables should be parallel. The rightmost on Blink'n Switch will also be the rightmost on BusDaughter. |            <img src="Pictures/TODO.PNG" style="zoom:50%;" /> |
+| 4     | Beware: put the board into the rightmost 1x40 bus in the 2x40 bus connector as seen from back. The first pin (toward front) must match the "1" marked hole on the printed board.<br />Normally, the two cables should be parallel. The rightmost on Blink'n Switch will also be the rightmost on BusDaughter. |            <img src="Pictures/TODO.png" style="zoom:50%;" /> |
 
 ## Front panel<A id="a37"></A>
 
@@ -59,7 +59,7 @@ an USB connector because of difficulties finding an appropriate connector.
 
 | Step  | Description                                                                                                            |     |                                                   |
 | ----- | ---------------------------------------------------------------------------------------------------------------------- | --- | ------------------------------------------------: |
-| 1     | Connect the HDMI cable extension on the interior side of the HDMI connector on back panel, then on your PiZeroTerminal or BusRaider. |     | <img src="Pictures/TODO.PNG" style="zoom:50%;" /> |
+| 1     | Connect the HDMI cable extension on the interior side of the HDMI connector on back panel, then on your PiZeroTerminal or BusRaider. |     | <img src="Pictures/TODO.png" style="zoom:50%;" /> |
 
 ### ROMs switches (SC126 only)<A id="a40"></A>
 
