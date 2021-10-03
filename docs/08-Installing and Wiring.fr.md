@@ -85,7 +85,7 @@ qu'avec un processeur moderne.
 
 | Etape | Description                                                  |      |                                                              |
 | ----- | ------------------------------------------------------------ | ---- | -----------------------------------------------------------: |
-| 1     | Branchez le cable du bouton reset avec les **fiches jaunes** sur le connecteur **P8** et le bouton de la façade. Pour ce câble la position des fils n'a pas d'importance. |      |                                       ![](pictures/TODO.png) |
+| 1     | Branchez le cable du bouton reset avec les **fiches jaunes** sur le connecteur **P8** et le bouton de la façade. Pour ce câble la position des fils n'a pas d'importance. |      |                                       ![](Pictures/TODO.png) |
 
 ### RC2014<A id="a43"></A>
 

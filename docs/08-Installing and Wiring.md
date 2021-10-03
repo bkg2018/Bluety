@@ -83,7 +83,7 @@ but it also serves when a program freezes the computer, as crashing bugs can loc
 
 | Step  | Description                                                  |      |                                                              |
 | ----- | ------------------------------------------------------------ | ---- | -----------------------------------------------------------: |
-| 1     | Connect the reset cable with the yellow connectors to **P8** on the  SC126 and to the panel button.Pour ce câble la position des fils n'a pas d'importance. |      |                                       ![](pictures/TODO.png) |
+| 1     | Connect the reset cable with the yellow connectors to **P8** on the  SC126 and to the panel button.Pour ce câble la position des fils n'a pas d'importance. |      |                                       ![](Pictures/TODO.png) |
 
 ### RC2014<A id="a43"></A>
 
