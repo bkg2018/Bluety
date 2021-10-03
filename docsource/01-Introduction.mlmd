@@ -51,14 +51,14 @@ computer kit and Spencer Owens's *[PiZero Terminal](https://www.tindie.com/produ
 RC2014 module or Rob Robson's [BusRaider](https://www.tindie.com/products/robdobson/play-retro-games-rc2014-graphics-kit/) card on a RC2014.
 The SC126 is a computer gifted with a fast 18 MHz Z-180 processor mostly compatible with the Z-80, equipped with two 512KB flash ROMs
 giving choice between two control softwares : [*Small Computer Monitor*](https://smallcomputercentral.wordpress.com/small-computer-monitor/) and
-[RomWBW](https://github.com/wwarthen/RomWBW), one 512KB Flash RAM and numerous integrated devices like two serial ports, one SD-card port and one I2C port
+[*RomWBW*](https://github.com/wwarthen/RomWBW), one 512KB Flash RAM and numerous integrated devices like two serial ports, one SD-card port and one I2C port
 which is used by Bluety LCD Screen.
 .fr((Bluety est particulièrement conçu pour accueillir le kit [SC126](https://www.tindie.com/products/tindiescx/sc126-z180-sbc-motherboard-kit/)
 de Stephen S. Cousins et la carte *[PiZero Terminal](https://www.tindie.com/products/semachthemonkey/raspberry-pi-zero-serial-terminal-for-rc2014/?pt=ac_prod_search)*
 qui possède une sortie HDMI ou la carte [BusRaider](https://www.tindie.com/products/robdobson/play-retro-games-rc2014-graphics-kit/) de Rob Robson.
 Le SC126 est un ordinateur équipé d'un processeur Z-180 à 18 MHz (compatible Z-80), de deux ROM Flash de 512 Ko permettant le choix entre les
 logiciels de contrôle [*Small Computer Monitor*](https://smallcomputercentral.wordpress.com/small-computer-monitor/) et
-[RomWBW](https://github.com/wwarthen/RomWBW), d'une RAM Flash de 512 Ko, ainsi que de nombreux contrôleurs de périphériques
+[*RomWBW*](https://github.com/wwarthen/RomWBW), d'une RAM Flash de 512 Ko, ainsi que de nombreux contrôleurs de périphériques
 intégrés tels que deux ports série, un port SD et un port I2C. Ce dernier permet d'accéder à l'écran LCD..))
 
 Bluety can also be used with Spencer Owens [RC2014](https://www.tindie.com/stores/Semachthemonkey/) computer kit in all versions
