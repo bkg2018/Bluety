@@ -123,4 +123,4 @@ son interrupteur par un connecteur à trois broches et placer un jumper sur les 
 de remplacer l'interrupteur en position ON comme indiqué sur l'image ci-dessous. Si en revanche votre SC126 est déjà assemblé,
 il vous suffira de placer l'interrupteur en position ON. Le bouton de Bluety lui-même est relié à un autre endroit du SC126..))
 
-<img src="Pictures/97-contact.jpg" .((alt="On/Off replacement".)).fr((alt="Remplacement on/off".)) style="zoom:50%;" />
+.all((<img src="Pictures/97-contact.jpg" .)).((alt="On/Off replacement".)).fr((alt="Remplacement on/off".)).all(( style="zoom:50%;" />.))
