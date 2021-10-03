@@ -32,7 +32,11 @@ Le numéro de chacun des deux ports est sélectionnable par les huit interrupteu
 Là aussi, le bit de poids fort (bit 7) est situé à gauche. Pour sélectionner le port 80h, placez l'interrupteur le plus à gauche en HAUT, et
 tous les autres en bas.
 
+<<<<<<< HEAD
 ### IX-2.1) Utiliser le port A ou B en entrée<A id="a50"></A>
+=======
+### IX-21) Utiliser le port A ou B en entrée<A id="a50"></A>
+>>>>>>> 9580c11acd298c66ba8bf6a34f2eedaf0581a559
 
 Chacun des ports en entrée dispose d'un connecteur 8 fils, de 8 LEDs et de 8 interrupteurs.
 
@@ -50,7 +54,11 @@ et pas beaucoup plus de +5V sous peine de brûler des composants et de rendre d�
 En général, un niveau d'entrée inférieur à +4.7V sera considéré comme
 un bit à 0.
 
+<<<<<<< HEAD
 ### IX-2.2) Utiliser le port A ou B en sortie<A id="a51"></A>
+=======
+### IX-22) Utiliser le port A ou B en sortie<A id="a51"></A>
+>>>>>>> 9580c11acd298c66ba8bf6a34f2eedaf0581a559
 
 | Etape | Description                                                  |                                                        |
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------: |

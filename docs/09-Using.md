@@ -31,7 +31,11 @@ The port number for both of these ports can be choosen with the 8 triggers of th
 trigger also represents the most significant bit in the port number: to select the 80h port, put the leftmost trigger UP and all the
 others DOWN.
 
+<<<<<<< HEAD
 ### IX-2.1) using the A or B input port<A id="a50"></A>
+=======
+### IX-21) using the A or B input port<A id="a50"></A>
+>>>>>>> 9580c11acd298c66ba8bf6a34f2eedaf0581a559
 
 Both input ports have an 8-bits female header for +5V input, 8 control LEDs, and 8 input switches.
 
@@ -48,7 +52,11 @@ than +5V or you could burn components and make your input port definitely useles
 
 Generally, less than +4.7V on an input line will be considered as a 0 bit.
 
+<<<<<<< HEAD
 ### IX-2.2) Using the A or B output port<A id="a51"></A>
+=======
+### IX-22) Using the A or B output port<A id="a51"></A>
+>>>>>>> 9580c11acd298c66ba8bf6a34f2eedaf0581a559
 
 | Step  | Description                                                  |                                                        |
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------: |

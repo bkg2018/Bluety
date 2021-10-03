@@ -51,7 +51,11 @@ En bas de la façade, une ouverture permet de passer les câbles utiles pour les
 pour contrôler l'ordinateur via une machine de bureau ou portable (si vous avez suivi les indications, un câble est déjà installé et passe
 à travers cette ouverture).
 
+<<<<<<< HEAD
 ### VIII-4.1) HDMI (RC2014, SC126)<A id="a39"></A>
+=======
+### VIII-41) HDMI (RC2014, SC126)<A id="a39"></A>
+>>>>>>> 9580c11acd298c66ba8bf6a34f2eedaf0581a559
 
 Le connecteur HDMI se branche par la rallonge fournie dans le kit directement sur une carte *PiZero Terminal* ou *BusRaider*, permettant
 d'avoir une sortie écran couleur via le logiciel interne (PiGfx ou BusRaider).
@@ -63,7 +67,11 @@ a été préférée à une prise USB en raison des difficultés à trouver un co
 | ----- | ---------------------------------------------------------------------------------------------------------------------- | --- | ------------------------------------------------: |
 | 1     | Branchez le raccord HDMI sur le connecteur intérieur de la façade arrière, puis sur votre PiZeroTerminal ou BusRaider. |     | <img src="Pictures/TODO.PNG" style="zoom:50%;" /> |
 
+<<<<<<< HEAD
 ### VIII-4.2) Interrupteurs ROM (SC126 seulement)<A id="a40"></A>
+=======
+### VIII-42) Interrupteurs ROM (SC126 seulement)<A id="a40"></A>
+>>>>>>> 9580c11acd298c66ba8bf6a34f2eedaf0581a559
 
 Les interrupteurs de sélection permettent de choisir entre les deux ROM du SC126 et d'autoriser leur écriture pour une mise à jour. 
 Ils se connectent directement sur des jhmpers de configuration du SC126.
@@ -75,25 +83,41 @@ Ces interrupteurs n'ont pas de fonction pour une configuration RC2014 Pro.</TD><
 | 1     | Branchez les **deux interrupteurs** **3 fils** sur les connecteurs **JP1** et **JP2** du SC126 : attention à placer le bon câble sur le bon connecteur selon que vous avez placé RomWBW en U1 et SCM en U2 ou l'inverse. L'interrupteur situé en haut va sur le connecteur de la ROM SCM, et celui du bas sur celle de RomWBW. Les fils ne doivent pas se croiser ou subir de torsion : vu de l'arrière, le fil le plus à droite sur l'interrupteur est aussi à droite sur la carte SC126 et correspond à la position "PROTECT" à la fois sur la carte et sur l'inscription de la façade arrière. |      | <img src="Pictures/091-U1U2.jpg" alt="U1U2" style="zoom:75%;" /><br /><img src="Pictures/091-U1U2 protect.jpg" alt="Protect" style="zoom:75%;" /> |
 | 2     | Branchez **l'interrupteur** **2 fils** sur le connecteur **P9** : si vous avez RomWBW en U1, les deux fils doivent se situer en bas. Si en revanche vous avez placé SCM en U1, les deux fils doivent se trouver en haut. |      | <img src="Pictures/091-reset+select.jpg" alt="Select Reset" style="zoom:100%;" /><img src="Pictures/95_romselect.jpg" alt="RomWBW" style="zoom:75%;" /> |
 
+<<<<<<< HEAD
 ### VIII-4.3) RESET<A id="a41"></A>
+=======
+### VIII-43) RESET<A id="a41"></A>
+>>>>>>> 9580c11acd298c66ba8bf6a34f2eedaf0581a559
 
 Le bouton Reset est particulièrement utile pour les utilisateurs de la carte PiZero Terminal qui nécessite en général un reset après
 la mise en marche, mais aussi lorsqu'une erreur de programme bloque l'ordinateur, ce qui arrive beaucoup plus facilement avec un Z-80 
 qu'avec un processeur moderne.
 
+<<<<<<< HEAD
 ### VIII-4.4) SC126<A id="a42"></A>
+=======
+### VIII-44) SC126<A id="a42"></A>
+>>>>>>> 9580c11acd298c66ba8bf6a34f2eedaf0581a559
 
 | Etape | Description                                                  |      |                                                              |
 | ----- | ------------------------------------------------------------ | ---- | -----------------------------------------------------------: |
 | 1     | Branchez le cable du bouton reset avec les **fiches jaunes** sur le connecteur **P8** et le bouton de la façade. Pour ce câble la position des fils n'a pas d'importance. |      |                                       ![](pictures/TODO.png) |
 
+<<<<<<< HEAD
 ### VIII-4.5) RC2014<A id="a43"></A>
+=======
+### VIII-45) RC2014<A id="a43"></A>
+>>>>>>> 9580c11acd298c66ba8bf6a34f2eedaf0581a559
 
 **TDB**
 
 ## VIII-5) Bouton alimentation<A id="a44"></A>
 
+<<<<<<< HEAD
 ### VIII-5.1) SC126<A id="a45"></A>
+=======
+### VIII-51) SC126<A id="a45"></A>
+>>>>>>> 9580c11acd298c66ba8bf6a34f2eedaf0581a559
 
 Le bouton de la façade avant est relié au connecteur d'alimentation de la façade arrière et contrôle l'alimentation du SC126 via le
 connecteur **J2**. Pour que ce dernier puisse alimenter le SC126 il faut placer l'interrupteur de la carte SC126 en position ON, afin
@@ -106,6 +130,10 @@ de déporter la fonction ON/OFF sur le bouton de la façade avant.
 | 3     | Branchez le fil noir de la broche **-** et le câble noir séparé sur la borne GND du bornier J2 | <img src="Pictures/091-borneGND.jpg" alt="Borne GND" style="zoom:50%;" /> |
 | 4     | Branchez le fil **rouge** provenant du bouton marche/arrêt sur la cosse **la plus courte** du connecteur d'alimentation arrière<br /><br />Branchez le fil **noir** provenant du bornier J2 sur la cosse **la plus longue** du connecteur d'alimentation arrière. | <img src="Pictures/95_powerconnect.jpg" alt="Connecteur" style="zoom:50%;" /><img src="Pictures/96_powerconnect.jpg" alt="Branchement" style="zoom:50%;" /> |
 
+<<<<<<< HEAD
 ### VIII-5.2) RC2014<A id="a46"></A>
+=======
+### VIII-52) RC2014<A id="a46"></A>
+>>>>>>> 9580c11acd298c66ba8bf6a34f2eedaf0581a559
 
 **TBD**
