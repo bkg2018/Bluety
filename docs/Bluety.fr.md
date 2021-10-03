@@ -15,7 +15,7 @@ de Spencer Owens.
   - I-1) [Contenu du kit](01-Introduction.fr.md#a3)
   - I-2) [Extension de bus](01-Introduction.fr.md#a4)
   - I-3) [Interrupteur marche/arrêt SC126](01-Introduction.fr.md#a5)
-- II) [Contenu du kit](02-Kit Content.fr.md#a6)
+- II) [Contenu du kit](<02-Kit Content.fr.md#a6>)
   - II-1) [Cartes et circuits imprimés](02-Kit Content.fr.md#a7)
   - II-2) [Composants](02-Kit Content.fr.md#a8)
   - II-3) [Connecteurs et supports](02-Kit Content.fr.md#a9)
