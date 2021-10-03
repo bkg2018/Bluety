@@ -39,7 +39,7 @@ de Spencer Owens également disponible avec le kit RC2014 Pro.
 ## Façade avant<A id="a37"></A>
 
 L'écran LCD n'a pas de fonction prédéfinie sur un RC2014 Pro car il n'a pas de bus I2C, aussi les instructions
-qui concernent le lCD ne s'appliquent qu'au SC126.
+qui concernent le LCD ne s'appliquent qu'au SC126.
 
 Les branchements sont facilités si vous avez connecté les câbles de l'écran LCD et du bouton marche/arrêt
 *avant* de visser la façade :
