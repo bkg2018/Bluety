@@ -60,7 +60,7 @@ kit which is inexpensive and features quality components. You can order it here:
 [SC113](https://www.tindie.com/products/tindiescx/sc113-modular-backplane-kit-for-rc2014/) and then use parts of its
 components to fill SC113-Tiny, which is built almost identically only with 3 bus connectors instead of 6.
 
-<img src="pictures/SC113tiny.jpg" alt="SC113 beside SC113-Tiny" style="zoom: 50%;" />
+<img src="Pictures/SC113tiny.jpg" alt="SC113 beside SC113-Tiny" style="zoom: 50%;" />
 
 ## SC126 power switch<A id="a5"></A>
 
@@ -70,4 +70,4 @@ can be used instead of the power switch and a jumper put on the two internal pin
 and turned on. If the computer is already soldered then simply put the power switch on the ON position. The Bluety button
 itself is wired elsewhere on the SC126.
 
-<img src="pictures/97-contact.jpg" alt="On/Off replacement" style="zoom:50%;" />
+<img src="Pictures/97-contact.jpg" alt="On/Off replacement" style="zoom:50%;" />

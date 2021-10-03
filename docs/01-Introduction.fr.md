@@ -62,7 +62,7 @@ de commander un [SC113](https://www.tindie.com/products/tindiescx/sc113-modular-
 ses composants sur la carte SC113 Tiny. Quelques composants du kit SC113 sont inutilisés mais en dehors de cela le
 fonctionnement et l'assemblage sont identiques.
 
-<img src="pictures/SC113tiny.jpg" alt="SC113 à côté de SC113 Tiny" style="zoom: 50%;" />
+<img src="Pictures/SC113tiny.jpg" alt="SC113 à côté de SC113 Tiny" style="zoom: 50%;" />
 
 ## Interrupteur marche/arrêt SC126<A id="a5"></A>
 

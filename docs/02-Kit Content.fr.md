@@ -5,20 +5,20 @@ discussion https://groups.google.com/forum/#!forum/rc2014-z80.
 
 Avant toute chose, une précaution importante.
 
-<TABLE><TR><TD><img src="pictures/attention.png" width="300px" /></TD><TD><B>Ne touchez pas les circuits intégrés et
+<TABLE><TR><TD><img src="Pictures/attention.png" width="300px" /></TD><TD><B>Ne touchez pas les circuits intégrés et
 l'écran LCD sans être équipé d'un bracelet antistatique relié à une masse</B>. De préférence, laissez les à l'abri dans
 leur étui anti-statique jusqu'au moment de la fixation de la façade avant sur le boîtier pour éliminer le risque de les
 endommager avec de l'électricité statique. Dans tous les cas, ne les placez pas sur le circuit avant d'avoir procédé
 aux vérifications électriques.</TD></TR></TABLE>
 
-<TABLE><TR><TD><img src="pictures/thisway.png" alt="Vérification" width="150px" /></TD><TD> Dans le processus
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Vérification" width="150px" /></TD><TD> Dans le processus
 d'assemblage, les étapes où vous devrez procéder à une vérification ou à un assemblage particulier seront
 indiquées par ce panneau.<B>N'ignorez pas ces recommandations</B>, elles garantissent le bon résultat de l'assemblage
 lors des étapes les moins évidentes.</TD></TR></TABLE>
 
 ## Cartes et circuits imprimés<A id="a7"></A>
 
-<TABLE><TR><TD><img src="pictures/attention.png" width="180px" /></TD><TD>Veillez à protéger les deux façades
+<TABLE><TR><TD><img src="Pictures/attention.png" width="180px" /></TD><TD>Veillez à protéger les deux façades
 de toute rayure, brûlure, ou projection de flux lors des soudures. Ce sont les faces visibles donc conservez
 les à l'abri jusqu'à la fin de l'assemblage. Les façades ne nécessitent aucune soudure.</TD></TR></TABLE>
 
@@ -30,28 +30,28 @@ NombreCarteFaçade avant"Façade avant"Façade arrière"Façade arrière" style=
 
 | Nombre | Composants                                            |                                                                          |
 | ------ | ----------------------------------------------------- | -----------------------------------------------------------------------: |
-| 40     | 8 LED 3mm bleues<br />16 LED 3mm vertes<br />16 LED 3mm jaunes<br /><br />Note : vous pouvez choisir la couleur des LEDs lors de votre commande. | <img src="pictures/026-LEDs.jpg" alt="LEDs" style="zoom: 33%;" /> |
-| 11     | Condensateurs céramique 100nF (marqués 104)           | <img src="pictures/013-Capa100nF.jpg" alt="100 nF (ou 0.1 uF)" style="zoom: 33%;" /> |
-| 1      | Condensateur électrolytique 100uF                     | <img src="pictures/034-capa100uF.jpg" alt="100 uF" style="zoom: 33%;" /> |
-| 3      | Réseaux résistance 10 KOhms (marqués 103)             | <img src="pictures/042A.jpg" alt="10 Kohm" style="zoom: 33%;" />         |
-| 5      | Réseaux résistance 470 Ohms (marqués 471)             | <img src="pictures/043A.jpg" alt="470 Ohm" style="zoom: 33%;" />         |
-| 10     | Circuits intégrés :<br />- 3x 74HCT273N<br />- 2x 74HCT245N<br />- 3x 74HCT688<br />- 2x 74HCT32 | <img src="pictures/037-ics.jpg" alt="Circuits intégrés" style="zoom: 33%;" /> |
-| 1      | Ecran LCD 4x20 rétroéclairé bleu avec adaptateur I2C  | <img src="pictures/038-LCD.jpg" alt="Ecran LCD" style="zoom: 33%;" />    |
+| 40     | 8 LED 3mm bleues<br />16 LED 3mm vertes<br />16 LED 3mm jaunes<br /><br />Note : vous pouvez choisir la couleur des LEDs lors de votre commande. | <img src="Pictures/026-LEDs.jpg" alt="LEDs" style="zoom: 33%;" /> |
+| 11     | Condensateurs céramique 100nF (marqués 104)           | <img src="Pictures/013-Capa100nF.jpg" alt="100 nF (ou 0.1 uF)" style="zoom: 33%;" /> |
+| 1      | Condensateur électrolytique 100uF                     | <img src="Pictures/034-capa100uF.jpg" alt="100 uF" style="zoom: 33%;" /> |
+| 3      | Réseaux résistance 10 KOhms (marqués 103)             | <img src="Pictures/042A.jpg" alt="10 Kohm" style="zoom: 33%;" />         |
+| 5      | Réseaux résistance 470 Ohms (marqués 471)             | <img src="Pictures/043A.jpg" alt="470 Ohm" style="zoom: 33%;" />         |
+| 10     | Circuits intégrés :<br />- 3x 74HCT273N<br />- 2x 74HCT245N<br />- 3x 74HCT688<br />- 2x 74HCT32 | <img src="Pictures/037-ics.jpg" alt="Circuits intégrés" style="zoom: 33%;" /> |
+| 1      | Ecran LCD 4x20 rétroéclairé bleu avec adaptateur I2C  | <img src="Pictures/038-LCD.jpg" alt="Ecran LCD" style="zoom: 33%;" />    |
 
 ## Connecteurs et supports<A id="a9"></A>
 
 | Nombre | Connecteurs et supports de circuits intégrés |                                                                                            |
 | ------ | -------------------------------------------- | -----------------------------------------------------------------------------------------: |
-| 1      | Connecteur 40P angle droit                   | <img src="pictures/014-header40P.jpg" alt="Connecteur 40P" style="zoom: 33%;" />           |
-| 1      | Connecteur 2x12P mâle angle droit            | <img src="pictures/015-header2x12P.jpg" alt="Connecteur 2x12P" style="zoom: 33%;" />       |
-| 4      | Supports CI 16P                              | <img src="pictures/023-support16.jpg" alt="Supports CI 16 positions" style="zoom: 33%;" /> |
-| 2      | Supports CI 14P                              | <img src="pictures/024-support14.jpg" alt="Supports CI 14 positions" style="zoom: 33%;" /> |
-| 8      | Supports CI 20P                              | <img src="pictures/025-support20.jpg" alt="Supports CI 20 positions" style="zoom: 33%;" /> |
-| 2      | Connecteurs femelle 2P pattes de 11mm        | <img src="pictures/030-h2P.jpg" alt="Connecteurs 2P" style="zoom: 33%;" />                 |
-| 4      | Connecteurs femelle 8P pattes de 11mm        | <img src="pictures/031-h8P.jpg" alt="Connecteurs 8P" style="zoom: 33%;" />                 |
-| 1      | Connecteur mâle 2x12P droit                  | <img src="pictures/032-h2x12P.jpg" alt="Connecteur 2x12P" style="zoom: 33%;" />            |
-| 1      | Connecteur d'alimentation                    | <img src="pictures/039-power.jpg" alt="Connecteur alimentation" style="zoom: 33%;" />      |
-| 1      | Connecteur HDMI                              | <img src="pictures/040-hdmi.jpg" alt="Connecteur HDMI" style="zoom: 33%;" />               |
+| 1      | Connecteur 40P angle droit                   | <img src="Pictures/014-header40P.jpg" alt="Connecteur 40P" style="zoom: 33%;" />           |
+| 1      | Connecteur 2x12P mâle angle droit            | <img src="Pictures/015-header2x12P.jpg" alt="Connecteur 2x12P" style="zoom: 33%;" />       |
+| 4      | Supports CI 16P                              | <img src="Pictures/023-support16.jpg" alt="Supports CI 16 positions" style="zoom: 33%;" /> |
+| 2      | Supports CI 14P                              | <img src="Pictures/024-support14.jpg" alt="Supports CI 14 positions" style="zoom: 33%;" /> |
+| 8      | Supports CI 20P                              | <img src="Pictures/025-support20.jpg" alt="Supports CI 20 positions" style="zoom: 33%;" /> |
+| 2      | Connecteurs femelle 2P pattes de 11mm        | <img src="Pictures/030-h2P.jpg" alt="Connecteurs 2P" style="zoom: 33%;" />                 |
+| 4      | Connecteurs femelle 8P pattes de 11mm        | <img src="Pictures/031-h8P.jpg" alt="Connecteurs 8P" style="zoom: 33%;" />                 |
+| 1      | Connecteur mâle 2x12P droit                  | <img src="Pictures/032-h2x12P.jpg" alt="Connecteur 2x12P" style="zoom: 33%;" />            |
+| 1      | Connecteur d'alimentation                    | <img src="Pictures/039-power.jpg" alt="Connecteur alimentation" style="zoom: 33%;" />      |
+| 1      | Connecteur HDMI                              | <img src="Pictures/040-hdmi.jpg" alt="Connecteur HDMI" style="zoom: 33%;" />               |
 
 ## Interrupteurs<A id="a10"></A>
 
@@ -63,11 +63,11 @@ façon pour obtenir un bon alignement : ceci sera rappelé dans les instructions
 
 | Nombres | Interrupteurs                        |                                                                                            |
 | ------- | -----------------------------------  | -----------------------------------------------------------------------------------------: |
-| 4       | Interrupteurs ON/ON ou ON/OFF        | <img src="pictures/027-ONON.jpg" alt="ON/ON" style="zoom: 33%;" />                         |
-| 16      | Interrupteurs ON-OFF-ON              | <img src="pictures/028-ONOFFFON.jpg" alt="ON/OFF/ON" style="zoom: 33%;" />                 |
-| 2       | Interrupteurs dipswitch 8 positions  | <img src="pictures/029-dipswitch.jpg" alt="Dipswitch" style="zoom: 33%;" />                |
-| 1       | Micro interrupteur avec câble 2 fils | <img src="pictures/040-switchselect.jpg" alt="Interrupteur 2 fils" style="zoom: 33%;" />   |
-| 2       | Micro interrupteur avec câble 3 fils | <img src="pictures/040-switchprotect.jpg" alt="Interrupteurs 3 fils" style="zoom: 33%;" /> |
+| 4       | Interrupteurs ON/ON ou ON/OFF        | <img src="Pictures/027-ONON.jpg" alt="ON/ON" style="zoom: 33%;" />                         |
+| 16      | Interrupteurs ON-OFF-ON              | <img src="Pictures/028-ONOFFFON.jpg" alt="ON/OFF/ON" style="zoom: 33%;" />                 |
+| 2       | Interrupteurs dipswitch 8 positions  | <img src="Pictures/029-dipswitch.jpg" alt="Dipswitch" style="zoom: 33%;" />                |
+| 1       | Micro interrupteur avec câble 2 fils | <img src="Pictures/040-switchselect.jpg" alt="Interrupteur 2 fils" style="zoom: 33%;" />   |
+| 2       | Micro interrupteur avec câble 3 fils | <img src="Pictures/040-switchprotect.jpg" alt="Interrupteurs 3 fils" style="zoom: 33%;" /> |
 
 NOTE : La couleur des interrupteurs et des câbles peut varier.
 
@@ -75,18 +75,18 @@ NOTE : La couleur des interrupteurs et des câbles peut varier.
 
 | Nombre | Boutons                      |                                                                              |
 | ------ | ---------------------------- | ---------------------------------------------------------------------------: |
-| 1      | Bouton Reset                 | <img src="pictures/040-resetbtn.jpg" alt="Reset" style="zoom: 33%;" />       |
-| 1      | Bouton marche/arrêt avec LED | <img src="pictures/040-pwrbtn.jpg" alt="Bouton ON/OFF" style="zoom: 33%;" /> |
+| 1      | Bouton Reset                 | <img src="Pictures/040-resetbtn.jpg" alt="Reset" style="zoom: 33%;" />       |
+| 1      | Bouton marche/arrêt avec LED | <img src="Pictures/040-pwrbtn.jpg" alt="Bouton ON/OFF" style="zoom: 33%;" /> |
 
 ## Visserie<A id="a12"></A>
 
 | Nombre | Visserie et Supports                              |                                                                                  |
 | ------ | ------------------------------------------------- | -------------------------------------------------------------------------------: |
-| 6      | Boulons M2x8 (interrupteurs façade arrière)       | <img src="pictures/040-M2x8.jpg" alt="M2x8" style="zoom: 33%;" />                |
-| 2      | Boulons M3x8 (connecteur HDMI)                    | <img src="pictures/040-M3x8.jpg" alt="M3x8" style="zoom: 33%;" />                |
-| 5      | Supports 12 mm avec vis et écrou (façade avant)    | <img src="pictures/022A-support12.jpg" alt="Supports 12 smm" style="zoom: 33%;" /> |
-| 4      | Supports 10 mm avec vis et écrou (écran LCD)       | <img src="pictures/022B-support10.jpg" alt="Supports 10 mm" style="zoom: 33%;" /> |
-| 6      | Supports 15 mm avec vis et écrou (fond de boîtier) | <img src="pictures/022C-support15.jpg" alt="Supports 15 mm" style="zoom:33%;" />                      |
+| 6      | Boulons M2x8 (interrupteurs façade arrière)       | <img src="Pictures/040-M2x8.jpg" alt="M2x8" style="zoom: 33%;" />                |
+| 2      | Boulons M3x8 (connecteur HDMI)                    | <img src="Pictures/040-M3x8.jpg" alt="M3x8" style="zoom: 33%;" />                |
+| 5      | Supports 12 mm avec vis et écrou (façade avant)    | <img src="Pictures/022A-support12.jpg" alt="Supports 12 smm" style="zoom: 33%;" /> |
+| 4      | Supports 10 mm avec vis et écrou (écran LCD)       | <img src="Pictures/022B-support10.jpg" alt="Supports 10 mm" style="zoom: 33%;" /> |
+| 6      | Supports 15 mm avec vis et écrou (fond de boîtier) | <img src="Pictures/022C-support15.jpg" alt="Supports 15 mm" style="zoom:33%;" />                      |
 
 NOTE : la couleur et la matière des supports 15mm peut varier.
 
@@ -103,13 +103,13 @@ Pour un boîtier plus profond il faudra utiliser des rallonges de type Dupont ou
 
 | Nombre | Câbles                                       |                                                                                    |
 | ------ | -------------------------------------------- | ---------------------------------------------------------------------------------: |
-| 1      | Câble HDMI/microHDMI                         |           <img src="pictures/040-hdmicable.jpg" style="zoom: 33%;" />              |
-| 1      | Câble bouton marche/arrêt avec 3 connecteurs | <img src="pictures/040-power.jpg" alt="Cable bouton ON/OFF" style="zoom: 33%;" />  |
-| 1      | Câble alimentation principale rouge          | <img src="pictures/040-mainvcc.jpg" alt="Cable alimentation" style="zoom: 33%;" /> |
-| 1      | Câble alimentation principale noir           | <img src="pictures/040-maingnd.jpg" alt="Cable alimentation" style="zoom: 33%;" /> |
-| 1      | Câble reset 2 fils                           | <img src="pictures/040-reset.jpg" alt="Cable reset" style="zoom: 33%;" />          |
-| 1      | Câble I2C 4 fils                             | <img src="pictures/040-I2C.jpg" alt="Cable I2C" style="zoom: 33%;" />              |
-| 2      | Câbles Dupont 12 fils                        | <img src="pictures/040-dupont.jpg" alt="Cables connexion" style="zoom: 33%;" />    |
+| 1      | Câble HDMI/microHDMI                         |           <img src="Pictures/040-hdmicable.jpg" style="zoom: 33%;" />              |
+| 1      | Câble bouton marche/arrêt avec 3 connecteurs | <img src="Pictures/040-power.jpg" alt="Cable bouton ON/OFF" style="zoom: 33%;" />  |
+| 1      | Câble alimentation principale rouge          | <img src="Pictures/040-mainvcc.jpg" alt="Cable alimentation" style="zoom: 33%;" /> |
+| 1      | Câble alimentation principale noir           | <img src="Pictures/040-maingnd.jpg" alt="Cable alimentation" style="zoom: 33%;" /> |
+| 1      | Câble reset 2 fils                           | <img src="Pictures/040-reset.jpg" alt="Cable reset" style="zoom: 33%;" />          |
+| 1      | Câble I2C 4 fils                             | <img src="Pictures/040-I2C.jpg" alt="Cable I2C" style="zoom: 33%;" />              |
+| 2      | Câbles Dupont 12 fils                        | <img src="Pictures/040-dupont.jpg" alt="Cables connexion" style="zoom: 33%;" />    |
 
 ## Conclusion<A id="a14"></A>
 

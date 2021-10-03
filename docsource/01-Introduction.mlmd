@@ -108,8 +108,8 @@ de commander un [SC113](https://www.tindie.com/products/tindiescx/sc113-modular-
 ses composants sur la carte SC113 Tiny. Quelques composants du kit SC113 sont inutilisés mais en dehors de cela le
 fonctionnement et l'assemblage sont identiques..))
 
-<img src="pictures/SC113tiny.jpg" alt="SC113 beside SC113-Tiny" style="zoom: 50%;" />
-.fr((<img src="pictures/SC113tiny.jpg" alt="SC113 à côté de SC113 Tiny" style="zoom: 50%;" />.))
+<img src="Pictures/SC113tiny.jpg" alt="SC113 beside SC113-Tiny" style="zoom: 50%;" />
+.fr((<img src="Pictures/SC113tiny.jpg" alt="SC113 à côté de SC113 Tiny" style="zoom: 50%;" />.))
 
 ## SC126 power switch.fr((Interrupteur marche/arrêt SC126.))
 
@@ -123,4 +123,4 @@ son interrupteur par un connecteur à trois broches et placer un jumper sur les 
 de remplacer l'interrupteur en position ON comme indiqué sur l'image ci-dessous. Si en revanche votre SC126 est déjà assemblé,
 il vous suffira de placer l'interrupteur en position ON. Le bouton de Bluety lui-même est relié à un autre endroit du SC126..))
 
-<img src="pictures/97-contact.jpg" .((alt="On/Off replacement".)).fr((alt="Remplacement on/off".)) style="zoom:50%;" />
+<img src="Pictures/97-contact.jpg" .((alt="On/Off replacement".)).fr((alt="Remplacement on/off".)) style="zoom:50%;" />

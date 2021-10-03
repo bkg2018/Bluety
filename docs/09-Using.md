@@ -17,7 +17,7 @@ The 8 Bluety LEDs below the LCD screen are direct echoes of the last byte writte
 - Any program can switch these LEDs on or off by sending a 8-bits data on the control port. The leftmost LED represents
 the most significant bit: writing 80h will light this LED alone.
 
-<TABLE><TR><TD><img src="pictures/thisway.png" alt="Advice" width="75px" /></TD><TD>
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Advice" width="75px" /></TD><TD>
 Remark: the control port retains the last written byte, so to switch LEDs off you mlust explicitely write a 0. This is
 particularly true with RomWBW which lights all 8 LEDs during its boot process and leaves them in this state.
 </TD></TR></TABLE>
@@ -37,10 +37,10 @@ Both input ports have an 8-bits female header for +5V input, 8 control LEDs, and
 
 | Step  | Description                                                  |                                                        |
 | ----- | :----------------------------------------------------------- | -----------------------------------------------------: |
-| 1     | Choose the port number and put the corresponding switches on the port select dip-switch up for bits 1, down for bits 0. The leftmost most significant bit is on the leftmost switch. For example, to select the port number 7 you put the 3 right most switches up and all the pthers down. | <img src="pictures/97-portselect.jpg" width="400px" /> |
-| 2     | Put the input source 3-positions switch in the middle position and connect your input wires to the input header. |     <img src="pictures/096-input.jpg" width="300px" /> |
-| 3     | Each switch can be set up to force a bit at 1 or down to force it at 0. |          <img src="pictures/TODO.PNG" width="300px" /> |
-| 4     | The control switch at the LEDs top right enable or disables all LEDs lighting. This saves a few current if case you need it. Each LED reflects the state of its corresponding bit in the input header or LED switch. In bottom position, the switch disables LEDs whatever the state of the input bit, which avoid consuming input current just for the LEDs. |          <img src="pictures/TODO.PNG" width="300px" /> |
+| 1     | Choose the port number and put the corresponding switches on the port select dip-switch up for bits 1, down for bits 0. The leftmost most significant bit is on the leftmost switch. For example, to select the port number 7 you put the 3 right most switches up and all the pthers down. | <img src="Pictures/97-portselect.jpg" width="400px" /> |
+| 2     | Put the input source 3-positions switch in the middle position and connect your input wires to the input header. |     <img src="Pictures/096-input.jpg" width="300px" /> |
+| 3     | Each switch can be set up to force a bit at 1 or down to force it at 0. |          <img src="Pictures/TODO.PNG" width="300px" /> |
+| 4     | The control switch at the LEDs top right enable or disables all LEDs lighting. This saves a few current if case you need it. Each LED reflects the state of its corresponding bit in the input header or LED switch. In bottom position, the switch disables LEDs whatever the state of the input bit, which avoid consuming input current just for the LEDs. |          <img src="Pictures/TODO.PNG" width="300px" /> |
 | 5     | To read the port input value, use:<br />● the Z-80 `IN` instruction family<br />● the Z-180 `IN0` instruction<br />● the BASIC `INP()` function<br />● the SCM `IN` command<br />The received data will have bits 1 on the input lines which receive +5V and the corresponding LEDs will be lighted (if the global control switch is not down). The bits for input lines at GND level or significantly less than +5V will be at 0 and the LED will be off. |                                                        |
 
 Beware that input lines directly feed integrated conponents and LEDs, so take care of not drawing more than a few milliampers and not much more
@@ -52,17 +52,17 @@ Generally, less than +4.7V on an input line will be considered as a 0 bit.
 
 | Step  | Description                                                  |                                                        |
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------: |
-| 1     | Choose the port number and put the corresponding switches on the port select dip-switch up for bits 1, down for bits 0. The leftmost most significant bit is on the leftmost switch. For example, to select the port number 7 you put the 3 right most switches up and all the pthers down. | <img src="pictures/97-portselect.jpg" width="400px" /> |
-| 2     | Connect up to 8 output wires to the output header.          |            <img src="pictures/TODO.PNG" width="300" /> |
-| 3     | The switch at the LEDs bottom right enables or disables the LEDs lighting. When they're disabled, the output header receives all the output current, when they're enabled they consume a few milliampers of the output load. |            <img src="pictures/TODO.PNG" width="300" /> |
-| 4     | To write a data on the port, use:<br />● the Z-80 `OUT` instruction family<br />● the `OUT0` Z-180 instruction<br />● the BASIC `OUT` instruction<br />● the SCM `OUT` command<br />+5V will be sent on the lines with a bit at 1 and the matching LED will be lighted. |            <img src="pictures/TODO.PNG" width="300" /> |
+| 1     | Choose the port number and put the corresponding switches on the port select dip-switch up for bits 1, down for bits 0. The leftmost most significant bit is on the leftmost switch. For example, to select the port number 7 you put the 3 right most switches up and all the pthers down. | <img src="Pictures/97-portselect.jpg" width="400px" /> |
+| 2     | Connect up to 8 output wires to the output header.          |            <img src="Pictures/TODO.PNG" width="300" /> |
+| 3     | The switch at the LEDs bottom right enables or disables the LEDs lighting. When they're disabled, the output header receives all the output current, when they're enabled they consume a few milliampers of the output load. |            <img src="Pictures/TODO.PNG" width="300" /> |
+| 4     | To write a data on the port, use:<br />● the Z-80 `OUT` instruction family<br />● the `OUT0` Z-180 instruction<br />● the BASIC `OUT` instruction<br />● the SCM `OUT` command<br />+5V will be sent on the lines with a bit at 1 and the matching LED will be lighted. |            <img src="Pictures/TODO.PNG" width="300" /> |
 | 5     | You can use the additional +5V/GND header to feed external devices like circuits with sensors or relays, independently from any switch or LED. |                                                        |
 
 <TABLE>
-<TR><TD><img src="pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
+<TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
 Remark: Output ports retain their last data, so to switch all lines and LEDs to GND level you must explicitely write a 0 to the output port.
 </TD></TR>
-<TR><TD><img src="pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
+<TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
 You can use the dipswitch port select to spy any of the Z-80 port, for example gthe Z-180 internal ports on the SC126 
 or the ports used by a ROM with BusRaider.
 </TD></TR></TABLE>
@@ -90,7 +90,7 @@ using either an 8-bit output port controller board, either a Z-80 PIO circuit, b
 
 With SC126 you can also use this solution if you want to keep the I2C bus for other uses.
 
-<TABLE><TR><TD><img src="pictures/attention.png" width="100px" /></TD><TD>
+<TABLE><TR><TD><img src="Pictures/attention.png" width="100px" /></TD><TD>
 When ordering your Bluety kit, make sure you select the right LCD screen type <EM>without I2C adapter</EM>, 
 or you will hzve to unsolder the adapter, which is very difficult
 </TD></TR></TABLE>
