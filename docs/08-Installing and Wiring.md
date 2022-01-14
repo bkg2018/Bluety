@@ -42,8 +42,13 @@ instructions only apply to the SC126.
 
 Connecting is easier if you already connected the LCD screen and power button cables *before* screwing the panel:
 
-- If you didn't attach the I2C cable on the LCD screen, unscrew the LCD from the front panel, connect the cable then screw again the
-  LCD screen on the front panel. Refer to the [Assembling Front Panel](06-Assembling Front Panellanguage}.md) part for connecting the I2C cable.- If you didn't attach the power button cable, unscrew the front panel, connect the power button as explained in  [Assembling Front Panel](06-Assembling Front Panel.{language}.md), then screw the front panel again..)).fr((- Si vous n'avez pas déjà fixé le câble I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le câble puis revissez l'écran.  Reportez-vous à la section [Façade avant](#façade-avant) pour le branchement.- Si vous n'avez pas fixé les câbles sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans  la section [Façade avant](#façade-avant) puis revissez la façade..))## Back panel<A id="a38"></A>
+- If you didn't attach the I2C cable on the LCD screen, unscrew the LCD from the front panel, connect the cable then
+  screw again the LCD screen on the front panel. Refer to the [Assembling Front Panel](06-Assembling Front Panel.md)
+  part for connecting the I2C cable.
+- If you didn't attach the power button cable, unscrew the front panel, connect the power button as explained in
+  [Assembling Front Panel](06-Assembling Front Panel.md), then screw the front panel again.
+
+## Back panel<A id="a38"></A>
 
 At the bottom of the back panel lies an opening facing the numerous SC126 connectors, like serial port to allow control from
 a terminal software on a desktop or portable computer. (If you followed instructions, a cable is already installed on serial port
@@ -76,8 +81,8 @@ an RC2014 Pro configuration.</TD></TR></TABLE>
 
 ### RESET<A id="a41"></A>
 
-The reset button is particularly useful for the PiZero Terminal users as it generaly requires a reset after switching the computer ON, 
-but it also serves when a program freezes the computer, as crashing bugs can lock a Z-80 much easier than a modern CPU.
+The reset button is particularly useful for the PiZero Terminal users as it may require a reset after switching the computer ON, 
+but it also serves when a program freezes the computer, as crashing bugs can lock a Z-80 much more easily than a modern CPU.
 
 ### SC126<A id="a42"></A>
 

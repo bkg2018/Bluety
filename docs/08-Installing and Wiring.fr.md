@@ -41,11 +41,14 @@ de Spencer Owens également disponible avec le kit RC2014 Pro.
 L'écran LCD n'a pas de fonction prédéfinie sur un RC2014 Pro car il n'a pas de bus I2C, aussi les instructions
 qui concernent le LCD ne s'appliquent qu'au SC126.
 
-Les branchements sont facilités si vous avez connecté les câbles de l'écran LCD et du bouton marche/arrêt
-*avant* de visser la façade :
+Les branchements sont facilités si vous avez connecté les câbles de l'écran LCD et du bouton marche/arrêt *avant* de visser la façade :
 
-- If you didn't attach the I2C cable on the LCD screen, unscrew the LCD from the front panel, connect the cable then screw again the
-  LCD screen on the front panel. Refer to the [Assembling Front Panel](06-Assembling Front Panellanguage}.md) part for connecting the I2C cable.- If you didn't attach the power button cable, unscrew the front panel, connect the power button as explained in  [Assembling Front Panel](06-Assembling Front Panel.{language}.md), then screw the front panel again..)).fr((- Si vous n'avez pas déjà fixé le câble I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le câble puis revissez l'écran.  Reportez-vous à la section [Façade avant](#façade-avant) pour le branchement.- Si vous n'avez pas fixé les câbles sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans  la section [Façade avant](#façade-avant) puis revissez la façade..))## Façade arrière<A id="a38"></A>
+- Si vous n'avez pas déjà fixé le câble I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le câble puis revissez l'écran.
+  Reportez-vous à la section [Façade avant](06-Assembling Front Panel.fr.md) pour le branchement.
+- Si vous n'avez pas fixé les câbles sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans
+  la section [Façade avant](06-Assembling Front Panel.fr.md) puis revissez la façade.
+
+## Façade arrière<A id="a38"></A>
 
 En bas de la façade, une ouverture permet de passer les câbles utiles pour les nombreux connecteurs du SC126, par exemple la prise série
 pour contrôler l'ordinateur via une machine de bureau ou portable (si vous avez suivi les indications, un câble est déjà installé et passe
@@ -66,7 +69,7 @@ a été préférée à une prise USB en raison des difficultés à trouver un co
 ### Interrupteurs ROM (SC126 seulement)<A id="a40"></A>
 
 Les interrupteurs de sélection permettent de choisir entre les deux ROM du SC126 et d'autoriser leur écriture pour une mise à jour. 
-Ils se connectent directement sur des jhmpers de configuration du SC126.
+Ils se connectent directement sur des jumpers de configuration du SC126.
 
 Ces interrupteurs n'ont pas de fonction pour une configuration RC2014 Pro.</TD></TR></TABLE>
 
@@ -77,7 +80,7 @@ Ces interrupteurs n'ont pas de fonction pour une configuration RC2014 Pro.</TD><
 
 ### RESET<A id="a41"></A>
 
-Le bouton Reset est particulièrement utile pour les utilisateurs de la carte PiZero Terminal qui nécessite en général un reset après
+Le bouton Reset est particulièrement utile pour les utilisateurs de la carte PiZero Terminal qui nécessite parfois un reset après
 la mise en marche, mais aussi lorsqu'une erreur de programme bloque l'ordinateur, ce qui arrive beaucoup plus facilement avec un Z-80 
 qu'avec un processeur moderne.
 

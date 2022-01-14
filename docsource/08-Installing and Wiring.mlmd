@@ -78,19 +78,19 @@ instructions only apply to the SC126.
 qui concernent le LCD ne s'appliquent qu'au SC126..))
 
 Connecting is easier if you already connected the LCD screen and power button cables *before* screwing the panel:
-.fr((Les branchements sont facilités si vous avez connecté les câbles de l'écran LCD et du bouton marche/arrêt
-*avant* de visser la façade :.))
+.fr((Les branchements sont facilités si vous avez connecté les câbles de l'écran LCD et du bouton marche/arrêt *avant* de visser la façade :.))
 
 .((
-- If you didn't attach the I2C cable on the LCD screen, unscrew the LCD from the front panel, connect the cable then screw again the
-  LCD screen on the front panel. Refer to the [Assembling Front Panel](06-Assembling Front Panel.{language}.md) part for connecting the I2C cable.
+- If you didn't attach the I2C cable on the LCD screen, unscrew the LCD from the front panel, connect the cable then
+  screw again the LCD screen on the front panel. Refer to the [Assembling Front Panel](06-Assembling Front Panel{extension})
+  part for connecting the I2C cable.
 - If you didn't attach the power button cable, unscrew the front panel, connect the power button as explained in
-  [Assembling Front Panel](06-Assembling Front Panel.{language}.md), then screw the front panel again.
+  [Assembling Front Panel](06-Assembling Front Panel{extension}), then screw the front panel again.
 .)).fr((
 - Si vous n'avez pas déjà fixé le câble I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le câble puis revissez l'écran.
-  Reportez-vous à la section [Façade avant](#façade-avant) pour le branchement.
+  Reportez-vous à la section [Façade avant](06-Assembling Front Panel{extension}) pour le branchement.
 - Si vous n'avez pas fixé les câbles sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans
-  la section [Façade avant](#façade-avant) puis revissez la façade.
+  la section [Façade avant](06-Assembling Front Panel{extension}) puis revissez la façade.
 .))
 
 ## Back panel.fr((Façade arrière.))
@@ -129,7 +129,7 @@ a été préférée à une prise USB en raison des difficultés à trouver un co
 The select switches let you choose between the two SC126 flashs ROMs and allow or disable writing for updating them. The connect
 directly on corresponding confuguration jumpers on the SC126 board.
 .fr((Les interrupteurs de sélection permettent de choisir entre les deux ROM du SC126 et d'autoriser leur écriture pour une mise à jour. 
-Ils se connectent directement sur des jhmpers de configuration du SC126..))
+Ils se connectent directement sur des jumpers de configuration du SC126..))
 
 <TABLE><TR><TD><img src="Pictures/thisway.png" alt="thisway" width="50px" /></TD><TD>These switches have no defined function on
 an RC2014 Pro configuration..fr((Ces interrupteurs n'ont pas de fonction pour une configuration RC2014 Pro..))</TD></TR></TABLE>
@@ -148,9 +148,9 @@ an RC2014 Pro configuration..fr((Ces interrupteurs n'ont pas de fonction pour un
 
 ### RESET
 
-The reset button is particularly useful for the PiZero Terminal users as it generaly requires a reset after switching the computer ON, 
-but it also serves when a program freezes the computer, as crashing bugs can lock a Z-80 much easier than a modern CPU.
-.fr((Le bouton Reset est particulièrement utile pour les utilisateurs de la carte PiZero Terminal qui nécessite en général un reset après
+The reset button is particularly useful for the PiZero Terminal users as it may require a reset after switching the computer ON, 
+but it also serves when a program freezes the computer, as crashing bugs can lock a Z-80 much more easily than a modern CPU.
+.fr((Le bouton Reset est particulièrement utile pour les utilisateurs de la carte PiZero Terminal qui nécessite parfois un reset après
 la mise en marche, mais aussi lorsqu'une erreur de programme bloque l'ordinateur, ce qui arrive beaucoup plus facilement avec un Z-80 
 qu'avec un processeur moderne..))
 
