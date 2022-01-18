@@ -1,6 +1,6 @@
 <A id="top">
-[<img src="https://www.countryflags.io/fr/flat/16.png">](Bluety.fr.md)
-[<img src="https://www.countryflags.io/gb/flat/16.png">](Bluety.md)
+[<img src="https://flagcdn.com/256x192/fr.png" width="25" height="19">](Bluety.fr.md)
+[<img src="https://flagcdn.com/256x192/gb.png" width="25" height="19">](Bluety.md)
 
 # Bluety - Case panels with I/O controls for Z-80 Retro Computers<A id="a1"></A>
 
@@ -66,5 +66,5 @@ from Spencer Owens.
   - [Ecran LCD : Interface logicielle](<09-Using.md#a54>)
 
 [^](#top)
-[<img src="https://www.countryflags.io/fr/flat/16.png">](Bluety.fr.md)
-[<img src="https://www.countryflags.io/gb/flat/16.png">](Bluety.md)
+[<img src="https://flagcdn.com/256x192/fr.png" width="25" height="19">](Bluety.fr.md)
+[<img src="https://flagcdn.com/256x192/gb.png" width="25" height="19">](Bluety.md)

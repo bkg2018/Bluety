@@ -1,6 +1,6 @@
 <A id="top">
-[<img src="https://www.countryflags.io/fr/flat/16.png">](Bluety.fr.md)
-[<img src="https://www.countryflags.io/gb/flat/16.png">](Bluety.md)
+[<img src="https://flagcdn.com/256x192/fr.png" width="25" height="19">](Bluety.fr.md)
+[<img src="https://flagcdn.com/256x192/gb.png" width="25" height="19">](Bluety.md)
 
 # Bluety - Panneaux avec contrôles E/S pour ordinateurs Z-80<A id="a1"></A>
 
@@ -66,5 +66,5 @@ de Spencer Owens.
   - [Ecran LCD : Interface logicielle](<09-Using.fr.md#a54>)
 
 [^](#top)
-[<img src="https://www.countryflags.io/fr/flat/16.png">](Bluety.fr.md)
-[<img src="https://www.countryflags.io/gb/flat/16.png">](Bluety.md)
+[<img src="https://flagcdn.com/256x192/fr.png" width="25" height="19">](Bluety.fr.md)
+[<img src="https://flagcdn.com/256x192/gb.png" width="25" height="19">](Bluety.md)
