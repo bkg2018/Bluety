@@ -3,53 +3,53 @@
 # Presentation.fr((Présentation.))
 
 Bluety is a set of printed electronic boards for a case hosting an RC2014 class computer, particularly aimed at the SC126 kit
-from Stephen S. Cousins and the RC2014 Pro from Spencer Owens, who created the original RC2014.
+from Stephen S. Cousins and the RC2014 Pro from Spencer Owens, who designed the original RC2014.
 .fr((Bluety est un ensemble de circuits imprimés pour un boîtier destiné à recevoir un ordinateur de type RC2014, en particulier le kit SC126
-de Stephen S. Cousins et le RC2014 Pro de Spencer Owens..))
+de Stephen S. Cousins et le RC2014 Pro de Spencer Owens, qui a conçu le RC2014 original..))
 
 
-## Kit Content.fr((Contenu du kit.))
+## Content.fr((Contenu.))
 
-The kit contains the following elements:.fr((L'ensemble se compose des éléments suivants :.))
+The set is made of the following elements:.fr((L'ensemble se compose des éléments suivants :.))
 
 .((
-- A Front Panel with an opening for an LCD display, lots of connectors, LEDs and switches, and a power button.
-- A Back Panel with a power connector, an HDMI connector, ROM control switches for the SC126, openings for external cabling
+- A *Front Panel* with an opening for an LCD display, lots of connectors, LEDs, switches and a power button.
+- A *Back Panel* with a power connector, an HDMI connector, ROM control switches for the SC126, openings for external cabling
   and a reset button.
 - *Blink'n Switch*, an input/output board with two selectable I/O ports and one fixed output port used by the
-  SC126 to display status during startup. This board is like two I/O boards but features front panel switches, connectors and
+  SC126 to display status during startup. This board is like two I/O boards but also hosts the front panel switches, connectors and
   control LEDs.
-- *Bus Daughter*, an RC2014 compatible board to link *Blink'n Switch* the the RC2014 bus.
-- A LCD 4x20 backlit display, with or without I2C adapter.
-- Cabling and swcrewing.
+- *Bus Daughter*, an RC2014 compatible board to link *Blink'n Switch* to the RC2014 bus.
+- An LCD 4x20 backlit display, with or without I2C adapter.
+- Cabling and screwing.
 .)).fr((
-- Une façade avant, avec des ouvertures pour un écran LCD et des nombreux connecteurs, LEDs et interrupteurs ainsi qu'un bouton marche/arrêt.
-- Une façade arrière avec un connecteur d'alimentation, une sortie HDMI, des interrupteurs de contrôle des ROMs du SC126, des ouvertures
+- Une *façade avant*, avec des ouvertures pour un écran LCD et des nombreux connecteurs, LEDs et interrupteurs ainsi qu'un bouton marche/arrêt.
+- Une *façade arrière* avec un connecteur d'alimentation, une sortie HDMI, des interrupteurs de contrôle des ROMs du SC126, des ouvertures
   pour faciliter les branchements et un bouton Reset.
-- *Blink'n Switch*, une carte d'entrée-sortie avec deux ports d'entrée/sortie sélectionnables et un port de  sortie fixe utilisé par le
-  SC126 pour afficher le status lors du démarrage. Cette carte équivaut à deux carte I/O mais ses contrôleurs en façades en rendent
-  l'utilisation beaucoup plus simple et elle présente des possibilités supplémentaires.
+- *Blink'n Switch*, une carte d'entrée-sortie avec deux ports d'entrée/sortie sélectionnables et un port de sortie fixe utilisé par le
+  SC126 pour afficher le status lors du démarrage. Cette carte équivaut à deux cartes I/O mais elle accueille aussi les interrupteurs, LEDs et
+  connecteurs de contrôle accessibles sur la façade avant.
 - *Bus Daughter*, une carte compatible RC2014 pour connecter *Blink'n Switch* au bus RC2014.
 - Un écran LCD 4x20 rétro éclairé, *avec ou sans adaptateur I2C*.
 - Tous les câbles nécessaires pour les branchements.
 .))
 
-The kit design and look are based on a blue case that can be bought from most merchant sites featuring an electronics hobby section.
-(See [Case](#boitier).) The blue color of this case gave its name and design to Bluety and dictated the size of electronic boards
-and front / back panels. Both the boards and when possible the components are blue colored. But Bluety can be hosted by any case with
-correctly sized front and back panel, as well as sufficient depth for the hosted computer. The user will have to practice a rectangular
-cutout in front and back panel in order to fix Bluety panels on them, and if depth is too big, build a few cables.
-.fr((La conception du kit et son design sont basés sur un boîtier bleu que l'on peut se procurer sur la plupart des sites marchands proposant
-de l'électronique (voir [Boitier](#boîtier)). La couleur de ce boîtier a donné son nom et son design à Bluety et a dicté la taille des
+The design, look and name of Bluety are based on a blue case that can be bought from most merchant sites featuring an electronics hobby section.
+(See [Case](#boitier).) This case dimensions dictated the size of electronic boards
+and front / back panels. Both the boards and when possible the components are blue colored. Bluety can be hosted by any case with
+correctly sized front and back panel, as well as sufficient depth for the host computer. The user will have to practice a rectangular
+cutout in front and back panel in order to fix Bluety panels on them, and if depth is too big, build a few cables longer than 
+.fr((La conception, l'allure et le nom de Bluety sont basés sur un boîtier bleu que l'on peut se procurer sur la plupart des sites marchands proposant
+de l'électronique (voir [Boitier](#boîtier)). Les dimensions de ce boîtier ont dicté la taille des
 façades. Les circuits imprimés et si possible les composants ont été choisis de couleur bleue. Mais Bluety conviendra à tout autre
 boîtier de dimensions supérieures (pour les façades) et d'une profondeur suffisante pour l'ordinateur choisi. L'utilisateur devra
-pratiquer une ouverture sur les façades de son boîtier pour pouvoir y fixer les façades de Bluety et éventuellement fabriquer des câbles
-si la profondeur est trop grande pour ceux fournis..))
+pratiquer une ouverture sur les façades de son boîtier pour pouvoir y fixer les façades de Bluety et fabriquer des câbles
+si la profondeur est trop grande pour ceux indiqués dans cette documentation..))
 
 Bluety has been specifically designed to receive Stephen's Cousins [SC126](https://www.tindie.com/products/tindiescx/sc126-z180-sbc-motherboard-kit/)
 computer kit and Spencer Owens's *[PiZero Terminal](https://www.tindie.com/products/semachthemonkey/raspberry-pi-zero-serial-terminal-for-rc2014/?pt=ac_prod_search)*
 RC2014 module or Rob Robson's [BusRaider](https://www.tindie.com/products/robdobson/play-retro-games-rc2014-graphics-kit/) card on a RC2014.
-The SC126 is a computer gifted with a fast 18 MHz Z-180 processor mostly compatible with the Z-80, equipped with two 512KB flash ROMs
+The SC126 is a computer gifted with a fast 18 MHz Z-180 processor almost totally compatible with the Z-80, and it features two 512KB flash ROMs
 giving choice between two control softwares : [*Small Computer Monitor*](https://smallcomputercentral.wordpress.com/small-computer-monitor/) and
 [*RomWBW*](https://github.com/wwarthen/RomWBW), one 512KB Flash RAM and numerous integrated devices like two serial ports, one SD-card port and one I2C port
 which is used by Bluety LCD Screen.
@@ -63,13 +63,11 @@ intégrés tels que deux ports série, un port SD et un port I2C. Ce dernier per
 
 Bluety can also be used with Spencer Owens [RC2014](https://www.tindie.com/stores/Semachthemonkey/) computer kit in all versions
 up to the [Backplane Pro](https://www.tindie.com/products/semachthemonkey/rc2014-pro-homebrew-z80-computer-kit/) with 12
-bus connectors, as well as other computers based on the RC2014, although Bluety only handles I2C connexion for the LCD display.
-A non I2C can also be used using one I/O parallel port but this has not been designed yet.
+bus connectors, as well as other computers based on the RC2014.
 .fr((Bluety est également utilisable avec le [RC2014](https://www.tindie.com/stores/Semachthemonkey/) de Spencer Owens dans toutes ses
 versions jusqu'à la version [RC2014 Pro](https://www.tindie.com/products/Semachthemonkey/backplane-pro-for-rc2014-z80-homebrew-computer/)
 équipée du [Backplane Pro](https://www.tindie.com/products/Semachthemonkey/backplane-pro-for-rc2014-z80-homebrew-computer/) avec 12
-connecteurs de bus, ainsi que de nombreux ordinateurs respectant le bus RC2014, bien que l'écran LCD de Bluety ne soit utilisable
-qu'avec un bus I2C..))
+connecteurs de bus, ainsi que de nombreux ordinateurs respectant le bus RC2014.))
 
 I wish you a lot of pleasure in assembling and using Bluety.
 .fr((Je vous souhaite un bon assemblage et beaucoup de plaisir avec Bluety..))
@@ -88,28 +86,28 @@ featuring 6 more bus connectors and another more expansion connector to expand f
 connecteurs de bus et un nouveau connecteur d'extension..))
 
 However the SC113 board is too long for Bluety casing, so I have derived a shorted version of Stephen S. Cousins board which
-I called SC113-Tiny, giving 3 bus connectors instead of 6 and fits in the Bluety casing. It also features an expansion connector
+I called FP113-Tiny, giving 3 bus connectors instead of 6 and fits in the Bluety casing. It also features an expansion connector
 which can be aligned to the case left side panel.
 .fr((La carte SC113 est cependant trop longue pour le boîtier de Bluety, aussi Bluety peut être équipé d'une version raccourcie,
-SC113-Tiny, qui propose 3 connecteurs de bus au lieu de 6 et convient aux dimensions du boîtier. Il présente lui aussi un
+FP113-Tiny, qui propose 3 connecteurs de bus au lieu de 6 et convient aux dimensions du boîtier. Il présente lui aussi un
 connecteur d'extension pour ajouter un SC113 à l'extérieur du boîtier..))
 
-The SC113-Tiny board is available as an option with the Bluety kit for a cheap value, without components.
-.fr((Le circuit imprimé SC113 Tiny est disponible en option avec le kit Bluety, sans ses composants..))
+The FP113-Tiny board design files are at [](https://oshwlab.com/bkg2018/sc113-t).
+.fr((Les fichier du circuit imprimé FP113-Tiny sont disponibles à [](https://oshwlab.com/bkg2018/sc113-t).))
 
-Notice this SC113-Tiny board has not been designed nor realized by Stephen S. Cousins and won't be supported by him
-but me in case of problems. I sell only the PCB as a Bluety option: to get components I recommend Stephen's SC113 official
+Notice this FP113-Tiny board has not been designed nor realized by Stephen S. Cousins and won't be supported by him
+but me in case of problems. To get components I recommend Stephen's SC113 official
 kit which is inexpensive and features quality components. You can order it here:
-[SC113](https://www.tindie.com/products/tindiescx/sc113-modular-backplane-kit-for-rc2014/) and then use parts of its
-components to fill SC113-Tiny, which is built almost identically only with 3 bus connectors instead of 6.
+[SC113](https://www.tindie.com/products/tindiescx/sc113-modular-backplane-kit-for-rc2014/) and then use most part of its
+components to fill FP113-Tiny, which is built almost identically only with 3 bus connectors instead of 6.
 .fr((Notez que *cette carte SC113-Tiny n'a pas été conçue par Stephen S. Cousins* et n'est donc pas supportée par lui mais
-par moi-même en cas de problème. Je fournis *uniquement le circuit imprimé* en option avec Bluety : je vous conseille
+par moi-même en cas de problème. Je vous conseille
 de commander un [SC113](https://www.tindie.com/products/tindiescx/sc113-modular-backplane-kit-for-rc2014/) et d'utiliser
-ses composants sur la carte SC113 Tiny. Quelques composants du kit SC113 sont inutilisés mais en dehors de cela le
+ses composants sur la carte FP113 Tiny. Quelques composants du kit SC113 sont inutilisés mais en dehors de cela le
 fonctionnement et l'assemblage sont identiques..))
 
-<img src="Pictures/SC113tiny.jpg" alt="SC113 beside SC113-Tiny" style="zoom: 50%;" />
-.fr((<img src="Pictures/SC113tiny.jpg" alt="SC113 à côté de SC113 Tiny" style="zoom: 50%;" />.))
+<img src="Pictures/SC113tiny.jpg" alt="SC113 beside FP113-Tiny" style="zoom: 50%;" />
+.fr((<img src="Pictures/SC113tiny.jpg" alt="SC113 à côté de FP113 Tiny" style="zoom: 50%;" />.))
 
 ## SC126 power switch.fr((Interrupteur marche/arrêt SC126.))
 

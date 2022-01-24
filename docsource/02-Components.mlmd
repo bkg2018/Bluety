@@ -1,0 +1,306 @@
+.topnumber 2
+
+# List of Components.fr((Liste des composants.))
+
+This document will list all the components you must gather before assembling.
+.fr((Ce document liste les composants que vous devrez vous procurer avant l'assemblage..))
+
+First, a very important notice.
+.fr((Avant toute chose, une précaution importante..))
+
+<TABLE><TR><TD><img src="Pictures/attention.png" width="300px" /></TD><TD><B>Do not touch the integrated circuits
+and the LCD screen without wearing an antistatic wristwrath linked to some ground.</B>. Preferably, leave them
+in their antistatic bag until final and front panel assembly to limit the risk of a static discharge which could
+damage them seriously. In any case, never place them before doing the electric checkings.</TD></TR></TABLE>
+.fr((
+<TABLE><TR><TD><img src="Pictures/attention.png" width="300px" /></TD><TD><B>Ne touchez pas les circuits intégrés et
+l'écran LCD sans être équipé d'un bracelet antistatique relié à une masse</B>. De préférence, laissez les à l'abri dans
+leur étui anti-statique jusqu'au moment de la fixation de la façade avant sur le boîtier pour éliminer le risque de les
+endommager avec de l'électricité statique. Dans tous les cas, ne les placez pas sur le circuit avant d'avoir procédé
+aux vérifications électriques.</TD></TR></TABLE>
+.))
+
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Verification" width="150px" /></TD><TD>During assembly,
+you will be informed to proceed with a specific checking by this panel. Do not oversee these recommendations,
+they will guarantee a perfect assembly where proceeding is not obvious.</TD></TR></TABLE>
+.fr((
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Vérification" width="150px" /></TD><TD> Dans le processus
+d'assemblage, les étapes où vous devrez procéder à une vérification ou à un assemblage particulier seront
+indiquées par ce panneau.<B>N'ignorez pas ces recommandations</B>, elles garantissent le bon résultat de l'assemblage
+lors des étapes les moins évidentes.</TD></TR></TABLE>
+.))
+
+## Case.fr((Boitier.))
+
+Bluety is designed for a blue metal case which can be found on most commercial sites with an electronics section:
+AliExpress, Banggood, Amazon, eBay to name a few. In their search input field, enter the following: **"Blue Metal
+Electronic Enclosure"** and choose the case with following dimensions:  **250 x 190 x 110** (mm) in results.
+.fr((Bluety est conçu pour un boîtier métallique bleu que l'on peut trouver sur la plupart des sites marchands :
+AliExpress, Banggood, Amazon, eBay pour en citer quelques uns. Dans le champ de recherche de votre site préféré, entrez
+**"Blue Metal Electronic Enclosures"** ou **boitier électronique bleu** et choisissez le boîtier de
+dimensions **250 x 190 x 110** (mm)
+dans les résultats. .))
+
+.((
+<TABLE><TR><TD><img src="Pictures/attention.png" width="100px" /></TD><TD>There are other similar cases
+with inferior dimensions which won't accept Bluety boards size, so make sure you choose the right dimensions 250x190x110.</TD></TR></TABLE>
+.)).fr((
+<TABLE><TR><TD><img src="Pictures/attention.png" width="100px" /></TD><TD>Il existe d'autres boitiers d'aspect similaire
+mais de dimensions inférieures qui ne conviendront pas à Bluety, donc vérifiez bien les dimensions 250x190x110.</TD></TR></TABLE>
+.))
+
+| <img src="Pictures/00-AE.png" alt="AliExpress" style="zoom:33%;" /> | <img src="Pictures/00-BG.png" alt="BangGood" style="zoom:33%;" /> |
+| ------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| <img src="Pictures/00-AZ.png" alt="Amazon" style="zoom:33%;" />     | <img src="Pictures/00-EB.png" alt="eBay" style="zoom:33%;" />     |
+
+The cost is about 20 to 40 euros or dollars shipping included.
+.fr((Le coût est d'environ 20 à 40 euros / dollars livraison comprise..))
+
+The plastic frames holding the front and back panels may have their
+corners slightly damaged during shipping. I had this problem with 3 cases I ordered.
+.fr((Il est possible que les coins des cadres
+plastifiés blancs soient abîmés durant le transport. J'ai eu ce problème sur les 3 exemplaires que j'ai commandés..))
+
+## Printed boards.fr((Cartes et circuits imprimés.))
+
+To build Bluety you will need its four printed boards, which you can build using the files available at the adresses 
+from the following table. I did mine at JLCPCB which has reasonable costs, although it forces you to build at least
+a 10 parts batch. You may resell your bonus boards if you like.
+.fr((Pour assembler Bluety vous aurez besoin de ses quatre circuits imprimés, que vous pourrez fabriquer à
+partir de leurs fichiers disponibles aux adresses indiquées dans le tableau suivant. J'ai fabriqué les mimens chez JLCPCB qui
+offre des tarifs raisonnables, bien qu'il faille fabriquer au minimum 10 circuits. Vous pouvez revendre le surplus si vous
+le souhaitez.))
+
+.((
+| Printed Board Name       | Purpose                                  | Web Address for files |
+|--------------------------|------------------------------------------|------------------------|
+| Bus Daughter             | Connects the I/O board to the RC2014 bus | https://oshwlab.com/bkg2018/front-panel-bus-daughter
+| Blink'n Switch           | 2 ports I/O board with LEDs and Switches | https://oshwlab.com/bkg2018/blink-n-switch-front-panel-for-rc2014
+| Front Panel              | Front panel for the case                 | https://oshwlab.com/bkg2018/blink-n-switch-front-panel-for-rc2014_copy
+| Back Panel               | Back panel for the case                  | https://oshwlab.com/bkg2018/bluety-back-panel
+| (optional) FP113-Tiny    | SC126 bus expansion for Bluety           | https://oshwlab.com/bkg2018/sc113-t
+.)).fr((
+| Circuit Imprimé          | Rôle                                           | Adresse pour les fichiers |
+|--------------------------|------------------------------------------------|------------------------|
+| Bus Daughter             | Connecte le panneau I/O au bus RC2014          | https://oshwlab.com/bkg2018/front-panel-bus-daughter
+| Blink'n Switch           | Panneau E/S 2 ports avec LEDs et interrupteurs | https://oshwlab.com/bkg2018/blink-n-switch-front-panel-for-rc2014
+| Front Panel              | Façade avant du boitier                        | https://oshwlab.com/bkg2018/blink-n-switch-front-panel-for-rc2014_copy
+| Back Panel               | Façade arrière du boitier                      | https://oshwlab.com/bkg2018/bluety-back-panel
+| (optional) FP113-Tiny    | Bus d'extension SC126 pour Bluety              | https://oshwlab.com/bkg2018/sc113-t
+.))
+
+<TABLE><TR><TD><img src="Pictures/attention.png" width="180px" /></TD><TD>Make sure. you protect both front and
+back panels from scratching, projections, burning during soldering. These are the visible faces of Bluety
+so keep them apart until the final assembly. There is no soldering at all on the front and back panels.</TD></TR></TABLE>
+.fr((<TABLE><TR><TD><img src="Pictures/attention.png" width="180px" /></TD><TD>Veillez à protéger les deux façades
+de toute rayure, brûlure, ou projection de flux lors des soudures. Ce sont les faces visibles donc conservez
+les à l'abri jusqu'à la fin de l'assemblage. Les deux façades ne nécessitent aucune soudure.</TD></TR></TABLE>.))
+
+Both panels can arrive slightly curved but this disappears once fixed to the case.
+.fr((Les façades peuvent arriver légèrement incurvées mais ceci disparaît après fixation sur le boîtier..))
+
+.((
+| Number | Board          |                                                                                     |
+| -------| -------------- | ----------------------------------------------------------------------------------: |
+| 1      | Bus Daughter   | <img src="Pictures/012-busdaughter.jpg" alt="Bus Daughter" style="zoom: 33%;" />    |
+| 1      | Blink'n Switch | <img src="Pictures/020-blinknswitch.jpg" alt="Blink'n Switch" style="zoom: 33%;" /> |
+| 1      | Front panel    | <img src="Pictures/021-frontpanel.jpg" alt="Front Panel" style="zoom: 33%;" />      |
+| 1      | Back panel     | <img src="Pictures/021B-backpanel.jpg" alt="Back panel" style="zoom: 33%;" />       |
+.)).fr((
+| Nombre | Carte          |                                                                                     |
+| -------| -------------- | ----------------------------------------------------------------------------------: |
+| 1      | Bus Daughter   | <img src="Pictures/012-busdaughter.jpg" alt="Bus Daughter" style="zoom: 33%;" />    |
+| 1      | Blink'n Switch | <img src="Pictures/020-blinknswitch.jpg" alt="Blink'n Switch" style="zoom: 33%;" /> |
+| 1      | Façade avant   | <img src="Pictures/021-frontpanel.jpg" alt="Façade avant" style="zoom: 33%;" />     |
+| 1      | Façade arrière | <img src="Pictures/021B-backpanel.jpg" alt="Façade arrière" style="zoom: 33%;" />   |
+.))
+
+## Components.fr((Composants.))
+
+Here is the list for passive and active electronic components.
+.fr((Voici la liste des composants électroniques passifs et actifs..))
+
+.((
+| Number | Components                                            |                                                                          |
+| ------ | ----------------------------------------------------- | -----------------------------------------------------------------------: |
+| 40     | 8 blue 3mm LED<br />16 green 3mm LED<br />16 yellow 3mm LED<br /><br />Notice: you can choose the LED colors when ordering. | <img src="Pictures/026-LEDs.jpg" alt="LEDs" style="zoom: 33%;" /> |
+| 11     | 100nF Ceramic capacitors (marked 104)                 | <img src="Pictures/013-Capa100nF.jpg" alt="100 nF (or 0.1 uF)" style="zoom: 33%;" /> |
+| 1      | 100uF electrolytic capacitor                          | <img src="Pictures/034-capa100uF.jpg" alt="100 uF" style="zoom: 33%;" /> |
+| 3      | 10 KOhms Resistor network (marked 103)                | <img src="Pictures/042A.jpg" alt="10 Kohm" style="zoom: 33%;" />         |
+| 5      | 470 Ohms Resistor network (marked 471)                | <img src="Pictures/043A.jpg" alt="470 Ohm" style="zoom: 33%;" />         |
+| 10     | Integrated circuits :<br />- 3x 74HCT273N<br />- 2x 74HCT245N<br />- 3x 74HCT688<br />- 2x 74HCT32 | <img src="Pictures/037-ics.jpg" alt="Integrated circuits" style="zoom: 33%;" /> |
+| 1      | Backlit 4x20 LCD screen with I2C adapter              | <img src="Pictures/038-LCD.jpg" alt="LCD display" style="zoom: 33%;" />    |
+.)).fr((
+| Nombre | Composants                                            |                                                                          |
+| ------ | ----------------------------------------------------- | -----------------------------------------------------------------------: |
+| 40     | 8 LED 3mm bleues<br />16 LED 3mm vertes<br />16 LED 3mm jaunes<br /><br />Note : vous pouvez choisir la couleur des LEDs lors de votre commande. | <img src="Pictures/026-LEDs.jpg" alt="LEDs" style="zoom: 33%;" /> |
+| 11     | Condensateurs céramique 100nF (marqués 104)           | <img src="Pictures/013-Capa100nF.jpg" alt="100 nF (ou 0.1 uF)" style="zoom: 33%;" /> |
+| 1      | Condensateur électrolytique 100uF                     | <img src="Pictures/034-capa100uF.jpg" alt="100 uF" style="zoom: 33%;" /> |
+| 3      | Réseaux résistance 10 KOhms (marqués 103)             | <img src="Pictures/042A.jpg" alt="10 Kohm" style="zoom: 33%;" />         |
+| 5      | Réseaux résistance 470 Ohms (marqués 471)             | <img src="Pictures/043A.jpg" alt="470 Ohm" style="zoom: 33%;" />         |
+| 10     | Circuits intégrés :<br />- 3x 74HCT273N<br />- 2x 74HCT245N<br />- 3x 74HCT688<br />- 2x 74HCT32 | <img src="Pictures/037-ics.jpg" alt="Circuits intégrés" style="zoom: 33%;" /> |
+| 1      | Ecran LCD 4x20 rétroéclairé bleu avec adaptateur I2C  | <img src="Pictures/038-LCD.jpg" alt="Ecran LCD" style="zoom: 33%;" />    |
+.))
+
+## Connectors and sockets.fr((Connecteurs et supports.))
+
+Here is the list for connecting components.
+.fr((Voici la liste des composants connectant l'électronique..))
+
+.((
+| Number | Connectors and circuits sockets |                                                                                            |
+| ------ | -------------------------------------------- | -----------------------------------------------------------------------------------------: |
+| 1      | 40 pins straight header                      | <img src="Pictures/014-header40P.jpg" alt="40 pins header" style="zoom: 33%;" />           |
+| 1      | 2x12 pins male right-angled header           | <img src="Pictures/015-header2x12P.jpg" alt="2x12 pins headers" style="zoom: 33%;" />       |
+| 4      | 16 pins IC socket                            | <img src="Pictures/023-support16.jpg" alt="16 pins IC socket" style="zoom: 33%;" /> |
+| 2      | 14 pins IC socket                            | <img src="Pictures/024-support14.jpg" alt="14 pins IC socket" style="zoom: 33%;" /> |
+| 8      | 20 pins IC socket                            | <img src="Pictures/025-support20.jpg" alt="20 pins IC socket" style="zoom: 33%;" /> |
+| 2      | 2 pins female header with 11mm legs          | <img src="Pictures/030-h2P.jpg" alt="2 pins headers" style="zoom: 33%;" />                 |
+| 4      | 8 pins female header with 11mm legs          | <img src="Pictures/031-h8P.jpg" alt="8 pins headers" style="zoom: 33%;" />                 |
+| 1      | 2x12 pins male straight header               | <img src="Pictures/032-h2x12P.jpg" alt="2x12 pins headers" style="zoom: 33%;" />            |
+| 1      | power connector                              | <img src="Pictures/039-power.jpg" alt="power connector" style="zoom: 33%;" />      |
+| 1      | HDMI connector                               | <img src="Pictures/040-hdmi.jpg" alt="HDMI connector" style="zoom: 33%;" />               |
+.)).fr((
+| Nombre | Connecteurs et supports de circuits intégrés |                                                                                            |
+| ------ | -------------------------------------------- | -----------------------------------------------------------------------------------------: |
+| 1      | Connecteur 40P angle droit                   | <img src="Pictures/014-header40P.jpg" alt="Connecteur 40P" style="zoom: 33%;" />           |
+| 1      | Connecteur 2x12P mâle angle droit            | <img src="Pictures/015-header2x12P.jpg" alt="Connecteur 2x12P" style="zoom: 33%;" />       |
+| 4      | Supports CI 16P                              | <img src="Pictures/023-support16.jpg" alt="Supports CI 16 positions" style="zoom: 33%;" /> |
+| 2      | Supports CI 14P                              | <img src="Pictures/024-support14.jpg" alt="Supports CI 14 positions" style="zoom: 33%;" /> |
+| 8      | Supports CI 20P                              | <img src="Pictures/025-support20.jpg" alt="Supports CI 20 positions" style="zoom: 33%;" /> |
+| 2      | Connecteurs femelle 2P pattes de 11mm        | <img src="Pictures/030-h2P.jpg" alt="Connecteurs 2P" style="zoom: 33%;" />                 |
+| 4      | Connecteurs femelle 8P pattes de 11mm        | <img src="Pictures/031-h8P.jpg" alt="Connecteurs 8P" style="zoom: 33%;" />                 |
+| 1      | Connecteur mâle 2x12P droit                  | <img src="Pictures/032-h2x12P.jpg" alt="Connecteur 2x12P" style="zoom: 33%;" />            |
+| 1      | Connecteur d'alimentation                    | <img src="Pictures/039-power.jpg" alt="Connecteur alimentation" style="zoom: 33%;" />      |
+| 1      | Connecteur HDMI                              | <img src="Pictures/040-hdmi.jpg" alt="Connecteur HDMI" style="zoom: 33%;" />               |
+.))
+
+## Switches.fr((Interrupteurs.))
+
+Bluety uses four 2-positions switches which control powering of the 4 LEDs banks and sixteen 3-positions switches which control
+the input port bits. To avoid mismatching, you can order different colors but when assembling, it will be a good idea to
+double check that switches types are as expected before soldering them. It must be noticed that the switches are not
+rigorously symetrical and must be all oriented the same way to get a nice alignment: this will be explained in assembling
+instructions. When ordering, make sure you get the right dimensions as not all manufacturers use the same.
+.fr((
+Bluety utilise 4 interrupteurs à deux positions qui contrôlent l'allumage des 4 rangées de LEDs ainsi que 16 interrupteurs
+à trois positions qui contrôlent les bits des ports d'entrée. Pour éviter la confusion vous pouvez les commander de couleurs
+différentes mais il est préférable de vérifier lors de la soudure que le type de l'interrupteur à souder est bien celui attendu.
+Par ailleurs ces interrupteurs ne sont pas rigoureusement symétriques et vous devrez donc les orienter tous de la même
+façon pour obtenir un bon alignement : ceci sera expliqué dans les instructions de montage. Assurez-vous de commander les
+bonnes dimensions car il peut y avoir des variations d'un fabricant à un autre.
+.))
+
+.((
+| Number | Interrupteurs                        |                                                                                            |
+| ------ | -----------------------------------  | -----------------------------------------------------------------------------------------: |
+| 4      | ON/ON or ON/OFF 2-pos switches       | <img src="Pictures/027-ONON.jpg" alt="ON/ON" style="zoom: 33%;" />                         |
+| 16     | ON-OFF-ON 3-pos switches             | <img src="Pictures/028-ONOFFFON.jpg" alt="ON/OFF/ON" style="zoom: 33%;" />                 |
+| 2      | 8 positions dipswitch                | <img src="Pictures/029-dipswitch.jpg" alt="Dipswitch" style="zoom: 33%;" />                |
+| 1      | 2 wires cabled micro-switches        | <img src="Pictures/040-switchselect.jpg" alt="2 wires switch" style="zoom: 33%;" />   |
+| 2      | 3 wires cabled micro-switches        | <img src="Pictures/040-switchprotect.jpg" alt="3 wires switch" style="zoom: 33%;" /> |
+.)).fr((
+| Nombres | Interrupteurs                        |                                                                                            |
+| ------- | -----------------------------------  | -----------------------------------------------------------------------------------------: |
+| 4       | Interrupteurs ON/ON ou ON/OFF        | <img src="Pictures/027-ONON.jpg" alt="ON/ON" style="zoom: 33%;" />                         |
+| 16      | Interrupteurs ON-OFF-ON              | <img src="Pictures/028-ONOFFFON.jpg" alt="ON/OFF/ON" style="zoom: 33%;" />                 |
+| 2       | Interrupteurs dipswitch 8 positions  | <img src="Pictures/029-dipswitch.jpg" alt="Dipswitch" style="zoom: 33%;" />                |
+| 1       | Micro interrupteur avec câble 2 fils | <img src="Pictures/040-switchselect.jpg" alt="Interrupteur 2 fils" style="zoom: 33%;" />   |
+| 2       | Micro interrupteur avec câble 3 fils | <img src="Pictures/040-switchprotect.jpg" alt="Interrupteurs 3 fils" style="zoom: 33%;" /> |
+.))
+
+
+
+## Buttons.fr((Boutons.))
+
+.((
+| Number | Buttons                 |                                                                              |
+| ------ | ----------------------- | ---------------------------------------------------------------------------: |
+| 1      | Reset button            | <img src="Pictures/040-resetbtn.jpg" alt="Reset" style="zoom: 33%;" />       |
+| 1      | Power button with LED   | <img src="Pictures/040-pwrbtn.jpg" alt="ON/OFF button" style="zoom: 33%;" /> |
+.)).fr((
+| Nombre | Boutons                      |                                                                              |
+| ------ | ---------------------------- | ---------------------------------------------------------------------------: |
+| 1      | Bouton Reset                 | <img src="Pictures/040-resetbtn.jpg" alt="Reset" style="zoom: 33%;" />       |
+| 1      | Bouton marche/arrêt avec LED | <img src="Pictures/040-pwrbtn.jpg" alt="Bouton ON/OFF" style="zoom: 33%;" /> |
+.))
+
+## Screws and mounts.fr((Visserie.))
+
+.((
+| Number | Screws and sockets                                |                                                                                  |
+| ------ | ------------------------------------------------- | -------------------------------------------------------------------------------: |
+| 6      | M2x8 bolt (for back panel switches)               | <img src="Pictures/040-M2x8.jpg" alt="M2x8" style="zoom: 33%;" />                |
+| 2      | M3x8 bolt (for HDMI connector)                    | <img src="Pictures/040-M3x8.jpg" alt="M3x8" style="zoom: 33%;" />                |
+| 5      | 12mm mount with screw and bolts (front panel)     | <img src="Pictures/022A-support12.jpg" alt="12mm mount" style="zoom: 33%;" /> |
+| 4      | 10mm mount with screw and bolts (LCD)             | <img src="Pictures/022B-support10.jpg" alt="10mm mount" style="zoom: 33%;" /> |
+| 6      | 15mm mount with screw and bolts (bottom panel)    | <img src="Pictures/022C-support15.jpg" alt="15mm mount" style="zoom:33%;" />                      |
+.)).fr((
+| Nombre | Visserie et Supports                              |                                                                                  |
+| ------ | ------------------------------------------------- | -------------------------------------------------------------------------------: |
+| 6      | Boulons M2x8 (interrupteurs façade arrière)       | <img src="Pictures/040-M2x8.jpg" alt="M2x8" style="zoom: 33%;" />                |
+| 2      | Boulons M3x8 (connecteur HDMI)                    | <img src="Pictures/040-M3x8.jpg" alt="M3x8" style="zoom: 33%;" />                |
+| 5      | Supports 12 mm avec vis et écrou (façade avant)    | <img src="Pictures/022A-support12.jpg" alt="Supports 12 smm" style="zoom: 33%;" /> |
+| 4      | Supports 10 mm avec vis et écrou (écran LCD)       | <img src="Pictures/022B-support10.jpg" alt="Supports 10 mm" style="zoom: 33%;" /> |
+| 6      | Supports 15 mm avec vis et écrou (fond de boîtier) | <img src="Pictures/022C-support15.jpg" alt="Supports 15 mm" style="zoom:33%;" />                      |
+.))
+
+Note that 15mm mounts colour may vary..fr((NOTE : la couleur et la matière des supports 15mm peut varier..))
+
+## Cables.fr((Câbles.))
+
+Bluety comes with custom cables cut at the right length for the reference case with a 190 mm depth and for the
+following 3 configurations:.fr((Bluety est livré avec des câbles sur mesure dont la longueur convient pour le boîtier de référence d'une profondeur de 190 mm
+et pour les trois configurations suivantes :.))
+
+.((
+- SC126 alone
+- SC126 with SC113 Tiny
+- RC2014 Pro
+.)).fr((
+- SC126 seul
+- SC126 avec SC113 Tiny
+- RC2014 Pro
+.))
+
+To use a deeper case, Dupont cables can be used or other custom cables with the right length have to be built.
+.fr((Pour un boîtier plus profond il faudra utiliser des rallonges de type Dupont ou sertir des câbles à la bonne longueur..))
+
+.((
+| Number | Cables                                       |                                                                                    |
+| ------ | -------------------------------------------- | ---------------------------------------------------------------------------------: |
+| 1      | HDMI/microHDMI cable                         |           <img src="Pictures/040-hdmicable.jpg" style="zoom: 33%;" />              |
+| 1      | Power button cable with 3 connectors         | <img src="Pictures/040-power.jpg" alt="Cable bouton ON/OFF" style="zoom: 33%;" />  |
+| 1      | Red main power cable                         | <img src="Pictures/040-mainvcc.jpg" alt="Cable alimentation" style="zoom: 33%;" /> |
+| 1      | Black main power cable                       | <img src="Pictures/040-maingnd.jpg" alt="Cable alimentation" style="zoom: 33%;" /> |
+| 1      | 2 wires reset cable                          | <img src="Pictures/040-reset.jpg" alt="Cable reset" style="zoom: 33%;" />          |
+| 1      | 4 wires I2C cable                            | <img src="Pictures/040-I2C.jpg" alt="Cable I2C" style="zoom: 33%;" />              |
+| 2      | 12 wires Dupont cable                        | <img src="Pictures/040-dupont.jpg" alt="Cables connexion" style="zoom: 33%;" />    |
+.)).fr((
+| Nombre | Câbles                                       |                                                                                    |
+| ------ | -------------------------------------------- | ---------------------------------------------------------------------------------: |
+| 1      | Câble HDMI/microHDMI                         |           <img src="Pictures/040-hdmicable.jpg" style="zoom: 33%;" />              |
+| 1      | Câble bouton marche/arrêt avec 3 connecteurs | <img src="Pictures/040-power.jpg" alt="Cable bouton ON/OFF" style="zoom: 33%;" />  |
+| 1      | Câble alimentation principale rouge          | <img src="Pictures/040-mainvcc.jpg" alt="Cable alimentation" style="zoom: 33%;" /> |
+| 1      | Câble alimentation principale noir           | <img src="Pictures/040-maingnd.jpg" alt="Cable alimentation" style="zoom: 33%;" /> |
+| 1      | Câble reset 2 fils                           | <img src="Pictures/040-reset.jpg" alt="Cable reset" style="zoom: 33%;" />          |
+| 1      | Câble I2C 4 fils                             | <img src="Pictures/040-I2C.jpg" alt="Cable I2C" style="zoom: 33%;" />              |
+| 2      | Câbles Dupont 12 fils                        | <img src="Pictures/040-dupont.jpg" alt="Cables connexion" style="zoom: 33%;" />    |
+.))
+
+## Conclusion
+
+Make sure you have all the components, buttons, cables before assembling. Contact me in case of any problem and I will send 
+missing parts free of charge.
+.fr((Assurez-vous d'avoir tous les composants, cables, boutons avant l'assemblage. Contactez-moi en cas de problème et j'enverrai
+gratuitement les pièces manquantes.))
+
+Make sure you ordered the right box case and check that bluety Front and Back panels fit correctly on it. Adjust the box
+plastic borders of panels with sand paper if needed.
+.fr((Vérifiez que vous avez commandé le bon boitier et que les panneaux de façade avant et arrière de Bluety
+prennent place correctement. Ajustez les contours en plastique du boitier avec du papier de verre si nécessaire..))
+
+Keep the integrated components safe in their anti-static bags until the very last steps of assembly.
+Wear an anti-static wrist strap linked to ground when handling them.
+.fr((Conservez les circuits intégrés à l'abri dans leur sachet anti-statique jusqu'au dernières étapes de l'assemblage. Portez
+un bracelet anti-statique relié à une masse pour les manipuler..))
