@@ -94,7 +94,8 @@ l'élément en cas de problème d'alignement. Une fois celui-ci correct on peut 
 Reverse the board to see the **front** side, with the power button opening now appearing on the bottom right. 
 .fr((Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenant en bas à droite..))
 
-<img src="Pictures/045.jpg" alt=.(("Board front".)).fr(("Avant carte".)) style="zoom:50%;" />
+.((<img src="Pictures/045.jpg" alt="Board front" style="zoom:50%;" />.))
+.fr((<img src="Pictures/045.jpg" alt="Avant carte" style="zoom:50%;" />.))
 
 .((
 | Step  | Description                                                       |                                                   |
