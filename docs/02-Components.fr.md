@@ -1,28 +1,44 @@
-# Contenu du kit<A id="a6"></A>
+# Liste des composants<A id="a6"></A>
 
-Vérifiez le contenu du kit, et contactez moi en cas d'erreur. Vous pouvez aussi intervenir dans le groupe de
-discussion https://groups.google.com/forum/#!forum/rc2014-z80.
+Ce document liste les composants que vous devrez vous procurer avant l'assemblage.
 
 Avant toute chose, une précaution importante.
 
-<TABLE><TR><TD><img src="Pictures/attention.png" width="300px" /></TD><TD><B>Ne touchez pas les circuits intégrés et
-l'écran LCD sans être équipé d'un bracelet antistatique relié à une masse</B>. De préférence, laissez les à l'abri dans
-leur étui anti-statique jusqu'au moment de la fixation de la façade avant sur le boîtier pour éliminer le risque de les
-endommager avec de l'électricité statique. Dans tous les cas, ne les placez pas sur le circuit avant d'avoir procédé
-aux vérifications électriques.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="Pictures/attention.png" width="300px" /></TD><TD><B>Ne touchez pas les circuits intégrés et l'écran LCD sans être équipé d'un bracelet antistatique relié à une masse</B>. De préférence, laissez les à l'abri dans leur étui anti-statique jusqu'au moment de la fixation de la façade avant sur le boîtier pour éliminer le risque de les endommager avec de l'électricité statique. Dans tous les cas, ne les placez pas sur le circuit avant d'avoir procédé aux vérifications électriques.</TD></TR></TABLE>
 
-<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Vérification" width="150px" /></TD><TD> Dans le processus
-d'assemblage, les étapes où vous devrez procéder à une vérification ou à un assemblage particulier seront
-indiquées par ce panneau.<B>N'ignorez pas ces recommandations</B>, elles garantissent le bon résultat de l'assemblage
-lors des étapes les moins évidentes.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Vérification" width="150px" /></TD><TD> Dans le processus d'assemblage, les étapes où vous devrez procéder à une vérification ou à un assemblage particulier seront indiquées par ce panneau. <B>N'ignorez pas ces recommandations</B>, elles garantissent le bon résultat de l'assemblage lors des étapes les moins évidentes.</TD></TR></TABLE>
 
-## Cartes et circuits imprimés<A id="a7"></A>
+## Boitier<A id="a7"></A>
+
+Bluety est conçu pour un boîtier métallique bleu que l'on peut trouver sur la plupart des sites marchands : AliExpress, Banggood, Amazon, eBay pour en citer quelques uns. Dans le champ de recherche de votre site préféré, entrez **"Blue Metal Electronic Enclosures"** ou **boitier électronique bleu** et choisissez le boîtier de dimensions **250 x 190 x 110** (mm) dans les résultats. 
+
+<TABLE><TR><TD><img src="Pictures/attention.png" width="100px" /></TD><TD>Il existe d'autres boitiers d'aspect similaire mais de dimensions inférieures qui ne conviendront pas à Bluety, donc vérifiez bien les dimensions 250x190x110.</TD></TR></TABLE>
+
+| <img src="Pictures/00-AE.png" alt="AliExpress" style="zoom:50%;" /> | <img src="Pictures/00-BG.png" alt="BangGood" style="zoom:50%;" /> |
+| ------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| <img src="Pictures/00-AZ.png" alt="Amazon" style="zoom:50%;" />     | <img src="Pictures/00-EB.png" alt="eBay" style="zoom:50%;" />     |
+
+Le coût est d'environ 20 à 40 euros / dollars livraison comprise.
+
+Il est possible que les coins des cadres plastifiés blancs soient abîmés durant le transport. J'ai eu ce problème sur les 3 exemplaires que j'ai commandés.
+
+## Cartes et circuits imprimés<A id="a8"></A>
+
+Pour assembler Bluety vous aurez besoin de ses quatre circuits imprimés, que vous pourrez fabriquer à partir de leurs fichiers disponibles aux adresses indiquées dans le tableau suivant. J'ai fabriqué les mimens chez JLCPCB qui offre des tarifs raisonnables, bien qu'il faille fabriquer au minimum 10 circuits. Vous pouvez revendre le surplus si vous le souhaitez
+
+| Circuit Imprimé          | Rôle                                           | Adresse pour les fichiers |
+|--------------------------|------------------------------------------------|------------------------|
+| Bus Daughter             | Connecte le panneau I/O au bus RC2014          | https://oshwlab.com/bkg2018/front-panel-bus-daughter
+| Blink'n Switch           | Panneau E/S 2 ports avec LEDs et interrupteurs | https://oshwlab.com/bkg2018/blink-n-switch-front-panel-for-rc2014
+| Front Panel              | Façade avant du boitier                        | https://oshwlab.com/bkg2018/blink-n-switch-front-panel-for-rc2014_copy
+| Back Panel               | Façade arrière du boitier                      | https://oshwlab.com/bkg2018/bluety-back-panel
+| (optional) FP113-Tiny    | Bus d'extension SC126 pour Bluety              | https://oshwlab.com/bkg2018/sc113-t
 
 <TABLE><TR><TD><img src="Pictures/attention.png" width="180px" /></TD><TD>Veillez à protéger les deux façades
 de toute rayure, brûlure, ou projection de flux lors des soudures. Ce sont les faces visibles donc conservez
-les à l'abri jusqu'à la fin de l'assemblage. Les façades ne nécessitent aucune soudure.</TD></TR></TABLE>
+les à l'abri jusqu'à la fin de l'assemblage. Les deux façades ne nécessitent aucune soudure.</TD></TR></TABLE>
 
-Les façades peuvent être légèrement incurvées mais ceci disparaîtra après fixation sur le boîtier.
+Les façades peuvent arriver légèrement incurvées mais ceci disparaît après fixation sur le boîtier.
 
 | Nombre | Carte          |                                                                                     |
 | -------| -------------- | ----------------------------------------------------------------------------------: |
@@ -31,7 +47,9 @@ Les façades peuvent être légèrement incurvées mais ceci disparaîtra après
 | 1      | Façade avant   | <img src="Pictures/021-frontpanel.jpg" alt="Façade avant" style="zoom: 33%;" />     |
 | 1      | Façade arrière | <img src="Pictures/021B-backpanel.jpg" alt="Façade arrière" style="zoom: 33%;" />   |
 
-## Composants<A id="a8"></A>
+## Composants<A id="a9"></A>
+
+Voici la liste des composants électroniques passifs et actifs.
 
 | Nombre | Composants                                            |                                                                          |
 | ------ | ----------------------------------------------------- | -----------------------------------------------------------------------: |
@@ -43,7 +61,9 @@ Les façades peuvent être légèrement incurvées mais ceci disparaîtra après
 | 10     | Circuits intégrés :<br />- 3x 74HCT273N<br />- 2x 74HCT245N<br />- 3x 74HCT688<br />- 2x 74HCT32 | <img src="Pictures/037-ics.jpg" alt="Circuits intégrés" style="zoom: 33%;" /> |
 | 1      | Ecran LCD 4x20 rétroéclairé bleu avec adaptateur I2C  | <img src="Pictures/038-LCD.jpg" alt="Ecran LCD" style="zoom: 33%;" />    |
 
-## Connecteurs et supports<A id="a9"></A>
+## Connecteurs et supports<A id="a10"></A>
+
+Voici la liste des composants connectant l'électronique.
 
 | Nombre | Connecteurs et supports de circuits intégrés |                                                                                            |
 | ------ | -------------------------------------------- | -----------------------------------------------------------------------------------------: |
@@ -58,13 +78,14 @@ Les façades peuvent être légèrement incurvées mais ceci disparaîtra après
 | 1      | Connecteur d'alimentation                    | <img src="Pictures/039-power.jpg" alt="Connecteur alimentation" style="zoom: 33%;" />      |
 | 1      | Connecteur HDMI                              | <img src="Pictures/040-hdmi.jpg" alt="Connecteur HDMI" style="zoom: 33%;" />               |
 
-## Interrupteurs<A id="a10"></A>
+## Interrupteurs<A id="a11"></A>
 
-Bluety est livré avec 4 interrupteurs à deux positions qui contrôlent l'allumage des 4 rangées de LEDs ainsi que 16 interrupteurs
-à trois position qui contrôlent les bits des ports d'entrée. Pour éviter la confusion le kit les livre dans des couleurs
-différentes mais il faudra vérifier lors de la soudure que le type de l'interrupteur à souder est bien celui attendu.
+Bluety utilise 4 interrupteurs à deux positions qui contrôlent l'allumage des 4 rangées de LEDs ainsi que 16 interrupteurs
+à trois positions qui contrôlent les bits des ports d'entrée. Pour éviter la confusion vous pouvez les commander de couleurs
+différentes mais il est préférable de vérifier lors de la soudure que le type de l'interrupteur à souder est bien celui attendu.
 Par ailleurs ces interrupteurs ne sont pas rigoureusement symétriques et vous devrez donc les orienter tous de la même
-façon pour obtenir un bon alignement : ceci sera rappelé dans les instructions de l'assemblage.
+façon pour obtenir un bon alignement : ceci sera expliqué dans les instructions de montage. Assurez-vous de commander les
+bonnes dimensions car il peut y avoir des variations d'un fabricant à un autre.
 
 | Nombres | Interrupteurs                        |                                                                                            |
 | ------- | -----------------------------------  | -----------------------------------------------------------------------------------------: |
@@ -74,16 +95,14 @@ façon pour obtenir un bon alignement : ceci sera rappelé dans les instructions
 | 1       | Micro interrupteur avec câble 2 fils | <img src="Pictures/040-switchselect.jpg" alt="Interrupteur 2 fils" style="zoom: 33%;" />   |
 | 2       | Micro interrupteur avec câble 3 fils | <img src="Pictures/040-switchprotect.jpg" alt="Interrupteurs 3 fils" style="zoom: 33%;" /> |
 
-NOTE : La couleur des interrupteurs et des câbles peut varier.
-
-## Boutons<A id="a11"></A>
+## Boutons<A id="a12"></A>
 
 | Nombre | Boutons                      |                                                                              |
 | ------ | ---------------------------- | ---------------------------------------------------------------------------: |
 | 1      | Bouton Reset                 | <img src="Pictures/040-resetbtn.jpg" alt="Reset" style="zoom: 33%;" />       |
 | 1      | Bouton marche/arrêt avec LED | <img src="Pictures/040-pwrbtn.jpg" alt="Bouton ON/OFF" style="zoom: 33%;" /> |
 
-## Visserie<A id="a12"></A>
+## Visserie<A id="a13"></A>
 
 | Nombre | Visserie et Supports                              |                                                                                  |
 | ------ | ------------------------------------------------- | -------------------------------------------------------------------------------: |
@@ -95,16 +114,16 @@ NOTE : La couleur des interrupteurs et des câbles peut varier.
 
 NOTE : la couleur et la matière des supports 15mm peut varier.
 
-## Câbles<A id="a13"></A>
+## Câbles<A id="a14"></A>
 
-Bluety est livré avec des câbles sur mesure dont la longueur convient pour le boîtier de référence d'une profondeur de 190 mm
+Bluety doit être équipé avec des câbles  dont la longueur convient pour le boîtier de référence d'une profondeur de 190 mm
 et pour les trois configurations suivantes :
 
 - SC126 seul
-- SC126 avec SC113 Tiny
+- SC126 avec FP113 Tiny
 - RC2014 Pro
 
-Pour un boîtier plus profond il faudra utiliser des rallonges de type Dupont ou sertir des câbles à la bonne longueur.
+Pour un boîtier plus profond il faudra utiliser des rallonges de type Dupont ou des câbles à la bonne longueur.
 
 | Nombre | Câbles                                       |                                                                                    |
 | ------ | -------------------------------------------- | ---------------------------------------------------------------------------------: |
@@ -116,13 +135,9 @@ Pour un boîtier plus profond il faudra utiliser des rallonges de type Dupont ou
 | 1      | Câble I2C 4 fils                             | <img src="Pictures/040-I2C.jpg" alt="Cable I2C" style="zoom: 33%;" />              |
 | 2      | Câbles Dupont 12 fils                        | <img src="Pictures/040-dupont.jpg" alt="Cables connexion" style="zoom: 33%;" />    |
 
-## Conclusion<A id="a14"></A>
+## Conclusion<A id="a15"></A>
 
-Assurez-vous d'avoir tous les composants, cables, boutons avant l'assemblage. Contactez-moi en cas de problème et j'enverrai
-gratuitement les pièces manquantes
+Assurez-vous d'avoir tous les composants, cables, boutons avant l'assemblage.
 
-Vérifiez que vous avez commandé le bon boitier et que les panneaux de façade avant et arrière de Bluety
-prennent place correctement. Ajustez les contours en plastique du boitier avec du papier de verre si nécessaire.
-
-Conservez les circuits intégrés à l'abri dans leur sachet anti-statique jusqu'au dernières étapes de l'assemblage. Portez
+Conservez les circuits intégrés à l'abri dans des sachets anti-statiques jusqu'au dernières étapes de l'assemblage. Portez
 un bracelet anti-statique relié à une masse pour les manipuler.

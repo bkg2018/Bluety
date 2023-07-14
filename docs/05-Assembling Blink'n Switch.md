@@ -1,27 +1,27 @@
-# Assembling Blink'n Switch<A id="a20"></A>
+# Assembling Blink'n Switch<A id="a21"></A>
 
 This board offers two input/ouput ports with indicator LEDs and control switches, as well as 8 front panel LEDs for the 13
-(0D hexa) control port for the SC26 computer from Stephen S. Cousins. This port can be used by any RC2014 computer to display 8 bits
+(0D hexa) control port for the SC126 computer from Stephen S. Cousins. This port can be used by any RC2014 computer to display 8 bits
 on the front panel 8 LEDs using an `OUT` Z-80 instruction on port 13.
 
 <TABLE><TR><TD><img src="Pictures/thisway.png" width="150px" /></TD><TD>This board assembly requires a few temporary assemblies
 with the front panel to make sure that the components appearing on the front view  are well aligned. <B>Make sure you respect
 the assembly order and advices</B> to ensure the front panel will offer a nice view on all visible controls.</TD></TR></TABLE>
 
-## Back (part 1): sockets and components<A id="a21"></A>
+## Back (part 1): sockets and components<A id="a22"></A>
 
-Place the **back** visible. (the opening for pow<er button must be on the bottom left.)
+Place the **back** visible. (The opening for power button must be on the bottom left.)
 
 | Step  | Description                                                                                           |                                                              |
 | ----- | ----------------------------------------------------------------------------------------------------- | -----------------------------------------------------------: |
 | 1     | Solder the ten 100nF capacitors C1 to C4 and C6 to C11. These capacitors are marked *104*.            | <img src="Pictures/040A.png" alt="100nF Capacitors" style="zoom: 33%;" /><br /><img src="Pictures/040B.jpg" alt="100nF Capacitors" style="zoom:50%;" /> |
-| 2     | Solder the eight 20-pins socketsand the two 14-pins sockets, with the little notch on the **top** or on the *left** depending on the orientation. | <img src="Pictures/041A.png" alt="Sockets" style="zoom: 33%;" /><br /><img src="Pictures/041B.jpg" alt="Sockets" style="zoom: 50%;" /> |
+| 2     | Solder the eight 20-pins sockets and the two 14-pins sockets, with the little notch on the *top* or on the *left* depending on the orientation. | <img src="Pictures/041A.png" alt="Sockets" style="zoom: 33%;" /><br /><img src="Pictures/041B.jpg" alt="Sockets" style="zoom: 50%;" /> |
 | 3     | Solder the three **10K** resitors networks RN1 RN4 RN7.                                               | <img src="Pictures/042B.png" alt="10K Resistors" style="zoom: 33%;" /> |
-| 4     | Take care: *do not mismatch with the 470 Ohms resistors*: the 10K component is marked *103*, which means 10 x 10^3^, hence 10 Kilo Ohms. | <img src="Pictures/042A.jpg" alt="10K" style="zoom: 33%;" /> |
+| 4     | Take care: *do not mismatch with the 470 Ohms resistors*: the 10K component is marked *103*, which means 10 x 10<sup>3</sup>, hence 10 Kilo Ohms. | <img src="Pictures/042A.jpg" alt="10K" style="zoom: 33%;" /> |
 | 5     | First, lightly solder one leg, then check position and the reference dot mark on the left which should match the little printed square on the circuit board. <br /><br />When everything is correct, finish soldering with the other legs and add sufficient solder on the first leg. | <img src="Pictures/042C.jpg" alt="Marks" style="zoom: 33%;" /> |
 | 6     | Solder the five **470** resistors networks RN2 RN3 RN5 RN6 RN8.                                       | <img src="Pictures/043B.png" alt=">Resistors" style="zoom: 33%;" /> |
-| 7     | The component is marked *471*, which means 47 x 10^1^, hence 470 Ohms.                                | <img src="Pictures/043A.jpg" alt="470" style="zoom: 33%;" /> |
-| 8     | Make sure you align the component dot mark on gthe left with the little printed square on the circuit board. | <img src="Pictures/043C.jpg" alt="Marks" style="zoom: 33%;" /> |
+| 7     | The component is marked *471*, which means 47 x 10<sup>1</sup>, hence 470 Ohms.                                | <img src="Pictures/043A.jpg" alt="470" style="zoom: 33%;" /> |
+| 8     | Make sure you align the component dot mark on the left with the little printed square on the circuit board. | <img src="Pictures/043C.jpg" alt="Marks" style="zoom: 33%;" /> |
 
 <TABLE><TR>
 <TD width="100px"> <img src="Pictures/thisway.png" alt="Check" width="75px" /></TD>
@@ -31,17 +31,18 @@ Place the **back** visible. (the opening for pow<er button must be on the bottom
 <TD><EM>Do not solder</EM> the P1 connector and C5 capacitor yet, they would hamper the next assembly steps.</TD>
 </TR></TABLE>
 
-Here's a view of the board at this step. 
+Here's a view of the board at this step.
+
 <img src="Pictures/044.jpg" alt="Soldered view" style="zoom:50%;" />
 
-## Front: dip-switch sockets<A id="a22"></A>
+## Front: dip-switch sockets<A id="a23"></A>
 
 <TABLE><TR>
 <TD><img src="Pictures/thisway.png" alt="Check" width="250px" /></TD>
 <TD>All the elements soldered on the front face will appear on the front panel through an opening, so a great part
 of the assembly will be soldering <EM>only one leg</EM> at first with very few solder, put the front panel on
 your assembly to check alignement, heat again the leg and fix in case of problems, and when everything is correctly
-alignedf solder the other legss and finally add solder again to the first leg.</TD>
+aligned solder the other legs and finally add solder again to the first leg.</TD>
 </TR></TABLE>
 
 Reverse the board to see the **front** side, with the power button opening now appearing on the bottom right. 
@@ -50,7 +51,7 @@ Reverse the board to see the **front** side, with the power button opening now a
 
 | Step  | Description                                                       |                                                   |
 | ------| -------------------------------------------------------- | ------------------------------------------------: |
-| 1     | Solder *one leg* of each of the two 16-pins IC sockets (SW10 and SW21), notch on the left. They will host the port select DIP-switches. | <img src="Pictures/TODO.png" style="zoom:33%;" /> |
+| 1     | Solder *one leg* of each of the two 16-pins IC sockets (SW10 and SW21), notch on the left. They will host the port select DIP-switches. |  |
 | 2     | Screw the five 12mm bolts on the board: bolt on the front, nut on the back. | <img src="Pictures/046.jpg" style="zoom: 50%;" /> |
 | 3     | The bolts will help for many temporary assemblies with front panel to ensure correct alignement, so you'll keep them screwed for this whole process step. There is little space on the back for some nuts when components are in place, so it is best to maintain the nut and turn the bolt than the contrary. |  <img src="Pictures/047.jpg" style="zoom:50%;" /> |
 | 4     | If a component requires that you turn a nut, lightly unscrew the bolt, turn the nut a little, then screw again the bolt. |                                                   |
@@ -59,31 +60,30 @@ Reverse the board to see the **front** side, with the power button opening now a
 | 7     | Once both DIP-switches are correctly aligned, return the set and finish soldering the sockets other legs, finishing by adding solder to the first leg. |                                                   |
 | 8     | Unscrew the front panel, put it apart and safe as well as the sloted sockets and DIP-switches. You'll put them back in place later. |                                                   |
 
-## Front: I/O connectors and power<A id="a23"></A>
+## Front: I/O connectors and power<A id="a24"></A>
 
 | Step  | Description                                                        |                                                              |
 | ----- | -------------------------------------------------------- | ------------------------------------------------------------ |
 | 1     | Put the printed board, front face on top, on some supports so it lies well above the working bench and let components slide in their position. Ensure a minimal height of 10 mm. Rolls of tape for example are perfect as shown on the picture. | <img src="Pictures/050.jpg" style="zoom:50%;" />             |
 | 2     | Place the 4 8-pins female connectors with 11mm long legs and the 2 2-pins female connectors with 11mm long legs. | <img src="Pictures/051.jpg" style="z  oom:75%;" />             |
 | 3     | Attach the front panel but *do not use the central screw* as it would hinder the connectors positionning. | <img src="Pictures/052.jpg" style="zoom:50%;" />             |
-| 4     | Put the back panel perpendicularly on the front panel so it covers the connectors openings. Put a piece of paper between both panels if you fear scratching their surface. The silk paper protecing them in the kit is perfect for this. | <img src="Pictures/053.jpg" style="zoom:50%;" />             |
+| 4     | Put the back panel perpendicularly on the front panel so it covers the connectors openings. Put a piece of paper between both panels if you fear scratching their surface. | <img src="Pictures/053.jpg" style="zoom:50%;" />             |
 | 5     | Return both together on the bench. | <img src="Pictures/054.jpg" style="zoom:50%;" />             |
 | 6     | Helped by a fine plier, place each connector in its front panel opening. <br />Don't force to avoid bending the legs. If this happens, unscrew the front panel, pull the connector, unbend the legs, and restart the operation. | <img src="Pictures/055.jpg" style="zoom:50%;" />             |
 | 7     | The connectors must be placed correctly in the front panel openings. Use a small plier to place them so the six are well aligned in their openings. | <img src="Pictures/056.jpg" style="zoom:50%;" /><img src="Pictures/057.jpg" style="zoom:50%;" /> |
-| 8     | When everything is inplace and we sodler *one leg* on each of the six connectors. | <img src="Pictures/058.jpg" style="zoom:50%;" />             |
-| 9     | Return everything to double check alignment. In case of need, heat again the leg solder to move a connector. | <img src="Pictures/059.jpg" style="zoom:50%;" />             |
-| 10    | When everything looks fine, return the whole and finish soldering of all the other legs, ending with more solder on the first leg. |                                                              |
+| 8     | When everything is in place, solder *one leg* on each of the six connectors. | <img src="Pictures/058.jpg" style="zoom:50%;" />             |
+| 9     | Return the assembly to double check alignment. In case of need, heat again the leg solder to move a connector. | <img src="Pictures/059.jpg" style="zoom:50%;" />             |
+| 10    | When everything looks fine, return the whole again and finish soldering on all the other legs, ending with more solder on the first leg. |                                                              |
 | 11    | Cut the legs exceedent when your soldering is well. Take care of protecting your eyes, as the legs are rather rigid and little parts of metal can be projected in any direction. |                                                              |
 | 12    | Unscrew the front panel.                                          |                                                              |
 
-## Front: switches<A id="a24"></A>
+## Front: switches<A id="a25"></A>
 
-Prepare the 16 ON-OFF-ON 3-positions switches and gthe 4 ON-OFF or ON-ON 2-positions switches. They have different colors so you should not mismatch them easily.
+Prepare the 16 ON-OFF-ON 3-positions switches and the 4 ON-OFF or ON-ON 2-positions switches.
 
 To use the input port correctly you must not mismatch the switches types.
 
-<TABLE><TR><TD width="100px"><img src="Pictures/thisway.png" alt="Check" width="100px" /></TD><TD>Group the switches by type. The kit should give you different
-colors but this can be stock-dependent. The switches are delivered in different bags to help you sort them, but checking the positions manually also helps.
+<TABLE><TR><TD width="100px"><img src="Pictures/thisway.png" alt="Check" width="100px" /></TD><TD>Group the switches by type.
 
 | Step  | Description                                                        |                                                              |
 | ----- | --------------------------------------------------------- | ------------------------------------------------------------ |
@@ -101,7 +101,7 @@ colors but this can be stock-dependent. The switches are delivered in different 
 | 11    | Put the switches in bottom or center position.    |                                                              |
 | 12    | Unscrew the front panel and put it apart, safe from projections.                               |                                                              |
 
-## Front: LEDs<A id="a25"></A>
+## Front: LEDs<A id="a26"></A>
 
 Prepare the LEDs:
 
@@ -109,7 +109,7 @@ Prepare the LEDs:
 - 16 yellow for output ports
 - you can reverse colors if you like
 - 8 blues pour the control port
-- if you prefer having replaceable LEDs, you can solder 2-position sockets instead of LEDs and gthen insert LEDs in the sockets but having the LEDs all at the same depth and well aligned on the front panel will be substantially more difficult. This is left to your appreciation: the kit and instructions do not include this option or sockets. 
+- if you prefer having replaceable LEDs, you can solder 2-position sockets instead of LEDs and then insert LEDs in the sockets but having the LEDs all at the same depth and well aligned on the front panel will be substantially more difficult. This is left to your appreciation. 
 
 | Step  | Description                                                  |                                                  |
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------------: |
@@ -118,18 +118,18 @@ Prepare the LEDs:
 | 3     | Put the 16 yellow (or green) LEDs of output ports in LED9 to LED16 and LED25 to LED32. The shorter leg is the anode and is placed on the board top (-) mark. |                                                              |
 | 4     | Put the 8 blue LEDS of control port in LED33 to LED40. The shorter leg is the anode and is placed on the board top (-) mark.|                                                              |
 | 5     | Check that the 40 shorter legs are all on the top side, as well as the LEDs plastic flat side. |                                                              |
-| 6     | Screw again the front panel with the 5 screws. Make sure you strongly screw the unique screw beside the on/off power button: it ensures the correct alignment of the LEDs below the LCD opening. |            <img src="Pictures/066.jpg" style="zoom:75%;" /> |
+| 6     | Screw again the front panel with the 5 screws. Make sure you strongly screw the unique screw beside the on/off power button: it ensures the correct alignment of the LEDs below the LCD opening. | |
 | 7     | Lift the whole: the LEDs will slide in their openings and take place on the printed board. |                                                              |
 | 8     | Gently reverse the whole so the LEDs slide in reverse direction and take place in their front panel openings. Most of them will take place easily, help the others with a fine plier to their opening. Put the reversed whole on the working bench, supported by the switches. |                                                              |
 | 9     | If a LED is not well positionned, use its legs with a plier to move it correctly. Proceed gently to avoid bending legs or you'll have to unscrew the front panel and restart. |           <img src="Pictures/067A.jpg" style="zoom:75%;" /> |
 | 10    | Check that all LEDs are well placed in their front panel opening by looking from the bottom. They should all have the same visible height. |           <img src="Pictures/067B.jpg" style="zoom:75%;" /> |
 | 11    | For the last time, check that all the short legs are on the (-) mark of the printed board. |           <img src="Pictures/067C.jpg" style="zoom:75%;" /> |
-| 12    | In case of mistake, return the board, unscrew the front panel, replace the LED in the correct orientation, check, screw the front pan el and reposition all LEDs. |                                                              |
-| 13    | Once you're absolutely sure everything is well palced and aligned, you can solder the 80 LED legs. |                                                              |
-| 14    | Curt the legs exceedent.                                |                                                              |
+| 12    | In case of mistake, return the board, unscrew the front panel, replace the LED in the correct orientation, check, screw the front panel and reposition all LEDs. |                                                              |
+| 13    | Once you're absolutely sure everything is well placed and aligned, you can solder the 80 LED legs. |                                                              |
+| 14    | Cut the legs exceedent.                                |                                                              |
 | 15    | Unscrew the front panel.                                          |                                                              |
 
-## Back: components (part 2)s<A id="a26"></A>
+## Back: components (part 2)<A id="a27"></A>
 
 | Step  | Description                                                       |                                                  |
 | ----- | --------------------------------------------------------- | ------------------------------------------------ |
@@ -137,13 +137,13 @@ Prepare the LEDs:
 | 2     | Solder the C5 capacitor, take care of polarity: the shorter leg must be on the (-) mark. The black strip marked `-` must match the hatched half-circle on the printed board. Cut legs on the other side. | <img src="Pictures/068.jpg" style="zoom:50%;" /> |
 | 3     | Solder the male 2x12-pins connector P1.                          | <img src="Pictures/069.jpg" style="zoom:50%;" /> |
 
-## Finishing<A id="a27"></A>
+## Finishing<A id="a28"></A>
 
 - Gently clean the front panel with a clean soft or microfiber cloth. 
 
 <TABLE><TR><TD><img src="Pictures/thisway.png" alt="Advice" width="75px" /></TD><TD>
   <B>Don't use detergent, solvers or alcoholic products.</B>
-  <P>Hot water and flat screens cleaning products are acceptable.
+  <P>Hot water or flat screens cleaning products are acceptable but make sure to dry everything thereafter.
   <P>If you want to use a cleaning product, test it on a little non-visible part like Bus Daughter or the front panel back side and make sure it doesn't damage the vernish.
 </TD></TR></TABLE>
 

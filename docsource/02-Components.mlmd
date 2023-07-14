@@ -8,68 +8,42 @@ This document will list all the components you must gather before assembling.
 First, a very important notice.
 .fr((Avant toute chose, une précaution importante..))
 
-<TABLE><TR><TD><img src="Pictures/attention.png" width="300px" /></TD><TD><B>Do not touch the integrated circuits
-and the LCD screen without wearing an antistatic wristwrath linked to some ground.</B>. Preferably, leave them
-in their antistatic bag until final and front panel assembly to limit the risk of a static discharge which could
-damage them seriously. In any case, never place them before doing the electric checkings.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="Pictures/attention.png" width="300px" /></TD><TD><B>Do not touch the integrated circuits and the LCD screen without wearing an antistatic wristwrath linked to some ground.</B>. Preferably, leave them in their antistatic bag until final and front panel assembly to limit the risk of a static discharge which could damage them seriously. In any case, never place them before doing the electric checkings.</TD></TR></TABLE>
 .fr((
-<TABLE><TR><TD><img src="Pictures/attention.png" width="300px" /></TD><TD><B>Ne touchez pas les circuits intégrés et
-l'écran LCD sans être équipé d'un bracelet antistatique relié à une masse</B>. De préférence, laissez les à l'abri dans
-leur étui anti-statique jusqu'au moment de la fixation de la façade avant sur le boîtier pour éliminer le risque de les
-endommager avec de l'électricité statique. Dans tous les cas, ne les placez pas sur le circuit avant d'avoir procédé
-aux vérifications électriques.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="Pictures/attention.png" width="300px" /></TD><TD><B>Ne touchez pas les circuits intégrés et l'écran LCD sans être équipé d'un bracelet antistatique relié à une masse</B>. De préférence, laissez les à l'abri dans leur étui anti-statique jusqu'au moment de la fixation de la façade avant sur le boîtier pour éliminer le risque de les endommager avec de l'électricité statique. Dans tous les cas, ne les placez pas sur le circuit avant d'avoir procédé aux vérifications électriques.</TD></TR></TABLE>
 .))
 
-<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Verification" width="150px" /></TD><TD>During assembly,
-you will be informed to proceed with a specific checking by this panel. Do not oversee these recommendations,
-they will guarantee a perfect assembly where proceeding is not obvious.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Verification" width="150px" /></TD><TD>During assembly, you will be informed to proceed with a specific checking by this panel. Do not oversee these recommendations, they will guarantee a perfect assembly where proceeding is not obvious.</TD></TR></TABLE>
 .fr((
-<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Vérification" width="150px" /></TD><TD> Dans le processus
-d'assemblage, les étapes où vous devrez procéder à une vérification ou à un assemblage particulier seront
-indiquées par ce panneau.<B>N'ignorez pas ces recommandations</B>, elles garantissent le bon résultat de l'assemblage
-lors des étapes les moins évidentes.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Vérification" width="150px" /></TD><TD> Dans le processus d'assemblage, les étapes où vous devrez procéder à une vérification ou à un assemblage particulier seront indiquées par ce panneau. <B>N'ignorez pas ces recommandations</B>, elles garantissent le bon résultat de l'assemblage lors des étapes les moins évidentes.</TD></TR></TABLE>
 .))
 
 ## Case.fr((Boitier.))
 
-Bluety is designed for a blue metal case which can be found on most commercial sites with an electronics section:
-AliExpress, Banggood, Amazon, eBay to name a few. In their search input field, enter the following: **"Blue Metal
-Electronic Enclosure"** and choose the case with following dimensions:  **250 x 190 x 110** (mm) in results.
-.fr((Bluety est conçu pour un boîtier métallique bleu que l'on peut trouver sur la plupart des sites marchands :
-AliExpress, Banggood, Amazon, eBay pour en citer quelques uns. Dans le champ de recherche de votre site préféré, entrez
-**"Blue Metal Electronic Enclosures"** ou **boitier électronique bleu** et choisissez le boîtier de
-dimensions **250 x 190 x 110** (mm)
-dans les résultats. .))
+Bluety is designed for a blue metal case which can be found on most commercial sites with an electronics section: AliExpress, Banggood, Amazon, eBay to name a few. In their search input field, enter the following: **"Blue Metal Electronic Enclosure"** and choose the case with following dimensions:  **250 x 190 x 110** (mm) in results.
+.fr((Bluety est conçu pour un boîtier métallique bleu que l'on peut trouver sur la plupart des sites marchands : AliExpress, Banggood, Amazon, eBay pour en citer quelques uns. Dans le champ de recherche de votre site préféré, entrez **"Blue Metal Electronic Enclosures"** ou **boitier électronique bleu** et choisissez le boîtier de dimensions **250 x 190 x 110** (mm) dans les résultats. .))
 
 .((
 <TABLE><TR><TD><img src="Pictures/attention.png" width="100px" /></TD><TD>There are other similar cases
 with inferior dimensions which won't accept Bluety boards size, so make sure you choose the right dimensions 250x190x110.</TD></TR></TABLE>
 .)).fr((
-<TABLE><TR><TD><img src="Pictures/attention.png" width="100px" /></TD><TD>Il existe d'autres boitiers d'aspect similaire
-mais de dimensions inférieures qui ne conviendront pas à Bluety, donc vérifiez bien les dimensions 250x190x110.</TD></TR></TABLE>
+<TABLE><TR><TD><img src="Pictures/attention.png" width="100px" /></TD><TD>Il existe d'autres boitiers d'aspect similaire mais de dimensions inférieures qui ne conviendront pas à Bluety, donc vérifiez bien les dimensions 250x190x110.</TD></TR></TABLE>
 .))
 
-| <img src="Pictures/00-AE.png" alt="AliExpress" style="zoom:33%;" /> | <img src="Pictures/00-BG.png" alt="BangGood" style="zoom:33%;" /> |
+| <img src="Pictures/00-AE.png" alt="AliExpress" style="zoom:50%;" /> | <img src="Pictures/00-BG.png" alt="BangGood" style="zoom:50%;" /> |
 | ------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| <img src="Pictures/00-AZ.png" alt="Amazon" style="zoom:33%;" />     | <img src="Pictures/00-EB.png" alt="eBay" style="zoom:33%;" />     |
+| <img src="Pictures/00-AZ.png" alt="Amazon" style="zoom:50%;" />     | <img src="Pictures/00-EB.png" alt="eBay" style="zoom:50%;" />     |
 
 The cost is about 20 to 40 euros or dollars shipping included.
 .fr((Le coût est d'environ 20 à 40 euros / dollars livraison comprise..))
 
-The plastic frames holding the front and back panels may have their
-corners slightly damaged during shipping. I had this problem with 3 cases I ordered.
-.fr((Il est possible que les coins des cadres
-plastifiés blancs soient abîmés durant le transport. J'ai eu ce problème sur les 3 exemplaires que j'ai commandés..))
+The plastic frames holding the front and back panels may have their corners slightly damaged during shipping. I had this problem with 3 cases I ordered.
+.fr((Il est possible que les coins des cadres plastifiés blancs soient abîmés durant le transport. J'ai eu ce problème sur les 3 exemplaires que j'ai commandés..))
 
 ## Printed boards.fr((Cartes et circuits imprimés.))
 
-To build Bluety you will need its four printed boards, which you can build using the files available at the adresses 
-from the following table. I did mine at JLCPCB which has reasonable costs, although it forces you to build at least
-a 10 parts batch. You may resell your bonus boards if you like.
-.fr((Pour assembler Bluety vous aurez besoin de ses quatre circuits imprimés, que vous pourrez fabriquer à
-partir de leurs fichiers disponibles aux adresses indiquées dans le tableau suivant. J'ai fabriqué les mimens chez JLCPCB qui
-offre des tarifs raisonnables, bien qu'il faille fabriquer au minimum 10 circuits. Vous pouvez revendre le surplus si vous
-le souhaitez.))
+To build Bluety you will need its four printed boards, which you can build using the files available at the adresses from the following table. I did mine at JLCPCB which has reasonable costs, although it forces you to build at least a 10 parts batch. You may resell your bonus boards if you like.
+.fr((Pour assembler Bluety vous aurez besoin de ses quatre circuits imprimés, que vous pourrez fabriquer à partir de leurs fichiers disponibles aux adresses indiquées dans le tableau suivant. J'ai fabriqué les mimens chez JLCPCB qui offre des tarifs raisonnables, bien qu'il faille fabriquer au minimum 10 circuits. Vous pouvez revendre le surplus si vous le souhaitez.))
 
 .((
 | Printed Board Name       | Purpose                                  | Web Address for files |
@@ -249,22 +223,22 @@ Note that 15mm mounts colour may vary..fr((NOTE : la couleur et la matière des 
 
 ## Cables.fr((Câbles.))
 
-Bluety comes with custom cables cut at the right length for the reference case with a 190 mm depth and for the
-following 3 configurations:.fr((Bluety est livré avec des câbles sur mesure dont la longueur convient pour le boîtier de référence d'une profondeur de 190 mm
+Bluety must be fit wristwrath cables cut at the right length for the reference case with a 190 mm depth and for the
+following 3 configurations:.fr((Bluety doit être équipé avec des câbles  dont la longueur convient pour le boîtier de référence d'une profondeur de 190 mm
 et pour les trois configurations suivantes :.))
 
 .((
 - SC126 alone
-- SC126 with SC113 Tiny
+- SC126 with FP113 Tiny
 - RC2014 Pro
 .)).fr((
 - SC126 seul
-- SC126 avec SC113 Tiny
+- SC126 avec FP113 Tiny
 - RC2014 Pro
 .))
 
-To use a deeper case, Dupont cables can be used or other custom cables with the right length have to be built.
-.fr((Pour un boîtier plus profond il faudra utiliser des rallonges de type Dupont ou sertir des câbles à la bonne longueur..))
+To use a deeper case, Dupont cables can be used or custom cables with the right length.
+.fr((Pour un boîtier plus profond il faudra utiliser des rallonges de type Dupont ou des câbles à la bonne longueur..))
 
 .((
 | Number | Cables                                       |                                                                                    |
@@ -290,17 +264,10 @@ To use a deeper case, Dupont cables can be used or other custom cables with the 
 
 ## Conclusion
 
-Make sure you have all the components, buttons, cables before assembling. Contact me in case of any problem and I will send 
-missing parts free of charge.
-.fr((Assurez-vous d'avoir tous les composants, cables, boutons avant l'assemblage. Contactez-moi en cas de problème et j'enverrai
-gratuitement les pièces manquantes.))
+Make sure you have all the components, buttons, cables before assembling.
+.fr((Assurez-vous d'avoir tous les composants, cables, boutons avant l'assemblage..))
 
-Make sure you ordered the right box case and check that bluety Front and Back panels fit correctly on it. Adjust the box
-plastic borders of panels with sand paper if needed.
-.fr((Vérifiez que vous avez commandé le bon boitier et que les panneaux de façade avant et arrière de Bluety
-prennent place correctement. Ajustez les contours en plastique du boitier avec du papier de verre si nécessaire..))
-
-Keep the integrated components safe in their anti-static bags until the very last steps of assembly.
+Keep the integrated components safe in anti-static bags until the very last steps of assembly.
 Wear an anti-static wrist strap linked to ground when handling them.
-.fr((Conservez les circuits intégrés à l'abri dans leur sachet anti-statique jusqu'au dernières étapes de l'assemblage. Portez
+.fr((Conservez les circuits intégrés à l'abri dans des sachets anti-statiques jusqu'au dernières étapes de l'assemblage. Portez
 un bracelet anti-statique relié à une masse pour les manipuler..))

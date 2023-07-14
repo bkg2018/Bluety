@@ -20,7 +20,7 @@ To assemble the LCD screen and the power button,  you must unscrew the front pan
 | 1     | Unscrew the front panel.                                          |                                                           |
 | 2     | Fix 4 10mm supports on the screen, with the bolt on front and the nut on the back. Do not use the wrong supports or the screen will be too far from the front panel. |          <img src="Pictures/070.jpg" style="zoom:33%;" /> |
 | 3     | Attach the 4 wires cable on the display I2C connector. It is best to do this at this step as it will be more difficult after the display has been fixed on the front panel because of the neighboring circuits. | <img src="Pictures/70A-lcdcable.jpg" style="zoom:33%;" /> |
-| 4     | Screen the screen on the front panel using the supports screws on the attached bolts. |          <img src="Pictures/071.jpg" style="zoom:33%;" /> |
+| 4     | Screw the screen on the front panel using the supports screws on the attached bolts. |          <img src="Pictures/071.jpg" style="zoom:33%;" /> |
 .)).fr((
 | Etape | Description                                                  |                                                           |
 | ----- | ------------------------------------------------------------ | --------------------------------------------------------: |
@@ -41,7 +41,7 @@ Si ce n'est pas le cas, dévissez donc la façade..))
 | Step | Description                                                                     |                                                                              |
 | ------| ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | 1     | If needed, unscrew the front panel.                                       |                                                                              |
-| 2     | Screw the power button using the nut on the back screw thread. If you want to use the rubber joint, put it on the thread before putting the button in its hole, so it lies on the front of the panel, but this joint has no pratical use. | <img src="Pictures/TODO.png" style="zoom:50%;" />            |
+| 2     | Screw the power button using the nut on the back screw thread. If you want to use the rubber joint, put it on the thread before putting the button in its hole, so it lies on the front of the panel, but this joint has no pratical use. |  |
 | 3     | Screw the front panel on Blink'n Switch. This is the last time, so you can screw it solidly.                        |                                                                              |
 | 4     | Notice the buttons pins marks: **+** et **-** on the outside are powering the button LED, **NO** is the input +5V, **C** is the output +5V when the button is switched on, and **NC** will stay unconnected. | <img src="Pictures/072-pwrbtn.jpg" alt="ON/OFF button pins" style="zoom:50%;" /> |
 | 5     | Connect the longest red wire on the central **NO** pin. | <img src="Pictures/072-mainvcc.jpg" alt="NO pin cable" style="zoom:50%;" /> |
@@ -50,7 +50,7 @@ Si ce n'est pas le cas, dévissez donc la façade..))
 | Etape | Description                                                                     |                                                                              |
 | ------| ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | 1     | Si ce n'est pas fait, dévissez la façade.                                       |                                                                              |
-| 2     | Vissez le bouton d'alimentation à l'aide de l'écrou. Si vous désirez utiliser le joint, placez le sur le pas de vis à l'intérieur du bouton pour qu'il aille s'appuyer sur l'extérieur de la façade, mais ce joint n'a pas d'utilité pratique. | <img src="Pictures/TODO.png" style="zoom:50%;" />            |
+| 2     | Vissez le bouton d'alimentation à l'aide de l'écrou. Si vous désirez utiliser le joint, placez le sur le pas de vis à l'intérieur du bouton pour qu'il aille s'appuyer sur l'extérieur de la façade, mais ce joint n'a pas d'utilité pratique. |  |
 | 3     | Revissez la façade sur Blink'n Switch. Vous pouvez visser solidement car cette fois est la dernière.                       |                                                                              |
 | 4     | Repérez les bornes du bouton : **+** et **-** à l'extérieur alimentent la LED, **NO** est l'entrée +5V, **C** est le fil de sortie +5V quand le bouton est enfoncé, et **NC** ne sera pas connecté. | <img src="Pictures/072-pwrbtn.jpg" alt="Bornes bouton ON/OFF" style="zoom:50%;" /> |
 | 5     | Branchez le long fil rouge serti aux deux extrémité sur la borne centrale **NO**. | <img src="Pictures/072-mainvcc.jpg" alt="Cable borne NO" style="zoom:50%;" /> |

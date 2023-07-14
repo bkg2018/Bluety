@@ -1,10 +1,10 @@
 .topnumber 7
 # Assembling the back panel.fr((Façade arrière.))
 
-The back panel features the following:.fr((La façade arrière offre :.))
+The back panel receives the following:.fr((La façade arrière reçoit :.))
 
 .((
-- micro switches to ontrol the flash memories on SC126 computer
+- micro switches to control the flash memories on SC126 computer
 - one HDMI connector and an opening for an USB cable for connecting to an RC2014 PiZero Terminal
 - a power connector for a 5V jack
 - a reset button
@@ -18,21 +18,23 @@ The back panel features the following:.fr((La façade arrière offre :.))
 - une ouverture en bas de la façade pour passer les cables vers les connecteurs arrière du SC126
 .))
 
-The micro switches are delivered precabled with wires length adjusted for a SC126. If you use a bigger case or
-another computer, youj might use Dupont male/female cables as extensions or build your own cables. For the main power
+The micro switches must be cabled with wires length adjusted for a SC126. If you use a bigger case or 
+another computer, you might use Dupont male/female cables as extensions or build longer cables. For the main power
 cables linking the back panel power connector, the power button on front panel and the J2 terminal on SC126, you'd use
-1.5mm^2^ wires as this cable will drive the current not onlyfor the computer but also its peripherals, LEDs, LCD screen etc.
+1.5mm<sup>2</sup> wires as this cable will drive the current not only for the computer but also its peripherals, LEDs,
+LCD screen etc. Any section will be fine for the low current it has to drive but a larger one will help to stabilize the current. 
 .fr((
-Les micro interrupteurs sont livrés soudés avec un câble de longueur convenant à un SC126. Si vous utilisez un boîtier
+Les micro interrupteurs doivent être soudés avec un câble de longueur convenant à un SC126. Si vous utilisez un boîtier
 plus grand ou un autre ordinateur, vous pouvez utiliser des cables Dupont male/femelle comme rallonge ou sertir vos
 propres câbles, les branchements restent identiques. Pour les câbles de l'alimentation principale qui relient
 le connecteur d'alimentation, le bouton marche/arrêt et le bornier J2, utilisez de préférence du fil de
-section 1,5 mm^2^ car ce câble véhiculera le courant pour l'ordinateur lui-même, mais aussi tous ses
-périphériques, les LEDs, l'écran LCD etc. 
+section 1,5 mm<sup>2</sup> car ce câble véhiculera le courant pour l'ordinateur lui-même, mais aussi tous ses
+périphériques, les LEDs, l'écran LCD etc. N'importe quelle section suffira pour le peu d'Ampères à véhiculer
+mais une plus grosse section aidera à stabiliser le courant.
 .))
 
 Notice that most RC2014 do not necessarily give a ROM choice and micro switches would be useless for them.
-.fr((Notez que les autres ordinateurs RC2014 ne proposent pas forcément le choix entre deux ROMs..))
+.fr((Notez que les autres ordinateurs RC2014 ne proposent pas forcément le choix entre deux ROMs et que les micro interrupteurs seront alors inutiles..))
 
 This assembly step is only about placing the elements, as connecting will be done later.
 .fr((Cette étape de l'assemblage ne concerne que le placement des éléments, les branchements seront effectués ultérieurement..))
@@ -49,7 +51,7 @@ Examples of RC2014 expansion boards with an HDMI output are:
 
 .((
 - [PiZero Terminal](https://www.tindie.com/products/Semachthemonkey/raspberry-pi-zero-serial-terminal-for-rc2014/)
-  from Spencer Owens, using a PiZero as a serial temrinal and sending video output on the PiZero HDMI output.
+  from Spencer Owens, using a PiZero as a serial terminal and sending video output on the PiZero HDMI output.
   The internal software PiGfx is in active development and you can get new releases and put them on the SD card
   to update the official SD card which contains an old version. Get the releases
   [from GitHub](https://github.com/fbergama/pigfx/releases).
@@ -76,7 +78,7 @@ of control softwares as BASIC, CP/M or SCM like the PiZero boards do.
 .((
 | Step  | Description                                                  |                                                              |
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------------: |
-| 1     | Screw the HDMI connector using the 2 M3x8 screws.        | <img src="Pictures/074-HDMI.jpg" alt="hdmi" style="zoom:75%;" /> |
+| 1     | Screw the HDMI connector using the two M3x8 screws.        | <img src="Pictures/074-HDMI.jpg" alt="hdmi" style="zoom:75%;" /> |
 .)).fr((
 | Etape | Description                                                  |                                                              |
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------------: |
@@ -90,16 +92,16 @@ but you can changed them for whatever jumper you want and place taped labels on 
 Choice is yours.
 .fr((Ces 3 interrupteurs correspondent directement à des jumpers sur la carte du SC126 et n'ont pas d'usage avec d'autres kits
 d'ordinateurs mais vous pouvez les utiliser pour n'importe quels jumpers et placer des étiquettes sur le panneau arrière pour indiquer
-leur véritable fonction. Le chpoix vous appartient..))
+leur véritable fonction. Le choix vous appartient..))
 
 .((
 | Step  | Description                                               |                                                              |
 | ----- | --------------------------------------------------------- | -----------------------------------------------------------: |
 | 2     | Screw the 2-wires micro-switch on the vertical position "flash select" using M2x8 screws and an Allen key or an hexagonal head screwdriver (not included in the kit). |  |
-| <img src="Pictures/thisway.png" alt="Conseil" width="75px" />     | Beware : if you've put the RomWBW flqash in U1 on your SC126, put the two wires on the bottom position. If you placed the SCM flash in U1 then put the two wires on the top position. | <img src="Pictures/073-selectU1U2.jpg" alt="Switch select" style="zoom:50%;" /> |
+| <img src="Pictures/thisway.png" alt="Conseil" width="75px" />     | Beware : if you've put the RomWBW flash in U1 on your SC126, put the two wires on the bottom position. If you placed the SCM flash in U1 then put the two wires on the top position. | <img src="Pictures/073-selectU1U2.jpg" alt="Switch select" style="zoom:50%;" /> |
 | 3     | Screw the two 3-wires micro-switches on the horizontal positions "flash protect" with M2x8 screws. |           |
-| 4     | Screw the power connector.<br />Oriientation is not important but remember that the longest pin is for the ground (GND) and the shortest is for +5V, which is the contrary of capacitors and LEDs. |  ![Powering](Pictures/091-powercnct.jpg) |
-| 5     | Screw the BRB reset (Big Red Button), pins orientation have no importance as it is ainly a temporary switch. put the Reset cable with yellow extremities. |                             ![Reset](Pictures/091-reset.jpg) |
+| 4     | Screw the power connector.<br />Orientation is not important but remember that the longest pin is for the ground (GND) and the shortest is for +5V, which is the contrary of capacitors and LEDs. |  ![Powering](Pictures/091-powercnct.jpg) |
+| 5     | Screw the BRB reset (Big Red Button), pins orientation is not important. Plug the Reset cable on it, there is no + and GND poles on this button. |                             ![Reset](Pictures/091-reset.jpg) |
 .)).fr((
 | Etape | Description                                               |                                                              |
 | ----- | --------------------------------------------------------- | -----------------------------------------------------------: |
@@ -107,7 +109,7 @@ leur véritable fonction. Le chpoix vous appartient..))
 | <img src="Pictures/thisway.png" alt="Conseil" width="75px" />     | Attention : si vous avez placé la RomWBW en U1 sur SC126, vous devez mettre les deux fils en bas. Si par contre vous avez placé la rom SCM en U1 vous devez mettre les deux fils en haut. | <img src="Pictures/073-selectU1U2.jpg" alt="Switch select" style="zoom:50%;" /> |
 | 3     | Vissez les deux interrupteurs avec 3 fils aux positions "flash protect" horizontales à l'aide de 4 vis M2x8. |           |
 | 4     | Vissez le connecteur d'alimentation.<br />L'orientation n'a pas d'importance mais retenez que la patte la plus *longue* est la masse (GND) et la patte la plus *courte* est le +5V, contrairement à la convention des LEDs et condensateurs. |  ![Alimentation](Pictures/091-powercnct.jpg) |
-| 5     | Vissez le bouton reset, la position des pattes n'a pas d'importance. Branchez le cable Reset avec les extrémités jaunes. |                             ![Reset](Pictures/091-reset.jpg) |
+| 5     | Vissez le bouton reset, la position des pattes n'a pas d'importance. Branchez le cable Reset, il n'y a pas de bornes + et GND. |                             ![Reset](Pictures/091-reset.jpg) |
 .))
 
 The back panel will then look like this..fr((La façade arrière présente alors l'aspect suivant..))

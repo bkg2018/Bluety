@@ -1,4 +1,4 @@
-# Assembling Bus Daughter<A id="a19"></A>
+# Assembling Bus Daughter<A id="a20"></A>
 
 This board takes place in any RC2014 bus connector and drives the needed signals to the Blink'n Switch
 input/output board. Assembly is not difficult but you should take care of the connectors orientation.

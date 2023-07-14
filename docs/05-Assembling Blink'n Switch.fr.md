@@ -1,4 +1,4 @@
-# Carte Blink'n Switch<A id="a20"></A>
+# Carte Blink'n Switch<A id="a21"></A>
 
 Cette carte offre deux ports d'entrée/sortie avec des LEDs témoins et des interrupteurs pour contrôler les entrées, ainsi que
 8 LEDs en façade pour le port de contrôles 13 (0D hexa) de l'ordinateur SC126 de Stephen S. Cousins. Ce port peut être utilisé par
@@ -8,7 +8,7 @@ n'importe quel ordinateur RC2014 pour afficher 8 bits sur les LEDs de la façade
 temporaires avec la façade avant pour que les composants apparaissant sur cette dernière soient correctement alignés. <B>Respectez
 l'ordre de montage et les consignes</B> pour avoir les meilleurs chances d'obtenir une belle façade.</TD></TR></TABLE>
 
-## Arrière (partie 1) : supports et composants<A id="a21"></A>
+## Arrière (partie 1) : supports et composants<A id="a22"></A>
 
 Placez le **dos** visible (l'orifice du bouton marche arrêt en bas à gauche)
 
@@ -17,10 +17,10 @@ Placez le **dos** visible (l'orifice du bouton marche arrêt en bas à gauche)
 | 1     | Soudez les 10 condensateurs 100nF C1 à C4 et C6 à C11. Ces condensateurs sont marqués *104*.          | <img src="Pictures/040A.png" alt="Condensateurs 100nF" style="zoom: 33%;" /><br /><img src="Pictures/040B.jpg" alt="Condensateurs" style="zoom:50%;" /> |
 | 2     | Soudez les 8 supports 20P et les 2 supports 14P, encoches vers le *haut* ou la *gauche* selon le cas. | <img src="Pictures/041A.png" alt="Supports" style="zoom: 33%;" /><br /><img src="Pictures/041B.jpg" alt="Supports" style="zoom: 50%;" /> |
 | 3     | Soudez les 3 réseaux de résistance **10K** RN1 RN4 RN7.                                               | <img src="Pictures/042B.png" alt="Résistances 10K" style="zoom: 33%;" /> |
-| 4     | Attention à *ne pas confondre avec les 470* : le composant est marqué *103*,ce qui signifie 10 x 10^3^, soit 10 Kilo Ohms. | <img src="Pictures/042A.jpg" alt="10K" style="zoom: 33%;" /> |
+| 4     | Attention à *ne pas confondre avec les 470* : le composant est marqué *103*,ce qui signifie 10 x 10<sup>3</sup>, soit 10 Kilo Ohms. | <img src="Pictures/042A.jpg" alt="10K" style="zoom: 33%;" /> |
 | 5     | Soudez d'abord une seule patte, vérifiez la position et le point de référence à gauche, correspondant au petit carré imprimé sur le circuit. <br /><br />Une fois la position vérifiée soudez les autres pattes. | <img src="Pictures/042C.jpg" alt="Repères" style="zoom: 33%;" /> |
 | 6     | Soudez les 5 réseaux de résistance **470** RN2 RN3 RN5 RN6 RN8.                                       | <img src="Pictures/043B.png" alt="Résistances" style="zoom: 33%;" /> |
-| 7     | Le composant est marqué 471, ce qui signifie 47 x 10^1^, soit 470 Ohms.                               | <img src="Pictures/043A.jpg" alt="470" style="zoom: 33%;" /> |
+| 7     | Le composant est marqué 471, ce qui signifie 47 x 10<sup>1</sup>, soit 470 Ohms.                               | <img src="Pictures/043A.jpg" alt="470" style="zoom: 33%;" /> |
 | 8     | Attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit | <img src="Pictures/043C.jpg" alt="Repère" style="zoom: 33%;" /> |
 
 <TABLE><TR>
@@ -31,9 +31,11 @@ Placez le **dos** visible (l'orifice du bouton marche arrêt en bas à gauche)
 <TD><EM>Ne soudez pas</EM> le connecteur P1 et le condensateur C5 pour l'instant : ils gêneraient la suite de l'assemblage.</TD>
 </TR></TABLE>
 
-Voici l'allure de la carte à ce stade.<img src="Pictures/044.jpg" alt="Vue carte soudée" style="zoom:50%;" />
+Voici l'allure de la carte à ce stade.
 
-## Avant : supports des dip-switch<A id="a22"></A>
+<img src="Pictures/044.jpg" alt="Vue carte soudée" style="zoom:50%;" />
+
+## Avant : supports des dip-switch<A id="a23"></A>
 
 <TABLE><TR>
 <TD><img src="Pictures/thisway.png" alt="Vérification" width="250px" /></TD>
@@ -45,11 +47,11 @@ l'élément en cas de problème d'alignement. Une fois celui-ci correct on peut 
 
 Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenant en bas à droite.
 
-"Avant carte" style="zoom:50%;" />
+<img src="Pictures/045.jpg" alt="Avant carte" style="zoom:50%;" />
 
 | Etape | Description                                                       |                                                   |
 | ------| -------------------------------------------------------- | ------------------------------------------------: |
-| 1     | Soudez *une patte* de chacun des 2 supports CI 16P (SW10 et SW21), encoche vers la gauche. Ils serviront de base aux DIP-Switchs de sélection du numéro de port. | <img src="Pictures/TODO.png" style="zoom:33%;" /> |
+| 1     | Soudez *une patte* de chacun des 2 supports CI 16P (SW10 et SW21), encoche vers la gauche. Ils serviront de base aux DIP-Switchs de sélection du numéro de port. | |
 | 2     | Vissez les 5 supports 12 mm sur la carte : support sur le dessus, boulon au dos. | <img src="Pictures/046.jpg" style="zoom: 50%;" /> |
 | 3     | Les supports vont servir à plusieurs assemblages provisoires afin de bien aligner les composants de la façade, donc ne les démontez pas tout le long de cette étape. L'espace de certains écrous est restreint une fois les composants en place, aussi il est préférable de maintenir l'écrou et tourner le support plutôt que l'inverse. |  <img src="Pictures/047.jpg" style="zoom:50%;" /> |
 | 4     | Si un composant nécessite à un moment de tourner un boulon, dévissez légèrement le support, tournez un peu l'écrou et revissez le support. |                                                   |
@@ -58,33 +60,30 @@ Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenan
 | 7     | Une fois que tout est bien aligné, retournez l'ensemble et terminez la soudure des supports, en n'oubliant pas de finir par un ajout de soudure sur la première patte. |                                                   |
 | 8     | Dévissez les vis de la façade, démontez la et mettez là à l'abri ainsi que les ensembles support+dip-switch emboités. Vous les remettrez en place plus tard. |                                                   |
 
-## Avant : connecteurs E/S et Alimentation<A id="a23"></A>
+## Avant : connecteurs E/S et Alimentation<A id="a24"></A>
 
 | Etape | Description                                                        |                                                              |
 | ----- | -------------------------------------------------------- | ------------------------------------------------------------ |
 | 1     | Posez le circuit imprimé, face avant sur le dessus, sur des supports de préférence non métalliques afin qu'il soit au dessus du plan de travail et permette aux composants de glisser dans leurs emplacements. Veillez à assurer une hauteur d'environ 10 mm. Des rouleaux de ruban adhésifs conviennent comme illustré sur l'image ci-contre. | <img src="Pictures/050.jpg" style="zoom:50%;" />             |
 | 2     | Positionnez les 4 connecteurs femelles 8P à longues pattes (11mm) et les 2 connecteurs femelles 2P à longues pattes (11mm) | <img src="Pictures/051.jpg" style="zoom:75%;" />             |
 | 3     | Fixez la façade *en évitant de fixer la vis centrale* elle gênerait le positionnement des connecteurs. | <img src="Pictures/052.jpg" style="zoom:50%;" />             |
-| 4     | Posez la façade arrière sur la façade avant et perpendiculairement de manière à recouvrir les ouvertures des connecteurs. Vous pouvez placer une feuille de papier entre les deux si vous craignez d'abimer leur revêtement, la feuille de papier de soie qui les protège lorsque vous recevez le kit convient parfaitement à cet usage. | <img src="Pictures/053.jpg" style="zoom:50%;" />             |
+| 4     | Posez la façade arrière sur la façade avant et perpendiculairement de manière à recouvrir les ouvertures des connecteurs. Vous pouvez placer une feuille de papier entre les deux si vous craignez d'abimer leur revêtement. | <img src="Pictures/053.jpg" style="zoom:50%;" />             |
 | 5     | Retournez délicatement l'ensemble et posez le à l'envers sur le plan de travail. | <img src="Pictures/054.jpg" style="zoom:50%;" />             |
 | 6     | A l'aide d'une pince, placez les connecteurs dans les ouvertures de la façade. <br />Ne forcez pas pour ne pas tordre les pattes. Si cela arrive, démontez la façade, sortez le connecteur, redressez les pattes et recommencez l'opération. | <img src="Pictures/055.jpg" style="zoom:50%;" />             |
 | 7     | Les connecteurs doivent être bien placés dans les encoches de la façade. Utilisez une petite pince pour les repositionner jusqu'à ce que les six soient bien placés dans leur ouverture de la façade. | <img src="Pictures/056.jpg" style="zoom:50%;" /><img src="Pictures/057.jpg" style="zoom:50%;" /> |
 | 8     | Lorsque tout est bien en place, soudez *une patte* de chacun des 6 connecteurs. | <img src="Pictures/058.jpg" style="zoom:50%;" />             |
-| 9     | Retournez l'ensemble pour vérifier l'alignement. En cas de besoin, rechauffez la soudure pour repositionner le conencteur. | <img src="Pictures/059.jpg" style="zoom:50%;" />             |
+| 9     | Retournez l'ensemble pour vérifier l'alignement. En cas de besoin, rechauffez la soudure pour repositionner le connecteur. | <img src="Pictures/059.jpg" style="zoom:50%;" />             |
 | 10    | Lorsque tout est correctement placé, retournez et terminez la soudure des pattes restantes. |                                                              |
-| 11    | Coupez l'excédent de pattes. Attention aux projections éventuelles des petits bouts de métal car ces pattes sont très ridgides : protégez vos yeux. |                                                              |
+| 11    | Coupez l'excédent de pattes. Attention aux projections éventuelles des petits bouts de métal car ces pattes sont très rigides : protégez vos yeux. |                                                              |
 | 12    | Dévissez la façade.                                          |                                                              |
 
-## Avant : interrupteurs<A id="a24"></A>
+## Avant : interrupteurs<A id="a25"></A>
 
-Préparez les 16 interrupteurs à trois positions ON-OFF-ON et 4 interrupteurs à deux positions ON-OFF ou ON-ON. Ils sont de couleurs différentes donc vous ne devirez pas 
-pouvoir les confondre.
+Préparez les 16 interrupteurs à trois positions ON-OFF-ON et 4 interrupteurs à deux positions ON-OFF ou ON-ON.
 
 Pour pouvoir utiliser le port d'entrée correctement vous ne devez pas vous tromper de type.
 
-<TABLE><TR><TD width="100px"><img src="Pictures/thisway.png" alt="Vérification" width="100px" /></TD><TD>Séparez les tas pour ne pas vous tromper. Le kit présente
-normalement deux couleurs différentes mais cela peut dépendre du stock. Les interrupteurs sont livrés dans des sachets différents pour vous aider à les trier, mais une
-vérification manuelle des positions est aussi efficace.</TD></TR></TABLE>
+<TABLE><TR><TD width="100px"><img src="Pictures/thisway.png" alt="Vérification" width="100px" /></TD><TD>Séparez les tas pour ne pas vous tromper..</TD></TR></TABLE>
 
 | Etape | Description                                                        |                                                              |
 | ----- | --------------------------------------------------------- | ------------------------------------------------------------ |
@@ -102,7 +101,7 @@ vérification manuelle des positions est aussi efficace.</TD></TR></TABLE>
 | 11    | Remettez les interrupteurs en position basse ou médiane.     |                                                              |
 | 12    | Dévissez et enlevez la façade.                               |                                                              |
 
-## Avant : LEDs<A id="a25"></A>
+## Avant : LEDs<A id="a26"></A>
 
 Préparez les LEDs :
 
@@ -110,7 +109,7 @@ Préparez les LEDs :
 - 16 jaunes pour les ports de sortie
 - vous pouvez inverser les couleurs vertes et jaunes selon votre goût
 - 8 bleues pour le port de contrôle
-- si vous préférez avoir des LED remplaçables, vous pouvez souder des supports femelles à deux broches à la place des LEDs, mais l'ajustement des LEDs à la bonne longueur sera sensiblement plus compliqué. Cette possibilité est laissée à votre appréciation et les supports ne sont pas fournis dans le kit.
+- si vous préférez avoir des LED remplaçables, vous pouvez souder des supports femelles à deux broches à la place des LEDs, mais l'ajustement des LEDs à la bonne longueur sera sensiblement plus compliqué. Cette possibilité est laissée à votre appréciation.
 
 | Etape | Description                                                  |                                                  |
 | ----- | ------------------------------------------------------------ | -----------------------------------------------------------: |
@@ -119,7 +118,7 @@ Préparez les LEDs :
 | 3     | Placez les 16 LEDs jaunes (ou vertes) des ports de sortie LED9 à LED16 et LED25 à LED32. La patte la plus courte est l'anode et se place en haut sur le signe (-) du circuit imprimé. |                                                              |
 | 4     | Placez les 8 LED bleues du port de contrôle LED33 à LED40. La patte la plus courte est l'anode et se place en haut sur le signe (-) du circuit imprimé. |                                                              |
 | 5     | Vérifiez une dernière fois que les pattes les plus courtes sont bien situées sur le haut, ainsi que l'applat de la LED. |                                                              |
-| 6     | Fixez de nouveau la façade à l'aide des 5 vis. Pensez à bien visser la vis unique à côté du trou du bouton marche/arrêt : elle assurera le bon alignement des LED situées sous le LCD. |            <img src="Pictures/066.jpg" style="zoom:75%;" /> |
+| 6     | Fixez de nouveau la façade à l'aide des 5 vis. Pensez à bien visser la vis unique à côté du trou du bouton marche/arrêt : elle assurera le bon alignement des LED situées sous le LCD. |  |
 | 7     | Soulevez l'ensemble : les LEDs glissent dans leur logement et se plaquent sur le circuit imprimé. |                                                              |
 | 8     | Retournez délicatement l'ensemble pour que les LEDs glissent en sens inverse et se placent dans leur ouverture sur la façade. Une grande partie d'entre elles va s'y positionner directement, pour les autres agissez avec une pince sur les pattes pour les placer dans leur ouverture en façade. Posez l'ensemble retourné sur le plan de travail, en appui sur les interrupteurs. |                                                              |
 | 9     | Si une LED est mal positionnée, utilisez ses pattes et une pince pour la replacer correctement. Procédez délicatement pour ne pas tordre les pattes. |           <img src="Pictures/067A.jpg" style="zoom:75%;" /> |
@@ -130,7 +129,7 @@ Préparez les LEDs :
 | 14    | Coupez l'excédent des pattes.                                |                                                              |
 | 15    | Dévissez la façade.                                          |                                                              |
 
-## Arrière : composants (partie 2)s<A id="a26"></A>
+## Arrière : composants (partie 2)<A id="a27"></A>
 
 | Etape | Description                                                       |                                                  |
 | ----- | --------------------------------------------------------- | ------------------------------------------------ |
@@ -138,13 +137,13 @@ Préparez les LEDs :
 | 2     | Soudez le condensateur C5, attention à la polarité la patte la plus courte est sur le (-). La bande noire avec le signe '-' doit être face au demi cercle hachuré sur le circuit imprimé. Coupez les pattes de l'autre côté. | <img src="Pictures/068.jpg" style="zoom:50%;" /> |
 | 3     | Soudez le connecteur mâle 2x12P P1.                          | <img src="Pictures/069.jpg" style="zoom:50%;" /> |
 
-## Finition<A id="a27"></A>
+## Finition<A id="a28"></A>
 
 - Nettoyez précautionneusement la façade avec un chiffon doux ou microfibre propre.
 
 <TABLE><TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
   <B>N'utilisez aucun produit détergent, solvant ou alcoolique.</B>
-  <P>L'eau chaude et les produits de nettoyage pour écran plat sont acceptables.
+  <P>L'eau chaude ou les produits de nettoyage pour écran plat sont acceptables mais assurez-vous de bien tout sécher ensuite.
   <P>Si vous souhaitez utiliser un produit, faites un essai sur un petit endroit au dos de la façade ou sur la carte Bus Daughter pour vérifier qu'il n'abime pas le vernis.
 </TD></TR></TABLE>
 

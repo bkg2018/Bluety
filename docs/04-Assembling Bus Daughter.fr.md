@@ -1,4 +1,4 @@
-# Carte Bus Daughter<A id="a19"></A>
+# Carte Bus Daughter<A id="a20"></A>
 
 Cette carte se connecte sur n'importe quel emplacement de bus d'un ordinateur RC2014 et véhicule les signaux utiles jusqu'à
 la carte Blink'n Switch d'entrée / sortie. Son assemblage ne présente pas de difficulté majeure mais vous devrez faire
