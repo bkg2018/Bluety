@@ -84,7 +84,7 @@ Both input ports have an 8-bits female header for +5V input, 8 control LEDs, and
 Beware that input lines directly feed integrated conponents and LEDs, so take care of not drawing more than a few milliampers and not much more
 than +5V or you could burn components and make your input port definitely useless.
 .fr((Attention: les lignes d'entrée alimentent directement des circuits intégrés et les LEDs, aussi vous ne devez pas tirer plus de quelques milliampères
-et pas beaucoup plus de +5V sous peine de brûler des composants et de rendre définitivement inutile le poirt d'entrée..))
+et pas beaucoup plus de +5V sous peine de brûler des composants et de rendre définitivement inutile le port d'entrée..))
 
 Generally, less than +4.7V on an input line will be considered as a 0 bit..fr((En général, un niveau d'entrée inférieur à +4.7V sera considéré comme
 un bit à 0..))
@@ -109,13 +109,14 @@ un bit à 0..))
 | 5     | Vous pouvez utiliser le connecteur +5V/GND pour alimenter des dispositifs extérieurs comme des circuits avec des relais ou des capteurs, indépendamment de l'état du port ou des interrupteurs en façade. |                                                        |
 .))
 
-<TABLE>
-<TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
+.((<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Advice" width="75px" /></TD><TD>.))
+.fr((<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>.))
 .((Remark: Output ports retain their last data, so to switch all lines and LEDs to GND level you must explicitely write a 0 to the output port..))
 .fr((Remarque : Chaque port de sortie retient sa dernière donnée, donc pour éteindre les LEDs il faut explicitement écrire un 0..))
 </TD></TR>
-<TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
-.((You can use the dipswitch port select to spy any of the Z-80 port, for example gthe Z-180 internal ports on the SC126 
+.((<TR><TD><img src="Pictures/thisway.png" alt="Advice" width="75px" /></TD><TD>.))
+.fr((<TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>.))
+.((You can use the dipswitch port select to spy any of the Z-80 port, for example the Z-180 internal ports on the SC126 
 or the ports used by a ROM with BusRaider..))
 .fr((Vous pouvez utiliser le dipswitch pour espionner
 n'importe quel numéro de port, par exemple les ports internes du Z-180 sur le SC126 ou les ports contrôlés par une ROM
@@ -141,7 +142,7 @@ Instead of using an I2C display you may buy a similar display without I2C and co
 an I/O controller RC2014 board. Stephen S. Cousins site shows a number of ways to do this and offers Z-80 code to control an LCD
 display using OUT instructions. 
 .fr((Au lieu d'utiliser un écran I2C on peut installer un écran sans adaptateur I2C et le contrôler
-par le biais d'un port parallèle ou d'une carte E/S. Le site de Stephen S. Cousins décrit diverses manières de controler un écran LCD
+par le biais d'un port parallèle ou d'une carte E/S. Le site de Stephen S. Cousins décrit diverses manières de contrôler un écran LCD
 à partir d'un SC126 ou d'un RC2014. .))
 
 ## LCD Display: parallel interfacing.fr((Ecran LCD : Interface parallèle.)) (SC126,RC2014 Pro)

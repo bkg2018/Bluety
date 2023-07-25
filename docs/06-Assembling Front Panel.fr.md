@@ -10,9 +10,9 @@ Pour assembler l'écran LCD et le bouton d'alimentation vous devez une dernière
 | Etape | Description                                                  |                                                           |
 | ----- | ------------------------------------------------------------ | --------------------------------------------------------: |
 | 1     | Dévissez la façade.                                          |                                                           |
-| 2     | Fixez les 4 supports 10 mm à l'écran, support sur l'avant et boulon au dos. Ne vous trompez pas de supports, sinon l'écran sera en retrait ou en avant de la façade. |          <img src="Pictures/070.jpg" style="zoom:33%;" /> |
-| 3     | Fixez le câble 4 fils sur le connecteur I2C. L'intérêt de le faire à ce stade est qu'il sera plus difficile de le brancher après que l'écran aura été fixé sur la façade à cause de la proximité de circuits intégrés. | <img src="Pictures/70A-lcdcable.jpg" style="zoom:33%;" /> |
-| 4     | Vissez l'écran sur la façade à l'aide des vis des supports.  |          <img src="Pictures/071.jpg" style="zoom:33%;" /> |
+| 2     | Fixez les 4 supports 10 mm à l'écran, support sur l'avant et boulon au dos. Ne vous trompez pas de supports, sinon l'écran sera en retrait ou en avant de la façade. |          <img src="Pictures/070.jpg" style="zoom: 60%;" /> |
+| 3     | Fixez le câble 4 fils sur le connecteur I2C. L'intérêt de le faire à ce stade est qu'il sera plus difficile de le brancher après que l'écran aura été fixé sur la façade à cause de la proximité de circuits intégrés. | <img src="Pictures/70A-lcdcable.jpg" style="zoom: 60%;" /> |
+| 4     | Vissez l'écran sur la façade à l'aide des vis des supports.  |          <img src="Pictures/071.jpg" style="zoom: 60%;" /> |
 
 ## Bouton d'alimentation<A id="a31"></A>
 

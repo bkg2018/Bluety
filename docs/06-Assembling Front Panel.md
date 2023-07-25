@@ -11,9 +11,9 @@ To assemble the LCD screen and the power button,  you must unscrew the front pan
 | Step  | Description                                                  |                                                           |
 | ----- | ------------------------------------------------------------ | --------------------------------------------------------: |
 | 1     | Unscrew the front panel.                                          |                                                           |
-| 2     | Fix 4 10mm supports on the screen, with the bolt on front and the nut on the back. Do not use the wrong supports or the screen will be too far from the front panel. |          <img src="Pictures/070.jpg" style="zoom:33%;" /> |
-| 3     | Attach the 4 wires cable on the display I2C connector. It is best to do this at this step as it will be more difficult after the display has been fixed on the front panel because of the neighboring circuits. | <img src="Pictures/70A-lcdcable.jpg" style="zoom:33%;" /> |
-| 4     | Screw the screen on the front panel using the supports screws on the attached bolts. |          <img src="Pictures/071.jpg" style="zoom:33%;" /> |
+| 2     | Fix 4 10mm supports on the screen, with the bolt on front and the nut on the back. Do not use the wrong supports or the screen will be too far from the front panel. |          <img src="Pictures/070.jpg" style="zoom: 60%;" /> |
+| 3     | Attach the 4 wires cable on the display I2C connector. It is best to do this at this step as it will be more difficult after the display has been fixed on the front panel because of the neighboring circuits. | <img src="Pictures/70A-lcdcable.jpg" style="zoom: 60%;" /> |
+| 4     | Screw the screen on the front panel using the supports screws on the attached bolts. |          <img src="Pictures/071.jpg" style="zoom: 60%;" /> |
 
 ## Power button<A id="a31"></A>
 

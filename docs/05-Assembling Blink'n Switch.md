@@ -14,14 +14,14 @@ Place the **back** visible. (The opening for power button must be on the bottom 
 
 | Step  | Description                                                                                           |                                                              |
 | ----- | ----------------------------------------------------------------------------------------------------- | -----------------------------------------------------------: |
-| 1     | Solder the ten 100nF capacitors C1 to C4 and C6 to C11. These capacitors are marked *104*.            | <img src="Pictures/040A.png" alt="100nF Capacitors" style="zoom: 33%;" /><br /><img src="Pictures/040B.jpg" alt="100nF Capacitors" style="zoom:50%;" /> |
-| 2     | Solder the eight 20-pins sockets and the two 14-pins sockets, with the little notch on the *top* or on the *left* depending on the orientation. | <img src="Pictures/041A.png" alt="Sockets" style="zoom: 33%;" /><br /><img src="Pictures/041B.jpg" alt="Sockets" style="zoom: 50%;" /> |
-| 3     | Solder the three **10K** resitors networks RN1 RN4 RN7.                                               | <img src="Pictures/042B.png" alt="10K Resistors" style="zoom: 33%;" /> |
-| 4     | Take care: *do not mismatch with the 470 Ohms resistors*: the 10K component is marked *103*, which means 10 x 10<sup>3</sup>, hence 10 Kilo Ohms. | <img src="Pictures/042A.jpg" alt="10K" style="zoom: 33%;" /> |
-| 5     | First, lightly solder one leg, then check position and the reference dot mark on the left which should match the little printed square on the circuit board. <br /><br />When everything is correct, finish soldering with the other legs and add sufficient solder on the first leg. | <img src="Pictures/042C.jpg" alt="Marks" style="zoom: 33%;" /> |
-| 6     | Solder the five **470** resistors networks RN2 RN3 RN5 RN6 RN8.                                       | <img src="Pictures/043B.png" alt=">Resistors" style="zoom: 33%;" /> |
-| 7     | The component is marked *471*, which means 47 x 10<sup>1</sup>, hence 470 Ohms.                                | <img src="Pictures/043A.jpg" alt="470" style="zoom: 33%;" /> |
-| 8     | Make sure you align the component dot mark on the left with the little printed square on the circuit board. | <img src="Pictures/043C.jpg" alt="Marks" style="zoom: 33%;" /> |
+| 1     | Solder the ten 100nF capacitors C1 to C4 and C6 to C11. These capacitors are marked *104*.            | <img src="Pictures/040A.png" alt="100nF Capacitors" style="zoom: 60%;" /><br /><img src="Pictures/040B.jpg" alt="100nF Capacitors" style="zoom:50%;" /> |
+| 2     | Solder the eight 20-pins sockets and the two 14-pins sockets, with the little notch on the *top* or on the *left* depending on the orientation. | <img src="Pictures/041A.png" alt="Sockets" style="zoom: 60%;" /><br /><img src="Pictures/041B.jpg" alt="Sockets" style="zoom: 60%;" /> |
+| 3     | Solder the three **10K** resitors networks RN1 RN4 RN7.                                               | <img src="Pictures/042B.png" alt="10K Resistors" style="zoom: 60%;" /> |
+| 4     | Take care: *do not mismatch with the 470 Ohms resistors*: the 10K component is marked *103*, which means 10 x 10<sup>3</sup>, hence 10 Kilo Ohms. | <img src="Pictures/042A.jpg" alt="10K" style="zoom: 60%;" /> |
+| 5     | First, lightly solder one leg, then check position and the reference dot mark on the left which should match the little printed square on the circuit board. <br /><br />When everything is correct, finish soldering with the other legs and add sufficient solder on the first leg. | <img src="Pictures/042C.jpg" alt="Marks" style="zoom: 60%;" /> |
+| 6     | Solder the five **470** resistors networks RN2 RN3 RN5 RN6 RN8.                                       | <img src="Pictures/043B.png" alt=">Resistors" style="zoom: 60%;" /> |
+| 7     | The component is marked *471*, which means 47 x 10<sup>1</sup>, hence 470 Ohms.                                | <img src="Pictures/043A.jpg" alt="470" style="zoom: 60%;" /> |
+| 8     | Make sure you align the component dot mark on the left with the little printed square on the circuit board. | <img src="Pictures/043C.jpg" alt="Marks" style="zoom: 60%;" /> |
 
 <TABLE><TR>
 <TD width="100px"> <img src="Pictures/thisway.png" alt="Check" width="75px" /></TD>
@@ -52,7 +52,7 @@ Reverse the board to see the **front** side, with the power button opening now a
 | Step  | Description                                                       |                                                   |
 | ------| -------------------------------------------------------- | ------------------------------------------------: |
 | 1     | Solder *one leg* of each of the two 16-pins IC sockets (SW10 and SW21), notch on the left. They will host the port select DIP-switches. |  |
-| 2     | Screw the five 12mm bolts on the board: bolt on the front, nut on the back. | <img src="Pictures/046.jpg" style="zoom: 50%;" /> |
+| 2     | Screw the five 12mm bolts on the board: bolt on the front, nut on the back. | <img src="Pictures/046.jpg" style="zoom: 60%;" /> |
 | 3     | The bolts will help for many temporary assemblies with front panel to ensure correct alignement, so you'll keep them screwed for this whole process step. There is little space on the back for some nuts when components are in place, so it is best to maintain the nut and turn the bolt than the contrary. |  <img src="Pictures/047.jpg" style="zoom:50%;" /> |
 | 4     | If a component requires that you turn a nut, lightly unscrew the bolt, turn the nut a little, then screw again the bolt. |                                                   |
 | 5     | Put another 16-pin IC socket into the soldered ones, then a DIP-switch on each second socket.   |  <img src="Pictures/048.jpg" style="zoom:50%;" /> |

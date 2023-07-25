@@ -7,7 +7,8 @@
 Bluety est un ensemble de circuits imprimés pour un boîtier destiné à recevoir un ordinateur rétro 
 basé sur le Z-80 de la famille RC2014, en particulier le kit SC126 de Stephen S. Cousins et le RC2014 Pro
 de Spencer Owens.
-what## Sommaire<A id="toc"></A>
+
+## Sommaire<A id="toc"></A>
 
 - [Bluety - Panneaux avec contrôles E/S pour ordinateurs Z-80](<#a1>)
 - [Présentation](<01-Introduction.fr.md#a2>)

@@ -14,14 +14,14 @@ Placez le **dos** visible (l'orifice du bouton marche arrêt en bas à gauche)
 
 | Etape | Description                                                                                           |                                                              |
 | ----- | ----------------------------------------------------------------------------------------------------- | -----------------------------------------------------------: |
-| 1     | Soudez les 10 condensateurs 100nF C1 à C4 et C6 à C11. Ces condensateurs sont marqués *104*.          | <img src="Pictures/040A.png" alt="Condensateurs 100nF" style="zoom: 33%;" /><br /><img src="Pictures/040B.jpg" alt="Condensateurs" style="zoom:50%;" /> |
-| 2     | Soudez les 8 supports 20P et les 2 supports 14P, encoches vers le *haut* ou la *gauche* selon le cas. | <img src="Pictures/041A.png" alt="Supports" style="zoom: 33%;" /><br /><img src="Pictures/041B.jpg" alt="Supports" style="zoom: 50%;" /> |
-| 3     | Soudez les 3 réseaux de résistance **10K** RN1 RN4 RN7.                                               | <img src="Pictures/042B.png" alt="Résistances 10K" style="zoom: 33%;" /> |
-| 4     | Attention à *ne pas confondre avec les 470* : le composant est marqué *103*,ce qui signifie 10 x 10<sup>3</sup>, soit 10 Kilo Ohms. | <img src="Pictures/042A.jpg" alt="10K" style="zoom: 33%;" /> |
-| 5     | Soudez d'abord une seule patte, vérifiez la position et le point de référence à gauche, correspondant au petit carré imprimé sur le circuit. <br /><br />Une fois la position vérifiée soudez les autres pattes. | <img src="Pictures/042C.jpg" alt="Repères" style="zoom: 33%;" /> |
-| 6     | Soudez les 5 réseaux de résistance **470** RN2 RN3 RN5 RN6 RN8.                                       | <img src="Pictures/043B.png" alt="Résistances" style="zoom: 33%;" /> |
-| 7     | Le composant est marqué 471, ce qui signifie 47 x 10<sup>1</sup>, soit 470 Ohms.                               | <img src="Pictures/043A.jpg" alt="470" style="zoom: 33%;" /> |
-| 8     | Attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit | <img src="Pictures/043C.jpg" alt="Repère" style="zoom: 33%;" /> |
+| 1     | Soudez les 10 condensateurs 100nF C1 à C4 et C6 à C11. Ces condensateurs sont marqués *104*.          | <img src="Pictures/040A.png" alt="Condensateurs 100nF" style="zoom: 60%;" /><br /><img src="Pictures/040B.jpg" alt="Condensateurs" style="zoom:50%;" /> |
+| 2     | Soudez les 8 supports 20P et les 2 supports 14P, encoches vers le *haut* ou la *gauche* selon le cas. | <img src="Pictures/041A.png" alt="Supports" style="zoom: 60%;" /><br /><img src="Pictures/041B.jpg" alt="Supports" style="zoom: 60%;" /> |
+| 3     | Soudez les 3 réseaux de résistance **10K** RN1 RN4 RN7.                                               | <img src="Pictures/042B.png" alt="Résistances 10K" style="zoom: 60%;" /> |
+| 4     | Attention à *ne pas confondre avec les 470* : le composant est marqué *103*,ce qui signifie 10 x 10<sup>3</sup>, soit 10 Kilo Ohms. | <img src="Pictures/042A.jpg" alt="10K" style="zoom: 60%;" /> |
+| 5     | Soudez d'abord une seule patte, vérifiez la position et le point de référence à gauche, correspondant au petit carré imprimé sur le circuit. <br /><br />Une fois la position vérifiée soudez les autres pattes. | <img src="Pictures/042C.jpg" alt="Repères" style="zoom: 60%;" /> |
+| 6     | Soudez les 5 réseaux de résistance **470** RN2 RN3 RN5 RN6 RN8.                                       | <img src="Pictures/043B.png" alt="Résistances" style="zoom: 60%;" /> |
+| 7     | Le composant est marqué 471, ce qui signifie 47 x 10<sup>1</sup>, soit 470 Ohms.                               | <img src="Pictures/043A.jpg" alt="470" style="zoom: 60%;" /> |
+| 8     | Attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit | <img src="Pictures/043C.jpg" alt="Repère" style="zoom: 60%;" /> |
 
 <TABLE><TR>
 <TD width="100px"> <img src="Pictures/thisway.png" alt="Vérification" width="75px" /></TD>
@@ -52,7 +52,7 @@ Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenan
 | Etape | Description                                                       |                                                   |
 | ------| -------------------------------------------------------- | ------------------------------------------------: |
 | 1     | Soudez *une patte* de chacun des 2 supports CI 16P (SW10 et SW21), encoche vers la gauche. Ils serviront de base aux DIP-Switchs de sélection du numéro de port. | |
-| 2     | Vissez les 5 supports 12 mm sur la carte : support sur le dessus, boulon au dos. | <img src="Pictures/046.jpg" style="zoom: 50%;" /> |
+| 2     | Vissez les 5 supports 12 mm sur la carte : support sur le dessus, boulon au dos. | <img src="Pictures/046.jpg" style="zoom: 60%;" /> |
 | 3     | Les supports vont servir à plusieurs assemblages provisoires afin de bien aligner les composants de la façade, donc ne les démontez pas tout le long de cette étape. L'espace de certains écrous est restreint une fois les composants en place, aussi il est préférable de maintenir l'écrou et tourner le support plutôt que l'inverse. |  <img src="Pictures/047.jpg" style="zoom:50%;" /> |
 | 4     | Si un composant nécessite à un moment de tourner un boulon, dévissez légèrement le support, tournez un peu l'écrou et revissez le support. |                                                   |
 | 5     | Emboitez un second support 16P et un DIP-Switch sur chacun des deux supports. |  <img src="Pictures/048.jpg" style="zoom:50%;" /> |

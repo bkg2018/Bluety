@@ -28,25 +28,25 @@ Place the **back** visible. (The opening for power button must be on the bottom 
 .((
 | Step  | Description                                                                                           |                                                              |
 | ----- | ----------------------------------------------------------------------------------------------------- | -----------------------------------------------------------: |
-| 1     | Solder the ten 100nF capacitors C1 to C4 and C6 to C11. These capacitors are marked *104*.            | <img src="Pictures/040A.png" alt="100nF Capacitors" style="zoom: 33%;" /><br /><img src="Pictures/040B.jpg" alt="100nF Capacitors" style="zoom:50%;" /> |
-| 2     | Solder the eight 20-pins sockets and the two 14-pins sockets, with the little notch on the *top* or on the *left* depending on the orientation. | <img src="Pictures/041A.png" alt="Sockets" style="zoom: 33%;" /><br /><img src="Pictures/041B.jpg" alt="Sockets" style="zoom: 50%;" /> |
-| 3     | Solder the three **10K** resitors networks RN1 RN4 RN7.                                               | <img src="Pictures/042B.png" alt="10K Resistors" style="zoom: 33%;" /> |
-| 4     | Take care: *do not mismatch with the 470 Ohms resistors*: the 10K component is marked *103*, which means 10 x 10<sup>3</sup>, hence 10 Kilo Ohms. | <img src="Pictures/042A.jpg" alt="10K" style="zoom: 33%;" /> |
-| 5     | First, lightly solder one leg, then check position and the reference dot mark on the left which should match the little printed square on the circuit board. <br /><br />When everything is correct, finish soldering with the other legs and add sufficient solder on the first leg. | <img src="Pictures/042C.jpg" alt="Marks" style="zoom: 33%;" /> |
-| 6     | Solder the five **470** resistors networks RN2 RN3 RN5 RN6 RN8.                                       | <img src="Pictures/043B.png" alt=">Resistors" style="zoom: 33%;" /> |
-| 7     | The component is marked *471*, which means 47 x 10<sup>1</sup>, hence 470 Ohms.                                | <img src="Pictures/043A.jpg" alt="470" style="zoom: 33%;" /> |
-| 8     | Make sure you align the component dot mark on the left with the little printed square on the circuit board. | <img src="Pictures/043C.jpg" alt="Marks" style="zoom: 33%;" /> |
+| 1     | Solder the ten 100nF capacitors C1 to C4 and C6 to C11. These capacitors are marked *104*.            | <img src="Pictures/040A.png" alt="100nF Capacitors" style="zoom: 60%;" /><br /><img src="Pictures/040B.jpg" alt="100nF Capacitors" style="zoom:50%;" /> |
+| 2     | Solder the eight 20-pins sockets and the two 14-pins sockets, with the little notch on the *top* or on the *left* depending on the orientation. | <img src="Pictures/041A.png" alt="Sockets" style="zoom: 60%;" /><br /><img src="Pictures/041B.jpg" alt="Sockets" style="zoom: 60%;" /> |
+| 3     | Solder the three **10K** resitors networks RN1 RN4 RN7.                                               | <img src="Pictures/042B.png" alt="10K Resistors" style="zoom: 60%;" /> |
+| 4     | Take care: *do not mismatch with the 470 Ohms resistors*: the 10K component is marked *103*, which means 10 x 10<sup>3</sup>, hence 10 Kilo Ohms. | <img src="Pictures/042A.jpg" alt="10K" style="zoom: 60%;" /> |
+| 5     | First, lightly solder one leg, then check position and the reference dot mark on the left which should match the little printed square on the circuit board. <br /><br />When everything is correct, finish soldering with the other legs and add sufficient solder on the first leg. | <img src="Pictures/042C.jpg" alt="Marks" style="zoom: 60%;" /> |
+| 6     | Solder the five **470** resistors networks RN2 RN3 RN5 RN6 RN8.                                       | <img src="Pictures/043B.png" alt=">Resistors" style="zoom: 60%;" /> |
+| 7     | The component is marked *471*, which means 47 x 10<sup>1</sup>, hence 470 Ohms.                                | <img src="Pictures/043A.jpg" alt="470" style="zoom: 60%;" /> |
+| 8     | Make sure you align the component dot mark on the left with the little printed square on the circuit board. | <img src="Pictures/043C.jpg" alt="Marks" style="zoom: 60%;" /> |
 .)).fr((
 | Etape | Description                                                                                           |                                                              |
 | ----- | ----------------------------------------------------------------------------------------------------- | -----------------------------------------------------------: |
-| 1     | Soudez les 10 condensateurs 100nF C1 à C4 et C6 à C11. Ces condensateurs sont marqués *104*.          | <img src="Pictures/040A.png" alt="Condensateurs 100nF" style="zoom: 33%;" /><br /><img src="Pictures/040B.jpg" alt="Condensateurs" style="zoom:50%;" /> |
-| 2     | Soudez les 8 supports 20P et les 2 supports 14P, encoches vers le *haut* ou la *gauche* selon le cas. | <img src="Pictures/041A.png" alt="Supports" style="zoom: 33%;" /><br /><img src="Pictures/041B.jpg" alt="Supports" style="zoom: 50%;" /> |
-| 3     | Soudez les 3 réseaux de résistance **10K** RN1 RN4 RN7.                                               | <img src="Pictures/042B.png" alt="Résistances 10K" style="zoom: 33%;" /> |
-| 4     | Attention à *ne pas confondre avec les 470* : le composant est marqué *103*,ce qui signifie 10 x 10<sup>3</sup>, soit 10 Kilo Ohms. | <img src="Pictures/042A.jpg" alt="10K" style="zoom: 33%;" /> |
-| 5     | Soudez d'abord une seule patte, vérifiez la position et le point de référence à gauche, correspondant au petit carré imprimé sur le circuit. <br /><br />Une fois la position vérifiée soudez les autres pattes. | <img src="Pictures/042C.jpg" alt="Repères" style="zoom: 33%;" /> |
-| 6     | Soudez les 5 réseaux de résistance **470** RN2 RN3 RN5 RN6 RN8.                                       | <img src="Pictures/043B.png" alt="Résistances" style="zoom: 33%;" /> |
-| 7     | Le composant est marqué 471, ce qui signifie 47 x 10<sup>1</sup>, soit 470 Ohms.                               | <img src="Pictures/043A.jpg" alt="470" style="zoom: 33%;" /> |
-| 8     | Attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit | <img src="Pictures/043C.jpg" alt="Repère" style="zoom: 33%;" /> |
+| 1     | Soudez les 10 condensateurs 100nF C1 à C4 et C6 à C11. Ces condensateurs sont marqués *104*.          | <img src="Pictures/040A.png" alt="Condensateurs 100nF" style="zoom: 60%;" /><br /><img src="Pictures/040B.jpg" alt="Condensateurs" style="zoom:50%;" /> |
+| 2     | Soudez les 8 supports 20P et les 2 supports 14P, encoches vers le *haut* ou la *gauche* selon le cas. | <img src="Pictures/041A.png" alt="Supports" style="zoom: 60%;" /><br /><img src="Pictures/041B.jpg" alt="Supports" style="zoom: 60%;" /> |
+| 3     | Soudez les 3 réseaux de résistance **10K** RN1 RN4 RN7.                                               | <img src="Pictures/042B.png" alt="Résistances 10K" style="zoom: 60%;" /> |
+| 4     | Attention à *ne pas confondre avec les 470* : le composant est marqué *103*,ce qui signifie 10 x 10<sup>3</sup>, soit 10 Kilo Ohms. | <img src="Pictures/042A.jpg" alt="10K" style="zoom: 60%;" /> |
+| 5     | Soudez d'abord une seule patte, vérifiez la position et le point de référence à gauche, correspondant au petit carré imprimé sur le circuit. <br /><br />Une fois la position vérifiée soudez les autres pattes. | <img src="Pictures/042C.jpg" alt="Repères" style="zoom: 60%;" /> |
+| 6     | Soudez les 5 réseaux de résistance **470** RN2 RN3 RN5 RN6 RN8.                                       | <img src="Pictures/043B.png" alt="Résistances" style="zoom: 60%;" /> |
+| 7     | Le composant est marqué 471, ce qui signifie 47 x 10<sup>1</sup>, soit 470 Ohms.                               | <img src="Pictures/043A.jpg" alt="470" style="zoom: 60%;" /> |
+| 8     | Attention au sens : alignez le point du composant avec le petit carré imprimé à gauche sur le circuit | <img src="Pictures/043C.jpg" alt="Repère" style="zoom: 60%;" /> |
 .))
 
 .((
@@ -101,7 +101,7 @@ Reverse the board to see the **front** side, with the power button opening now a
 | Step  | Description                                                       |                                                   |
 | ------| -------------------------------------------------------- | ------------------------------------------------: |
 | 1     | Solder *one leg* of each of the two 16-pins IC sockets (SW10 and SW21), notch on the left. They will host the port select DIP-switches. |  |
-| 2     | Screw the five 12mm bolts on the board: bolt on the front, nut on the back. | <img src="Pictures/046.jpg" style="zoom: 50%;" /> |
+| 2     | Screw the five 12mm bolts on the board: bolt on the front, nut on the back. | <img src="Pictures/046.jpg" style="zoom: 60%;" /> |
 | 3     | The bolts will help for many temporary assemblies with front panel to ensure correct alignement, so you'll keep them screwed for this whole process step. There is little space on the back for some nuts when components are in place, so it is best to maintain the nut and turn the bolt than the contrary. |  <img src="Pictures/047.jpg" style="zoom:50%;" /> |
 | 4     | If a component requires that you turn a nut, lightly unscrew the bolt, turn the nut a little, then screw again the bolt. |                                                   |
 | 5     | Put another 16-pin IC socket into the soldered ones, then a DIP-switch on each second socket.   |  <img src="Pictures/048.jpg" style="zoom:50%;" /> |
@@ -112,7 +112,7 @@ Reverse the board to see the **front** side, with the power button opening now a
 | Etape | Description                                                       |                                                   |
 | ------| -------------------------------------------------------- | ------------------------------------------------: |
 | 1     | Soudez *une patte* de chacun des 2 supports CI 16P (SW10 et SW21), encoche vers la gauche. Ils serviront de base aux DIP-Switchs de sélection du numéro de port. | |
-| 2     | Vissez les 5 supports 12 mm sur la carte : support sur le dessus, boulon au dos. | <img src="Pictures/046.jpg" style="zoom: 50%;" /> |
+| 2     | Vissez les 5 supports 12 mm sur la carte : support sur le dessus, boulon au dos. | <img src="Pictures/046.jpg" style="zoom: 60%;" /> |
 | 3     | Les supports vont servir à plusieurs assemblages provisoires afin de bien aligner les composants de la façade, donc ne les démontez pas tout le long de cette étape. L'espace de certains écrous est restreint une fois les composants en place, aussi il est préférable de maintenir l'écrou et tourner le support plutôt que l'inverse. |  <img src="Pictures/047.jpg" style="zoom:50%;" /> |
 | 4     | Si un composant nécessite à un moment de tourner un boulon, dévissez légèrement le support, tournez un peu l'écrou et revissez le support. |                                                   |
 | 5     | Emboitez un second support 16P et un DIP-Switch sur chacun des deux supports. |  <img src="Pictures/048.jpg" style="zoom:50%;" /> |

@@ -59,12 +59,11 @@ Generally, less than +4.7V on an input line will be considered as a 0 bit.
 | 4     | To write a data on the port, use:<br />● the Z-80 `OUT` instruction family<br />● the `OUT0` Z-180 instruction<br />● the BASIC `OUT` instruction<br />● the SCM `OUT` command<br />+5V will be sent on the lines with a bit at 1 and the matching LED will be lighted. |            <img src="Pictures/TODO.png" width="300" /> |
 | 5     | You can use the additional +5V/GND header to feed external devices like circuits with sensors or relays, independently from any switch or LED. |                                                        |
 
-<TABLE>
-<TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Advice" width="75px" /></TD><TD>
 Remark: Output ports retain their last data, so to switch all lines and LEDs to GND level you must explicitely write a 0 to the output port.
 </TD></TR>
-<TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>
-You can use the dipswitch port select to spy any of the Z-80 port, for example gthe Z-180 internal ports on the SC126 
+<TR><TD><img src="Pictures/thisway.png" alt="Advice" width="75px" /></TD><TD>
+You can use the dipswitch port select to spy any of the Z-80 port, for example the Z-180 internal ports on the SC126 
 or the ports used by a ROM with BusRaider.
 </TD></TR></TABLE>
 

@@ -13,7 +13,7 @@ from Spencer Owens.
 .fr((Bluety est un ensemble de circuits imprimés pour un boîtier destiné à recevoir un ordinateur rétro 
 basé sur le Z-80 de la famille RC2014, en particulier le kit SC126 de Stephen S. Cousins et le RC2014 Pro
 de Spencer Owens..))
-what
+
 .toc title=Table of Contents.fr((Sommaire.)) level=1-3
 
 .include 01-Introduction.mlmd

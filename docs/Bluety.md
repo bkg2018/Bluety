@@ -7,7 +7,8 @@
 Bluety is a set of printed circuit boards for a case hosting a retro-computer from the RC2014
 family of Z-80 based retro-computers, particularly the SC126 kit from Stephen S. Cousins and the original RC2014 Pro
 from Spencer Owens.
-what## Table of Contents<A id="toc"></A>
+
+## Table of Contents<A id="toc"></A>
 
 - [Bluety - Case panels with I/O controls for Z-80 Retro Computers](<#a1>)
 - [Presentation](<01-Introduction.md#a2>)

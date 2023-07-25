@@ -49,7 +49,7 @@ Chacun des ports en entrée dispose d'un connecteur 8 fils, de 8 LEDs et de 8 in
 | 5     | Pour lire l'état du port , utilisez :<br />● l'instruction `IN` du Z-80<br />● l'instruction `IN0` du Z-180<br />● la fonction `INP()` du BASIC<br />● la commande `IN` de SCM<br />La donnée reçue aura les bits à 1 sur les entrées qui seront à +5V, et les LEDs de ces bits seront allumées (si l'interrupteur on/off est sur *on*). Les bits des entrées reliées à GND ou recevant moins de 5V seront à 0 et la LED sera éteinte. |                                                        |
 
 Attention: les lignes d'entrée alimentent directement des circuits intégrés et les LEDs, aussi vous ne devez pas tirer plus de quelques milliampères
-et pas beaucoup plus de +5V sous peine de brûler des composants et de rendre définitivement inutile le poirt d'entrée.
+et pas beaucoup plus de +5V sous peine de brûler des composants et de rendre définitivement inutile le port d'entrée.
 
 En général, un niveau d'entrée inférieur à +4.7V sera considéré comme
 un bit à 0.
@@ -64,7 +64,7 @@ un bit à 0.
 | 4     | Pour écrire une donnée 8 bits sur le port, utilisez :<br />● l'instruction `OUT` du Z-80<br />● l'instruction `OUT0` du Z-180<br />● la commande `OUT` du BASIC<br />● la commande `OUT` de SCM<br />5V sont placés sur les sorties des bits placés à 1 et les LEDs des bits à 1 sont allumées. Les autres bits restent à 0 et la LED éteinte. |            <img src="Pictures/TODO.png" width="300" /> |
 | 5     | Vous pouvez utiliser le connecteur +5V/GND pour alimenter des dispositifs extérieurs comme des circuits avec des relais ou des capteurs, indépendamment de l'état du port ou des interrupteurs en façade. |                                                        |
 
-Remarque : Chaque port de sortie retient sa dernière donnée, donc pour éteindre les LEDs il faut explicitement écrire un 0.Vous pouvez utiliser le dipswitch pour espionner
+<TABLE><TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>Remarque : Chaque port de sortie retient sa dernière donnée, donc pour éteindre les LEDs il faut explicitement écrire un 0.<TR><TD><img src="Pictures/thisway.png" alt="Conseil" width="75px" /></TD><TD>Vous pouvez utiliser le dipswitch pour espionner
 n'importe quel numéro de port, par exemple les ports internes du Z-180 sur le SC126 ou les ports contrôlés par une ROM
 avec BusRaider.
 </TD></TR></TABLE>
@@ -79,7 +79,7 @@ utiliser d'autres dispositifs I2C vous devrez les placer en amont et vous assure
 un dispositif suivant. Reportez vous aux spécifications I2C et à celles de vos dispositifs I2C. Certains écrans ont un numéro d'identification I2C configurable.
 
 Au lieu d'utiliser un écran I2C on peut installer un écran sans adaptateur I2C et le contrôler
-par le biais d'un port parallèle ou d'une carte E/S. Le site de Stephen S. Cousins décrit diverses manières de controler un écran LCD
+par le biais d'un port parallèle ou d'une carte E/S. Le site de Stephen S. Cousins décrit diverses manières de contrôler un écran LCD
 à partir d'un SC126 ou d'un RC2014. 
 
 ## Ecran LCD : Interface parallèle (SC126,RC2014 Pro)<A id="a54"></A>
