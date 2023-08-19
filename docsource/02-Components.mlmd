@@ -107,7 +107,7 @@ Here is the list for passive and active electronic components.
 .)).fr((
 | Nombre | Composants                                            |                                                                          |
 | ------ | ----------------------------------------------------- | -----------------------------------------------------------------------: |
-| 40     | 8 LED 3mm bleues<br />16 LED 3mm vertes<br />16 LED 3mm jaunes<br /><br />Note : vous pouvez choisir la couleur des LEDs lors de votre commande. | <img src="Pictures/026-LEDs.jpg" alt="LEDs" style="zoom: 33%;" /> |
+| 40     | 8 LED 3mm bleues<br />16 LED 3mm vertes<br />16 LED 3mm jaunes. | <img src="Pictures/026-LEDs.jpg" alt="LEDs" style="zoom: 33%;" /> |
 | 11     | Condensateurs céramique 100nF (marqués 104)           | <img src="Pictures/013-Capa100nF.jpg" alt="100 nF (ou 0.1 uF)" style="zoom: 33%;" /> |
 | 1      | Condensateur électrolytique 100uF                     | <img src="Pictures/034-capa100uF.jpg" alt="100 uF" style="zoom: 33%;" /> |
 | 3      | Réseaux résistance 10 KOhms (marqués 103)             | <img src="Pictures/042A.jpg" alt="10 Kohm" style="zoom: 33%;" />         |
@@ -158,7 +158,7 @@ rigorously symetrical and must be all oriented the same way to get a nice alignm
 instructions. When ordering, make sure you get the right dimensions as not all manufacturers use the same.
 .fr((
 Bluety utilise 4 interrupteurs à deux positions qui contrôlent l'allumage des 4 rangées de LEDs ainsi que 16 interrupteurs
-à trois positions qui contrôlent les bits des ports d'entrée. Pour éviter la confusion vous pouvez les commander de couleurs
+à trois positions qui contrôlent les bits des ports d'entrée. Pour éviter la confusion vous pouvez en commander de couleurs
 différentes mais il est préférable de vérifier lors de la soudure que le type de l'interrupteur à souder est bien celui attendu.
 Par ailleurs ces interrupteurs ne sont pas rigoureusement symétriques et vous devrez donc les orienter tous de la même
 façon pour obtenir un bon alignement : ceci sera expliqué dans les instructions de montage. Assurez-vous de commander les
